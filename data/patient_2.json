@@ -1,0 +1,39 @@
+{
+  "patient_id": "2",
+  "demographics": {
+    "name": "Jane Smith",
+    "age": 62,
+    "sex": "Female"
+  },
+  "medical_history": [
+    {
+      "date": "2023-03-10",
+      "diagnosis": "Osteoarthritis",
+      "treatment": "Ibuprofen"
+    },
+    {
+      "date": "2021-11-01",
+      "diagnosis": "Hypothyroidism",
+      "treatment": "Levothyroxine"
+    }
+  ],
+  "lab_results": [
+    {
+      "date": "2023-09-15",
+      "test": "TSH",
+      "value": "3.5 mIU/L"
+    }
+  ],
+  "medications": [
+    {
+      "name": "Ibuprofen",
+      "dosage": "200mg",
+      "frequency": "as needed"
+    },
+    {
+      "name": "Levothyroxine",
+      "dosage": "50mcg",
+      "frequency": "daily"
+    }
+  ]
+}

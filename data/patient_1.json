@@ -1,0 +1,44 @@
+{
+  "patient_id": "1",
+  "demographics": {
+    "name": "John Doe",
+    "age": 45,
+    "sex": "Male"
+  },
+  "medical_history": [
+    {
+      "date": "2023-01-15",
+      "diagnosis": "Hypertension",
+      "treatment": "Lisinopril"
+    },
+    {
+      "date": "2022-05-20",
+      "diagnosis": "Type 2 Diabetes",
+      "treatment": "Metformin"
+    }
+  ],
+  "lab_results": [
+    {
+      "date": "2023-10-26",
+      "test": "HbA1c",
+      "value": "7.2%"
+    },
+    {
+      "date": "2023-10-26",
+      "test": "Cholesterol",
+      "value": "210 mg/dL"
+    }
+  ],
+  "medications": [
+    {
+      "name": "Lisinopril",
+      "dosage": "10mg",
+      "frequency": "daily"
+    },
+    {
+      "name": "Metformin",
+      "dosage": "500mg",
+      "frequency": "twice daily"
+    }
+  ]
+}

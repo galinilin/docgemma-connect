@@ -1,0 +1,44 @@
+{
+  "patient_id": "3",
+  "demographics": {
+    "name": "Peter Jones",
+    "age": 78,
+    "sex": "Male"
+  },
+  "medical_history": [
+    {
+      "date": "2022-08-12",
+      "diagnosis": "Coronary Artery Disease",
+      "treatment": "Aspirin, Atorvastatin"
+    },
+    {
+      "date": "2020-02-20",
+      "diagnosis": "Chronic Obstructive Pulmonary Disease",
+      "treatment": "Albuterol inhaler"
+    }
+  ],
+  "lab_results": [
+    {
+      "date": "2023-11-01",
+      "test": "Troponin",
+      "value": "<0.01 ng/mL"
+    }
+  ],
+  "medications": [
+    {
+      "name": "Aspirin",
+      "dosage": "81mg",
+      "frequency": "daily"
+    },
+    {
+      "name": "Atorvastatin",
+      "dosage": "40mg",
+      "frequency": "daily"
+    },
+    {
+      "name": "Albuterol",
+      "dosage": "2 puffs",
+      "frequency": "as needed for shortness of breath"
+    }
+  ]
+}
