@@ -13,7 +13,9 @@ readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
     "accelerate>=1.12.0",
+    "httpx>=0.28.0",
     "huggingface-hub>=1.3.4",
+    "mcp>=1.0.0",
     "outlines>=1.2.9",
     "pillow>=12.1.0",
     "pydantic>=2.0.0",
@@ -30,6 +32,9 @@ cu128 = [
   "torch>=2.9.1",
   "torchvision>=0.24.1",
 ]
+
+[project.scripts]
+docgemma-mcp = "docgemma.tools.server:main"
 
 [tool.uv]
 conflicts = [
