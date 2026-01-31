@@ -146,6 +146,8 @@ class DocGemma:
             outputs[0][input_length:],
             skip_special_tokens=True,
         )
+        print("[*] Raw:", json.dumps({"input": messages, "response": response}, indent=2))
+        print("*********************")
         return response.strip()
 
     def generate_outlines(
