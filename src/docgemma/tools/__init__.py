@@ -40,7 +40,6 @@ from .schemas import (
     PatientRecordsInput,
     PatientRecordsOutput,
 )
-from .server import mcp_server
 
 __all__ = [
     # Tools
@@ -65,6 +64,4 @@ __all__ = [
     "DrugInteraction",
     "PatientRecord",
     "ClinicalTrial",
-    # Server
-    "mcp_server",
 ]
