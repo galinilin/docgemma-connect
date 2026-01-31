@@ -34,6 +34,7 @@ class DocGemmaState(TypedDict, total=False):
 
     # === Routing decisions ===
     complexity: str  # "direct" | "complex"
+    reasoning: str | None  # from thinking_mode node
 
     # === Agentic loop state ===
     subtasks: list[Subtask]

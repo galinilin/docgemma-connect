@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from .schemas import ComplexityClassification, DecomposedIntent, ToolCall
+from .schemas import ComplexityClassification, DecomposedIntent, ThinkingOutput, ToolCall
 from .state import DocGemmaState, Subtask, ToolResult
 
 if TYPE_CHECKING:
@@ -87,7 +87,24 @@ def complexity_router(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
 
 
 # =============================================================================
-# Node 3: Decompose Intent (LLM + Outlines)
+# Node 3: Thinking Mode (LLM + Outlines)
+# =============================================================================
+
+THINKING_PROMPT = """Extensively think and reason about the following user prompt.
+
+Query: '{user_input}'
+"""
+
+
+def thinking_mode(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
+    """Generate reasoning for complex queries before decomposition."""
+    prompt = THINKING_PROMPT.format(user_input=state["user_input"])
+    result = model.generate_outlines(prompt, ThinkingOutput)
+    return {**state, "reasoning": result.reasoning}
+
+
+# =============================================================================
+# Node 4: Decompose Intent (LLM + Outlines)
 # =============================================================================
 
 DECOMPOSE_PROMPT = """Break down this clinical query into actionable subtasks.
@@ -104,6 +121,9 @@ Available tools:
 Query: {user_input}
 Image attached: {image_present}
 
+Reasoning context:
+{reasoning}
+
 Decompose into 1-{max_subtasks} subtasks. Each subtask should map to one tool call."""
 
 
@@ -112,6 +132,7 @@ def decompose_intent(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
     prompt = DECOMPOSE_PROMPT.format(
         user_input=state["user_input"],
         image_present=state.get("image_present", False),
+        reasoning=state.get("reasoning", "No prior reasoning."),
         max_subtasks=MAX_SUBTASKS,
     )
 

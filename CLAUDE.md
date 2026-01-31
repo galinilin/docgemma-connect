@@ -70,18 +70,20 @@ docgemma-connect/
 ## Agent Pipeline
 
 ```
-Image Detection → Complexity Router → Decompose Intent → Agentic Loop → Response Synthesis
-     (code)           (LLM)              (LLM)         (Plan→Execute→Check)    (LLM)
+                                    ┌─ "direct" → Direct Response → END
+Image Detection → Complexity Router ┤
+                                    └─ "complex" → Thinking Mode → Decompose Intent → Agentic Loop → Synthesis → END
 ```
 
 Nodes (all implemented in `agent/nodes.py`):
 1. **Image Detection** - Pure code, detect medical image attachments
 2. **Complexity Router** - LLM + Outlines, route direct vs complex queries
-3. **Decompose Intent** - LLM + Outlines, break query into subtasks
-4. **Plan Tool** - LLM + Outlines, select tool for current subtask
-5. **Execute Tool** - Pure code, call tool via executor
-6. **Check Result** - Pure code, loop control logic
-7. **Synthesize Response** - Free-form LLM generation
+3. **Thinking Mode** - LLM + Outlines, generate reasoning for complex queries
+4. **Decompose Intent** - LLM + Outlines, break query into subtasks (uses reasoning)
+5. **Plan Tool** - LLM + Outlines, select tool for current subtask
+6. **Execute Tool** - Pure code, call tool via executor
+7. **Check Result** - Pure code, loop control logic
+8. **Synthesize Response** - Free-form LLM generation
 
 ## Model Usage
 

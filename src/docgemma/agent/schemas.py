@@ -12,6 +12,16 @@ class ComplexityClassification(BaseModel):
     reasoning: str = Field(description="Brief justification for the classification")
 
 
+class ThinkingOutput(BaseModel):
+    """Output schema for thinking mode."""
+
+    reasoning: str = Field(
+        ...,
+        description="Reasoning and train of thoughts.",
+        max_length=512,
+    )
+
+
 class SubtaskSchema(BaseModel):
     """A single subtask from intent decomposition."""
 

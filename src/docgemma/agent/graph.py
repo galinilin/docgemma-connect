@@ -15,6 +15,7 @@ from .nodes import (
     image_detection,
     plan_tool,
     synthesize_response,
+    thinking_mode,
 )
 from .state import DocGemmaState
 
@@ -39,6 +40,7 @@ def build_graph(model: DocGemma, tool_executor: Callable | None = None) -> State
     workflow.add_node("image_detection", image_detection)
     workflow.add_node("complexity_router", lambda s: complexity_router(s, model))
     workflow.add_node("direct_response", lambda s: direct_response(s, model))
+    workflow.add_node("thinking_mode", lambda s: thinking_mode(s, model))
     workflow.add_node("decompose_intent", lambda s: decompose_intent(s, model))
     workflow.add_node("plan_tool", lambda s: plan_tool(s, model))
 
@@ -63,16 +65,19 @@ def build_graph(model: DocGemma, tool_executor: Callable | None = None) -> State
     def route_complexity(state: DocGemmaState) -> str:
         if state.get("complexity") == "direct":
             return "direct_response"
-        return "decompose_intent"
+        return "thinking_mode"
 
     workflow.add_conditional_edges(
         "complexity_router",
         route_complexity,
-        {"direct_response": "direct_response", "decompose_intent": "decompose_intent"},
+        {"direct_response": "direct_response", "thinking_mode": "thinking_mode"},
     )
 
     # Direct response ends
     workflow.add_edge("direct_response", END)
+
+    # Thinking mode leads to decompose intent
+    workflow.add_edge("thinking_mode", "decompose_intent")
 
     # Decompose leads to planning (or synthesis if clarification needed)
     def route_decompose(state: DocGemmaState) -> str:
