@@ -171,8 +171,11 @@ class DocGemma:
             pad_token_id=self._tokenizer.eos_token_id
         )
         try:
-            return out_type.model_validate_json(raw_response)
-        except e:
+            import json
+            response = out_type.model_validate_json(raw_response)
+            print("[*] Outlines:", json.dumps({"input": prompt, "response": response.model_dump()}, indent=2))
+            print("*********************")
+        except Exception as e:
             raise RuntimeError(
                 f"Failed to parse Outlines response into {out_type}: {e}\nRaw response: {raw_response}"
-            ) from e
+            )
