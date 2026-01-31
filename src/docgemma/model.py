@@ -8,25 +8,11 @@ import outlines
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
-from .prompts import EMERGENCY_CLASSIFICATION, USER_TYPE_CLASSIFICATION
-
 if TYPE_CHECKING:
     from pydantic import BaseModel
 
-# Type aliases for Outlines classification
-EmergencyLevel = Literal["emergency", "non_emergency"]
-UserType = Literal["patient", "expert"]
-
-
 class DocGemma:
-    """MedGemma model wrapper with lazy loading and Outlines-based structured generation.
-
-    Example:
-        >>> gemma = DocGemma(model_id="google/medgemma-1.5-4b-it")
-        >>> gemma.load()
-        >>> gemma.classify_emergency("I have chest pain")
-        'emergency'
-    """
+    """MedGemma model wrapper with lazy loading and Outlines-based structured generation."""
 
     def __init__(
         self,
@@ -52,8 +38,6 @@ class DocGemma:
         self._model: AutoModelForCausalLM | None = None
         self._tokenizer: AutoTokenizer | None = None
         self._outlines_model = None
-        self._emergency_classifier = None
-        self._user_type_classifier = None
 
     @property
     def is_loaded(self) -> bool:
@@ -81,7 +65,7 @@ class DocGemma:
                 "Model not loaded. Call load() before using generation methods."
             )
 
-    def load(self) -> DocGemma:
+    def load(self, _model=None, _tokenizer=None) -> DocGemma:
         """Load the model, tokenizer, and initialize Outlines generators.
 
         Returns:
@@ -90,59 +74,31 @@ class DocGemma:
         if self.is_loaded:
             return self
 
-        # Load tokenizer
-        self._tokenizer = AutoTokenizer.from_pretrained(self.model_id)
-
-        # Load model
-        self._model = AutoModelForCausalLM.from_pretrained(
-            self.model_id,
-            torch_dtype=self.dtype,
-            device_map=self._device_map,
-        )
+        # Load tokenizer & model or use provided ones
+        if _model is not None and _tokenizer is not None:
+            self._tokenizer = _tokenizer
+            self._model = _model
+        else:
+            self._tokenizer = AutoTokenizer.from_pretrained(self.model_id)
+            self._model = AutoModelForCausalLM.from_pretrained(
+                self.model_id,
+                torch_dtype=self.dtype,
+                device_map=self._device_map,
+            )
 
         # Wrap with Outlines
         self._outlines_model = outlines.from_transformers(
             self._model, self._tokenizer
         )
-
-        # Create built-in classifiers using Literal types
-        self._emergency_classifier = lambda x: self._outlines_model(x, EmergencyLevel)
-        self._user_type_classifier = lambda x: self._outlines_model(x, UserType)
-
+        
         return self
-
-    def classify_emergency(self, user_input: str) -> str:
-        """Classify if the input describes a medical emergency.
-
-        Args:
-            user_input: The user's medical query.
-
-        Returns:
-            'emergency' or 'non_emergency'
-        """
-        self._ensure_loaded()
-        prompt = EMERGENCY_CLASSIFICATION.format(user_input=user_input)
-        return self._emergency_classifier(prompt)
-
-    def classify_user_type(self, user_input: str) -> str:
-        """Classify if the user is a patient or medical expert.
-
-        Args:
-            user_input: The user's medical query.
-
-        Returns:
-            'patient' or 'expert'
-        """
-        self._ensure_loaded()
-        prompt = USER_TYPE_CLASSIFICATION.format(user_input=user_input)
-        return self._user_type_classifier(prompt)
 
     def generate(
         self,
         prompt: str,
         max_new_tokens: int = 256,
         do_sample: bool = False,
-        temperature: float = 1.0,
+        temperature: float = 0.6,
         top_p: float = 1.0,
         top_k: int = 50,
     ) -> str:
@@ -182,6 +138,7 @@ class DocGemma:
                 temperature=temperature if do_sample else None,
                 top_p=top_p if do_sample else None,
                 top_k=top_k if do_sample else None,
+                pad_token_id=self._tokenizer.eos_token_id
             )
 
         # Decode only new tokens
@@ -207,4 +164,15 @@ class DocGemma:
             Instance of the schema class with generated values.
         """
         self._ensure_loaded()
-        return self._outlines_model(prompt, out_type, max_new_tokens=max_new_tokens)
+        raw_response = self._outlines_model(
+            prompt,
+            out_type,
+            max_new_tokens=max_new_tokens,
+            pad_token_id=self._tokenizer.eos_token_id
+        )
+        try:
+            return out_type.model_validate_json(raw_response)
+        except outlines.OutlinesParseError as e:
+            raise RuntimeError(
+                f"Failed to parse Outlines response into {out_type}: {e}\nRaw response: {raw_response}"
+            ) from e
