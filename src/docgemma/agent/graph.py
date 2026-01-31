@@ -177,7 +177,20 @@ class DocGemmaAgent:
         user_input: str,
         image_data: bytes | None = None,
     ) -> str:
-        """Synchronous wrapper for run()."""
+        """Synchronous wrapper for run().
+
+        Works in both regular Python and Jupyter/Colab environments.
+        """
         import asyncio
 
-        return asyncio.run(self.run(user_input, image_data))
+        try:
+            loop = asyncio.get_running_loop()
+        except RuntimeError:
+            # No running loop, use asyncio.run()
+            return asyncio.run(self.run(user_input, image_data))
+
+        # Already in an event loop (Jupyter/Colab) - use nest_asyncio
+        import nest_asyncio
+
+        nest_asyncio.apply()
+        return loop.run_until_complete(self.run(user_input, image_data))
