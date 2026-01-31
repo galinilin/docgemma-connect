@@ -34,6 +34,12 @@ docgemma-connect/
 ├── src/docgemma/
 │   ├── __init__.py
 │   ├── model.py              # DocGemma wrapper with Outlines integration
+│   ├── agent/
+│   │   ├── __init__.py
+│   │   ├── state.py          # DocGemmaState TypedDict
+│   │   ├── schemas.py        # Pydantic schemas for LLM nodes
+│   │   ├── nodes.py          # All node implementations
+│   │   └── graph.py          # LangGraph workflow + DocGemmaAgent
 │   └── tools/
 │       ├── __init__.py
 │       ├── schemas.py        # Pydantic schemas for all tools
@@ -43,7 +49,8 @@ docgemma-connect/
 │       └── clinical_trials.py    # ClinicalTrials.gov search
 ├── doc/
 │   └── DOCGEMMA_IMPLEMENTATION_GUIDE.md  # Full architecture spec
-├── main.py                   # Test script
+├── main.py                   # Model test script
+├── test_agent.py             # Agent pipeline test script
 ├── test_tools.py
 └── pyproject.toml
 ```
@@ -60,19 +67,21 @@ docgemma-connect/
 | `update_patient_record` | Local EHR | ❌ TODO |
 | `analyze_medical_image` | MedGemma Vision | ❌ TODO |
 
-## Agent Pipeline (TODO)
+## Agent Pipeline
 
 ```
 Image Detection → Complexity Router → Decompose Intent → Agentic Loop → Response Synthesis
      (code)           (LLM)              (LLM)         (Plan→Execute→Check)    (LLM)
 ```
 
-Key nodes to implement:
+Nodes (all implemented in `agent/nodes.py`):
 1. **Image Detection** - Pure code, detect medical image attachments
 2. **Complexity Router** - LLM + Outlines, route direct vs complex queries
 3. **Decompose Intent** - LLM + Outlines, break query into subtasks
-4. **Plan/Execute/Check** - Agentic loop with tool calls
-5. **Response Synthesis** - Free-form LLM generation
+4. **Plan Tool** - LLM + Outlines, select tool for current subtask
+5. **Execute Tool** - Pure code, call tool via executor
+6. **Check Result** - Pure code, loop control logic
+7. **Synthesize Response** - Free-form LLM generation
 
 ## Model Usage
 
@@ -93,6 +102,29 @@ class Result(BaseModel):
     confidence: float
 
 result = gemma.generate_outlines(prompt, Result)
+```
+
+## Agent Usage
+
+```python
+from docgemma import DocGemma, DocGemmaAgent
+
+# Initialize and load model
+model = DocGemma(model_id="google/medgemma-1.5-4b-it")
+model.load()
+
+# Create agent with tool executor
+async def my_tool_executor(tool_name: str, args: dict) -> dict:
+    # Implement tool dispatch logic
+    ...
+
+agent = DocGemmaAgent(model, tool_executor=my_tool_executor)
+
+# Run async
+response = await agent.run("Check drug interactions between warfarin and aspirin")
+
+# Or sync
+response = agent.run_sync("What is hypertension?")
 ```
 
 ## Commands
@@ -121,18 +153,18 @@ uv run python test_tools.py
 
 ## Implementation Priority
 
-### Phase 1: Core Pipeline
-- [ ] State object (`DocGemmaState` TypedDict)
-- [ ] LangGraph workflow skeleton
-- [ ] Image detection node
-- [ ] Complexity router node
-- [ ] Basic synthesis node
+### Phase 1: Core Pipeline ✅
+- [x] State object (`DocGemmaState` TypedDict)
+- [x] LangGraph workflow skeleton
+- [x] Image detection node
+- [x] Complexity router node
+- [x] Basic synthesis node
 
-### Phase 2: Agentic Loop
-- [ ] Intent decomposition node
-- [ ] Tool selection node (Outlines constrained)
-- [ ] Result checking logic
-- [ ] Loop control flow
+### Phase 2: Agentic Loop ✅
+- [x] Intent decomposition node
+- [x] Tool selection node (Outlines constrained)
+- [x] Result checking logic
+- [x] Loop control flow
 
 ### Phase 3: Missing Tools
 - [ ] `get_patient_record` / `update_patient_record`

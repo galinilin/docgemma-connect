@@ -172,7 +172,7 @@ class DocGemma:
         )
         try:
             return out_type.model_validate_json(raw_response)
-        except outlines.OutlinesParseError as e:
+        except e:
             raise RuntimeError(
                 f"Failed to parse Outlines response into {out_type}: {e}\nRaw response: {raw_response}"
             ) from e
