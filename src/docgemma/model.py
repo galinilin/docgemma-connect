@@ -175,6 +175,7 @@ class DocGemma:
             response = out_type.model_validate_json(raw_response)
             print("[*] Outlines:", json.dumps({"input": prompt, "response": response.model_dump()}, indent=2))
             print("*********************")
+            return response
         except Exception as e:
             raise RuntimeError(
                 f"Failed to parse Outlines response into {out_type}: {e}\nRaw response: {raw_response}"
