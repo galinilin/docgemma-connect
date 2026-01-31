@@ -32,9 +32,10 @@ The agent processes each turn through a streamlined pipeline:
 
 1. **Image Detection** — Check if medical images are attached
 2. **Complexity Routing** — Direct answer vs. tool-assisted response
-3. **Intent Decomposition** — Break complex queries into subtasks
-4. **Agentic Loop** — Plan → Execute → Check for each subtask
-5. **Response Synthesis** — Generate final clinical response
+3. **Thinking Mode** — Reason through complex queries (complex only)
+4. **Intent Decomposition** — Break complex queries into subtasks
+5. **Agentic Loop** — Plan → Execute → Check for each subtask
+6. **Response Synthesis** — Generate final clinical response
 
 ### Key Design Decisions
 
@@ -42,6 +43,7 @@ The agent processes each turn through a streamlined pipeline:
 |----------|--------|-----------|
 | User type | Expert only | Simplified scope, technical responses |
 | Image processing | Hybrid: detect pre-loop (code), analyze via tool (LLM) | Metadata informs routing; analysis is lazy/on-demand |
+| Thinking mode | Enabled for complex queries | Better reasoning before task decomposition |
 | Loop termination | Deterministic flags + retry limit | 4B models fail at self-reflection ("am I done?") |
 | Multi-intent queries | Decompose into subtasks | Handle sequentially for reliability |
 
@@ -57,6 +59,9 @@ class DocGemmaState(TypedDict):
     user_input: str
     image_present: bool
     image_data: bytes | None  # raw image, not yet analyzed
+    
+    # === Thinking mode ===
+    reasoning: str | None        # output from thinking mode
     
     # === Agentic loop state ===
     subtasks: list[dict]             # decomposed intents
@@ -89,14 +94,20 @@ class DocGemmaState(TypedDict):
 │         │                                                        │
 │         ▼                                                        │
 │  ┌──────────────┐    "DIRECT"                                    │
-│  │ Complexity   │────────→ [Skip loop, answer directly]          │
+│  │ Complexity   │────────→ [Skip to synthesis]                   │
 │  │ Router       │                                                │
 │  └──────┬───────┘                                                │
 │         │ "COMPLEX"                                              │
 │         ▼                                                        │
 │  ┌──────────────┐                                                │
+│  │ Thinking     │ → reasoning: str (max 512 tokens)              │
+│  │ Mode         │   Chain-of-thought before decomposition        │
+│  └──────┬───────┘                                                │
+│         │                                                        │
+│         ▼                                                        │
+│  ┌──────────────┐                                                │
 │  │ Decompose    │ → list of subtasks                             │
-│  │ Intent       │                                                │
+│  │ Intent       │   (uses reasoning as context)                  │
 │  └──────┬───────┘                                                │
 │         │                                                        │
 │         ▼                                                        │
@@ -159,8 +170,6 @@ def detect_image(attachments: list[dict]) -> tuple[bool, bytes | None]:
     return False, None
 ```
 
-**Note:** Image TYPE classification (xray vs CT vs MRI) happens later via the `analyze_medical_image` tool, which uses MedGemma vision.
-
 ---
 
 ### Node 2: Complexity Router
@@ -181,10 +190,6 @@ class ComplexityClassification(BaseModel):
     reasoning: str  # brief justification
 ```
 
-**Routing Logic:**
-- `direct`: Greetings, thanks, simple factual questions answerable from training, basic clinical knowledge
-- `complex`: Requires tools, image analysis, multi-step reasoning, external data lookup
-
 **Prompt:**
 ```
 Classify if this clinical query needs external tools/data or can be answered directly.
@@ -200,13 +205,48 @@ If an image is attached, classify as COMPLEX.
 
 ---
 
-### Node 3: Decompose Intent
+### Node 3: Thinking Mode (NEW)
+
+| Property | Value |
+|----------|-------|
+| **Type** | LLM (constrained via Outlines) |
+| **Runs** | Only if complexity == "complex" |
+| **Input** | User message |
+| **Output** | `reasoning: str` (max 512 tokens) |
+
+**Outlines Schema:**
+```python
+from pydantic import BaseModel, Field
+
+class ThinkingOutput(BaseModel):
+    reasoning: str = Field(
+        ..., 
+        description="Reasoning and train of thoughts.",
+        max_length=512
+    )
+```
+
+**Prompt:**
+```
+Extensively think and reason about the following user prompt.
+
+Query: '{user_input}'
+```
+
+**Purpose:** 
+- Allows the model to reason through complex clinical queries before committing to task decomposition
+- Improves quality of subtask planning
+- The `reasoning` output is passed to the Decompose Intent node as context
+
+---
+
+### Node 4: Decompose Intent
 
 | Property | Value |
 |----------|-------|
 | **Type** | LLM (structured output via Outlines) |
 | **Runs** | Only if complexity == "complex" |
-| **Input** | User message, image_present flag |
+| **Input** | User message, image_present flag, **reasoning from thinking mode** |
 | **Output** | List of subtasks |
 
 **Outlines Schema:**
@@ -222,37 +262,22 @@ class DecomposedIntent(BaseModel):
     clarification_question: str | None
 ```
 
-**Example Decomposition:**
+**Prompt (updated to include reasoning):**
+```
+Based on the following analysis, decompose the user's request into actionable subtasks.
 
-User: *"CXR shows what looks like a mass in the right upper lobe. Patient ID 555. Pull their smoking history and find current screening guidelines for lung cancer."*
+User query: {user_input}
+Image attached: {image_present}
 
-```json
-{
-  "subtasks": [
-    {
-      "intent": "Analyze the chest X-ray for mass characterization",
-      "requires_tool": "analyze_medical_image",
-      "context": "right upper lobe mass noted"
-    },
-    {
-      "intent": "Retrieve patient 555 smoking history",
-      "requires_tool": "get_patient_record", 
-      "context": "patient ID 555"
-    },
-    {
-      "intent": "Find lung cancer screening guidelines",
-      "requires_tool": "search_medical_literature",
-      "context": "lung cancer screening guidelines"
-    }
-  ],
-  "requires_clarification": false,
-  "clarification_question": null
-}
+Prior reasoning:
+{reasoning}
+
+Break this into sequential subtasks, each requiring a specific tool.
 ```
 
 ---
 
-### Node 4: Plan - Tool Selection (Agentic Loop)
+### Node 5: Plan - Tool Selection (Agentic Loop)
 
 | Property | Value |
 |----------|-------|
@@ -277,22 +302,9 @@ class ToolCall(BaseModel):
     reasoning: str
 ```
 
-**Available Tools:**
-```python
-AVAILABLE_TOOLS = [
-    "check_drug_safety",
-    "search_medical_literature",
-    "check_drug_interactions",
-    "find_clinical_trials",
-    "get_patient_record",
-    "update_patient_record",
-    "analyze_medical_image",
-]
-```
-
 ---
 
-### Node 5: Execute Tool (Agentic Loop)
+### Node 6: Execute Tool (Agentic Loop)
 
 | Property | Value |
 |----------|-------|
@@ -301,11 +313,9 @@ AVAILABLE_TOOLS = [
 | **Input** | Tool name, arguments |
 | **Output** | Tool result or error |
 
-**Implementation:** Use existing MCP server infrastructure in `docgemma/tools/server.py`
-
 ---
 
-### Node 6: Check Result (Agentic Loop)
+### Node 7: Check Result (Agentic Loop)
 
 | Property | Value |
 |----------|-------|
@@ -340,39 +350,38 @@ MAX_TOOL_RETRIES = 3
 
 def should_continue_loop(state: DocGemmaState, result_status: str) -> bool:
     if result_status == "needs_user_input":
-        return False  # exit to ask user
+        return False
     
     if result_status == "error":
         if state["tool_retries"] < MAX_TOOL_RETRIES:
             state["tool_retries"] += 1
-            return True  # retry
-        return False  # give up
+            return True
+        return False
     
     if result_status == "needs_more_action":
         if state["loop_iterations"] < MAX_ITERATIONS_PER_SUBTASK:
             state["loop_iterations"] += 1
             return True
-        return False  # max iterations
+        return False
     
-    # success - check for more subtasks
     if state["current_subtask_index"] < len(state["subtasks"]) - 1:
         state["current_subtask_index"] += 1
         state["loop_iterations"] = 0
         state["tool_retries"] = 0
-        return True  # next subtask
+        return True
     
-    return False  # all done
+    return False
 ```
 
 ---
 
-### Node 7: Response Synthesis
+### Node 8: Response Synthesis
 
 | Property | Value |
 |----------|-------|
 | **Type** | LLM (free-form generation) |
 | **Runs** | Once at end of turn |
-| **Input** | Tool results, original query |
+| **Input** | Tool results, original query, reasoning |
 | **Output** | Final response string |
 
 **Prompt Template:**
@@ -394,21 +403,6 @@ def get_synthesis_prompt(state: DocGemmaState) -> str:
     
     Synthesize a helpful clinical response.
     If information is incomplete, acknowledge limitations and suggest next steps.
-    """
-```
-
-**Clarification Request (if needs_user_input):**
-```python
-def get_clarification_prompt(state: DocGemmaState) -> str:
-    return f"""
-    I need more information to complete this request.
-    
-    Original query: {state["user_input"]}
-    
-    What's missing: {state.get("missing_info", "specific details")}
-    
-    Generate a concise, specific question to get the information needed.
-    Be direct - this is a clinical setting.
     """
 ```
 
@@ -437,15 +431,13 @@ def get_clarification_prompt(state: DocGemmaState) -> str:
 
 ```python
 class ImageAnalysisInput(BaseModel):
-    """Input for medical image analysis."""
     image_data: str  # base64 encoded
-    clinical_context: str | None = None  # e.g., "patient complains of chest pain"
+    clinical_context: str | None = None
 
 class ImageAnalysisOutput(BaseModel):
-    """Output from medical image analysis."""
     image_type: Literal["chest_xray", "ct_scan", "mri", "pathology", "dermatology", "unknown"]
-    findings: list[str]  # structured findings
-    impression: str      # summary interpretation  
+    findings: list[str]
+    impression: str
     confidence: Literal["high", "medium", "low"]
     requires_specialist_review: bool
 ```
@@ -459,12 +451,12 @@ from typing import Literal
 from langgraph.graph import StateGraph, END
 from docgemma.state import DocGemmaState
 
-# Create the graph
 workflow = StateGraph(DocGemmaState)
 
 # === Add Nodes ===
 workflow.add_node("image_detection", image_detection_node)
 workflow.add_node("complexity_router", complexity_router_node)
+workflow.add_node("thinking_mode", thinking_mode_node)  # NEW
 workflow.add_node("decompose_intent", decompose_intent_node)
 workflow.add_node("plan_tool", plan_tool_node)
 workflow.add_node("execute_tool", execute_tool_node)
@@ -480,9 +472,12 @@ workflow.add_edge("image_detection", "complexity_router")
 def route_complexity(state: DocGemmaState) -> str:
     if state.get("complexity") == "direct":
         return "synthesize_response"
-    return "decompose_intent"
+    return "thinking_mode"  # Go to thinking first
 
 workflow.add_conditional_edges("complexity_router", route_complexity)
+
+# Thinking → Decompose
+workflow.add_edge("thinking_mode", "decompose_intent")
 workflow.add_edge("decompose_intent", "plan_tool")
 
 # === Agentic Loop ===
@@ -496,16 +491,16 @@ def route_result(state: DocGemmaState) -> str:
         return "synthesize_response"
     
     if result_status == "error" and state["tool_retries"] < 3:
-        return "execute_tool"  # retry
+        return "execute_tool"
     
     if result_status == "needs_more_action" and state["loop_iterations"] < 3:
-        return "plan_tool"  # continue loop
+        return "plan_tool"
     
     if result_status == "success":
         if state["current_subtask_index"] < len(state["subtasks"]) - 1:
-            return "plan_tool"  # next subtask
+            return "plan_tool"
     
-    return "synthesize_response"  # done or give up
+    return "synthesize_response"
 
 workflow.add_conditional_edges("check_result", route_result)
 
@@ -530,6 +525,7 @@ docgemma/
 │   └── nodes/
 │       ├── __init__.py
 │       ├── routing.py    # image_detection, complexity_router
+│       ├── thinking.py   # thinking_mode (NEW)
 │       ├── planning.py   # decompose_intent, plan_tool
 │       ├── execution.py  # execute_tool, check_result
 │       └── synthesis.py  # synthesize_response
@@ -538,21 +534,22 @@ docgemma/
 │   ├── classification.py # Outlines schemas for LLM nodes
 │   └── tools.py          # Tool input/output schemas
 ├── tools/
-│   ├── __init__.py       # (exists)
-│   ├── server.py         # (exists) MCP server
-│   ├── drug_safety.py    # (exists)
-│   ├── drug_interactions.py  # (exists)
-│   ├── medical_literature.py # (exists)
-│   ├── clinical_trials.py    # (exists)
-│   ├── patient_records.py    # TODO: implement
-│   └── image_analysis.py     # TODO: implement
+│   ├── __init__.py
+│   ├── server.py         # MCP server
+│   ├── drug_safety.py
+│   ├── drug_interactions.py
+│   ├── medical_literature.py
+│   ├── clinical_trials.py
+│   ├── patient_records.py    # TODO
+│   └── image_analysis.py     # TODO
 ├── prompts/
 │   ├── __init__.py
-│   ├── complexity.py     # prompts for complexity routing
-│   ├── decompose.py      # prompts for intent decomposition
-│   ├── tool_select.py    # prompts for tool selection
-│   └── synthesis.py      # prompts for response generation
-└── config.py             # constants, limits, etc.
+│   ├── complexity.py
+│   ├── thinking.py       # NEW
+│   ├── decompose.py
+│   ├── tool_select.py
+│   └── synthesis.py
+└── config.py
 ```
 
 ---
@@ -562,17 +559,15 @@ docgemma/
 ```python
 # config.py
 
-# Loop limits (critical for 4B model stability)
 MAX_ITERATIONS_PER_SUBTASK = 3
 MAX_TOOL_RETRIES = 3
 MAX_SUBTASKS = 5
+MAX_THINKING_TOKENS = 512
 
-# Model settings
 MODEL_ID = "google/medgemma-1.5-4b-it"
 MAX_NEW_TOKENS = 512
-TEMPERATURE = 0.0  # deterministic for medical accuracy
+TEMPERATURE = 0.0
 
-# Available tools
 AVAILABLE_TOOLS = [
     "check_drug_safety",
     "search_medical_literature",
@@ -586,34 +581,6 @@ AVAILABLE_TOOLS = [
 
 ---
 
-## Implementation Priority
-
-### Phase 1: Core Pipeline (Week 1)
-1. ✅ Tool infrastructure (MCP server exists)
-2. [ ] State object and LangGraph skeleton
-3. [ ] Image detection node (pure code)
-4. [ ] Complexity router node (Outlines)
-5. [ ] Basic synthesis node
-
-### Phase 2: Agentic Loop (Week 1-2)
-1. [ ] Intent decomposition node
-2. [ ] Tool selection node (Outlines constrained)
-3. [ ] Result checking logic
-4. [ ] Loop control flow
-
-### Phase 3: Missing Tools (Week 2)
-1. [ ] `get_patient_record` / `update_patient_record`
-2. [ ] `analyze_medical_image` (MedGemma vision wrapper)
-3. [ ] Pseudo-EHR data store
-
-### Phase 4: Polish (Week 3)
-1. [ ] UI for demo video
-2. [ ] Pre-cache hard queries for demo
-3. [ ] Technical writeup
-4. [ ] 3-minute video recording
-
----
-
 ## Key Reminders for 4B Model
 
 1. **Keep prompts short** — Under 200 tokens for system prompts
@@ -621,3 +588,4 @@ AVAILABLE_TOOLS = [
 3. **Deterministic stopping** — Never ask "are you done?"
 4. **One decision per node** — Don't combine classification tasks
 5. **Filter context aggressively** — Only pass what's needed for each node
+6. **Thinking mode helps** — Let the model reason before decomposing complex queries

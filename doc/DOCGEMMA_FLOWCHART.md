@@ -6,7 +6,8 @@ flowchart TD
         T1([💬 User Message<br/>+ Optional Image]) --> T2["<b>🖼️ Image Detection</b><br/><i>Pure code: MIME check</i><br/>→ image_present, image_data"]
         T2 --> T3{"<b>🔀 Complexity Router</b><br/><i>LLM + Outlines</i>"}
         T3 -->|"DIRECT<br/>(greeting, simple Q)"| SYNTH
-        T3 -->|"COMPLEX<br/>(needs tools)"| T4["<b>📋 Decompose Intent</b><br/><i>LLM + Outlines</i><br/>→ list of subtasks"]
+        T3 -->|"COMPLEX<br/>(needs tools)"| T4["<b>🧠 Thinking Mode</b><br/><i>LLM + Outlines</i><br/>→ reasoning (max 512 tokens)"]
+        T4 --> T5["<b>📋 Decompose Intent</b><br/><i>LLM + Outlines</i><br/>→ list of subtasks"]
     end
 
     subgraph Loop["<b>AGENTIC LOOP</b><br/><i>max 3 iterations per subtask</i>"]
@@ -54,12 +55,13 @@ flowchart TD
         CLARIFY --> OUT
     end
 
-    T4 --> L1
+    T5 --> L1
     DONE --> SYNTH
     PARTIAL --> SYNTH
     OUT --> END([🔚 End Turn])
 
     %% Styling
+    style T4 fill:#da77f2,color:#fff,stroke:#ae3ec9
     style DONE fill:#51cf66,color:#fff,stroke:#2f9e44
     style CLARIFY fill:#ffd43b,color:#000,stroke:#fab005
     style PARTIAL fill:#ff922b,color:#fff,stroke:#e8590c
@@ -85,11 +87,40 @@ flowchart TD
 |------|------|---------|
 | Image Detection | Pure code | Check MIME type for attached images |
 | Complexity Router | LLM + Outlines | Classify as direct vs complex |
-| Decompose Intent | LLM + Outlines | Break into subtasks |
+| **Thinking Mode** | **LLM + Outlines** | **Reason through complex query before decomposition** |
+| Decompose Intent | LLM + Outlines | Break into subtasks (uses thinking context) |
 | Plan | LLM + Outlines | Select tool for current subtask |
 | Execute Tool | Pure code (MCP) | Call external tool |
 | Check Result | Pure code | Determine next action |
 | Synthesize Response | LLM | Generate clinical response |
+
+---
+
+## Thinking Mode Details
+
+**Purpose:** Allow the model to reason through complex clinical queries before committing to a task decomposition. This improves the quality of subtask planning.
+
+**Schema:**
+```python
+class ThinkingOutput(BaseModel):
+    reasoning: str = Field(
+        ..., 
+        description="Reasoning and train of thoughts.",
+        max_length=512
+    )
+```
+
+**Prompt:**
+```
+Extensively think and reason about the following user prompt.
+
+Query: '{user_input}'
+```
+
+**Flow:**
+- Only triggered when `complexity == "complex"`
+- Output `reasoning` is passed to Decompose Intent node as context
+- Max 512 tokens to keep it focused
 
 ---
 
