@@ -2,13 +2,55 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import functools
+import logging
+import time
+from typing import TYPE_CHECKING, Callable, ParamSpec, TypeVar
 
 from .schemas import ComplexityClassification, DecomposedIntent, ThinkingOutput, ToolCall
 from .state import DocGemmaState, Subtask, ToolResult
 
 if TYPE_CHECKING:
     from ..model import DocGemma
+
+logger = logging.getLogger(__name__)
+
+# =============================================================================
+# Timing Decorator
+# =============================================================================
+
+P = ParamSpec("P")
+T = TypeVar("T")
+
+
+def timed_node(func: Callable[P, T]) -> Callable[P, T]:
+    """Decorator to log elapsed time for node execution."""
+
+    @functools.wraps(func)
+    def sync_wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        start = time.perf_counter()
+        try:
+            result = func(*args, **kwargs)
+            return result
+        finally:
+            elapsed_ms = (time.perf_counter() - start) * 1000
+            logger.info(f"[NODE] {func.__name__} completed in {elapsed_ms:.1f}ms")
+
+    @functools.wraps(func)
+    async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        start = time.perf_counter()
+        try:
+            result = await func(*args, **kwargs)
+            return result
+        finally:
+            elapsed_ms = (time.perf_counter() - start) * 1000
+            logger.info(f"[NODE] {func.__name__} completed in {elapsed_ms:.1f}ms")
+
+    import asyncio
+
+    if asyncio.iscoroutinefunction(func):
+        return async_wrapper  # type: ignore
+    return sync_wrapper  # type: ignore
 
 # =============================================================================
 # Constants
@@ -41,6 +83,7 @@ AVAILABLE_TOOLS = [
 # =============================================================================
 
 
+@timed_node
 def image_detection(state: DocGemmaState) -> DocGemmaState:
     """Detect if medical images are attached to the request.
 
@@ -71,6 +114,7 @@ Image attached: {image_present}
 If an image is attached, classify as COMPLEX."""
 
 
+@timed_node
 def complexity_router(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
     """Route query to direct answer or complex processing pipeline."""
     # Image attached = always complex
@@ -96,6 +140,7 @@ Query: '{user_input}'
 """
 
 
+@timed_node
 def thinking_mode(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
     """Generate reasoning for complex queries before decomposition."""
     prompt = THINKING_PROMPT.format(user_input=state["user_input"])
@@ -127,6 +172,7 @@ Reasoning context:
 Decompose into 1-{max_subtasks} subtasks. Each subtask should map to one tool call."""
 
 
+@timed_node
 def decompose_intent(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
     """Decompose complex query into subtasks."""
     prompt = DECOMPOSE_PROMPT.format(
@@ -181,6 +227,7 @@ Available tools: {tools}
 Select the tool and provide arguments. Use "none" if no tool needed."""
 
 
+@timed_node
 def plan_tool(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
     """Select tool for current subtask."""
     idx = state.get("current_subtask_index", 0)
@@ -220,6 +267,7 @@ def plan_tool(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
 # =============================================================================
 
 
+@timed_node
 async def execute_tool(state: DocGemmaState, tool_executor) -> DocGemmaState:
     """Execute the planned tool call.
 
@@ -285,6 +333,7 @@ async def execute_tool(state: DocGemmaState, tool_executor) -> DocGemmaState:
 # =============================================================================
 
 
+@timed_node
 def check_result(state: DocGemmaState) -> DocGemmaState:
     """Check tool result and update loop control state."""
     status = state.get("last_result_status", "success")
@@ -370,6 +419,7 @@ def _format_tool_results(results: list[ToolResult]) -> str:
     return "\n".join(lines)
 
 
+@timed_node
 def synthesize_response(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
     """Generate final response from accumulated context."""
     # Handle clarification request
@@ -392,6 +442,7 @@ def synthesize_response(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
     return {**state, "final_response": response}
 
 
+@timed_node
 def direct_response(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
     """Generate direct response without tools (for simple queries)."""
     prompt = f"""You are a clinical decision support system. Respond concisely to this query:
