@@ -146,7 +146,7 @@ Query: '{user_input}'
 def thinking_mode(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
     """Generate reasoning for complex queries before decomposition."""
     prompt = THINKING_PROMPT.format(user_input=state["user_input"])
-    result = model.generate_outlines(prompt, ThinkingOutput)
+    result = model.generate_outlines(prompt, ThinkingOutput, max_new_tokens=512)
     return {**state, "reasoning": result.reasoning}
 
 
@@ -184,7 +184,7 @@ def decompose_intent(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaS
         max_subtasks=MAX_SUBTASKS,
     )
 
-    result = model.generate_outlines(prompt, DecomposedIntent)
+    result = model.generate_outlines(prompt, DecomposedIntent, max_new_tokens=1024)
 
     # Handle clarification needed
     if result.requires_clarification:
@@ -254,7 +254,7 @@ def plan_tool(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
         tools=", ".join(AVAILABLE_TOOLS),
     )
 
-    result = model.generate_outlines(prompt, ToolCall)
+    result = model.generate_outlines(prompt, ToolCall, max_new_tokens=256)
 
     # Store planned tool call in state for execute node
     return {
