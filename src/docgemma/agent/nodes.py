@@ -267,6 +267,19 @@ def plan_tool(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
 # =============================================================================
 
 
+def _truncate_for_log(obj: dict, max_len: int = 200) -> str:
+    """Truncate object representation for logging."""
+    import json
+
+    try:
+        s = json.dumps(obj, default=str)
+    except Exception:
+        s = str(obj)
+    if len(s) > max_len:
+        return s[: max_len - 3] + "..."
+    return s
+
+
 @timed_node
 async def execute_tool(state: DocGemmaState, tool_executor) -> DocGemmaState:
     """Execute the planned tool call.
@@ -279,7 +292,7 @@ async def execute_tool(state: DocGemmaState, tool_executor) -> DocGemmaState:
     tool_args = state.get("_planned_args", {})
 
     if not tool_name or tool_name == "none":
-        # No tool needed, mark success
+        logger.info("[TOOL] No tool needed, skipping execution")
         return {
             **state,
             "last_result_status": "success",
@@ -287,8 +300,14 @@ async def execute_tool(state: DocGemmaState, tool_executor) -> DocGemmaState:
             "_planned_args": None,
         }
 
+    logger.info(f"[TOOL] Executing: {tool_name}")
+    logger.info(f"[TOOL] Arguments: {_truncate_for_log(tool_args)}")
+
+    start = time.perf_counter()
     try:
         result = await tool_executor(tool_name, tool_args)
+        elapsed_ms = (time.perf_counter() - start) * 1000
+
         tool_result: ToolResult = {
             "tool_name": tool_name,
             "arguments": tool_args,
@@ -301,6 +320,9 @@ async def execute_tool(state: DocGemmaState, tool_executor) -> DocGemmaState:
 
         status = "success" if tool_result["success"] else "error"
 
+        logger.info(f"[TOOL] {tool_name} completed in {elapsed_ms:.1f}ms - {status.upper()}")
+        logger.info(f"[TOOL] Result: {_truncate_for_log(result)}")
+
         return {
             **state,
             "tool_results": tool_results,
@@ -310,6 +332,8 @@ async def execute_tool(state: DocGemmaState, tool_executor) -> DocGemmaState:
         }
 
     except Exception as e:
+        elapsed_ms = (time.perf_counter() - start) * 1000
+
         tool_result: ToolResult = {
             "tool_name": tool_name,
             "arguments": tool_args,
@@ -318,6 +342,8 @@ async def execute_tool(state: DocGemmaState, tool_executor) -> DocGemmaState:
         }
         tool_results = state.get("tool_results", [])
         tool_results.append(tool_result)
+
+        logger.error(f"[TOOL] {tool_name} failed in {elapsed_ms:.1f}ms - ERROR: {e}")
 
         return {
             **state,
