@@ -21,6 +21,7 @@ class DocGemma:
         device: str | None = None,
         dtype: torch.dtype | None = None,
         device_map: str = "auto",
+        cache_dir: str | None = None,
     ) -> None:
         """Initialize DocGemma configuration without loading the model.
 
@@ -29,11 +30,14 @@ class DocGemma:
             device: Target device ('cuda', 'cpu'). Auto-detected if None.
             dtype: Model dtype (torch.bfloat16, torch.float32). Auto-detected if None.
             device_map: Device map strategy for model loading.
+            cache_dir: Directory to cache model weights. Use Google Drive path
+                in Colab to persist across sessions (e.g., '/content/drive/MyDrive/hf_cache').
         """
         self.model_id = model_id
         self._device = device
         self._dtype = dtype
         self._device_map = device_map
+        self._cache_dir = cache_dir
 
         # Lazy-loaded attributes
         self._model: AutoModelForCausalLM | None = None
@@ -80,11 +84,15 @@ class DocGemma:
             self._tokenizer = _tokenizer
             self._model = _model
         else:
-            self._tokenizer = AutoTokenizer.from_pretrained(self.model_id)
+            self._tokenizer = AutoTokenizer.from_pretrained(
+                self.model_id,
+                cache_dir=self._cache_dir,
+            )
             self._model = AutoModelForCausalLM.from_pretrained(
                 self.model_id,
                 torch_dtype=self.dtype,
                 device_map=self._device_map,
+                cache_dir=self._cache_dir,
             )
 
         # Wrap with Outlines
