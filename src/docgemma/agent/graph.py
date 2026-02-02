@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, Callable
 
 from langgraph.graph import END, StateGraph
@@ -21,6 +22,8 @@ from .state import DocGemmaState
 
 if TYPE_CHECKING:
     from ..protocols import DocGemmaProtocol
+
+logger = logging.getLogger(__name__)
 
 
 def build_graph(model: DocGemmaProtocol, tool_executor: Callable | None = None) -> StateGraph:
@@ -63,8 +66,11 @@ def build_graph(model: DocGemmaProtocol, tool_executor: Callable | None = None) 
 
     # Route based on complexity
     def route_complexity(state: DocGemmaState) -> str:
-        if state.get("complexity") == "direct":
+        complexity = state.get("complexity", "complex")
+        if complexity == "direct":
+            logger.info("[ROUTE] complexity_router -> direct_response (simple query)")
             return "direct_response"
+        logger.info("[ROUTE] complexity_router -> thinking_mode (complex query)")
         return "thinking_mode"
 
     workflow.add_conditional_edges(
@@ -82,7 +88,10 @@ def build_graph(model: DocGemmaProtocol, tool_executor: Callable | None = None) 
     # Decompose leads to planning (or synthesis if clarification needed)
     def route_decompose(state: DocGemmaState) -> str:
         if state.get("needs_user_input"):
+            logger.info("[ROUTE] decompose_intent -> synthesize_response (needs clarification)")
             return "synthesize_response"
+        subtasks = state.get("subtasks", [])
+        logger.info(f"[ROUTE] decompose_intent -> plan_tool ({len(subtasks)} subtasks)")
         return "plan_tool"
 
     workflow.add_conditional_edges(
@@ -98,12 +107,17 @@ def build_graph(model: DocGemmaProtocol, tool_executor: Callable | None = None) 
     # Route based on check result
     def route_result(state: DocGemmaState) -> str:
         status = state.get("last_result_status", "done")
+        idx = state.get("current_subtask_index", 0)
+        subtasks = state.get("subtasks", [])
 
         if status == "continue":
+            logger.info(f"[ROUTE] check_result -> plan_tool (subtask {idx + 1}/{len(subtasks)})")
             return "plan_tool"
         if status == "needs_user_input":
+            logger.info("[ROUTE] check_result -> synthesize_response (needs user input)")
             return "synthesize_response"
         # "done" or "error" after max retries
+        logger.info(f"[ROUTE] check_result -> synthesize_response (status={status})")
         return "synthesize_response"
 
     workflow.add_conditional_edges(
@@ -158,6 +172,10 @@ class DocGemmaAgent:
         Returns:
             The agent's response string
         """
+        logger.info("=" * 60)
+        logger.info(f"[AGENT] Starting run: {user_input[:80]}{'...' if len(user_input) > 80 else ''}")
+        logger.info("=" * 60)
+        
         initial_state: DocGemmaState = {
             "user_input": user_input,
             "image_data": image_data,
@@ -170,6 +188,11 @@ class DocGemmaAgent:
         }
 
         result = await self.graph.ainvoke(initial_state)
+        
+        logger.info("=" * 60)
+        logger.info("[AGENT] Run completed")
+        logger.info("=" * 60)
+        
         return result.get("final_response", "I was unable to generate a response.")
 
     def run_sync(

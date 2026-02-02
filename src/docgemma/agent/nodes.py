@@ -28,6 +28,7 @@ def timed_node(func: Callable[P, T]) -> Callable[P, T]:
 
     @functools.wraps(func)
     def sync_wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        logger.info(f"[NODE] {func.__name__} starting...")
         start = time.perf_counter()
         try:
             result = func(*args, **kwargs)
@@ -38,6 +39,7 @@ def timed_node(func: Callable[P, T]) -> Callable[P, T]:
 
     @functools.wraps(func)
     async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        logger.info(f"[NODE] {func.__name__} starting...")
         start = time.perf_counter()
         try:
             result = await func(*args, **kwargs)
