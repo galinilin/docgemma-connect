@@ -153,7 +153,7 @@ class DocGemma:
         # Decode only new tokens
         response = self._tokenizer.decode(
             outputs[0][input_length:],
-            skip_special_tokens=True,
+            skip_special_tokens=False,
         )
         print("[*] Raw:", json.dumps({"input": messages, "response": response}, indent=2))
         print("*********************")
