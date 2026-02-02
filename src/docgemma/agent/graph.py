@@ -20,10 +20,10 @@ from .nodes import (
 from .state import DocGemmaState
 
 if TYPE_CHECKING:
-    from ..model import DocGemma
+    from ..protocols import DocGemmaProtocol
 
 
-def build_graph(model: DocGemma, tool_executor: Callable | None = None) -> StateGraph:
+def build_graph(model: DocGemmaProtocol, tool_executor: Callable | None = None) -> StateGraph:
     """Build the DocGemma agent graph.
 
     Args:
@@ -124,14 +124,14 @@ def build_graph(model: DocGemma, tool_executor: Callable | None = None) -> State
 class DocGemmaAgent:
     """High-level agent interface wrapping the LangGraph workflow."""
 
-    def __init__(self, model: DocGemma, tool_executor: Callable | None = None):
+    def __init__(self, model: DocGemmaProtocol, tool_executor: Callable | None = None):
         """Initialize the agent.
 
         Args:
-            model: DocGemma model instance
+            model: DocGemma-compatible model (DocGemma or RemoteDocGemma)
             tool_executor: Async callable(tool_name, args) -> result dict
         """
-        self.model = model
+        self.model: DocGemmaProtocol = model
         self.tool_executor = tool_executor
         self._graph = None
 

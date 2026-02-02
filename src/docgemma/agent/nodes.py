@@ -11,7 +11,7 @@ from .schemas import ComplexityClassification, DecomposedIntent, ThinkingOutput,
 from .state import DocGemmaState, Subtask, ToolResult
 
 if TYPE_CHECKING:
-    from ..model import DocGemma
+    from ..protocols import DocGemmaProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +115,7 @@ If an image is attached, classify as COMPLEX."""
 
 
 @timed_node
-def complexity_router(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
+def complexity_router(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
     """Route query to direct answer or complex processing pipeline."""
     # Image attached = always complex
     if state.get("image_present"):
@@ -141,7 +141,7 @@ Query: '{user_input}'
 
 
 @timed_node
-def thinking_mode(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
+def thinking_mode(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
     """Generate reasoning for complex queries before decomposition."""
     prompt = THINKING_PROMPT.format(user_input=state["user_input"])
     result = model.generate_outlines(prompt, ThinkingOutput)
@@ -173,7 +173,7 @@ Decompose into 1-{max_subtasks} subtasks. Each subtask should map to one tool ca
 
 
 @timed_node
-def decompose_intent(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
+def decompose_intent(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
     """Decompose complex query into subtasks."""
     prompt = DECOMPOSE_PROMPT.format(
         user_input=state["user_input"],
@@ -228,7 +228,7 @@ Select the tool and provide arguments. Use "none" if no tool needed."""
 
 
 @timed_node
-def plan_tool(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
+def plan_tool(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
     """Select tool for current subtask."""
     idx = state.get("current_subtask_index", 0)
     subtasks = state.get("subtasks", [])
@@ -446,7 +446,7 @@ def _format_tool_results(results: list[ToolResult]) -> str:
 
 
 @timed_node
-def synthesize_response(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
+def synthesize_response(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
     """Generate final response from accumulated context."""
     # Handle clarification request
     if state.get("needs_user_input"):
@@ -469,7 +469,7 @@ def synthesize_response(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
 
 
 @timed_node
-def direct_response(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
+def direct_response(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
     """Generate direct response without tools (for simple queries)."""
     prompt = f"""You are a clinical decision support system. Respond concisely to this query:
 
