@@ -90,6 +90,8 @@ class RemoteDocGemma:
         Returns:
             Generated text response.
         """
+        import json
+
         resp = self._client.post(
             self._url("generate"),
             json={
@@ -99,7 +101,10 @@ class RemoteDocGemma:
             },
         )
         resp.raise_for_status()
-        return resp.json()["response"]
+        response = resp.json()["response"]
+        print("[*] Raw:", json.dumps({"input": [{"role": "user", "content": prompt}], "response": response}, indent=2))
+        print("*********************")
+        return response
 
     def generate_outlines(
         self,
@@ -117,6 +122,8 @@ class RemoteDocGemma:
         Returns:
             Instance of out_type with generated values.
         """
+        import json
+
         # Convert Pydantic model to JSON schema
         schema = out_type.model_json_schema()
 
@@ -129,7 +136,17 @@ class RemoteDocGemma:
             },
         )
         resp.raise_for_status()
-        return out_type.model_validate(resp.json()["response"])
+        response_data = resp.json()["response"]
+        
+        # Handle both string (JSON) and dict responses
+        if isinstance(response_data, str):
+            response = out_type.model_validate_json(response_data)
+        else:
+            response = out_type.model_validate(response_data)
+        
+        print("[*] Outlines:", json.dumps({"input": prompt, "response": response.model_dump()}, indent=2))
+        print("*********************")
+        return response
 
     def close(self) -> None:
         """Close HTTP client."""

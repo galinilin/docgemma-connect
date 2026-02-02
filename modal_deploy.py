@@ -81,47 +81,33 @@ class Inference:
 
     @modal.fastapi_endpoint(method="POST")
     def generate_structured(self, request: dict) -> dict:
-        """Generate structured response matching a Pydantic schema.
+        """Generate structured response matching a JSON schema.
 
         Request body:
             prompt: str
-            schema: dict (JSON schema)
+            schema: dict (JSON schema from Pydantic's model_json_schema())
             max_new_tokens: int (default 256)
         """
-        from pydantic import create_model
+        import json
+        import outlines
+        from outlines.generator import JsonSchema
 
         prompt = request.get("prompt", "")
         schema = request.get("schema", {})
         max_new_tokens = request.get("max_new_tokens", 256)
 
-        # Build Pydantic model from schema
-        fields = {}
-        for field_name, field_info in schema.get("properties", {}).items():
-            field_type = _json_type_to_python(field_info.get("type", "string"))
-            required = field_name in schema.get("required", [])
-            fields[field_name] = (field_type, ... if required else None)
-
-        DynamicModel = create_model("DynamicModel", **fields)
-
-        result = self.gemma.generate_outlines(
-            prompt=prompt,
-            out_type=DynamicModel,
+        # Use Outlines Generator with JsonSchema type
+        output_type = JsonSchema(schema)
+        generator = outlines.Generator(self.gemma._outlines_model, output_type)
+        
+        result = generator(
+            prompt,
             max_new_tokens=max_new_tokens,
         )
-        return {"response": result.model_dump()}
+        # Result is already a dict from JsonSchema
+        return {"response": result}
 
     @modal.fastapi_endpoint(method="GET")
     def health(self) -> dict:
         """Health check endpoint."""
         return {"status": "ok", "model_loaded": self.gemma.is_loaded}
-
-
-def _json_type_to_python(json_type: str) -> type:
-    """Convert JSON schema type to Python type."""
-    mapping = {
-        "string": str,
-        "integer": int,
-        "number": float,
-        "boolean": bool,
-    }
-    return mapping.get(json_type, str)
