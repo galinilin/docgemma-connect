@@ -1,11 +1,18 @@
 """Test script for DocGemma Agent pipeline."""
 
 import asyncio
+import logging
 import time
 
 from dotenv import load_dotenv
 
 load_dotenv()
+
+# Configure logging to see agent flow
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(message)s",
+)
 
 from src.docgemma import DocGemma, DocGemmaAgent
 
@@ -64,7 +71,7 @@ async def main() -> None:
 
     # Initialize model
     print("\n[1] Loading model...")
-    model = DocGemma(model_id="google/medgemma-1.5-4b-it")
+    model = DocGemma(model_id="google/medgemma-1.5-4b-it", cache_dir="./usr/hf_cache")
     model.load()
     print(f"    Loaded on {model.device}")
 
