@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING, Literal
 import outlines
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
+import json
 
 if TYPE_CHECKING:
     from pydantic import BaseModel
