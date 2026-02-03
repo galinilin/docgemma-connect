@@ -2,7 +2,28 @@
 
 All prompts are centralized here for easy optimization and iteration.
 Each prompt includes documentation on its purpose and expected variables.
+
+Temperature Guide for SLMs:
+- 0.0-0.2: Deterministic, structured output (classification, JSON)
+- 0.3-0.5: Focused reasoning with some exploration
+- 0.5-0.7: Natural language generation with variation
 """
+
+# =============================================================================
+# TEMPERATURE SETTINGS
+# =============================================================================
+# Centralized temperature config for each node type.
+# SLMs are sensitive to temperature - lower is better for structured output.
+
+TEMPERATURE = {
+    "complexity_router": 0.1,   # Classification task - very deterministic
+    "thinking_mode": 0.4,       # Reasoning - some exploration allowed
+    "decompose_intent": 0.2,    # Structured output - low temp
+    "plan_tool": 0.1,           # Tool selection - deterministic
+    "synthesize_response": 0.6, # Free-form text - natural variation
+    "clarification": 0.5,       # Free-form question - natural
+    "direct_response": 0.5,     # Free-form answer - natural variation
+}
 
 # =============================================================================
 # COMPLEXITY ROUTER
@@ -17,10 +38,7 @@ COMPLEXITY_PROMPT = """Classify if this clinical query needs external tools/data
 DIRECT: Greetings, thanks, simple factual questions from medical knowledge, basic definitions.
 COMPLEX: Requires tools, image analysis, multi-step reasoning, external data lookup, patient records.
 
-Query: {user_input}
-Image attached: {image_present}
-
-If an image is attached, classify as COMPLEX."""
+Query: `{user_input}`"""
 
 
 # =============================================================================
@@ -33,7 +51,7 @@ If an image is attached, classify as COMPLEX."""
 
 THINKING_PROMPT = """Extensively think and reason about the following user prompt.
 
-Query: '{user_input}'
+Query: `{user_input}`
 """
 
 
@@ -56,7 +74,7 @@ Available tools:
 - update_patient_record: Add diagnosis/medication/note to patient record
 - analyze_medical_image: Analyze X-ray/CT/MRI images
 
-Query: {user_input}
+Query: `{user_input}`
 Image attached: {image_present}
 
 Reasoning context:
@@ -95,7 +113,7 @@ Select the tool and provide arguments. Use "none" if no tool needed."""
 
 SYNTHESIS_PROMPT = """You are a clinical decision support system responding to a healthcare professional.
 
-Original query: {user_input}
+Original query: `{user_input}`
 
 Findings from tools:
 {tool_results}
@@ -116,7 +134,7 @@ Synthesize a helpful clinical response:
 
 CLARIFICATION_PROMPT = """I need more information to complete this request.
 
-Original query: {user_input}
+Original query: `{user_input}`
 What's missing: {missing_info}
 
 Generate a concise, specific question to get the information needed."""
@@ -131,4 +149,4 @@ Generate a concise, specific question to get the information needed."""
 
 DIRECT_RESPONSE_PROMPT = """You are a clinical decision support system. Respond concisely to this query:
 
-{user_input}"""
+`{user_input}`"""
