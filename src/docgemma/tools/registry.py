@@ -15,8 +15,11 @@ Example:
 
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass, field
 from typing import Any, Callable, Awaitable
+
+logger = logging.getLogger(__name__)
 
 # Type alias for tool executor functions
 ToolExecutor = Callable[..., Awaitable[dict[str, Any]]]
@@ -125,15 +128,22 @@ class ToolRegistry:
         Returns:
             Tool result dict
         """
+        print(f"[TOOL] Executing {tool_name} with args: {args}")
+        
         if tool_name == "none" or not tool_name:
+            print(f"[TOOL] Skipped: No tool needed")
             return {"skipped": True, "reason": "No tool needed"}
 
         tool = self._tools.get(tool_name)
         if not tool:
-            return {"error": f"Unknown tool: {tool_name}"}
+            error_msg = f"Unknown tool: {tool_name}"
+            print(f"[TOOL] ERROR: {error_msg}")
+            return {"error": error_msg}
 
         if not tool.executor:
-            return {"error": f"Tool {tool_name} has no executor registered"}
+            error_msg = f"Tool {tool_name} has no executor registered"
+            print(f"[TOOL] ERROR: {error_msg}")
+            return {"error": error_msg}
 
         # Map schema fields to executor params using arg_mapping
         mapped_args = {}
@@ -145,12 +155,20 @@ class ToolRegistry:
             mapped_args[param_name] = value
 
         try:
-            return await tool.executor(**mapped_args)
+            result = await tool.executor(**mapped_args)
+            # Log success with truncated result
+            result_preview = str(result)[:200] + "..." if len(str(result)) > 200 else str(result)
+            print(f"[TOOL] SUCCESS {tool_name}: {result_preview}")
+            return result
         except TypeError as e:
             # Handle missing/extra arguments gracefully
-            return {"error": f"Argument error for {tool_name}: {e}"}
+            error_msg = f"Argument error for {tool_name}: {e}"
+            print(f"[TOOL] ERROR: {error_msg}")
+            return {"error": error_msg}
         except Exception as e:
-            return {"error": f"Tool {tool_name} failed: {e}"}
+            error_msg = f"Tool {tool_name} failed: {e}"
+            print(f"[TOOL] ERROR: {error_msg}")
+            return {"error": error_msg}
 
 
 # Global registry instance
