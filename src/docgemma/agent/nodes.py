@@ -14,6 +14,7 @@ from .prompts import (
     DIRECT_RESPONSE_PROMPT,
     PLAN_PROMPT,
     SYNTHESIS_PROMPT,
+    TEMPERATURE,
     THINKING_PROMPT,
 )
 from .schemas import ComplexityClassification, DecomposedIntent, ThinkingOutput, ToolCall
@@ -122,12 +123,10 @@ def complexity_router(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemma
     if state.get("image_present"):
         return {**state, "complexity": "complex"}
 
-    prompt = COMPLEXITY_PROMPT.format(
-        user_input=state["user_input"],
-        image_present=state.get("image_present", False),
+    prompt = COMPLEXITY_PROMPT.format(user_input=state["user_input"])
+    result = model.generate_outlines(
+        prompt, ComplexityClassification, temperature=TEMPERATURE["complexity_router"]
     )
-
-    result = model.generate_outlines(prompt, ComplexityClassification)
     return {**state, "complexity": result.complexity}
 
 
@@ -140,7 +139,9 @@ def complexity_router(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemma
 def thinking_mode(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
     """Generate reasoning for complex queries before decomposition."""
     prompt = THINKING_PROMPT.format(user_input=state["user_input"])
-    result = model.generate_outlines(prompt, ThinkingOutput, max_new_tokens=512)
+    result = model.generate_outlines(
+        prompt, ThinkingOutput, max_new_tokens=512, temperature=TEMPERATURE["thinking_mode"]
+    )
     return {**state, "reasoning": result.reasoning}
 
 
@@ -159,7 +160,9 @@ def decompose_intent(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaS
         max_subtasks=MAX_SUBTASKS,
     )
 
-    result = model.generate_outlines(prompt, DecomposedIntent, max_new_tokens=1024)
+    result = model.generate_outlines(
+        prompt, DecomposedIntent, max_new_tokens=1024, temperature=TEMPERATURE["decompose_intent"]
+    )
 
     # Handle clarification needed
     if result.requires_clarification:
@@ -216,7 +219,9 @@ def plan_tool(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
         tools=", ".join(AVAILABLE_TOOLS),
     )
 
-    result = model.generate_outlines(prompt, ToolCall, max_new_tokens=256)
+    result = model.generate_outlines(
+        prompt, ToolCall, max_new_tokens=256, temperature=TEMPERATURE["plan_tool"]
+    )
 
     # Store planned tool call in state for execute node
     return {
@@ -398,7 +403,9 @@ def synthesize_response(state: DocGemmaState, model: DocGemmaProtocol) -> DocGem
             user_input=state["user_input"],
             missing_info=state.get("missing_info", "specific details"),
         )
-        response = model.generate(prompt, max_new_tokens=256)
+        response = model.generate(
+            prompt, max_new_tokens=256, do_sample=True, temperature=TEMPERATURE["clarification"]
+        )
         return {**state, "final_response": response}
 
     # Normal synthesis
@@ -408,7 +415,9 @@ def synthesize_response(state: DocGemmaState, model: DocGemmaProtocol) -> DocGem
         tool_results=_format_tool_results(tool_results),
     )
 
-    response = model.generate(prompt, max_new_tokens=512)
+    response = model.generate(
+        prompt, max_new_tokens=512, do_sample=True, temperature=TEMPERATURE["synthesize_response"]
+    )
     return {**state, "final_response": response}
 
 
@@ -416,5 +425,7 @@ def synthesize_response(state: DocGemmaState, model: DocGemmaProtocol) -> DocGem
 def direct_response(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
     """Generate direct response without tools (for simple queries)."""
     prompt = DIRECT_RESPONSE_PROMPT.format(user_input=state["user_input"])
-    response = model.generate(prompt, max_new_tokens=256)
+    response = model.generate(
+        prompt, max_new_tokens=256, do_sample=True, temperature=TEMPERATURE["direct_response"]
+    )
     return {**state, "final_response": response}

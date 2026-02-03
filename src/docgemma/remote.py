@@ -129,6 +129,7 @@ class RemoteDocGemma:
         prompt: str,
         out_type: type[BaseModel],
         max_new_tokens: int = 256,
+        temperature: float = 0.1,
     ) -> BaseModel:
         """Generate structured response matching Pydantic schema.
 
@@ -138,6 +139,8 @@ class RemoteDocGemma:
             prompt: The input prompt.
             out_type: Pydantic model class defining output schema.
             max_new_tokens: Maximum tokens to generate.
+            temperature: Sampling temperature. Lower = more deterministic.
+                         Recommended: 0.0-0.2 for structured output.
 
         Returns:
             Instance of out_type with generated values.
@@ -147,13 +150,11 @@ class RemoteDocGemma:
         messages = [{"role": "user", "content": prompt}]
         schema = out_type.model_json_schema()
 
-        import json as json_module
-
         payload = {
             "model": self._model,
             "messages": messages,
             "max_tokens": max_new_tokens,
-            "temperature": 0.0,
+            "temperature": temperature,
             # vLLM guided decoding via response_format
             "response_format": {
                 "type": "json_schema",
