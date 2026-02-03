@@ -37,9 +37,9 @@ from src.docgemma import DocGemma, DocGemmaAgent
 # CATEGORY CONFIGURATION - Set True/False to enable/disable categories
 # =============================================================================
 ENABLED_CATEGORIES = {
-    "simple_questions": True,        # SQ-01 to SQ-10: Direct factual questions
-    "complex_thinking": False,        # CT-01 to CT-10: Reasoning without tools
-    "thinking_single_tool": False,   # CTT-01 to CTT-10: Thinking + 1 tool
+    "simple_questions": False,        # SQ-01 to SQ-10: Direct factual questions
+    "complex_thinking": True,        # CT-01 to CT-10: Reasoning without tools
+    "thinking_single_tool": True,   # CTT-01 to CTT-10: Thinking + 1 tool
     "tool_failure": False,           # TF-01 to TF-10: Tool failure handling
     "missing_info": False,           # MI-01 to MI-10: Clarification needed
     "multi_tool": False,             # MT-01 to MT-10: 2-3 tool workflows
@@ -52,7 +52,7 @@ ENABLED_CATEGORIES = {
 }
 
 # Number of random cases to run per enabled category
-CASES_PER_CATEGORY = 10
+CASES_PER_CATEGORY = 3
 
 # Set to a specific test ID to run only that test (e.g., "CT-01"), or None for random
 RUN_SPECIFIC_TEST = None  # e.g., "CT-01", "SQ-05", "MT-02"
@@ -63,95 +63,17 @@ RUN_SPECIFIC_TEST = None  # e.g., "CT-01", "SQ-05", "MT-02"
 # =============================================================================
 USE_REAL_TOOLS = True  # Set to False to use mock tools instead
 
-# Import real tools
-from docgemma.tools.clinical_trials import find_clinical_trials
-from docgemma.tools.drug_interactions import check_drug_interactions
-from docgemma.tools.drug_safety import check_drug_safety
-from docgemma.tools.medical_literature import search_medical_literature
-from docgemma.tools.schemas import (
-    ClinicalTrialsInput,
-    DrugInteractionsInput,
-    DrugSafetyInput,
-    MedicalLiteratureInput,
-)
-
-
-async def real_tool_executor(tool_name: str, args: dict) -> dict:
-    """Real tool executor that calls actual API tools."""
-    print(f"  [TOOL CALL] {tool_name}({args})")
-
-    try:
-        if tool_name == "check_drug_safety":
-            # Map common arg names
-            brand_name = args.get("brand_name") or args.get("drug_name") or args.get("query", "unknown")
-            result = await check_drug_safety(DrugSafetyInput(brand_name=brand_name))
-            return result.model_dump()
-
-        if tool_name == "search_medical_literature":
-            query = args.get("query", "")
-            max_results = args.get("max_results", 3)
-            result = await search_medical_literature(
-                MedicalLiteratureInput(query=query, max_results=max_results)
-            )
-            return result.model_dump()
-
-        if tool_name == "check_drug_interactions":
-            drugs = args.get("drugs", [])
-            if not drugs and args.get("drug_list"):
-                # Handle comma-separated string
-                drugs = [d.strip() for d in args["drug_list"].split(",")]
-            if len(drugs) < 2:
-                return {"error": "Need at least 2 drugs to check interactions", "drugs_checked": drugs}
-            result = await check_drug_interactions(DrugInteractionsInput(drugs=drugs))
-            return result.model_dump()
-
-        if tool_name == "find_clinical_trials":
-            condition = args.get("condition") or args.get("query", "")
-            location = args.get("location")
-            result = await find_clinical_trials(
-                ClinicalTrialsInput(condition=condition, location=location)
-            )
-            return result.model_dump()
-
-        # Tools not yet implemented - return mock/error
-        if tool_name == "get_patient_record":
-            return {
-                "error": "Patient records not implemented",
-                "patient_id": args.get("patient_id", "unknown"),
-                "name": "Mock Patient",
-                "medications": ["metformin 500mg BID", "lisinopril 10mg daily"],
-                "conditions": ["Type 2 Diabetes", "Hypertension"],
-                "allergies": ["Penicillin"],
-            }
-
-        if tool_name == "update_patient_record":
-            return {
-                "error": "Patient records not implemented",
-                "success": False,
-                "patient_id": args.get("patient_id", "unknown"),
-            }
-
-        if tool_name == "analyze_medical_image":
-            return {
-                "error": "Image analysis not implemented",
-                "image_type": "unknown",
-                "findings": "Image analysis tool not yet available.",
-            }
-
-        return {"error": f"Unknown tool: {tool_name}"}
-
-    except Exception as e:
-        print(f"  [TOOL ERROR] {e}")
-        return {"error": str(e), "tool": tool_name}
+# Import real tools from registry (unified executor)
+from docgemma.tools import execute_tool as registry_execute_tool
 
 
 async def mock_tool_executor(tool_name: str, args: dict) -> dict:
-    """Mock tool executor that returns fake results."""
+    """Mock tool executor that returns fake results for testing."""
     print(f"  [TOOL CALL - MOCK] {tool_name}({args})")
 
     if tool_name == "check_drug_safety":
         return {
-            "brand_name": args.get("brand_name", args.get("drug_name", "unknown")),
+            "brand_name": args.get("brand_name") or args.get("drug_name", "unknown"),
             "has_warning": True,
             "boxed_warning": "Mock warning: Use with caution. Monitor for adverse effects.",
         }
@@ -165,7 +87,8 @@ async def mock_tool_executor(tool_name: str, args: dict) -> dict:
             ],
         }
     if tool_name == "check_drug_interactions":
-        drugs = args.get("drugs", [])
+        drug_list = args.get("drug_list", "")
+        drugs = [d.strip() for d in drug_list.split(",")] if drug_list else []
         return {
             "drugs_checked": drugs,
             "interactions": [
@@ -174,7 +97,7 @@ async def mock_tool_executor(tool_name: str, args: dict) -> dict:
         }
     if tool_name == "find_clinical_trials":
         return {
-            "condition": args.get("condition", args.get("query", "")),
+            "condition": args.get("condition") or args.get("query", ""),
             "total_found": 2,
             "trials": [
                 {"nct_id": "NCT00000001", "title": "Mock Phase 3 Trial", "status": "Recruiting"},
@@ -188,12 +111,6 @@ async def mock_tool_executor(tool_name: str, args: dict) -> dict:
             "conditions": ["Type 2 Diabetes", "Hypertension"],
             "allergies": ["Penicillin"],
         }
-    if tool_name == "update_patient_record":
-        return {
-            "success": True,
-            "patient_id": args.get("patient_id", "unknown"),
-            "updated_fields": list(args.keys()),
-        }
     if tool_name == "analyze_medical_image":
         return {
             "image_type": "chest_xray",
@@ -203,8 +120,10 @@ async def mock_tool_executor(tool_name: str, args: dict) -> dict:
     return {"result": "mock", "tool": tool_name}
 
 
-# Select which executor to use
-tool_executor = real_tool_executor if USE_REAL_TOOLS else mock_tool_executor
+# Select which executor to use:
+# - None: Uses the built-in registry (real tools)
+# - mock_tool_executor: Uses fake results for testing
+tool_executor = None if USE_REAL_TOOLS else mock_tool_executor
 
 
 # =============================================================================
