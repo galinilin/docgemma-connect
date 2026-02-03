@@ -30,7 +30,7 @@ logging.basicConfig(
     format="%(message)s",
 )
 
-from src.docgemma import RemoteDocGemma, DocGemmaAgent
+from src.docgemma import DocGemma, DocGemmaAgent
 
 
 # =============================================================================
@@ -386,7 +386,7 @@ async def main() -> None:
 
     # Initialize model
     print("\n[1] Connecting to remote model...")
-    model = RemoteDocGemma()
+    model = DocGemma()
     print(f"    Endpoint: {model._endpoint}")
     print(f"    Model: {model._model}")
     print(f"    Health check: {model.health_check()}")

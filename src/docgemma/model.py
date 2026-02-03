@@ -1,4 +1,4 @@
-"""Remote DocGemma client for OpenAI-compatible vLLM endpoint."""
+"""DocGemma client for OpenAI-compatible vLLM endpoint."""
 
 from __future__ import annotations
 
@@ -11,8 +11,8 @@ if TYPE_CHECKING:
     from pydantic import BaseModel
 
 
-class RemoteDocGemma:
-    """Remote client matching DocGemma interface via OpenAI-compatible API.
+class DocGemma:
+    """DocGemma client for OpenAI-compatible vLLM endpoint.
 
     Works with vLLM, OpenAI, or any OpenAI-compatible endpoint.
 
@@ -21,8 +21,8 @@ class RemoteDocGemma:
         export DOCGEMMA_API_KEY="your-api-key"
         export DOCGEMMA_MODEL="google/medgemma-1.5-4b-it"
 
-        from docgemma.remote import RemoteDocGemma
-        model = RemoteDocGemma()
+        from docgemma import DocGemma
+        model = DocGemma()
         response = model.generate("What is hypertension?")
     """
 
@@ -74,7 +74,7 @@ class RemoteDocGemma:
         except Exception:
             return False
 
-    def load(self) -> RemoteDocGemma:
+    def load(self) -> DocGemma:
         """No-op for API compatibility. Remote model is always loaded."""
         return self
 
@@ -185,7 +185,7 @@ class RemoteDocGemma:
         """Close HTTP client."""
         self._client.close()
 
-    def __enter__(self) -> RemoteDocGemma:
+    def __enter__(self) -> DocGemma:
         return self
 
     def __exit__(self, *args) -> None:

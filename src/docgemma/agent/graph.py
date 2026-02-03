@@ -21,12 +21,12 @@ from .nodes import (
 from .state import DocGemmaState
 
 if TYPE_CHECKING:
-    from ..remote import RemoteDocGemma
+    from ..model import DocGemma
 
 logger = logging.getLogger(__name__)
 
 
-def build_graph(model: RemoteDocGemma, tool_executor: Callable | None = None) -> StateGraph:
+def build_graph(model: DocGemma, tool_executor: Callable | None = None) -> StateGraph:
     """Build the DocGemma agent graph.
 
     Args:
@@ -138,14 +138,14 @@ def build_graph(model: RemoteDocGemma, tool_executor: Callable | None = None) ->
 class DocGemmaAgent:
     """High-level agent interface wrapping the LangGraph workflow."""
 
-    def __init__(self, model: RemoteDocGemma, tool_executor: Callable | None = None):
+    def __init__(self, model: DocGemma, tool_executor: Callable | None = None):
         """Initialize the agent.
 
         Args:
-            model: RemoteDocGemma model instance
+            model: DocGemma model instance
             tool_executor: Async callable(tool_name, args) -> result dict
         """
-        self.model: RemoteDocGemma = model
+        self.model: DocGemma = model
         self.tool_executor = tool_executor
         self._graph = None
 
