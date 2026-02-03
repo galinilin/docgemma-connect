@@ -39,22 +39,22 @@ from src.docgemma import DocGemma, DocGemmaAgent
 # CATEGORY CONFIGURATION - Set True/False to enable/disable categories
 # =============================================================================
 ENABLED_CATEGORIES = {
-    "simple_questions": False,        # SQ-01 to SQ-10: Direct factual questions
-    "complex_thinking": True,        # CT-01 to CT-10: Reasoning without tools
-    "thinking_single_tool": True,   # CTT-01 to CTT-10: Thinking + 1 tool
-    "tool_failure": False,           # TF-01 to TF-10: Tool failure handling
-    "missing_info": False,           # MI-01 to MI-10: Clarification needed
-    "multi_tool": False,             # MT-01 to MT-10: 2-3 tool workflows
-    "simple_image": False,           # SQI-01 to SQI-10: Simple image questions
-    "complex_thinking_image": False, # CTI-01 to CTI-10: Image + reasoning
-    "image_single_tool": False,      # ITT-01 to ITT-10: Image + 1 tool
-    "image_missing_info": False,     # IMI-01 to IMI-10: Image + clarification
-    "image_multi_tool": False,       # IMT-01 to IMT-10: Image + multi-tool
-    "image_tool_failure": False,     # ITF-01 to ITF-10: Image + tool failure
+    "simple_questions": True,         # SQ-01 to SQ-10: Direct factual questions
+    "complex_thinking": True,         # CT-01 to CT-10: Reasoning without tools
+    "thinking_single_tool": True,     # CTT-01 to CTT-10: Thinking + 1 tool
+    "tool_failure": True,             # TF-01 to TF-10: Tool failure handling
+    "missing_info": True,             # MI-01 to MI-10: Clarification needed
+    "multi_tool": True,               # MT-01 to MT-10: 2-3 tool workflows
+    "simple_image": True,             # SQI-01 to SQI-10: Simple image questions
+    "complex_thinking_image": True,   # CTI-01 to CTI-10: Image + reasoning
+    "image_single_tool": True,        # ITT-01 to ITT-10: Image + 1 tool
+    "image_missing_info": True,       # IMI-01 to IMI-10: Image + clarification
+    "image_multi_tool": True,         # IMT-01 to IMT-10: Image + multi-tool
+    "image_tool_failure": True,       # ITF-01 to ITF-10: Image + tool failure
 }
 
 # Number of random cases to run per enabled category
-CASES_PER_CATEGORY = 3
+CASES_PER_CATEGORY = 10  # Run all cases per category
 
 # Set to a specific test ID to run only that test (e.g., "CT-01"), or None for random
 RUN_SPECIFIC_TEST = None  # e.g., "CT-01", "SQ-05", "MT-02"
@@ -145,7 +145,7 @@ def filter_cases(cases: list[dict]) -> list[dict]:
 
 
 def select_cases(cases: list[dict]) -> list[dict]:
-    """Select random cases from each enabled category."""
+    """Select test cases to run."""
     if RUN_SPECIFIC_TEST:
         # Find and return only the specific test
         for c in cases:
@@ -154,21 +154,8 @@ def select_cases(cases: list[dict]) -> list[dict]:
         print(f"WARNING: Test '{RUN_SPECIFIC_TEST}' not found!")
         return []
 
-    # Group by category
-    by_category: dict[str, list[dict]] = {}
-    for c in cases:
-        cat = c["category"]
-        if cat not in by_category:
-            by_category[cat] = []
-        by_category[cat].append(c)
-
-    # Select random samples from each
-    selected = []
-    for cat, cat_cases in by_category.items():
-        n = min(CASES_PER_CATEGORY, len(cat_cases))
-        selected.extend(random.sample(cat_cases, n))
-
-    return selected
+    # Return all filtered cases (no random sampling)
+    return cases
 
 
 class TeeWriter:
