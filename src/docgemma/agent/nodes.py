@@ -7,6 +7,15 @@ import logging
 import time
 from typing import TYPE_CHECKING, Callable, ParamSpec, TypeVar
 
+from .prompts import (
+    CLARIFICATION_PROMPT,
+    COMPLEXITY_PROMPT,
+    DECOMPOSE_PROMPT,
+    DIRECT_RESPONSE_PROMPT,
+    PLAN_PROMPT,
+    SYNTHESIS_PROMPT,
+    THINKING_PROMPT,
+)
 from .schemas import ComplexityClassification, DecomposedIntent, ThinkingOutput, ToolCall
 from .state import DocGemmaState, Subtask, ToolResult
 
@@ -105,16 +114,6 @@ def image_detection(state: DocGemmaState) -> DocGemmaState:
 # Node 2: Complexity Router (LLM + Outlines)
 # =============================================================================
 
-COMPLEXITY_PROMPT = """Classify if this clinical query needs external tools/data or can be answered directly.
-
-DIRECT: Greetings, thanks, simple factual questions from medical knowledge, basic definitions.
-COMPLEX: Requires tools, image analysis, multi-step reasoning, external data lookup, patient records.
-
-Query: {user_input}
-Image attached: {image_present}
-
-If an image is attached, classify as COMPLEX."""
-
 
 @timed_node
 def complexity_router(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
@@ -136,11 +135,6 @@ def complexity_router(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemma
 # Node 3: Thinking Mode (LLM + Outlines)
 # =============================================================================
 
-THINKING_PROMPT = """Extensively think and reason about the following user prompt.
-
-Query: '{user_input}'
-"""
-
 
 @timed_node
 def thinking_mode(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
@@ -153,25 +147,6 @@ def thinking_mode(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaStat
 # =============================================================================
 # Node 4: Decompose Intent (LLM + Outlines)
 # =============================================================================
-
-DECOMPOSE_PROMPT = """Break down this clinical query into actionable subtasks.
-
-Available tools:
-- check_drug_safety: FDA boxed warnings lookup
-- search_medical_literature: PubMed article search
-- check_drug_interactions: Drug-drug interaction check
-- find_clinical_trials: Search recruiting trials
-- get_patient_record: Fetch patient data by ID
-- update_patient_record: Add diagnosis/medication/note to patient record
-- analyze_medical_image: Analyze X-ray/CT/MRI images
-
-Query: {user_input}
-Image attached: {image_present}
-
-Reasoning context:
-{reasoning}
-
-Decompose into 1-{max_subtasks} subtasks. Each subtask should map to one tool call."""
 
 
 @timed_node
@@ -212,21 +187,8 @@ def decompose_intent(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaS
 
 
 # =============================================================================
-# Node 4: Plan Tool (LLM + Outlines)
+# Node 5: Plan Tool (LLM + Outlines)
 # =============================================================================
-
-PLAN_PROMPT = """Select the best tool for this subtask.
-
-Subtask: {intent}
-Context: {context}
-Suggested tool: {suggested_tool}
-
-Previous results this turn:
-{previous_results}
-
-Available tools: {tools}
-
-Select the tool and provide arguments. Use "none" if no tool needed."""
 
 
 @timed_node
@@ -406,26 +368,6 @@ def check_result(state: DocGemmaState) -> DocGemmaState:
 # Node 7: Response Synthesis (LLM)
 # =============================================================================
 
-SYNTHESIS_PROMPT = """You are a clinical decision support system responding to a healthcare professional.
-
-Original query: {user_input}
-
-Findings from tools:
-{tool_results}
-
-Synthesize a helpful clinical response:
-- Use standard medical terminology and abbreviations (HTN, DM2, BID, PRN)
-- Be concise - clinicians don't need hand-holding
-- Include source citations where applicable
-- If information is incomplete, acknowledge limitations"""
-
-CLARIFICATION_PROMPT = """I need more information to complete this request.
-
-Original query: {user_input}
-What's missing: {missing_info}
-
-Generate a concise, specific question to get the information needed."""
-
 
 def _format_tool_results(results: list[ToolResult]) -> str:
     """Format tool results for synthesis prompt."""
@@ -473,9 +415,6 @@ def synthesize_response(state: DocGemmaState, model: DocGemmaProtocol) -> DocGem
 @timed_node
 def direct_response(state: DocGemmaState, model: DocGemmaProtocol) -> DocGemmaState:
     """Generate direct response without tools (for simple queries)."""
-    prompt = f"""You are a clinical decision support system. Respond concisely to this query:
-
-{state["user_input"]}"""
-
+    prompt = DIRECT_RESPONSE_PROMPT.format(user_input=state["user_input"])
     response = model.generate(prompt, max_new_tokens=256)
     return {**state, "final_response": response}

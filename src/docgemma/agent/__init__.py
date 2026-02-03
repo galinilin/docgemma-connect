@@ -2,6 +2,7 @@
 
 from .graph import DocGemmaAgent, build_graph
 from .state import DocGemmaState, Subtask, ToolResult
+from . import prompts
 
 __all__ = [
     "DocGemmaAgent",
@@ -9,4 +10,5 @@ __all__ = [
     "DocGemmaState",
     "Subtask",
     "ToolResult",
+    "prompts",
 ]
