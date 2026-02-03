@@ -10,15 +10,16 @@ from typing import TYPE_CHECKING, Callable, ParamSpec, TypeVar
 from .prompts import (
     CLARIFICATION_PROMPT,
     COMPLEXITY_PROMPT,
-    DECOMPOSE_PROMPT,
     DIRECT_RESPONSE_PROMPT,
-    PLAN_PROMPT,
     SYNTHESIS_PROMPT,
     TEMPERATURE,
     THINKING_PROMPT,
+    get_decompose_prompt,
+    get_plan_prompt,
 )
 from .schemas import ComplexityClassification, DecomposedIntent, ThinkingOutput, ToolCall
 from .state import DocGemmaState, Subtask, ToolResult
+from ..tools.registry import TOOL_REGISTRY, get_tool_names
 
 if TYPE_CHECKING:
     from ..model import DocGemma
@@ -70,7 +71,7 @@ def timed_node(func: Callable[P, T]) -> Callable[P, T]:
 
 MAX_ITERATIONS_PER_SUBTASK = 3
 MAX_TOOL_RETRIES = 3
-MAX_SUBTASKS = 5
+MAX_SUBTASKS = 2  # Reduced to match flat schema
 
 SUPPORTED_IMAGE_TYPES = {
     "image/png",
@@ -78,16 +79,6 @@ SUPPORTED_IMAGE_TYPES = {
     "image/dicom",
     "application/dicom",
 }
-
-AVAILABLE_TOOLS = [
-    "check_drug_safety",
-    "search_medical_literature",
-    "check_drug_interactions",
-    "find_clinical_trials",
-    "get_patient_record",
-    "update_patient_record",
-    "analyze_medical_image",
-]
 
 
 # =============================================================================
@@ -152,20 +143,18 @@ def thinking_mode(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
 
 @timed_node
 def decompose_intent(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
-    """Decompose complex query into subtasks."""
-    prompt = DECOMPOSE_PROMPT.format(
+    """Decompose complex query into subtasks (flat structure, max 2)."""
+    prompt = get_decompose_prompt(
         user_input=state["user_input"],
-        image_present=state.get("image_present", False),
-        reasoning=state.get("reasoning", "No prior reasoning."),
-        max_subtasks=MAX_SUBTASKS,
+        reasoning=state.get("reasoning", ""),
     )
 
     result = model.generate_outlines(
-        prompt, DecomposedIntent, max_new_tokens=1024, temperature=TEMPERATURE["decompose_intent"]
+        prompt, DecomposedIntent, max_new_tokens=256, temperature=TEMPERATURE["decompose_intent"]
     )
 
     # Handle clarification needed
-    if result.requires_clarification:
+    if result.needs_clarification:
         return {
             **state,
             "needs_user_input": True,
@@ -173,11 +162,22 @@ def decompose_intent(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
             "subtasks": [],
         }
 
-    # Convert to state format
-    subtasks: list[Subtask] = [
-        {"intent": s.intent, "requires_tool": s.requires_tool, "context": s.context}
-        for s in result.subtasks[:MAX_SUBTASKS]
-    ]
+    # Convert flat fields to subtask list
+    subtasks: list[Subtask] = []
+
+    if result.subtask_1:
+        subtasks.append({
+            "intent": result.subtask_1,
+            "requires_tool": result.tool_1,
+            "context": state["user_input"],
+        })
+
+    if result.subtask_2 and result.tool_2:
+        subtasks.append({
+            "intent": result.subtask_2,
+            "requires_tool": result.tool_2,
+            "context": state["user_input"],
+        })
 
     return {
         **state,
@@ -205,29 +205,30 @@ def plan_tool(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
 
     subtask = subtasks[idx]
 
-    # Format previous results
-    prev_results = state.get("tool_results", [])
-    prev_str = "None" if not prev_results else "\n".join(
-        f"- {r['tool_name']}: {r['success']}" for r in prev_results
-    )
-
-    prompt = PLAN_PROMPT.format(
+    prompt = get_plan_prompt(
         intent=subtask["intent"],
-        context=subtask["context"],
-        suggested_tool=subtask.get("requires_tool", "unknown"),
-        previous_results=prev_str,
-        tools=", ".join(AVAILABLE_TOOLS),
+        suggested_tool=subtask.get("requires_tool", "none"),
     )
 
     result = model.generate_outlines(
-        prompt, ToolCall, max_new_tokens=256, temperature=TEMPERATURE["plan_tool"]
+        prompt, ToolCall, max_new_tokens=128, temperature=TEMPERATURE["plan_tool"]
     )
+
+    # Collect all non-None argument fields from the result
+    # The registry will handle mapping these to executor params
+    arguments = {}
+    if result.drug_name:
+        arguments["drug_name"] = result.drug_name
+    if result.drug_list:
+        arguments["drug_list"] = result.drug_list
+    if result.query:
+        arguments["query"] = result.query
 
     # Store planned tool call in state for execute node
     return {
         **state,
         "_planned_tool": result.tool_name,
-        "_planned_args": result.arguments,
+        "_planned_args": arguments,
     }
 
 

@@ -19,6 +19,7 @@ from .nodes import (
     thinking_mode,
 )
 from .state import DocGemmaState
+from ..tools.registry import execute_tool as registry_execute_tool
 
 if TYPE_CHECKING:
     from ..model import DocGemma
@@ -31,12 +32,15 @@ def build_graph(model: DocGemma, tool_executor: Callable | None = None) -> State
 
     Args:
         model: DocGemma model instance (must be loaded)
-        tool_executor: Async callable(tool_name, args) -> result dict.
-                       If None, tools will be skipped.
+        tool_executor: Optional custom tool executor. If None, uses the
+                       built-in tool registry. Signature: async (tool_name, args) -> dict
 
     Returns:
         Compiled LangGraph workflow
     """
+    # Use registry executor if no custom one provided
+    _executor = tool_executor if tool_executor is not None else registry_execute_tool
+
     workflow = StateGraph(DocGemmaState)
 
     # === Add Nodes ===
@@ -47,12 +51,9 @@ def build_graph(model: DocGemma, tool_executor: Callable | None = None) -> State
     workflow.add_node("decompose_intent", lambda s: decompose_intent(s, model))
     workflow.add_node("plan_tool", lambda s: plan_tool(s, model))
 
-    # Execute tool needs async handling
+    # Execute tool with the selected executor
     async def _execute(s):
-        if tool_executor is None:
-            # No executor, skip tool execution
-            return {**s, "last_result_status": "success", "_planned_tool": None}
-        return await execute_tool(s, tool_executor)
+        return await execute_tool(s, _executor)
 
     workflow.add_node("execute_tool", _execute)
     workflow.add_node("check_result", check_result)

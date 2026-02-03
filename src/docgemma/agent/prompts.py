@@ -1,152 +1,146 @@
 """Prompt templates for DocGemma agent nodes.
 
-All prompts are centralized here for easy optimization and iteration.
-Each prompt includes documentation on its purpose and expected variables.
+Optimized for SLMs (Small Language Models):
+- Direct imperatives, no politeness
+- One-shot examples where helpful
+- Minimal context, maximum clarity
+- Structure over prose
 
-Temperature Guide for SLMs:
-- 0.0-0.2: Deterministic, structured output (classification, JSON)
-- 0.3-0.5: Focused reasoning with some exploration
-- 0.5-0.7: Natural language generation with variation
+Temperature Guide:
+- 0.0-0.1: Structured output (JSON, classification)
+- 0.3-0.4: Focused reasoning
+- 0.5-0.6: Natural text generation
 """
+
+from ..tools.registry import get_tools_for_prompt
 
 # =============================================================================
 # TEMPERATURE SETTINGS
 # =============================================================================
-# Centralized temperature config for each node type.
-# SLMs are sensitive to temperature - lower is better for structured output.
 
 TEMPERATURE = {
-    "complexity_router": 0.1,   # Classification task - very deterministic
-    "thinking_mode": 0.4,       # Reasoning - some exploration allowed
-    "decompose_intent": 0.2,    # Structured output - low temp
-    "plan_tool": 0.1,           # Tool selection - deterministic
-    "synthesize_response": 0.6, # Free-form text - natural variation
-    "clarification": 0.5,       # Free-form question - natural
-    "direct_response": 0.5,     # Free-form answer - natural variation
+    "complexity_router": 0.0,   # Binary classification - deterministic
+    "thinking_mode": 0.3,       # Reasoning - focused
+    "decompose_intent": 0.1,    # Structured output - very deterministic
+    "plan_tool": 0.0,           # Tool selection - deterministic
+    "synthesize_response": 0.5, # Free-form text
+    "clarification": 0.4,       # Free-form question
+    "direct_response": 0.5,     # Free-form answer
 }
 
 # =============================================================================
-# COMPLEXITY ROUTER
+# COMPLEXITY ROUTER (Binary classification)
 # =============================================================================
-# Purpose: Classify whether a query needs tools/complex processing or can be
-#          answered directly from model knowledge.
-# Variables: {user_input}, {image_present}
-# Output: ComplexityClassification schema (complexity: "direct" | "complex")
 
-COMPLEXITY_PROMPT = """Classify if this clinical query needs external tools/data or can be answered directly.
+COMPLEXITY_PROMPT = """Classify: DIRECT or COMPLEX?
 
-DIRECT: Greetings, thanks, simple factual questions from medical knowledge, basic definitions.
-COMPLEX: Requires tools, image analysis, multi-step reasoning, external data lookup, patient records.
+DIRECT = answer from medical knowledge (definitions, facts, mechanisms)
+COMPLEX = needs tools, data lookup, patient records, images
 
-Query: `{user_input}`"""
+Query: {user_input}"""
 
 
 # =============================================================================
-# THINKING MODE
+# THINKING MODE (Chain-of-thought)
 # =============================================================================
-# Purpose: Generate reasoning/chain-of-thought for complex queries before
-#          decomposing into subtasks. Helps the model think through the problem.
-# Variables: {user_input}
-# Output: ThinkingOutput schema (reasoning: str)
 
-THINKING_PROMPT = """Extensively think and reason about the following user prompt.
+THINKING_PROMPT = """Analyze this clinical query. What information is needed? What tools might help?
 
-Query: `{user_input}`
-"""
+Query: {user_input}"""
 
 
 # =============================================================================
-# INTENT DECOMPOSITION
+# INTENT DECOMPOSITION (Flat structure, 1-2 subtasks max)
 # =============================================================================
-# Purpose: Break down a complex query into actionable subtasks, each mapping
-#          to a specific tool call.
-# Variables: {user_input}, {image_present}, {reasoning}, {max_subtasks}
-# Output: DecomposedIntent schema (subtasks list, requires_clarification, etc.)
 
-DECOMPOSE_PROMPT = """Break down this clinical query into actionable subtasks.
+def get_decompose_prompt(user_input: str, reasoning: str) -> str:
+    """Generate decomposition prompt with dynamic tool list."""
+    tools = get_tools_for_prompt()
+    return f"""Decompose into 1-2 tool calls.
 
-Available tools:
-- check_drug_safety: FDA boxed warnings lookup
-- search_medical_literature: PubMed article search
-- check_drug_interactions: Drug-drug interaction check
-- find_clinical_trials: Search recruiting trials
-- get_patient_record: Fetch patient data by ID
-- update_patient_record: Add diagnosis/medication/note to patient record
-- analyze_medical_image: Analyze X-ray/CT/MRI images
+Tools:
+{tools}
 
-Query: `{user_input}`
-Image attached: {image_present}
+Query: {user_input}
 
-Reasoning context:
-{reasoning}
+Context: {reasoning}
 
-Decompose into 1-{max_subtasks} subtasks. Each subtask should map to one tool call."""
+Return subtask_1, tool_1, and optionally subtask_2, tool_2."""
+
+
+# Keep static version for backwards compatibility
+DECOMPOSE_PROMPT = """Decompose into 1-2 tool calls.
+
+Tools:
+{tools}
+
+Query: {user_input}
+
+Context: {reasoning}
+
+Return subtask_1, tool_1, and optionally subtask_2, tool_2."""
 
 
 # =============================================================================
-# TOOL PLANNING
+# TOOL PLANNING (Explicit fields, no dict)
 # =============================================================================
-# Purpose: Select the best tool and arguments for a specific subtask.
-# Variables: {intent}, {context}, {suggested_tool}, {previous_results}, {tools}
-# Output: ToolCall schema (tool_name, arguments, reasoning)
 
-PLAN_PROMPT = """Select the best tool for this subtask.
+def get_plan_prompt(intent: str, suggested_tool: str) -> str:
+    """Generate tool planning prompt with dynamic tool list."""
+    tools = get_tools_for_prompt()
+    return f"""Select tool and arguments.
 
-Subtask: {intent}
-Context: {context}
-Suggested tool: {suggested_tool}
+Task: {intent}
+Suggested: {suggested_tool}
 
-Previous results this turn:
-{previous_results}
+Tools:
+{tools}
 
-Available tools: {tools}
+Return tool_name and the appropriate argument field."""
 
-Select the tool and provide arguments. Use "none" if no tool needed."""
+
+# Keep static version for backwards compatibility
+PLAN_PROMPT = """Select tool and arguments.
+
+Task: {intent}
+Suggested: {suggested_tool}
+
+Tools:
+{tools}
+
+Return tool_name and the appropriate argument field."""
 
 
 # =============================================================================
 # RESPONSE SYNTHESIS
 # =============================================================================
-# Purpose: Synthesize a final clinical response from tool results.
-# Variables: {user_input}, {tool_results}
-# Output: Free-form text response
 
-SYNTHESIS_PROMPT = """You are a clinical decision support system responding to a healthcare professional.
+SYNTHESIS_PROMPT = """Clinical decision support response.
 
-Original query: `{user_input}`
+Query: {user_input}
 
-Findings from tools:
+Tool findings:
 {tool_results}
 
-Synthesize a helpful clinical response:
-- Use standard medical terminology and abbreviations (HTN, DM2, BID, PRN)
-- Be concise - clinicians don't need hand-holding
-- Include source citations where applicable
-- If information is incomplete, acknowledge limitations"""
+Respond concisely. Use medical abbreviations. Cite sources if available."""
 
 
 # =============================================================================
 # CLARIFICATION REQUEST
 # =============================================================================
-# Purpose: Generate a question to get missing information from the user.
-# Variables: {user_input}, {missing_info}
-# Output: Free-form text question
 
-CLARIFICATION_PROMPT = """I need more information to complete this request.
+CLARIFICATION_PROMPT = """Need more information.
 
-Original query: `{user_input}`
-What's missing: {missing_info}
+Query: {user_input}
+Missing: {missing_info}
 
-Generate a concise, specific question to get the information needed."""
+Ask one specific question."""
 
 
 # =============================================================================
 # DIRECT RESPONSE
 # =============================================================================
-# Purpose: Generate a direct response for simple queries (no tools needed).
-# Variables: {user_input}
-# Output: Free-form text response
 
-DIRECT_RESPONSE_PROMPT = """You are a clinical decision support system. Respond concisely to this query:
+DIRECT_RESPONSE_PROMPT = """Answer concisely as a clinical decision support system.
 
-`{user_input}`"""
+{user_input}"""
