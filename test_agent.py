@@ -20,9 +20,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Create logs directory
-LOGS_DIR = Path(__file__).parent / "test_logs"
-LOGS_DIR.mkdir(exist_ok=True)
+# Create logs directory structure: test_agent/run-MMDDYYYY/
+LOGS_BASE_DIR = Path(__file__).parent / "test_agent"
+RUN_FOLDER = f"run-{datetime.now().strftime('%m%d%Y')}"
+LOGS_DIR = LOGS_BASE_DIR / RUN_FOLDER
+LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Configure logging to see agent flow
 logging.basicConfig(
@@ -185,9 +187,8 @@ class TeeWriter:
 
 
 def save_test_log(test_id: str, content: str, test_case: dict, result: dict) -> Path:
-    """Save test log to file."""
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    filename = f"{test_id}_{timestamp}.log"
+    """Save test log to file in run folder."""
+    filename = f"{test_id}.txt"
     filepath = LOGS_DIR / filename
 
     with open(filepath, "w") as f:
@@ -330,7 +331,7 @@ async def main() -> None:
     success_count = sum(1 for r in results if r["success"])
     print(f"Completed: {success_count}/{len(results)}")
     print(f"Total time: {sum(r['time'] for r in results):.2f}s")
-    print(f"Logs directory: {LOGS_DIR}")
+    print(f"Logs folder: {LOGS_DIR}")
     print("\nResults:")
     for r in results:
         status = "PASS" if r["success"] else "FAIL"
