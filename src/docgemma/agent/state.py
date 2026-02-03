@@ -44,6 +44,10 @@ class DocGemmaState(TypedDict, total=False):
     tool_retries: int
     last_result_status: str  # "success" | "error" | "needs_more_action" | "needs_user_input"
 
+    # === Tool execution (internal) ===
+    _planned_tool: str | None  # Tool name from plan_tool
+    _planned_args: dict | None  # Tool arguments from plan_tool
+
     # === Control flags ===
     needs_user_input: bool
     missing_info: str | None

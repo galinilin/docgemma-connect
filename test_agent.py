@@ -20,9 +20,9 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Create logs directory structure: test_agent/run-MMDDYYYY/
+# Create logs directory structure: test_agent/run-MMDDYYYY-HHMMSS/
 LOGS_BASE_DIR = Path(__file__).parent / "test_agent"
-RUN_FOLDER = f"run-{datetime.now().strftime('%m%d%Y')}"
+RUN_FOLDER = f"run-{datetime.now().strftime('%m%d%Y-%H%M%S')}"
 LOGS_DIR = LOGS_BASE_DIR / RUN_FOLDER
 LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
