@@ -20,6 +20,13 @@ class ToolResult(TypedDict):
     success: bool
 
 
+class ConversationMessage(TypedDict):
+    """A message in the conversation history."""
+
+    role: str  # "user" | "assistant"
+    content: str
+
+
 class DocGemmaState(TypedDict, total=False):
     """State object for the DocGemma agent pipeline.
 
@@ -31,6 +38,9 @@ class DocGemmaState(TypedDict, total=False):
     user_input: str
     image_present: bool
     image_data: bytes | None
+
+    # === Multi-turn context ===
+    conversation_history: list[ConversationMessage]  # Previous messages for context
 
     # === Routing decisions ===
     complexity: str  # "direct" | "complex"
