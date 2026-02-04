@@ -1,210 +1,234 @@
-"""DocGemma model wrapper with Outlines integration."""
+"""DocGemma client for OpenAI-compatible vLLM endpoint."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Literal
+import os
+from typing import TYPE_CHECKING
 
-import outlines
-import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
-from .prompts import EMERGENCY_CLASSIFICATION, USER_TYPE_CLASSIFICATION
+import httpx
 
 if TYPE_CHECKING:
     from pydantic import BaseModel
 
-# Type aliases for Outlines classification
-EmergencyLevel = Literal["emergency", "non_emergency"]
-UserType = Literal["patient", "expert"]
-
 
 class DocGemma:
-    """MedGemma model wrapper with lazy loading and Outlines-based structured generation.
+    """DocGemma client for OpenAI-compatible vLLM endpoint.
 
-    Example:
-        >>> gemma = DocGemma(model_id="google/medgemma-1.5-4b-it")
-        >>> gemma.load()
-        >>> gemma.classify_emergency("I have chest pain")
-        'emergency'
+    Works with vLLM, OpenAI, or any OpenAI-compatible endpoint.
+
+    Usage:
+        export DOCGEMMA_ENDPOINT="https://your-vllm-endpoint.com"
+        export DOCGEMMA_API_KEY="your-api-key"
+        export DOCGEMMA_MODEL="google/medgemma-1.5-4b-it"
+
+        from docgemma import DocGemma
+        model = DocGemma()
+        response = model.generate("What is hypertension?")
     """
 
     def __init__(
         self,
-        model_id: str = "google/medgemma-1.5-4b-it",
-        device: str | None = None,
-        dtype: torch.dtype | None = None,
-        device_map: str = "auto",
+        endpoint: str | None = None,
+        api_key: str | None = None,
+        model: str | None = None,
+        timeout: float = 120.0,
     ) -> None:
-        """Initialize DocGemma configuration without loading the model.
+        """Initialize remote client.
 
         Args:
-            model_id: HuggingFace model identifier.
-            device: Target device ('cuda', 'cpu'). Auto-detected if None.
-            dtype: Model dtype (torch.bfloat16, torch.float32). Auto-detected if None.
-            device_map: Device map strategy for model loading.
+            endpoint: Base URL for OpenAI-compatible API.
+                      If None, uses DOCGEMMA_ENDPOINT env var.
+            api_key: API key for authentication.
+                     If None, uses DOCGEMMA_API_KEY env var.
+            model: Model ID to use. If None, uses DOCGEMMA_MODEL env var.
+            timeout: HTTP request timeout in seconds.
         """
-        self.model_id = model_id
-        self._device = device
-        self._dtype = dtype
-        self._device_map = device_map
+        self._endpoint = endpoint or os.environ.get("DOCGEMMA_ENDPOINT")
+        if not self._endpoint:
+            raise ValueError(
+                "No endpoint URL provided. Set DOCGEMMA_ENDPOINT environment variable "
+                "or pass endpoint parameter."
+            )
+        self._endpoint = self._endpoint.rstrip("/")
 
-        # Lazy-loaded attributes
-        self._model: AutoModelForCausalLM | None = None
-        self._tokenizer: AutoTokenizer | None = None
-        self._outlines_model = None
-        self._emergency_classifier = None
-        self._user_type_classifier = None
+        self._api_key = api_key or os.environ.get("DOCGEMMA_API_KEY", "")
+        self._model = model or os.environ.get("DOCGEMMA_MODEL", "google/medgemma-1.5-4b-it")
+        self._timeout = timeout
+
+        headers = {"Content-Type": "application/json"}
+        if self._api_key:
+            headers["Authorization"] = f"Bearer {self._api_key}"
+
+        self._client = httpx.Client(timeout=timeout, headers=headers)
 
     @property
     def is_loaded(self) -> bool:
-        """Check if the model has been loaded."""
-        return self._model is not None
+        """Remote model is always considered loaded (managed server-side)."""
+        return True
 
-    @property
-    def device(self) -> str:
-        """Get the device (auto-detected if not specified)."""
-        if self._device is not None:
-            return self._device
-        return "cuda" if torch.cuda.is_available() else "cpu"
-
-    @property
-    def dtype(self) -> torch.dtype:
-        """Get the dtype (auto-detected if not specified)."""
-        if self._dtype is not None:
-            return self._dtype
-        return torch.bfloat16 if torch.cuda.is_available() else torch.float32
-
-    def _ensure_loaded(self) -> None:
-        """Raise an error if the model is not loaded."""
-        if not self.is_loaded:
-            raise RuntimeError(
-                "Model not loaded. Call load() before using generation methods."
-            )
+    def health_check(self) -> bool:
+        """Check if remote endpoint is reachable."""
+        try:
+            resp = self._client.get(f"{self._endpoint}/v1/models")
+            return resp.status_code == 200
+        except Exception:
+            return False
 
     def load(self) -> DocGemma:
-        """Load the model, tokenizer, and initialize Outlines generators.
-
-        Returns:
-            Self for method chaining.
-        """
-        if self.is_loaded:
-            return self
-
-        # Load tokenizer
-        self._tokenizer = AutoTokenizer.from_pretrained(self.model_id)
-
-        # Load model
-        self._model = AutoModelForCausalLM.from_pretrained(
-            self.model_id,
-            torch_dtype=self.dtype,
-            device_map=self._device_map,
-        )
-
-        # Wrap with Outlines
-        self._outlines_model = outlines.from_transformers(
-            self._model, self._tokenizer
-        )
-
-        # Create built-in classifiers using Literal types
-        self._emergency_classifier = lambda x: self._outlines_model(x, EmergencyLevel)
-        self._user_type_classifier = lambda x: self._outlines_model(x, UserType)
-
+        """No-op for API compatibility. Remote model is always loaded."""
         return self
-
-    def classify_emergency(self, user_input: str) -> str:
-        """Classify if the input describes a medical emergency.
-
-        Args:
-            user_input: The user's medical query.
-
-        Returns:
-            'emergency' or 'non_emergency'
-        """
-        self._ensure_loaded()
-        prompt = EMERGENCY_CLASSIFICATION.format(user_input=user_input)
-        return self._emergency_classifier(prompt)
-
-    def classify_user_type(self, user_input: str) -> str:
-        """Classify if the user is a patient or medical expert.
-
-        Args:
-            user_input: The user's medical query.
-
-        Returns:
-            'patient' or 'expert'
-        """
-        self._ensure_loaded()
-        prompt = USER_TYPE_CLASSIFICATION.format(user_input=user_input)
-        return self._user_type_classifier(prompt)
 
     def generate(
         self,
         prompt: str,
         max_new_tokens: int = 256,
         do_sample: bool = False,
-        temperature: float = 1.0,
-        top_p: float = 1.0,
-        top_k: int = 50,
+        temperature: float = 0.6,
+        **kwargs,
     ) -> str:
-        """Generate a response using the raw model with chat template.
+        """Generate free-form response via OpenAI-compatible API.
 
         Args:
             prompt: The input prompt.
-            max_new_tokens: Maximum number of tokens to generate.
-            do_sample: Whether to use sampling (vs greedy decoding).
-            temperature: Sampling temperature (higher = more random).
-            top_p: Nucleus sampling probability threshold.
-            top_k: Top-k sampling parameter.
+            max_new_tokens: Maximum tokens to generate.
+            do_sample: Whether to use sampling.
+            temperature: Sampling temperature (used if do_sample=True).
+            **kwargs: Additional arguments (ignored for compatibility).
 
         Returns:
             Generated text response.
         """
-        self._ensure_loaded()
+        import json
 
         messages = [{"role": "user", "content": prompt}]
 
-        input_ids = self._tokenizer.apply_chat_template(
-            messages,
-            add_generation_prompt=True,
-            return_tensors="pt",
-        )
-        # Handle both tensor and BatchEncoding returns
-        if hasattr(input_ids, "input_ids"):
-            input_ids = input_ids.input_ids
-        input_ids = input_ids.to(self._model.device)
-        input_length = input_ids.shape[1]
+        payload = {
+            "model": self._model,
+            "messages": messages,
+            "max_tokens": max_new_tokens,
+        }
 
-        with torch.inference_mode():
-            outputs = self._model.generate(
-                input_ids=input_ids,
-                max_new_tokens=max_new_tokens,
-                do_sample=do_sample,
-                temperature=temperature if do_sample else None,
-                top_p=top_p if do_sample else None,
-                top_k=top_k if do_sample else None,
-            )
+        if do_sample:
+            payload["temperature"] = temperature
+        else:
+            payload["temperature"] = 0.0
 
-        # Decode only new tokens
-        response = self._tokenizer.decode(
-            outputs[0][input_length:],
-            skip_special_tokens=True,
+        resp = self._client.post(
+            f"{self._endpoint}/v1/chat/completions",
+            json=payload,
         )
-        return response.strip()
+        resp.raise_for_status()
+
+        response = resp.json()["choices"][0]["message"]["content"]
+        print("[*] Raw:", json.dumps({"input": messages, "response": response}, indent=2))
+        print("*********************")
+        return response
 
     def generate_outlines(
         self,
         prompt: str,
         out_type: type[BaseModel],
         max_new_tokens: int = 256,
+        temperature: float = 0.1,
+        max_retries: int = 3,
     ) -> BaseModel:
-        """Generate constrained with respect to given type.
+        """Generate structured response matching Pydantic schema.
+
+        Uses vLLM's guided decoding via response_format parameter.
+        Includes retry logic for truncated/malformed JSON responses.
 
         Args:
             prompt: The input prompt.
-            out_type: Pydantic model class defining the output schema.
-            max_new_tokens: Maximum number of tokens to generate.
+            out_type: Pydantic model class defining output schema.
+            max_new_tokens: Maximum tokens to generate.
+            temperature: Sampling temperature. Lower = more deterministic.
+                         Recommended: 0.0-0.2 for structured output.
+            max_retries: Maximum retry attempts for JSON parsing failures.
+
         Returns:
-            Instance of the schema class with generated values.
+            Instance of out_type with generated values.
+
+        Raises:
+            ValueError: If all retry attempts fail with JSON parsing errors.
         """
-        self._ensure_loaded()
-        return self._outlines_model(prompt, out_type, max_new_tokens=max_new_tokens)
+        import json
+        import time
+
+        messages = [{"role": "user", "content": prompt}]
+        schema = out_type.model_json_schema()
+
+        last_error = None
+        last_response_text = None
+
+        for attempt in range(max_retries):
+            # Increase max_tokens on retry to handle truncation
+            tokens_for_attempt = max_new_tokens + (attempt * 256)
+
+            payload = {
+                "model": self._model,
+                "messages": messages,
+                "max_tokens": tokens_for_attempt,
+                "temperature": temperature,
+                # vLLM guided decoding via response_format
+                "response_format": {
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": out_type.__name__,
+                        "schema": schema,
+                        "strict": True,
+                    },
+                },
+            }
+
+            try:
+                resp = self._client.post(
+                    f"{self._endpoint}/v1/chat/completions",
+                    json=payload,
+                )
+                resp.raise_for_status()
+
+                response_text = resp.json()["choices"][0]["message"]["content"]
+                last_response_text = response_text
+
+                # Parse JSON response into Pydantic model
+                response = out_type.model_validate_json(response_text)
+
+                print("[*] Outlines:", json.dumps({"input": prompt, "response": response.model_dump()}, indent=2))
+                print("*********************")
+                return response
+
+            except Exception as e:
+                last_error = e
+                error_msg = str(e)
+
+                # Check if it's a JSON parsing error (truncation issue)
+                is_json_error = any(
+                    indicator in error_msg.lower()
+                    for indicator in ["json", "eof", "parsing", "unterminated", "expecting"]
+                )
+
+                if is_json_error and attempt < max_retries - 1:
+                    # Exponential backoff: 0.5s, 1s, 2s
+                    backoff = 0.5 * (2 ** attempt)
+                    print(f"[*] Outlines: JSON parsing failed (attempt {attempt + 1}/{max_retries}) retrying with more tokens in...")
+                    continue
+                elif not is_json_error:
+                    # Non-JSON error, raise immediately
+                    raise
+
+        # All retries exhausted
+        raise ValueError(
+            f"Failed to generate valid JSON after {max_retries} attempts. "
+            f"Last error: {last_error}\n"
+            f"Last response (truncated): {last_response_text[:200] if last_response_text else 'None'}..."
+        )
+
+    def close(self) -> None:
+        """Close HTTP client."""
+        self._client.close()
+
+    def __enter__(self) -> DocGemma:
+        return self
+
+    def __exit__(self, *args) -> None:
+        self.close()

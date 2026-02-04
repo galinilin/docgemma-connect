@@ -24,6 +24,12 @@ from .clinical_trials import find_clinical_trials
 from .drug_interactions import check_drug_interactions
 from .drug_safety import check_drug_safety
 from .medical_literature import search_medical_literature
+from .registry import (
+    TOOL_REGISTRY,
+    execute_tool,
+    get_tool_names,
+    get_tools_for_prompt,
+)
 from .schemas import (
     ArticleSummary,
     ClinicalTrial,
@@ -40,9 +46,13 @@ from .schemas import (
     PatientRecordsInput,
     PatientRecordsOutput,
 )
-from .server import mcp_server
 
 __all__ = [
+    # Registry
+    "TOOL_REGISTRY",
+    "execute_tool",
+    "get_tool_names",
+    "get_tools_for_prompt",
     # Tools
     "check_drug_safety",
     "search_medical_literature",
@@ -65,6 +75,4 @@ __all__ = [
     "DrugInteraction",
     "PatientRecord",
     "ClinicalTrial",
-    # Server
-    "mcp_server",
 ]
