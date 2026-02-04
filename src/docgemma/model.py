@@ -130,10 +130,12 @@ class DocGemma:
         out_type: type[BaseModel],
         max_new_tokens: int = 256,
         temperature: float = 0.1,
+        max_retries: int = 3,
     ) -> BaseModel:
         """Generate structured response matching Pydantic schema.
 
         Uses vLLM's guided decoding via response_format parameter.
+        Includes retry logic for truncated/malformed JSON responses.
 
         Args:
             prompt: The input prompt.
@@ -141,45 +143,85 @@ class DocGemma:
             max_new_tokens: Maximum tokens to generate.
             temperature: Sampling temperature. Lower = more deterministic.
                          Recommended: 0.0-0.2 for structured output.
+            max_retries: Maximum retry attempts for JSON parsing failures.
 
         Returns:
             Instance of out_type with generated values.
+
+        Raises:
+            ValueError: If all retry attempts fail with JSON parsing errors.
         """
         import json
+        import time
 
         messages = [{"role": "user", "content": prompt}]
         schema = out_type.model_json_schema()
 
-        payload = {
-            "model": self._model,
-            "messages": messages,
-            "max_tokens": max_new_tokens,
-            "temperature": temperature,
-            # vLLM guided decoding via response_format
-            "response_format": {
-                "type": "json_schema",
-                "json_schema": {
-                    "name": out_type.__name__,
-                    "schema": schema,
-                    "strict": True,
+        last_error = None
+        last_response_text = None
+
+        for attempt in range(max_retries):
+            # Increase max_tokens on retry to handle truncation
+            tokens_for_attempt = max_new_tokens + (attempt * 256)
+
+            payload = {
+                "model": self._model,
+                "messages": messages,
+                "max_tokens": tokens_for_attempt,
+                "temperature": temperature,
+                # vLLM guided decoding via response_format
+                "response_format": {
+                    "type": "json_schema",
+                    "json_schema": {
+                        "name": out_type.__name__,
+                        "schema": schema,
+                        "strict": True,
+                    },
                 },
-            },
-        }
+            }
 
-        resp = self._client.post(
-            f"{self._endpoint}/v1/chat/completions",
-            json=payload,
+            try:
+                resp = self._client.post(
+                    f"{self._endpoint}/v1/chat/completions",
+                    json=payload,
+                )
+                resp.raise_for_status()
+
+                response_text = resp.json()["choices"][0]["message"]["content"]
+                last_response_text = response_text
+
+                # Parse JSON response into Pydantic model
+                response = out_type.model_validate_json(response_text)
+
+                print("[*] Outlines:", json.dumps({"input": prompt, "response": response.model_dump()}, indent=2))
+                print("*********************")
+                return response
+
+            except Exception as e:
+                last_error = e
+                error_msg = str(e)
+
+                # Check if it's a JSON parsing error (truncation issue)
+                is_json_error = any(
+                    indicator in error_msg.lower()
+                    for indicator in ["json", "eof", "parsing", "unterminated", "expecting"]
+                )
+
+                if is_json_error and attempt < max_retries - 1:
+                    # Exponential backoff: 0.5s, 1s, 2s
+                    backoff = 0.5 * (2 ** attempt)
+                    print(f"[*] Outlines: JSON parsing failed (attempt {attempt + 1}/{max_retries}) retrying with more tokens in...")
+                    continue
+                elif not is_json_error:
+                    # Non-JSON error, raise immediately
+                    raise
+
+        # All retries exhausted
+        raise ValueError(
+            f"Failed to generate valid JSON after {max_retries} attempts. "
+            f"Last error: {last_error}\n"
+            f"Last response (truncated): {last_response_text[:200] if last_response_text else 'None'}..."
         )
-        resp.raise_for_status()
-
-        response_text = resp.json()["choices"][0]["message"]["content"]
-
-        # Parse JSON response into Pydantic model
-        response = out_type.model_validate_json(response_text)
-
-        print("[*] Outlines:", json.dumps({"input": prompt, "response": response.model_dump()}, indent=2))
-        print("*********************")
-        return response
 
     def close(self) -> None:
         """Close HTTP client."""
