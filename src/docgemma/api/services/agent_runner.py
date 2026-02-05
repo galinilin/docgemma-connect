@@ -12,6 +12,7 @@ from langgraph.checkpoint.memory import MemorySaver
 
 from ..models.events import (
     AgentEvent,
+    ClinicalTrace,
     CompletionEvent,
     ErrorEvent,
     NodeEndEvent,
@@ -19,6 +20,8 @@ from ..models.events import (
     ToolApprovalRequestEvent,
     ToolExecutionEndEvent,
     ToolExecutionStartEvent,
+    TraceStep,
+    TraceStepType,
 )
 from ..models.session import Session, SessionStatus
 from ...agent.graph import GRAPH_EDGES, GRAPH_NODES, build_graph
@@ -29,6 +32,19 @@ if TYPE_CHECKING:
     from ...model import DocGemma
 
 logger = logging.getLogger(__name__)
+
+# Clinical-friendly labels for tool names
+TOOL_CLINICAL_LABELS = {
+    "check_drug_safety": "FDA Safety Database",
+    "check_drug_interactions": "Drug Interaction Check",
+    "search_medical_literature": "Medical Literature (PubMed)",
+    "find_clinical_trials": "Clinical Trials Registry",
+    "search_patient": "Patient Records Search",
+    "get_patient_chart": "Patient Chart Review",
+    "add_allergy": "Allergy Documentation",
+    "prescribe_medication": "Medication Prescription",
+    "save_clinical_note": "Clinical Note",
+}
 
 
 class AgentRunner:
@@ -91,6 +107,7 @@ class AgentRunner:
         session.status = SessionStatus.PROCESSING
         session.reset_for_new_turn()
 
+        # Reset ALL state for new turn - critical to avoid stale data from checkpoint
         initial_state: DocGemmaState = {
             "user_input": user_input,
             "image_data": image_data,
@@ -100,6 +117,15 @@ class AgentRunner:
             "tool_results": [],
             "loop_iterations": 0,
             "tool_retries": 0,
+            # Explicitly clear turn outputs to prevent checkpoint leakage
+            "final_response": None,
+            "complexity": None,
+            "reasoning": None,
+            "_planned_tool": None,
+            "_planned_args": None,
+            "last_result_status": None,
+            "needs_user_input": False,
+            "missing_info": None,
         }
 
         # Add conversation history if provided
@@ -228,8 +254,12 @@ class AgentRunner:
             AgentEvent objects
         """
         node_start_times: dict[str, float] = {}
+        node_durations: dict[str, float] = {}
+        completion_emitted = False  # Guard against multiple completions
 
-        # Use astream_events for detailed event streaming
+        # Terminal nodes that produce final_response
+        terminal_nodes = {"synthesize_response", "direct_response"}
+
         input_data = initial_state if not is_resume else None
 
         async for event in self._graph.astream(
@@ -279,6 +309,7 @@ class AgentRunner:
                 # Node completed
                 elapsed_ms = (time.perf_counter() - node_start_times.get(node_name, time.perf_counter())) * 1000
                 node_label = self._get_node_label(node_name)
+                node_durations[node_name] = elapsed_ms
 
                 if node_name not in session.completed_nodes:
                     session.completed_nodes.append(node_name)
@@ -301,21 +332,32 @@ class AgentRunner:
                             duration_ms=elapsed_ms,
                         )
 
-                # Check for final response
-                if state_update and "final_response" in state_update:
+                # Only emit completion from terminal nodes and only once
+                if (
+                    not completion_emitted
+                    and node_name in terminal_nodes
+                    and state_update
+                    and state_update.get("final_response")
+                ):
                     final_response = state_update["final_response"]
-                    if final_response:
-                        # Get tool call count from state
-                        full_state = self._graph.get_state(config)
-                        tool_count = 0
-                        if full_state and full_state.values:
-                            tool_count = len(full_state.values.get("tool_results", []))
+                    completion_emitted = True
 
-                        session.status = SessionStatus.ACTIVE
-                        yield CompletionEvent(
-                            final_response=final_response,
-                            tool_calls_made=tool_count,
+                    # Get tool call count and build trace from state
+                    full_state = self._graph.get_state(config)
+                    tool_count = 0
+                    clinical_trace = None
+                    if full_state and full_state.values:
+                        tool_count = len(full_state.values.get("tool_results", []))
+                        clinical_trace = self._build_clinical_trace(
+                            full_state.values, node_durations
                         )
+
+                    session.status = SessionStatus.ACTIVE
+                    yield CompletionEvent(
+                        final_response=final_response,
+                        tool_calls_made=tool_count,
+                        clinical_trace=clinical_trace,
+                    )
 
     def _get_node_label(self, node_id: str) -> str:
         """Get human-readable label for a node."""
@@ -323,6 +365,118 @@ class AgentRunner:
             if node["id"] == node_id:
                 return node["label"]
         return node_id.replace("_", " ").title()
+
+    def _describe_tool_call(self, result: dict) -> str:
+        """Generate a clinical-friendly description of a tool call."""
+        tool = result.get("tool_name", "")
+        args = result.get("arguments", {})
+
+        if tool == "check_drug_safety":
+            drug = args.get("drug_name", "medication")
+            return f"Checked safety profile for {drug}"
+        elif tool == "check_drug_interactions":
+            drugs = args.get("drug_names", [])
+            if len(drugs) >= 2:
+                return f"Checked interactions between {drugs[0]} and {drugs[1]}"
+            return "Checked drug interactions"
+        elif tool == "search_medical_literature":
+            query = args.get("query", "")
+            return f"Searched medical literature for: {query[:50]}..."
+        elif tool == "find_clinical_trials":
+            condition = args.get("condition", "")
+            return f"Searched clinical trials for {condition}"
+        elif tool == "get_patient_chart":
+            patient_id = args.get("patient_id", "")
+            return f"Retrieved patient chart ({patient_id})"
+        elif tool == "search_patient":
+            return "Searched patient records"
+        else:
+            return f"Consulted {TOOL_CLINICAL_LABELS.get(tool, tool.replace('_', ' '))}"
+
+    def _summarize_result(self, result: dict) -> str:
+        """Generate a brief summary of a tool result."""
+        tool = result.get("tool_name", "")
+        data = result.get("result", {})
+
+        if tool == "check_drug_safety":
+            warnings = data.get("boxed_warnings", [])
+            if warnings:
+                return f"Found {len(warnings)} boxed warning(s)"
+            return "No boxed warnings found"
+        elif tool == "check_drug_interactions":
+            interactions = data.get("interactions", [])
+            if interactions:
+                return f"Found {len(interactions)} potential interaction(s)"
+            return "No interactions found"
+        elif tool == "search_medical_literature":
+            articles = data.get("articles", [])
+            return f"Found {len(articles)} relevant article(s)"
+        elif tool == "find_clinical_trials":
+            trials = data.get("trials", [])
+            return f"Found {len(trials)} active trial(s)"
+        else:
+            return "Completed successfully"
+
+    def _build_clinical_trace(
+        self, state: dict, node_durations: dict[str, float]
+    ) -> ClinicalTrace:
+        """Build a clinical reasoning trace from the agent state."""
+        steps: list[TraceStep] = []
+        total_ms = 0.0
+
+        # 1. Reasoning step (if present)
+        if state.get("reasoning"):
+            dur = node_durations.get("thinking_mode", 0)
+            total_ms += dur
+            reasoning_text = state["reasoning"]
+            if len(reasoning_text) > 500:
+                reasoning_text = reasoning_text[:500] + "..."
+            steps.append(
+                TraceStep(
+                    type=TraceStepType.THOUGHT,
+                    label="Clinical Reasoning",
+                    description="Analyzed query to plan approach",
+                    duration_ms=dur,
+                    reasoning_text=reasoning_text,
+                )
+            )
+
+        # 2. Successful tool calls only
+        for result in state.get("tool_results", []):
+            if not result.get("success"):
+                continue
+            tool = result.get("tool_name", "unknown")
+            dur = node_durations.get(f"tool_{tool}", node_durations.get("execute_tool", 0))
+            total_ms += dur
+            steps.append(
+                TraceStep(
+                    type=TraceStepType.TOOL_CALL,
+                    label=TOOL_CLINICAL_LABELS.get(tool, tool.replace("_", " ").title()),
+                    description=self._describe_tool_call(result),
+                    duration_ms=dur,
+                    tool_name=tool,
+                    tool_result_summary=self._summarize_result(result),
+                    success=True,
+                )
+            )
+
+        # 3. Synthesis step
+        dur = node_durations.get("synthesize_response", 0)
+        total_ms += dur
+        steps.append(
+            TraceStep(
+                type=TraceStepType.SYNTHESIS,
+                label="Response Synthesis",
+                description="Combined findings into clinical response",
+                duration_ms=dur,
+            )
+        )
+
+        return ClinicalTrace(
+            steps=steps,
+            total_duration_ms=total_ms,
+            tools_consulted=len([s for s in steps if s.type == TraceStepType.TOOL_CALL]),
+        )
 
     def get_graph_visualization(self, session: Session) -> dict[str, Any]:
         """Get graph state for visualization.
