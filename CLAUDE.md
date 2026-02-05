@@ -85,8 +85,11 @@ docgemma-connect/
 | `search_medical_literature` | PubMed | ✅ Done |
 | `check_drug_interactions` | RxNav | ✅ Done |
 | `find_clinical_trials` | ClinicalTrials.gov | ✅ Done |
-| `get_patient_record` | Local EHR | ❌ TODO |
-| `update_patient_record` | Local EHR | ❌ TODO |
+| `search_patient` | Medplum FHIR | ✅ Done |
+| `get_patient_chart` | Medplum FHIR | ✅ Done |
+| `add_allergy` | Medplum FHIR | ✅ Done |
+| `prescribe_medication` | Medplum FHIR | ✅ Done |
+| `save_clinical_note` | Medplum FHIR | ✅ Done |
 | `analyze_medical_image` | MedGemma Vision | ❌ TODO |
 
 ## Agent Pipeline
@@ -205,8 +208,33 @@ The API server provides REST and WebSocket endpoints for the frontend.
 - `tool_approval_request` - Request user approval for tool
 - `tool_execution_start` / `tool_execution_end` - Tool execution lifecycle
 - `streaming_text` - Streaming response text
-- `completion` - Final response ready
+- `completion` - Final response ready (includes `clinical_trace` for UI)
 - `error` - Error occurred
+
+**Clinical Trace (`completion` event):**
+The `completion` event includes a `clinical_trace` object for frontend display:
+```python
+class ClinicalTrace:
+    steps: list[TraceStep]  # thought, tool_call, synthesis
+    total_duration_ms: float
+    tools_consulted: int
+```
+Built by `AgentRunner._build_clinical_trace()` using `TOOL_CLINICAL_LABELS` for user-friendly names.
+
+## Known Issues & Fixes
+
+### LangGraph Checkpoint State Leakage
+**Problem**: With `MemorySaver` checkpointer, state fields like `final_response` persist across turns, causing stale responses.
+
+**Fix** (in `agent_runner.py`):
+1. Reset ALL state at turn start: `final_response: None`, `complexity: None`, etc.
+2. Only emit `CompletionEvent` from terminal nodes (`synthesize_response`, `direct_response`)
+3. Use `completion_emitted` flag to prevent duplicate events
+
+### Terminal Nodes
+Only these nodes produce `final_response`:
+- `synthesize_response` - Complex query path
+- `direct_response` - Simple query path
 
 ## 4B Model Guidelines
 
@@ -235,13 +263,17 @@ The API server provides REST and WebSocket endpoints for the frontend.
 - [x] FastAPI server with REST + WebSocket
 - [x] Session management (in-memory)
 - [x] Real-time agent state streaming
-- [x] Vue 3 + Vue Flow frontend
+- [x] Vue 3 frontend with inline clinical trace display
 - [x] Tool approval flow
 
-### Phase 4: Missing Tools
-- [ ] `get_patient_record` / `update_patient_record`
-- [ ] `analyze_medical_image` (MedGemma vision)
-- [ ] Pseudo-EHR data store
+### Phase 4: EHR Integration ✅
+- [x] Medplum FHIR client (`tools/medplum/client.py`)
+- [x] `search_patient` - Search by name/DOB
+- [x] `get_patient_chart` - Clinical summary
+- [x] `add_allergy` - Document allergies
+- [x] `prescribe_medication` - Medication orders
+- [x] `save_clinical_note` - Clinical documentation
+- [ ] `analyze_medical_image` (MedGemma vision) - TODO
 
 ### Phase 5: Polish
 - [ ] Pre-cache queries for demo
