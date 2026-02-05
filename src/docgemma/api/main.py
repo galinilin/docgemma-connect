@@ -10,7 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import APIConfig, get_config
-from .routers import health_router, sessions_router, tools_router
+from .routers import health_router, patients_router, sessions_router, tools_router
 from .routers.health import set_model_loaded
 from .routers.sessions import set_agent_runner
 
@@ -103,6 +103,7 @@ def create_app(config: APIConfig | None = None) -> FastAPI:
     app.include_router(health_router, prefix="/api")
     app.include_router(sessions_router, prefix="/api")
     app.include_router(tools_router, prefix="/api")
+    app.include_router(patients_router, prefix="/api")
 
     return app
 
