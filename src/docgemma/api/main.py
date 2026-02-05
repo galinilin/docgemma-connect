@@ -22,6 +22,8 @@ logger = logging.getLogger(__name__)
 # Global model instance
 _model: DocGemma | None = None
 
+from dotenv import load_dotenv
+load_dotenv()
 
 def get_model() -> DocGemma | None:
     """Get the loaded model instance."""
@@ -109,7 +111,8 @@ def create_app(config: APIConfig | None = None) -> FastAPI:
 app = create_app()
 
 
-if __name__ == "__main__":
+def main():
+    """Entry point for the docgemma-serve command."""
     import uvicorn
 
     config = get_config()
@@ -119,3 +122,7 @@ if __name__ == "__main__":
         port=config.port,
         reload=config.debug,
     )
+
+
+if __name__ == "__main__":
+    main()

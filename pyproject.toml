@@ -24,3 +24,6 @@ dependencies = [
     "websockets>=14.0",
     "python-multipart>=0.0.20",
 ]
+
+[project.scripts]
+docgemma-serve = "docgemma.api.main:main"
