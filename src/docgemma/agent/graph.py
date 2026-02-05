@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Any, Callable
 
+from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.graph import END, StateGraph
 
 from .nodes import (
@@ -26,14 +27,51 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
+# Graph node definitions for visualization
+GRAPH_NODES = [
+    {"id": "image_detection", "label": "Image Detection", "type": "code"},
+    {"id": "complexity_router", "label": "Complexity Router", "type": "llm"},
+    {"id": "direct_response", "label": "Direct Response", "type": "llm"},
+    {"id": "thinking_mode", "label": "Thinking Mode", "type": "llm"},
+    {"id": "decompose_intent", "label": "Decompose Intent", "type": "llm"},
+    {"id": "plan_tool", "label": "Plan Tool", "type": "llm"},
+    {"id": "execute_tool", "label": "Execute Tool", "type": "tool"},
+    {"id": "check_result", "label": "Check Result", "type": "code"},
+    {"id": "synthesize_response", "label": "Synthesize Response", "type": "llm"},
+]
 
-def build_graph(model: DocGemma, tool_executor: Callable | None = None) -> StateGraph:
+GRAPH_EDGES = [
+    {"source": "image_detection", "target": "complexity_router", "label": None},
+    {"source": "complexity_router", "target": "direct_response", "label": "direct"},
+    {"source": "complexity_router", "target": "thinking_mode", "label": "complex"},
+    {"source": "direct_response", "target": "__end__", "label": None},
+    {"source": "thinking_mode", "target": "decompose_intent", "label": None},
+    {"source": "decompose_intent", "target": "synthesize_response", "label": "needs_clarification"},
+    {"source": "decompose_intent", "target": "plan_tool", "label": "has_subtasks"},
+    {"source": "plan_tool", "target": "execute_tool", "label": None},
+    {"source": "execute_tool", "target": "check_result", "label": None},
+    {"source": "check_result", "target": "plan_tool", "label": "continue"},
+    {"source": "check_result", "target": "synthesize_response", "label": "done"},
+    {"source": "synthesize_response", "target": "__end__", "label": None},
+]
+
+
+def build_graph(
+    model: DocGemma,
+    tool_executor: Callable | None = None,
+    checkpointer: BaseCheckpointSaver | None = None,
+    interrupt_before: list[str] | None = None,
+) -> StateGraph:
     """Build the DocGemma agent graph.
 
     Args:
         model: DocGemma model instance (must be loaded)
         tool_executor: Optional custom tool executor. If None, uses the
                        built-in tool registry. Signature: async (tool_name, args) -> dict
+        checkpointer: Optional checkpoint saver for persistence and interrupts.
+                      Required if using interrupt_before.
+        interrupt_before: List of node names to interrupt before execution.
+                          Useful for human-in-the-loop approval (e.g., ["execute_tool"]).
 
     Returns:
         Compiled LangGraph workflow
@@ -133,7 +171,14 @@ def build_graph(model: DocGemma, tool_executor: Callable | None = None) -> State
     # Synthesis ends
     workflow.add_edge("synthesize_response", END)
 
-    return workflow.compile()
+    # Compile with optional checkpointer and interrupt support
+    compile_kwargs: dict[str, Any] = {}
+    if checkpointer is not None:
+        compile_kwargs["checkpointer"] = checkpointer
+    if interrupt_before is not None:
+        compile_kwargs["interrupt_before"] = interrupt_before
+
+    return workflow.compile(**compile_kwargs)
 
 
 class DocGemmaAgent:

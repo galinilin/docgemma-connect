@@ -23,8 +23,9 @@ Medical AI assistant for the **Google MedGemma Impact Challenge** on Kaggle.
 |-----------|------------|
 | LLM | MedGemma 1.5 4B IT |
 | Structured Output | Outlines (constrained generation) |
-| Agent Orchestration | LangGraph (TODO) |
+| Agent Orchestration | LangGraph |
 | Tool Protocol | MCP |
+| API Server | FastAPI + WebSockets |
 | Package Manager | uv |
 
 ## Project Structure
@@ -33,26 +34,47 @@ Medical AI assistant for the **Google MedGemma Impact Challenge** on Kaggle.
 docgemma-connect/
 ├── src/docgemma/
 │   ├── __init__.py
-│   ├── model.py              # DocGemma wrapper with Outlines integration
+│   ├── model.py              # DocGemma remote client (vLLM/OpenAI API)
 │   ├── agent/
 │   │   ├── __init__.py
 │   │   ├── state.py          # DocGemmaState TypedDict
 │   │   ├── schemas.py        # Pydantic schemas for LLM nodes
+│   │   ├── prompts.py        # System/user prompts for LLM nodes
 │   │   ├── nodes.py          # All node implementations
 │   │   └── graph.py          # LangGraph workflow + DocGemmaAgent
+│   ├── api/
+│   │   ├── __init__.py
+│   │   ├── main.py           # FastAPI app factory, lifespan
+│   │   ├── config.py         # Configuration from env vars
+│   │   ├── models/           # Pydantic request/response models
+│   │   │   ├── events.py     # WebSocket event types
+│   │   │   ├── requests.py
+│   │   │   ├── responses.py
+│   │   │   └── session.py
+│   │   ├── routers/          # API endpoint handlers
+│   │   │   ├── health.py     # /api/health
+│   │   │   ├── sessions.py   # /api/sessions/*
+│   │   │   └── tools.py      # /api/tools
+│   │   └── services/         # Business logic
+│   │       ├── agent_runner.py   # Async agent execution + WebSocket
+│   │       └── session_store.py  # In-memory session management
 │   └── tools/
 │       ├── __init__.py
+│       ├── registry.py       # ToolRegistry + global registrations
 │       ├── schemas.py        # Pydantic schemas for all tools
 │       ├── drug_safety.py    # OpenFDA boxed warnings
 │       ├── drug_interactions.py  # RxNav drug interactions
 │       ├── medical_literature.py # PubMed search
 │       └── clinical_trials.py    # ClinicalTrials.gov search
 ├── doc/
-│   └── DOCGEMMA_IMPLEMENTATION_GUIDE.md  # Full architecture spec
+│   ├── DOCGEMMA_IMPLEMENTATION_GUIDE.md  # Full architecture spec
+│   ├── DOCGEMMA_FLOWCHART.md             # Mermaid diagram
+│   └── DOCGEMMA_TEST_CASES_V2.md         # 120 test cases (YAML)
 ├── main.py                   # Model test script
 ├── test_agent.py             # Agent pipeline test script
 ├── test_tools.py
-└── pyproject.toml
+├── pyproject.toml
+└── .env                      # Environment (RunPod endpoint)
 ```
 
 ## Implemented Tools
@@ -143,7 +165,48 @@ uv run python main.py
 
 # Run tool tests
 uv run python test_tools.py
+
+# Run agent tests
+uv run python test_agent.py
+
+# Start API server
+uv run docgemma-serve
 ```
+
+## API Server
+
+The API server provides REST and WebSocket endpoints for the frontend.
+
+**Environment Variables:**
+- `DOCGEMMA_ENDPOINT` - vLLM/OpenAI API endpoint
+- `DOCGEMMA_API_KEY` - Authentication token
+- `DOCGEMMA_MODEL` - Model ID (default: `google/medgemma-1.5-4b-it`)
+- `DOCGEMMA_HOST` - Server host (default: `0.0.0.0`)
+- `DOCGEMMA_PORT` - Server port (default: `8000`)
+- `DOCGEMMA_LOAD_MODEL` - Load model on startup (default: `true`)
+- `DOCGEMMA_TOOL_APPROVAL` - Enable tool approval flow (default: `true`)
+
+**Endpoints:**
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/health` | Health check + model status |
+| POST | `/api/sessions` | Create new session |
+| GET | `/api/sessions` | List all sessions |
+| GET | `/api/sessions/{id}` | Get session details |
+| DELETE | `/api/sessions/{id}` | Delete session |
+| GET | `/api/sessions/{id}/graph` | Get graph state (nodes + edges) |
+| GET | `/api/sessions/{id}/messages` | Get conversation history |
+| WS | `/api/sessions/{id}/ws` | WebSocket for real-time events |
+| GET | `/api/tools` | List available tools |
+
+**WebSocket Events (Server → Client):**
+- `node_start` / `node_end` - Node execution lifecycle
+- `tool_approval_request` - Request user approval for tool
+- `tool_execution_start` / `tool_execution_end` - Tool execution lifecycle
+- `streaming_text` - Streaming response text
+- `completion` - Final response ready
+- `error` - Error occurred
 
 ## 4B Model Guidelines
 
@@ -168,13 +231,19 @@ uv run python test_tools.py
 - [x] Result checking logic
 - [x] Loop control flow
 
-### Phase 3: Missing Tools
+### Phase 3: API & Frontend ✅
+- [x] FastAPI server with REST + WebSocket
+- [x] Session management (in-memory)
+- [x] Real-time agent state streaming
+- [x] Vue 3 + Vue Flow frontend
+- [x] Tool approval flow
+
+### Phase 4: Missing Tools
 - [ ] `get_patient_record` / `update_patient_record`
 - [ ] `analyze_medical_image` (MedGemma vision)
 - [ ] Pseudo-EHR data store
 
-### Phase 4: Polish
-- [ ] Demo UI
+### Phase 5: Polish
 - [ ] Pre-cache queries for demo
 - [ ] Technical writeup
 - [ ] 3-minute video

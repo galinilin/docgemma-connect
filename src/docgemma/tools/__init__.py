@@ -10,6 +10,13 @@ Available Tools:
     - check_drug_interactions: Drug interaction checker (OpenFDA)
     - find_clinical_trials: Search recruiting trials (ClinicalTrials.gov)
 
+Medplum EHR Tools:
+    - search_patient: Search patients by name/DOB
+    - get_patient_chart: Retrieve patient clinical summary
+    - add_allergy: Document allergies
+    - prescribe_medication: Create medication orders
+    - save_clinical_note: Save clinical notes
+
 Usage:
     # Run as MCP server
     python -m docgemma.tools.server
@@ -18,6 +25,11 @@ Usage:
     from docgemma.tools import check_drug_safety, DrugSafetyInput
 
     result = await check_drug_safety(DrugSafetyInput(brand_name="Lipitor"))
+
+    # Medplum tools
+    from docgemma.tools import search_patient, SearchPatientInput
+
+    result = await search_patient(SearchPatientInput(name="Smith"))
 """
 
 from .clinical_trials import find_clinical_trials
@@ -45,6 +57,27 @@ from .schemas import (
     PatientRecord,
     PatientRecordsInput,
     PatientRecordsOutput,
+)
+
+# Medplum FHIR tools
+from .medplum import (
+    MedplumClient,
+    get_client,
+    search_patient,
+    get_patient_chart,
+    add_allergy,
+    prescribe_medication,
+    save_clinical_note,
+    SearchPatientInput,
+    SearchPatientOutput,
+    GetPatientChartInput,
+    GetPatientChartOutput,
+    AddAllergyInput,
+    AddAllergyOutput,
+    PrescribeMedicationInput,
+    PrescribeMedicationOutput,
+    SaveClinicalNoteInput,
+    SaveClinicalNoteOutput,
 )
 
 __all__ = [
@@ -75,4 +108,25 @@ __all__ = [
     "DrugInteraction",
     "PatientRecord",
     "ClinicalTrial",
+    # Medplum client
+    "MedplumClient",
+    "get_client",
+    # Medplum tools
+    "search_patient",
+    "get_patient_chart",
+    "add_allergy",
+    "prescribe_medication",
+    "save_clinical_note",
+    # Medplum input schemas
+    "SearchPatientInput",
+    "GetPatientChartInput",
+    "AddAllergyInput",
+    "PrescribeMedicationInput",
+    "SaveClinicalNoteInput",
+    # Medplum output schemas
+    "SearchPatientOutput",
+    "GetPatientChartOutput",
+    "AddAllergyOutput",
+    "PrescribeMedicationOutput",
+    "SaveClinicalNoteOutput",
 ]

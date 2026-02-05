@@ -191,6 +191,20 @@ from ..tools.schemas import (
     ClinicalTrialsInput,
 )
 
+# Medplum FHIR tools
+from ..tools.medplum import (
+    search_patient,
+    get_patient_chart,
+    add_allergy,
+    prescribe_medication,
+    save_clinical_note,
+    SearchPatientInput,
+    GetPatientChartInput,
+    AddAllergyInput,
+    PrescribeMedicationInput,
+    SaveClinicalNoteInput,
+)
+
 
 # --- Drug Safety ---
 async def _check_drug_safety(drug_name: str = "", query: str = "") -> dict:
@@ -260,6 +274,134 @@ TOOL_REGISTRY.register_tool(
     args={"query": "condition or drug to search"},
     executor=_find_clinical_trials,
     arg_mapping={"query": "query", "condition": "condition"},
+)
+
+
+# =============================================================================
+# MEDPLUM FHIR TOOLS
+# =============================================================================
+
+
+# --- Search Patient ---
+async def _search_patient(name: str = "", dob: str = "") -> dict:
+    """Execute patient search."""
+    result = await search_patient(SearchPatientInput(
+        name=name if name else None,
+        dob=dob if dob else None,
+    ))
+    return result.model_dump()
+
+TOOL_REGISTRY.register_tool(
+    name="search_patient",
+    description="Search patients by name or DOB in EHR",
+    args={"name": "patient name", "dob": "date of birth (YYYY-MM-DD)"},
+    executor=_search_patient,
+)
+
+
+# --- Get Patient Chart ---
+async def _get_patient_chart(patient_id: str = "") -> dict:
+    """Execute patient chart retrieval."""
+    if not patient_id:
+        return {"result": "", "error": "patient_id is required"}
+    result = await get_patient_chart(GetPatientChartInput(patient_id=patient_id))
+    return result.model_dump()
+
+TOOL_REGISTRY.register_tool(
+    name="get_patient_chart",
+    description="Get patient clinical summary from EHR",
+    args={"patient_id": "patient ID"},
+    executor=_get_patient_chart,
+)
+
+
+# --- Add Allergy ---
+async def _add_allergy(
+    patient_id: str = "",
+    substance: str = "",
+    reaction: str = "",
+    severity: str = "moderate",
+) -> dict:
+    """Execute allergy documentation."""
+    if not patient_id or not substance or not reaction:
+        return {"result": "", "error": "patient_id, substance, and reaction are required"}
+    result = await add_allergy(AddAllergyInput(
+        patient_id=patient_id,
+        substance=substance,
+        reaction=reaction,
+        severity=severity,
+    ))
+    return result.model_dump()
+
+TOOL_REGISTRY.register_tool(
+    name="add_allergy",
+    description="Document allergy in patient chart",
+    args={
+        "patient_id": "patient ID",
+        "substance": "allergen name",
+        "reaction": "reaction description",
+        "severity": "mild/moderate/severe",
+    },
+    executor=_add_allergy,
+)
+
+
+# --- Prescribe Medication ---
+async def _prescribe_medication(
+    patient_id: str = "",
+    medication_name: str = "",
+    dosage: str = "",
+    frequency: str = "",
+) -> dict:
+    """Execute medication prescription."""
+    if not patient_id or not medication_name or not dosage or not frequency:
+        return {"result": "", "error": "patient_id, medication_name, dosage, and frequency are required"}
+    result = await prescribe_medication(PrescribeMedicationInput(
+        patient_id=patient_id,
+        medication_name=medication_name,
+        dosage=dosage,
+        frequency=frequency,
+    ))
+    return result.model_dump()
+
+TOOL_REGISTRY.register_tool(
+    name="prescribe_medication",
+    description="Prescribe medication for patient",
+    args={
+        "patient_id": "patient ID",
+        "medication_name": "medication name",
+        "dosage": "dosage (e.g., 500mg)",
+        "frequency": "frequency (e.g., twice daily)",
+    },
+    executor=_prescribe_medication,
+)
+
+
+# --- Save Clinical Note ---
+async def _save_clinical_note(
+    patient_id: str = "",
+    note_text: str = "",
+    note_type: str = "clinical-note",
+) -> dict:
+    """Execute clinical note save."""
+    if not patient_id or not note_text:
+        return {"result": "", "error": "patient_id and note_text are required"}
+    result = await save_clinical_note(SaveClinicalNoteInput(
+        patient_id=patient_id,
+        note_text=note_text,
+        note_type=note_type,
+    ))
+    return result.model_dump()
+
+TOOL_REGISTRY.register_tool(
+    name="save_clinical_note",
+    description="Save clinical note to patient chart",
+    args={
+        "patient_id": "patient ID",
+        "note_text": "note content",
+        "note_type": "note type (default: clinical-note)",
+    },
+    executor=_save_clinical_note,
 )
 
 
