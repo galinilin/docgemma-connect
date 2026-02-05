@@ -41,6 +41,27 @@ uv sync --extra cpu
 uv sync --extra cu128
 ```
 
+## Quick Start
+
+```bash
+# Configure environment
+cp .env.example .env
+# Edit .env with your RunPod/vLLM endpoint
+
+# Start the API server
+uv run docgemma-serve
+
+# Server runs at http://localhost:8000
+# API docs at http://localhost:8000/docs
+```
+
+## Documentation
+
+- [CLAUDE.md](./CLAUDE.md) - Architecture, tech stack, development guide
+- [doc/DOCGEMMA_IMPLEMENTATION_GUIDE.md](./doc/DOCGEMMA_IMPLEMENTATION_GUIDE.md) - Full implementation spec
+- [doc/DOCGEMMA_FLOWCHART.md](./doc/DOCGEMMA_FLOWCHART.md) - Agent pipeline diagram
+- [doc/DOCGEMMA_TEST_CASES_V2.md](./doc/DOCGEMMA_TEST_CASES_V2.md) - 120 test cases
+
 ## License
 
 See LICENSE file for details.
