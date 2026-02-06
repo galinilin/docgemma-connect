@@ -117,12 +117,20 @@ class FhirJsonStore:
         descending = sort_key.startswith("-")
         if sort_key:
             sort_field = sort_key.lstrip("-")
-            field_map = {"date": "effectiveDateTime", "_lastUpdated": "meta.lastUpdated"}
+            field_map = {"_lastUpdated": "meta.lastUpdated"}
             sort_field = field_map.get(sort_field, sort_field)
-            resources.sort(
-                key=lambda r: self._get_nested(r, sort_field) or "",
-                reverse=descending,
-            )
+            if sort_field == "date":
+                # Try multiple date fields: effectiveDateTime (Observation), date (DocumentReference)
+                resources.sort(
+                    key=lambda r: self._get_nested(r, "effectiveDateTime") or self._get_nested(r, "date") or "",
+                    reverse=descending,
+                )
+                sort_field = None  # already sorted
+            if sort_field:
+                resources.sort(
+                    key=lambda r: self._get_nested(r, sort_field) or "",
+                    reverse=descending,
+                )
 
         # Count limit
         count = params.get("_count")
@@ -164,6 +172,10 @@ class FhirJsonStore:
                 if not self._match_category(resource, value):
                     return False
 
+            elif key == "type":
+                if not self._match_type(resource, value):
+                    return False
+
         return True
 
     # -- match helpers --------------------------------------------------
@@ -184,6 +196,16 @@ class FhirJsonStore:
         """Match Observation.category coding code."""
         for cat in resource.get("category", []):
             for coding in cat.get("coding", []):
+                if coding.get("code") == value:
+                    return True
+        return False
+
+    @staticmethod
+    def _match_type(resource: dict, value: str) -> bool:
+        """Match resource.type.coding[].code (e.g. DocumentReference.type)."""
+        type_obj = resource.get("type", {})
+        if isinstance(type_obj, dict):
+            for coding in type_obj.get("coding", []):
                 if coding.get("code") == value:
                     return True
         return False

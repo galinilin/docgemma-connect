@@ -164,6 +164,35 @@ class ClinicalNote(BaseModel):
     preview: str | None = Field(None, description="Preview of note content")
 
 
+class VitalSign(BaseModel):
+    """Information about a vital sign reading."""
+
+    id: str | None = Field(None, description="Vital sign ID")
+    name: str = Field(..., description="Vital sign name (e.g. Heart rate)")
+    value: float = Field(..., description="Numeric value")
+    unit: str = Field(..., description="Unit (e.g. /min, mm[Hg])")
+    date: str | None = Field(None, description="Reading date")
+
+
+class ScreeningResult(BaseModel):
+    """Information about a screening assessment result."""
+
+    id: str | None = Field(None, description="Screening result ID")
+    name: str = Field(..., description="Assessment name (e.g. GAD-7 total score)")
+    score: str = Field(..., description="Score value")
+    date: str | None = Field(None, description="Assessment date")
+
+
+class VisitNote(BaseModel):
+    """Information about a visit documentation note."""
+
+    id: str | None = Field(None, description="Note ID")
+    note_type: str = Field(..., description="HPI, Review of Systems, or Physical Exam")
+    date: str | None = Field(None, description="Note date")
+    author: str | None = Field(None, description="Note author")
+    content: str = Field(..., description="Decoded note text")
+
+
 class PatientChartResponse(BaseModel):
     """Full patient chart response."""
 
@@ -176,6 +205,9 @@ class PatientChartResponse(BaseModel):
     allergies: list[AllergyInfo] = Field(default_factory=list)
     labs: list[LabResult] = Field(default_factory=list)
     notes: list[ClinicalNote] = Field(default_factory=list)
+    vitals: list[VitalSign] = Field(default_factory=list)
+    screenings: list[ScreeningResult] = Field(default_factory=list)
+    visit_notes: list[VisitNote] = Field(default_factory=list)
     error: str | None = Field(None, description="Error message if retrieval failed")
 
 
