@@ -107,6 +107,7 @@ class PatientSummary(BaseModel):
     name: str = Field(..., description="Patient full name")
     dob: str = Field(..., description="Date of birth (YYYY-MM-DD)")
     gender: str | None = Field(None, description="Patient gender")
+    specialty: str | None = Field(None, description="Medical specialty category")
 
 
 class PatientListResponse(BaseModel):
@@ -200,6 +201,7 @@ class PatientChartResponse(BaseModel):
     name: str = Field(..., description="Patient full name")
     dob: str = Field(..., description="Date of birth")
     gender: str | None = Field(None, description="Patient gender")
+    specialty: str | None = Field(None, description="Medical specialty category")
     conditions: list[ConditionInfo] = Field(default_factory=list)
     medications: list[MedicationInfo] = Field(default_factory=list)
     allergies: list[AllergyInfo] = Field(default_factory=list)

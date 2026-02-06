@@ -137,6 +137,7 @@ async def get_patient(patient_id: str) -> PatientChartResponse:
         name = _extract_patient_name(patient_data)
         dob = patient_data.get("birthDate", "unknown")
         gender = patient_data.get("gender")
+        specialty = _extract_specialty_tag(patient_data)
 
         # Fetch related resources
         conditions = await _fetch_conditions(client, patient_id)
@@ -153,6 +154,7 @@ async def get_patient(patient_id: str) -> PatientChartResponse:
             name=name,
             dob=dob,
             gender=gender,
+            specialty=specialty,
             conditions=conditions,
             medications=medications,
             allergies=allergies,
@@ -310,6 +312,7 @@ def _parse_patient_bundle(data: dict) -> list[PatientSummary]:
         name = _extract_patient_name(resource)
         dob = resource.get("birthDate", "unknown")
         gender = resource.get("gender")
+        specialty = _extract_specialty_tag(resource)
 
         patients.append(
             PatientSummary(
@@ -317,6 +320,7 @@ def _parse_patient_bundle(data: dict) -> list[PatientSummary]:
                 name=name,
                 dob=dob,
                 gender=gender,
+                specialty=specialty,
             )
         )
 
@@ -332,6 +336,15 @@ def _extract_patient_name(patient: dict) -> str:
         family = name_obj.get("family", "")
         return f"{given} {family}".strip() or "Unknown"
     return "Unknown"
+
+
+def _extract_specialty_tag(patient: dict) -> str | None:
+    """Extract specialty display from meta.tag if present."""
+    tags = patient.get("meta", {}).get("tag", [])
+    for tag in tags:
+        if tag.get("system") == "http://docgemma.dev/specialty":
+            return tag.get("display") or tag.get("code")
+    return None
 
 
 def _extract_id_from_message(message: str, id_label: str) -> str | None:
