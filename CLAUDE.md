@@ -85,11 +85,11 @@ docgemma-connect/
 | `search_medical_literature` | PubMed | ✅ Done |
 | `check_drug_interactions` | RxNav | ✅ Done |
 | `find_clinical_trials` | ClinicalTrials.gov | ✅ Done |
-| `search_patient` | Medplum FHIR | ✅ Done |
-| `get_patient_chart` | Medplum FHIR | ✅ Done |
-| `add_allergy` | Medplum FHIR | ✅ Done |
-| `prescribe_medication` | Medplum FHIR | ✅ Done |
-| `save_clinical_note` | Medplum FHIR | ✅ Done |
+| `search_patient` | Local FHIR JSON store | ✅ Done |
+| `get_patient_chart` | Local FHIR JSON store | ✅ Done |
+| `add_allergy` | Local FHIR JSON store | ✅ Done |
+| `prescribe_medication` | Local FHIR JSON store | ✅ Done |
+| `save_clinical_note` | Local FHIR JSON store | ✅ Done |
 | `analyze_medical_image` | MedGemma Vision | ❌ TODO |
 
 ## Agent Pipeline
@@ -188,6 +188,7 @@ The API server provides REST and WebSocket endpoints for the frontend.
 - `DOCGEMMA_PORT` - Server port (default: `8000`)
 - `DOCGEMMA_LOAD_MODEL` - Load model on startup (default: `true`)
 - `DOCGEMMA_TOOL_APPROVAL` - Enable tool approval flow (default: `true`)
+- `FHIR_DATA_DIR` - Local FHIR JSON store path (default: `data/fhir/`)
 
 **Endpoints:**
 
@@ -267,7 +268,7 @@ Only these nodes produce `final_response`:
 - [x] Tool approval flow
 
 ### Phase 4: EHR Integration ✅
-- [x] Medplum FHIR client (`tools/medplum/client.py`)
+- [x] Local FHIR JSON store (`tools/fhir_store/store.py`)
 - [x] `search_patient` - Search by name/DOB
 - [x] `get_patient_chart` - Clinical summary
 - [x] `add_allergy` - Document allergies

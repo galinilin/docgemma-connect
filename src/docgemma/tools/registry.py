@@ -191,8 +191,8 @@ from ..tools.schemas import (
     ClinicalTrialsInput,
 )
 
-# Medplum FHIR tools
-from ..tools.medplum import (
+# FHIR store tools
+from ..tools.fhir_store import (
     search_patient,
     get_patient_chart,
     add_allergy,
@@ -278,7 +278,7 @@ TOOL_REGISTRY.register_tool(
 
 
 # =============================================================================
-# MEDPLUM FHIR TOOLS
+# FHIR STORE TOOLS
 # =============================================================================
 
 

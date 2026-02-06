@@ -10,7 +10,7 @@ Available Tools:
     - check_drug_interactions: Drug interaction checker (OpenFDA)
     - find_clinical_trials: Search recruiting trials (ClinicalTrials.gov)
 
-Medplum EHR Tools:
+FHIR Store EHR Tools:
     - search_patient: Search patients by name/DOB
     - get_patient_chart: Retrieve patient clinical summary
     - add_allergy: Document allergies
@@ -26,7 +26,7 @@ Usage:
 
     result = await check_drug_safety(DrugSafetyInput(brand_name="Lipitor"))
 
-    # Medplum tools
+    # FHIR store tools
     from docgemma.tools import search_patient, SearchPatientInput
 
     result = await search_patient(SearchPatientInput(name="Smith"))
@@ -59,9 +59,9 @@ from .schemas import (
     PatientRecordsOutput,
 )
 
-# Medplum FHIR tools
-from .medplum import (
-    MedplumClient,
+# Local FHIR JSON store tools
+from .fhir_store import (
+    FhirJsonStore,
     get_client,
     search_patient,
     get_patient_chart,
@@ -108,22 +108,22 @@ __all__ = [
     "DrugInteraction",
     "PatientRecord",
     "ClinicalTrial",
-    # Medplum client
-    "MedplumClient",
+    # FHIR store client
+    "FhirJsonStore",
     "get_client",
-    # Medplum tools
+    # FHIR store tools
     "search_patient",
     "get_patient_chart",
     "add_allergy",
     "prescribe_medication",
     "save_clinical_note",
-    # Medplum input schemas
+    # FHIR store input schemas
     "SearchPatientInput",
     "GetPatientChartInput",
     "AddAllergyInput",
     "PrescribeMedicationInput",
     "SaveClinicalNoteInput",
-    # Medplum output schemas
+    # FHIR store output schemas
     "SearchPatientOutput",
     "GetPatientChartOutput",
     "AddAllergyOutput",

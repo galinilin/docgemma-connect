@@ -1,7 +1,7 @@
 """Patient/EHR API endpoints.
 
 Provides REST endpoints for browsing and managing patient data
-via the Medplum FHIR API.
+via the local FHIR JSON store.
 """
 
 from __future__ import annotations
@@ -28,7 +28,7 @@ from ..models.responses import (
     PatientListResponse,
     PatientSummary,
 )
-from ...tools.medplum import (
+from ...tools.fhir_store import (
     AddAllergyInput,
     GetPatientChartInput,
     PrescribeMedicationInput,
