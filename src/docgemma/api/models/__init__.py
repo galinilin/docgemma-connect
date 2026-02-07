@@ -3,9 +3,6 @@
 from .session import Message, PendingToolApproval, Session, SessionStatus
 from .requests import CreateSessionRequest, SendMessageRequest, ToolApprovalRequest
 from .responses import (
-    GraphEdge,
-    GraphNode,
-    GraphStateResponse,
     MessageResponse,
     SessionResponse,
     ToolInfo,
@@ -35,9 +32,6 @@ __all__ = [
     # Response models
     "SessionResponse",
     "MessageResponse",
-    "GraphStateResponse",
-    "GraphNode",
-    "GraphEdge",
     "ToolInfo",
     # Event models
     "BaseEvent",

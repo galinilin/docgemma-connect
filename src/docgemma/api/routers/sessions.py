@@ -13,9 +13,6 @@ from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisco
 from ..models.events import ErrorEvent
 from ..models.requests import CreateSessionRequest
 from ..models.responses import (
-    GraphEdge,
-    GraphNode,
-    GraphStateResponse,
     MessageResponse,
     SessionListResponse,
     SessionResponse,
@@ -60,8 +57,6 @@ def _session_to_response(session: Session) -> SessionResponse:
             for msg in session.messages
         ],
         pending_approval=session.pending_approval.model_dump() if session.pending_approval else None,
-        current_node=session.current_node,
-        completed_nodes=session.completed_nodes,
         created_at=session.created_at,
         updated_at=session.updated_at,
     )
@@ -130,72 +125,6 @@ async def get_messages(
         )
         for msg in session.messages
     ]
-
-
-@router.get("/{session_id}/graph", response_model=GraphStateResponse)
-async def get_graph_state(
-    session_id: str,
-    store: SessionStore = Depends(get_session_store),
-) -> GraphStateResponse:
-    """Get graph state for visualization.
-
-    Returns the current state of the agent graph including:
-    - All nodes with their status (pending/active/completed)
-    - Edges between nodes with active state
-    - Current executing node
-    - Subtasks and tool results
-    """
-    session = store.get(session_id)
-    if not session:
-        raise HTTPException(status_code=404, detail=f"Session '{session_id}' not found")
-
-    # Import here to avoid circular imports
-    from ...agent.graph import GRAPH_EDGES, GRAPH_NODES
-
-    # Build nodes with status
-    nodes = []
-    for node_def in GRAPH_NODES:
-        status = "pending"
-        if node_def["id"] in session.completed_nodes:
-            status = "completed"
-        elif node_def["id"] == session.current_node:
-            status = "active"
-
-        nodes.append(
-            GraphNode(
-                id=node_def["id"],
-                label=node_def["label"],
-                status=status,
-                node_type=node_def["type"],
-            )
-        )
-
-    # Build edges with active state
-    edges = []
-    for edge_def in GRAPH_EDGES:
-        active = (
-            edge_def["source"] in session.completed_nodes
-            and (
-                edge_def["target"] == session.current_node
-                or edge_def["target"] in session.completed_nodes
-            )
-        )
-        edges.append(
-            GraphEdge(
-                source=edge_def["source"],
-                target=edge_def["target"],
-                label=edge_def["label"],
-                active=active,
-            )
-        )
-
-    return GraphStateResponse(
-        nodes=nodes,
-        edges=edges,
-        current_node=session.current_node,
-        subtasks=[],  # Would need agent runner to get these
-        tool_results=[],
-    )
 
 
 # =============================================================================

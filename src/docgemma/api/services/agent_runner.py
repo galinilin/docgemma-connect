@@ -5,7 +5,6 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
-import uuid
 from collections.abc import AsyncGenerator
 from typing import TYPE_CHECKING, Any
 
@@ -14,7 +13,6 @@ from langgraph.checkpoint.memory import MemorySaver
 from ..models.events import (
     AgentEvent,
     AgentStatusEvent,
-    ClinicalTrace,
     CompletionEvent,
     ErrorEvent,
     NodeEndEvent,
@@ -22,46 +20,15 @@ from ..models.events import (
     StreamingTextEvent,
     ToolApprovalRequestEvent,
     ToolExecutionEndEvent,
-    ToolExecutionStartEvent,
-    TraceStep,
-    TraceStepType,
 )
 from ..models.session import Session, SessionStatus
-from ...agent.graph import GRAPH_EDGES, GRAPH_NODES, build_graph
-from ...agent.state import DocGemmaState
+from ...agent.graph import GRAPH_CONFIG, GraphConfig, build_graph
 from ...tools.registry import execute_tool as registry_execute_tool
 
 if TYPE_CHECKING:
     from ...model import DocGemma
 
 logger = logging.getLogger(__name__)
-
-# Clinical-friendly labels for tool names
-TOOL_CLINICAL_LABELS = {
-    "check_drug_safety": "FDA Safety Database",
-    "check_drug_interactions": "Drug Interaction Check",
-    "search_medical_literature": "Medical Literature (PubMed)",
-    "find_clinical_trials": "Clinical Trials Registry",
-    "search_patient": "Patient Records Search",
-    "get_patient_chart": "Patient Chart Review",
-    "add_allergy": "Allergy Documentation",
-    "prescribe_medication": "Medication Prescription",
-    "save_clinical_note": "Clinical Note",
-}
-
-
-# Human-readable status labels for tool execution
-TOOL_STATUS_LABELS = {
-    "check_drug_safety": "Checking FDA safety database...",
-    "check_drug_interactions": "Checking drug interactions...",
-    "search_medical_literature": "Searching medical literature...",
-    "find_clinical_trials": "Searching clinical trials...",
-    "search_patient": "Searching patient records...",
-    "get_patient_chart": "Retrieving patient chart...",
-    "add_allergy": "Documenting allergy...",
-    "prescribe_medication": "Processing prescription...",
-    "save_clinical_note": "Saving clinical note...",
-}
 
 
 class AgentRunner:
@@ -76,18 +43,21 @@ class AgentRunner:
     def __init__(
         self,
         model: DocGemma,
+        graph_config: GraphConfig | None = None,
         enable_tool_approval: bool = True,
     ):
         """Initialize the agent runner.
 
         Args:
             model: DocGemma model instance (must be loaded)
+            graph_config: Graph topology configuration. Defaults to GRAPH_CONFIG.
             enable_tool_approval: Whether to interrupt before tool execution
         """
         self.model = model
+        self._cfg = graph_config or GRAPH_CONFIG
         self.enable_tool_approval = enable_tool_approval
         self._checkpointer = MemorySaver()
-        self._interrupt_before = ["execute_tool"] if enable_tool_approval else None
+        self._interrupt_before = self._cfg.interrupt_before if enable_tool_approval else None
 
         # Build default graph (no streaming callback) for resume operations
         self._graph = build_graph(
@@ -134,30 +104,9 @@ class AgentRunner:
         session.status = SessionStatus.PROCESSING
         session.reset_for_new_turn()
 
-        # Reset ALL state for new turn - critical to avoid stale data from checkpoint
-        initial_state: DocGemmaState = {
-            "user_input": user_input,
-            "image_data": image_data,
-            "image_present": False,
-            "subtasks": [],
-            "current_subtask_index": 0,
-            "tool_results": [],
-            "loop_iterations": 0,
-            "tool_retries": 0,
-            # Explicitly clear turn outputs to prevent checkpoint leakage
-            "final_response": None,
-            "complexity": None,
-            "reasoning": None,
-            "_planned_tool": None,
-            "_planned_args": None,
-            "last_result_status": None,
-            "needs_user_input": False,
-            "missing_info": None,
-        }
-
-        # Add conversation history if provided
-        if conversation_history:
-            initial_state["conversation_history"] = conversation_history
+        initial_state = self._cfg.make_initial_state(
+            user_input, image_data, conversation_history
+        )
 
         config = self._make_thread_id(session.session_id)
 
@@ -219,33 +168,13 @@ class AgentRunner:
                 )
                 session.status = SessionStatus.ERROR
         else:
-            # Tool rejected - update state and skip to synthesis
-            yield NodeStartEvent(
-                node_id="synthesize_response",
-                node_label="Synthesize Response",
-            )
-
-            # Get current state and modify it to skip tool execution
+            # Tool rejected - update state and resume; graph routing decides next node
             state = self._graph.get_state(config)
             if state and state.values:
-                # Mark tool as rejected and jump to synthesis
-                updated_state = {
-                    **state.values,
-                    "_planned_tool": None,
-                    "_planned_args": None,
-                    "last_result_status": "done",
-                    "tool_results": state.values.get("tool_results", []) + [
-                        {
-                            "tool_name": session.pending_approval.tool_name if session.pending_approval else "unknown",
-                            "arguments": session.pending_approval.tool_args if session.pending_approval else {},
-                            "result": {"rejected": True, "reason": rejection_reason or "User rejected"},
-                            "success": False,
-                        }
-                    ],
-                }
-
-                # Update the state
-                self._graph.update_state(config, updated_state)
+                rejection_update = self._cfg.build_rejection_update(
+                    state.values, rejection_reason
+                )
+                self._graph.update_state(config, rejection_update)
 
                 # Resume execution
                 try:
@@ -265,7 +194,7 @@ class AgentRunner:
     async def _stream_execution(
         self,
         session: Session,
-        initial_state: DocGemmaState | None,
+        initial_state: dict | None,
         config: dict,
         is_resume: bool = False,
     ) -> AsyncGenerator[AgentEvent, None]:
@@ -288,7 +217,6 @@ class AgentRunner:
         node_durations: dict[str, float] = {}
         completion_emitted = False
 
-        terminal_nodes = {"synthesize_response", "direct_response"}
         input_data = initial_state if not is_resume else None
 
         # Queue bridge: streaming tokens and graph updates flow through here
@@ -309,7 +237,7 @@ class AgentRunner:
             """Run graph iteration and push updates to queue.
 
             Automatically resumes the graph when it interrupts before
-            execute_tool with a no-op tool (planned_tool is None or "none").
+            a node with a no-op tool (planned_tool is None or "none").
             """
             try:
                 data = input_data
@@ -319,14 +247,15 @@ class AgentRunner:
                     ):
                         await event_queue.put(event)
 
-                    # Check if graph paused at an interrupt (e.g. before execute_tool)
+                    # Check if graph paused at an interrupt
                     current_state = graph.get_state(config)
                     if current_state and current_state.next:
                         # Graph is paused — check if it's a no-op tool
-                        planned_tool = (current_state.values or {}).get("_planned_tool")
-                        if not planned_tool or planned_tool == "none":
-                            # Auto-resume: skip the interrupt, let execute_tool
-                            # handle the "none" case
+                        tool_name, _, _ = self._cfg.extract_tool_proposal(
+                            current_state.values or {}
+                        )
+                        if not tool_name:
+                            # Auto-resume: skip the interrupt
                             data = None
                             continue
                     # Graph finished or paused for real tool approval
@@ -368,26 +297,21 @@ class AgentRunner:
                     if node_name == "__interrupt__":
                         current_state = graph.get_state(config)
                         if current_state and current_state.values:
-                            planned_tool = current_state.values.get("_planned_tool")
-                            planned_args = current_state.values.get("_planned_args", {})
-                            subtasks = current_state.values.get("subtasks", [])
-                            idx = current_state.values.get("current_subtask_index", 0)
+                            tool_name, tool_args, intent = self._cfg.extract_tool_proposal(
+                                current_state.values
+                            )
 
-                            intent = ""
-                            if subtasks and idx < len(subtasks):
-                                intent = subtasks[idx].get("intent", "")
-
-                            if planned_tool and planned_tool != "none":
+                            if tool_name:
                                 session.set_pending_approval(
-                                    tool_name=planned_tool,
-                                    tool_args=planned_args,
+                                    tool_name=tool_name,
+                                    tool_args=tool_args,
                                     subtask_intent=intent,
                                     checkpoint_id=str(current_state.config.get("configurable", {}).get("checkpoint_id", "")),
                                 )
 
                                 yield ToolApprovalRequestEvent(
-                                    tool_name=planned_tool,
-                                    tool_args=planned_args,
+                                    tool_name=tool_name,
+                                    tool_args=tool_args,
                                     subtask_intent=intent,
                                 )
                                 return
@@ -401,22 +325,16 @@ class AgentRunner:
                         continue
 
                     # Regular node execution
-                    if node_name not in node_start_times:
-                        node_start_times[node_name] = time.perf_counter()
-                    else:
-                        # Re-entered node (agentic loop) — reset start time
-                        node_start_times[node_name] = time.perf_counter()
+                    node_start_times[node_name] = time.perf_counter()
 
-                    node_label = self._get_node_label(node_name)
-                    session.current_node = node_name
+                    node_label = self._cfg.node_labels.get(
+                        node_name, node_name.replace("_", " ").title()
+                    )
 
                     yield NodeStartEvent(node_id=node_name, node_label=node_label)
 
                     elapsed_ms = (time.perf_counter() - node_start_times[node_name]) * 1000
                     node_durations[node_name] = elapsed_ms
-
-                    if node_name not in session.completed_nodes:
-                        session.completed_nodes.append(node_name)
 
                     yield NodeEndEvent(
                         node_id=node_name,
@@ -425,16 +343,18 @@ class AgentRunner:
                     )
 
                     # Emit forward-looking status: what's running NEXT
-                    next_status = self._get_next_status(
-                        node_name, state_update
-                    )
-                    if next_status:
-                        yield AgentStatusEvent(
-                            status_text=next_status,
-                            node_id=node_name,
+                    if self._cfg.get_status_text:
+                        next_status = self._cfg.get_status_text(
+                            node_name, state_update
                         )
+                        if next_status:
+                            yield AgentStatusEvent(
+                                status_text=next_status,
+                                node_id=node_name,
+                            )
 
-                    if node_name == "execute_tool" and state_update:
+                    # Emit tool execution end for any node producing tool_results
+                    if state_update:
                         tool_results = state_update.get("tool_results", [])
                         if tool_results:
                             last_result = tool_results[-1]
@@ -447,11 +367,11 @@ class AgentRunner:
 
                     if (
                         not completion_emitted
-                        and node_name in terminal_nodes
+                        and node_name in self._cfg.terminal_nodes
                         and state_update
-                        and state_update.get("final_response")
+                        and state_update.get(self._cfg.final_response_key)
                     ):
-                        final_response = state_update["final_response"]
+                        final_response = state_update[self._cfg.final_response_key]
                         completion_emitted = True
 
                         full_state = graph.get_state(config)
@@ -459,9 +379,10 @@ class AgentRunner:
                         clinical_trace = None
                         if full_state and full_state.values:
                             tool_count = len(full_state.values.get("tool_results", []))
-                            clinical_trace = self._build_clinical_trace(
-                                full_state.values, node_durations
-                            )
+                            if self._cfg.build_clinical_trace:
+                                clinical_trace = self._cfg.build_clinical_trace(
+                                    full_state.values, node_durations
+                                )
 
                         session.status = SessionStatus.ACTIVE
                         yield CompletionEvent(
@@ -476,230 +397,3 @@ class AgentRunner:
                     await graph_task
                 except asyncio.CancelledError:
                     pass
-
-    def _get_node_label(self, node_id: str) -> str:
-        """Get human-readable label for a node."""
-        for node in GRAPH_NODES:
-            if node["id"] == node_id:
-                return node["label"]
-        return node_id.replace("_", " ").title()
-
-    def _get_next_status(
-        self, node_name: str, state_update: dict | None
-    ) -> str | None:
-        """Return status text describing what will run NEXT after this node.
-
-        Since astream(stream_mode='updates') yields after each node completes,
-        status must describe the upcoming work, not the finished work.
-        """
-        state = state_update or {}
-
-        if node_name == "image_detection":
-            return "Analyzing query..."
-
-        if node_name == "complexity_router":
-            if state.get("complexity") == "direct":
-                return "Composing response..."
-            return "Clinical reasoning..."
-
-        if node_name == "thinking_mode":
-            return "Breaking down your question..."
-
-        if node_name == "decompose_intent":
-            if state.get("needs_user_input"):
-                return "Composing response..."
-            return "Planning approach..."
-
-        if node_name == "plan_tool":
-            planned_tool = state.get("_planned_tool")
-            if planned_tool and planned_tool != "none":
-                return TOOL_STATUS_LABELS.get(
-                    planned_tool,
-                    f"Using {planned_tool.replace('_', ' ')}...",
-                )
-            return None
-
-        if node_name == "execute_tool":
-            return "Processing results..."
-
-        if node_name == "check_result":
-            status = state.get("last_result_status", "done")
-            if status == "continue":
-                return "Planning next step..."
-            return "Composing response..."
-
-        # Terminal nodes — no next status (streaming/completion clears it)
-        return None
-
-    def _describe_tool_call(self, result: dict) -> str:
-        """Generate a clinical-friendly description of a tool call."""
-        tool = result.get("tool_name", "")
-        args = result.get("arguments", {})
-
-        if tool == "check_drug_safety":
-            drug = args.get("drug_name", "medication")
-            return f"Checked safety profile for {drug}"
-        elif tool == "check_drug_interactions":
-            drugs = args.get("drug_names", [])
-            if len(drugs) >= 2:
-                return f"Checked interactions between {drugs[0]} and {drugs[1]}"
-            return "Checked drug interactions"
-        elif tool == "search_medical_literature":
-            query = args.get("query", "")
-            return f"Searched medical literature for: {query[:50]}..."
-        elif tool == "find_clinical_trials":
-            condition = args.get("condition", "")
-            return f"Searched clinical trials for {condition}"
-        elif tool == "get_patient_chart":
-            patient_id = args.get("patient_id", "")
-            return f"Retrieved patient chart ({patient_id})"
-        elif tool == "search_patient":
-            return "Searched patient records"
-        else:
-            return f"Consulted {TOOL_CLINICAL_LABELS.get(tool, tool.replace('_', ' '))}"
-
-    def _summarize_result(self, result: dict) -> str:
-        """Generate a brief summary of a tool result."""
-        tool = result.get("tool_name", "")
-        data = result.get("result", {})
-
-        if tool == "check_drug_safety":
-            warnings = data.get("boxed_warnings", [])
-            if warnings:
-                return f"Found {len(warnings)} boxed warning(s)"
-            return "No boxed warnings found"
-        elif tool == "check_drug_interactions":
-            interactions = data.get("interactions", [])
-            if interactions:
-                return f"Found {len(interactions)} potential interaction(s)"
-            return "No interactions found"
-        elif tool == "search_medical_literature":
-            articles = data.get("articles", [])
-            return f"Found {len(articles)} relevant article(s)"
-        elif tool == "find_clinical_trials":
-            trials = data.get("trials", [])
-            return f"Found {len(trials)} active trial(s)"
-        else:
-            return "Completed successfully"
-
-    def _build_clinical_trace(
-        self, state: dict, node_durations: dict[str, float]
-    ) -> ClinicalTrace:
-        """Build a clinical reasoning trace from the agent state."""
-        steps: list[TraceStep] = []
-        total_ms = 0.0
-
-        # 1. Reasoning step (if present)
-        if state.get("reasoning"):
-            dur = node_durations.get("thinking_mode", 0)
-            total_ms += dur
-            reasoning_text = state["reasoning"]
-            if len(reasoning_text) > 500:
-                reasoning_text = reasoning_text[:500] + "..."
-            steps.append(
-                TraceStep(
-                    type=TraceStepType.THOUGHT,
-                    label="Clinical Reasoning",
-                    description="Analyzed query to plan approach",
-                    duration_ms=dur,
-                    reasoning_text=reasoning_text,
-                )
-            )
-
-        # 2. Successful tool calls only
-        for result in state.get("tool_results", []):
-            if not result.get("success"):
-                continue
-            tool = result.get("tool_name", "unknown")
-            dur = node_durations.get(f"tool_{tool}", node_durations.get("execute_tool", 0))
-            total_ms += dur
-            steps.append(
-                TraceStep(
-                    type=TraceStepType.TOOL_CALL,
-                    label=TOOL_CLINICAL_LABELS.get(tool, tool.replace("_", " ").title()),
-                    description=self._describe_tool_call(result),
-                    duration_ms=dur,
-                    tool_name=tool,
-                    tool_result_summary=self._summarize_result(result),
-                    success=True,
-                )
-            )
-
-        # 3. Synthesis step
-        dur = node_durations.get("synthesize_response", 0)
-        total_ms += dur
-        steps.append(
-            TraceStep(
-                type=TraceStepType.SYNTHESIS,
-                label="Response Synthesis",
-                description="Combined findings into clinical response",
-                duration_ms=dur,
-            )
-        )
-
-        return ClinicalTrace(
-            steps=steps,
-            total_duration_ms=total_ms,
-            tools_consulted=len([s for s in steps if s.type == TraceStepType.TOOL_CALL]),
-        )
-
-    def get_graph_visualization(self, session: Session) -> dict[str, Any]:
-        """Get graph state for visualization.
-
-        Args:
-            session: The session to get state for
-
-        Returns:
-            Dict with nodes, edges, current_node, subtasks, tool_results
-        """
-        config = self._make_thread_id(session.session_id)
-        state = self._graph.get_state(config)
-
-        # Build nodes with status
-        nodes = []
-        for node_def in GRAPH_NODES:
-            status = "pending"
-            if node_def["id"] in session.completed_nodes:
-                status = "completed"
-            elif node_def["id"] == session.current_node:
-                status = "active"
-
-            nodes.append({
-                "id": node_def["id"],
-                "label": node_def["label"],
-                "status": status,
-                "node_type": node_def["type"],
-            })
-
-        # Build edges with active state
-        edges = []
-        for edge_def in GRAPH_EDGES:
-            # An edge is active if its source is completed and target is current or completed
-            active = (
-                edge_def["source"] in session.completed_nodes
-                and (
-                    edge_def["target"] == session.current_node
-                    or edge_def["target"] in session.completed_nodes
-                )
-            )
-            edges.append({
-                "source": edge_def["source"],
-                "target": edge_def["target"],
-                "label": edge_def["label"],
-                "active": active,
-            })
-
-        # Get subtasks and tool results from state
-        subtasks = []
-        tool_results = []
-        if state and state.values:
-            subtasks = state.values.get("subtasks", [])
-            tool_results = state.values.get("tool_results", [])
-
-        return {
-            "nodes": nodes,
-            "edges": edges,
-            "current_node": session.current_node,
-            "subtasks": subtasks,
-            "tool_results": tool_results,
-        }
