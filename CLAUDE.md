@@ -199,7 +199,6 @@ The API server provides REST and WebSocket endpoints for the frontend.
 | GET | `/api/sessions` | List all sessions |
 | GET | `/api/sessions/{id}` | Get session details |
 | DELETE | `/api/sessions/{id}` | Delete session |
-| GET | `/api/sessions/{id}/graph` | Get graph state (nodes + edges) |
 | GET | `/api/sessions/{id}/messages` | Get conversation history |
 | WS | `/api/sessions/{id}/ws` | WebSocket for real-time events |
 | GET | `/api/tools` | List available tools |

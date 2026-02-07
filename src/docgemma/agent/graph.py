@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Callable
 
 from langgraph.checkpoint.base import BaseCheckpointSaver
@@ -28,34 +29,326 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-# Graph node definitions for visualization
-GRAPH_NODES = [
-    {"id": "image_detection", "label": "Image Detection", "type": "code"},
-    {"id": "complexity_router", "label": "Complexity Router", "type": "llm"},
-    {"id": "direct_response", "label": "Direct Response", "type": "llm"},
-    {"id": "thinking_mode", "label": "Thinking Mode", "type": "llm"},
-    {"id": "decompose_intent", "label": "Decompose Intent", "type": "llm"},
-    {"id": "plan_tool", "label": "Plan Tool", "type": "llm"},
-    {"id": "execute_tool", "label": "Execute Tool", "type": "tool"},
-    {"id": "check_result", "label": "Check Result", "type": "code"},
-    {"id": "synthesize_response", "label": "Synthesize Response", "type": "llm"},
-]
 
-GRAPH_EDGES = [
-    {"source": "image_detection", "target": "complexity_router", "label": None},
-    {"source": "complexity_router", "target": "direct_response", "label": "direct"},
-    {"source": "complexity_router", "target": "thinking_mode", "label": "complex"},
-    {"source": "direct_response", "target": "__end__", "label": None},
-    {"source": "thinking_mode", "target": "decompose_intent", "label": None},
-    {"source": "decompose_intent", "target": "synthesize_response", "label": "needs_clarification"},
-    {"source": "decompose_intent", "target": "plan_tool", "label": "has_subtasks"},
-    {"source": "plan_tool", "target": "execute_tool", "label": None},
-    {"source": "execute_tool", "target": "check_result", "label": None},
-    {"source": "check_result", "target": "plan_tool", "label": "continue"},
-    {"source": "check_result", "target": "synthesize_response", "label": "done"},
-    {"source": "synthesize_response", "target": "__end__", "label": None},
-]
+# ── Clinical-friendly labels for tool names ──────────────────────────────────
+TOOL_CLINICAL_LABELS = {
+    "check_drug_safety": "FDA Safety Database",
+    "check_drug_interactions": "Drug Interaction Check",
+    "search_medical_literature": "Medical Literature (PubMed)",
+    "find_clinical_trials": "Clinical Trials Registry",
+    "search_patient": "Patient Records Search",
+    "get_patient_chart": "Patient Chart Review",
+    "add_allergy": "Allergy Documentation",
+    "prescribe_medication": "Medication Prescription",
+    "save_clinical_note": "Clinical Note",
+}
 
+# Human-readable status labels for tool execution
+TOOL_STATUS_LABELS = {
+    "check_drug_safety": "Checking FDA safety database...",
+    "check_drug_interactions": "Checking drug interactions...",
+    "search_medical_literature": "Searching medical literature...",
+    "find_clinical_trials": "Searching clinical trials...",
+    "search_patient": "Searching patient records...",
+    "get_patient_chart": "Retrieving patient chart...",
+    "add_allergy": "Documenting allergy...",
+    "prescribe_medication": "Processing prescription...",
+    "save_clinical_note": "Saving clinical note...",
+}
+
+
+# ── GraphConfig ──────────────────────────────────────────────────────────────
+
+@dataclass(frozen=True)
+class GraphConfig:
+    """Everything the API layer needs to know about the graph topology.
+
+    The graph author fills this in alongside ``build_graph()``.  The API layer
+    (``agent_runner.py``) consumes it without importing any node names.
+    """
+
+    # Node names to interrupt before (for tool approval). Empty = no approval.
+    interrupt_before: list[str]
+
+    # Given state dict at interrupt, return (tool_name, tool_args, intent_text).
+    # Return (None, {}, "") if interrupt should be auto-resumed (no-op tool).
+    extract_tool_proposal: Callable[[dict], tuple[str | None, dict, str]]
+
+    # Given state dict + rejection reason, return state-update dict to apply
+    # before resuming after rejection.
+    build_rejection_update: Callable[[dict, str | None], dict]
+
+    # Set of node names that produce the final response.
+    terminal_nodes: frozenset[str]
+
+    # State key that carries the final response text.
+    final_response_key: str  # e.g. "final_response"
+
+    # Factory: (user_input, image_data, conversation_history) -> initial state dict.
+    make_initial_state: Callable[[str, bytes | None, list[dict] | None], dict]
+
+    # (node_name, state_update) -> status text or None.
+    get_status_text: Callable[[str, dict], str | None] | None
+
+    # node_id -> human-readable label.
+    node_labels: dict[str, str]
+
+    # (full_state, node_durations) -> ClinicalTrace or None.
+    build_clinical_trace: Callable[[dict, dict[str, float]], Any] | None
+
+
+# ── Helpers for the default GRAPH_CONFIG ─────────────────────────────────────
+
+def _extract_tool_proposal(state: dict) -> tuple[str | None, dict, str]:
+    """Read the planned tool from interrupt state."""
+    planned_tool = state.get("_planned_tool")
+    planned_args = state.get("_planned_args", {})
+    subtasks = state.get("subtasks", [])
+    idx = state.get("current_subtask_index", 0)
+    intent = ""
+    if subtasks and idx < len(subtasks):
+        intent = subtasks[idx].get("intent", "")
+    if not planned_tool or planned_tool == "none":
+        return (None, {}, "")
+    return (planned_tool, planned_args, intent)
+
+
+def _build_rejection_update(state: dict, reason: str | None) -> dict:
+    """Build state update dict for a rejected tool."""
+    return {
+        "_planned_tool": None,
+        "_planned_args": None,
+        "last_result_status": "done",
+        "tool_results": state.get("tool_results", []) + [
+            {
+                "tool_name": state.get("_planned_tool", "unknown"),
+                "arguments": state.get("_planned_args", {}),
+                "result": {"rejected": True, "reason": reason or "User rejected"},
+                "success": False,
+            }
+        ],
+    }
+
+
+def _make_initial_state(
+    user_input: str,
+    image_data: bytes | None,
+    conversation_history: list[dict] | None,
+) -> dict:
+    """Create a fresh state dict for a new turn."""
+    state: dict[str, Any] = {
+        "user_input": user_input,
+        "image_data": image_data,
+        "image_present": False,
+        "subtasks": [],
+        "current_subtask_index": 0,
+        "tool_results": [],
+        "loop_iterations": 0,
+        "tool_retries": 0,
+        # Explicitly clear turn outputs to prevent checkpoint leakage
+        "final_response": None,
+        "complexity": None,
+        "reasoning": None,
+        "_planned_tool": None,
+        "_planned_args": None,
+        "last_result_status": None,
+        "needs_user_input": False,
+        "missing_info": None,
+    }
+    if conversation_history:
+        state["conversation_history"] = conversation_history
+    return state
+
+
+def _get_status_text(node_name: str, state_update: dict) -> str | None:
+    """Return status text describing what will run NEXT after this node."""
+    state = state_update or {}
+
+    if node_name == "image_detection":
+        return "Analyzing query..."
+
+    if node_name == "complexity_router":
+        if state.get("complexity") == "direct":
+            return "Composing response..."
+        return "Clinical reasoning..."
+
+    if node_name == "thinking_mode":
+        return "Breaking down your question..."
+
+    if node_name == "decompose_intent":
+        if state.get("needs_user_input"):
+            return "Composing response..."
+        return "Planning approach..."
+
+    if node_name == "plan_tool":
+        planned_tool = state.get("_planned_tool")
+        if planned_tool and planned_tool != "none":
+            return TOOL_STATUS_LABELS.get(
+                planned_tool,
+                f"Using {planned_tool.replace('_', ' ')}...",
+            )
+        return None
+
+    if node_name == "execute_tool":
+        return "Processing results..."
+
+    if node_name == "check_result":
+        status = state.get("last_result_status", "done")
+        if status == "continue":
+            return "Planning next step..."
+        return "Composing response..."
+
+    # Terminal nodes — no next status
+    return None
+
+
+def _describe_tool_call(result: dict) -> str:
+    """Generate a clinical-friendly description of a tool call."""
+    tool = result.get("tool_name", "")
+    args = result.get("arguments", {})
+
+    if tool == "check_drug_safety":
+        drug = args.get("drug_name", "medication")
+        return f"Checked safety profile for {drug}"
+    elif tool == "check_drug_interactions":
+        drugs = args.get("drug_names", [])
+        if len(drugs) >= 2:
+            return f"Checked interactions between {drugs[0]} and {drugs[1]}"
+        return "Checked drug interactions"
+    elif tool == "search_medical_literature":
+        query = args.get("query", "")
+        return f"Searched medical literature for: {query[:50]}..."
+    elif tool == "find_clinical_trials":
+        condition = args.get("condition", "")
+        return f"Searched clinical trials for {condition}"
+    elif tool == "get_patient_chart":
+        patient_id = args.get("patient_id", "")
+        return f"Retrieved patient chart ({patient_id})"
+    elif tool == "search_patient":
+        return "Searched patient records"
+    else:
+        return f"Consulted {TOOL_CLINICAL_LABELS.get(tool, tool.replace('_', ' '))}"
+
+
+def _summarize_result(result: dict) -> str:
+    """Generate a brief summary of a tool result."""
+    tool = result.get("tool_name", "")
+    data = result.get("result", {})
+
+    if tool == "check_drug_safety":
+        warnings = data.get("boxed_warnings", [])
+        if warnings:
+            return f"Found {len(warnings)} boxed warning(s)"
+        return "No boxed warnings found"
+    elif tool == "check_drug_interactions":
+        interactions = data.get("interactions", [])
+        if interactions:
+            return f"Found {len(interactions)} potential interaction(s)"
+        return "No interactions found"
+    elif tool == "search_medical_literature":
+        articles = data.get("articles", [])
+        return f"Found {len(articles)} relevant article(s)"
+    elif tool == "find_clinical_trials":
+        trials = data.get("trials", [])
+        return f"Found {len(trials)} active trial(s)"
+    else:
+        return "Completed successfully"
+
+
+def _build_clinical_trace(
+    state: dict, node_durations: dict[str, float]
+) -> Any:
+    """Build a clinical reasoning trace from the agent state."""
+    # Import here to avoid circular dependency at module level
+    from ..api.models.events import ClinicalTrace, TraceStep, TraceStepType
+
+    steps: list[TraceStep] = []
+    total_ms = 0.0
+
+    # 1. Reasoning step (if present)
+    if state.get("reasoning"):
+        dur = node_durations.get("thinking_mode", 0)
+        total_ms += dur
+        reasoning_text = state["reasoning"]
+        if len(reasoning_text) > 500:
+            reasoning_text = reasoning_text[:500] + "..."
+        steps.append(
+            TraceStep(
+                type=TraceStepType.THOUGHT,
+                label="Clinical Reasoning",
+                description="Analyzed query to plan approach",
+                duration_ms=dur,
+                reasoning_text=reasoning_text,
+            )
+        )
+
+    # 2. Successful tool calls only
+    for result in state.get("tool_results", []):
+        if not result.get("success"):
+            continue
+        tool = result.get("tool_name", "unknown")
+        dur = node_durations.get(f"tool_{tool}", node_durations.get("execute_tool", 0))
+        total_ms += dur
+        steps.append(
+            TraceStep(
+                type=TraceStepType.TOOL_CALL,
+                label=TOOL_CLINICAL_LABELS.get(tool, tool.replace("_", " ").title()),
+                description=_describe_tool_call(result),
+                duration_ms=dur,
+                tool_name=tool,
+                tool_result_summary=_summarize_result(result),
+                success=True,
+            )
+        )
+
+    # 3. Synthesis step
+    dur = node_durations.get("synthesize_response", 0)
+    total_ms += dur
+    steps.append(
+        TraceStep(
+            type=TraceStepType.SYNTHESIS,
+            label="Response Synthesis",
+            description="Combined findings into clinical response",
+            duration_ms=dur,
+        )
+    )
+
+    return ClinicalTrace(
+        steps=steps,
+        total_duration_ms=total_ms,
+        tools_consulted=len([s for s in steps if s.type == TraceStepType.TOOL_CALL]),
+    )
+
+
+# ── Node labels ──────────────────────────────────────────────────────────────
+_NODE_LABELS = {
+    "image_detection": "Image Detection",
+    "complexity_router": "Complexity Router",
+    "direct_response": "Direct Response",
+    "thinking_mode": "Thinking Mode",
+    "decompose_intent": "Decompose Intent",
+    "plan_tool": "Plan Tool",
+    "execute_tool": "Execute Tool",
+    "check_result": "Check Result",
+    "synthesize_response": "Synthesize Response",
+}
+
+
+# ── Default config for the current 9-node graph ─────────────────────────────
+GRAPH_CONFIG = GraphConfig(
+    interrupt_before=["execute_tool"],
+    extract_tool_proposal=_extract_tool_proposal,
+    build_rejection_update=_build_rejection_update,
+    terminal_nodes=frozenset({"synthesize_response", "direct_response"}),
+    final_response_key="final_response",
+    make_initial_state=_make_initial_state,
+    get_status_text=_get_status_text,
+    node_labels=_NODE_LABELS,
+    build_clinical_trace=_build_clinical_trace,
+)
+
+
+# ── Graph builder ────────────────────────────────────────────────────────────
 
 def build_graph(
     model: DocGemma,
@@ -229,7 +522,7 @@ class DocGemmaAgent:
         logger.info("=" * 60)
         logger.info(f"[AGENT] Starting run: {user_input[:80]}{'...' if len(user_input) > 80 else ''}")
         logger.info("=" * 60)
-        
+
         initial_state: DocGemmaState = {
             "user_input": user_input,
             "image_data": image_data,
@@ -242,11 +535,11 @@ class DocGemmaAgent:
         }
 
         result = await self.graph.ainvoke(initial_state)
-        
+
         logger.info("=" * 60)
         logger.info("[AGENT] Run completed")
         logger.info("=" * 60)
-        
+
         return result.get("final_response", "I was unable to generate a response.")
 
     def run_sync(
