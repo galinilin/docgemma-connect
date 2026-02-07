@@ -9,6 +9,7 @@ from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.graph import END, StateGraph
 
 from .nodes import (
+    StreamCallback,
     check_result,
     complexity_router,
     decompose_intent,
@@ -61,6 +62,7 @@ def build_graph(
     tool_executor: Callable | None = None,
     checkpointer: BaseCheckpointSaver | None = None,
     interrupt_before: list[str] | None = None,
+    stream_callback: StreamCallback = None,
 ) -> StateGraph:
     """Build the DocGemma agent graph.
 
@@ -84,7 +86,10 @@ def build_graph(
     # === Add Nodes ===
     workflow.add_node("image_detection", image_detection)
     workflow.add_node("complexity_router", lambda s: complexity_router(s, model))
-    workflow.add_node("direct_response", lambda s: direct_response(s, model))
+    async def _direct_response(s):
+        return await direct_response(s, model, stream_callback)
+
+    workflow.add_node("direct_response", _direct_response)
     workflow.add_node("thinking_mode", lambda s: thinking_mode(s, model))
     workflow.add_node("decompose_intent", lambda s: decompose_intent(s, model))
     workflow.add_node("plan_tool", lambda s: plan_tool(s, model))
@@ -95,7 +100,10 @@ def build_graph(
 
     workflow.add_node("execute_tool", _execute)
     workflow.add_node("check_result", check_result)
-    workflow.add_node("synthesize_response", lambda s: synthesize_response(s, model))
+    async def _synthesize_response(s):
+        return await synthesize_response(s, model, stream_callback)
+
+    workflow.add_node("synthesize_response", _synthesize_response)
 
     # === Entry Point ===
     workflow.set_entry_point("image_detection")

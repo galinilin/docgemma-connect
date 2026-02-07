@@ -5,7 +5,11 @@ from __future__ import annotations
 import functools
 import logging
 import time
+from collections.abc import Awaitable
 from typing import TYPE_CHECKING, Callable, ParamSpec, TypeVar
+
+# Callback type for streaming tokens during generation
+StreamCallback = Callable[[str], Awaitable[None]] | None
 
 from .prompts import (
     CLARIFICATION_PROMPT,
@@ -396,7 +400,11 @@ def _format_tool_results(results: list[ToolResult]) -> str:
 
 
 @timed_node
-def synthesize_response(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
+async def synthesize_response(
+    state: DocGemmaState,
+    model: DocGemma,
+    stream_callback: StreamCallback = None,
+) -> DocGemmaState:
     """Generate final response from accumulated context."""
     # Handle clarification request
     if state.get("needs_user_input"):
@@ -404,9 +412,18 @@ def synthesize_response(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
             user_input=state["user_input"],
             missing_info=state.get("missing_info", "specific details"),
         )
-        response = model.generate(
-            prompt, max_new_tokens=256, do_sample=True, temperature=TEMPERATURE["clarification"]
-        )
+        if stream_callback:
+            chunks: list[str] = []
+            async for chunk in model.generate_stream(
+                prompt, max_new_tokens=256, do_sample=True, temperature=TEMPERATURE["clarification"]
+            ):
+                await stream_callback(chunk)
+                chunks.append(chunk)
+            response = "".join(chunks)
+        else:
+            response = model.generate(
+                prompt, max_new_tokens=256, do_sample=True, temperature=TEMPERATURE["clarification"]
+            )
         return {**state, "final_response": response}
 
     # Normal synthesis
@@ -416,17 +433,40 @@ def synthesize_response(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
         tool_results=_format_tool_results(tool_results),
     )
 
-    response = model.generate(
-        prompt, max_new_tokens=512, do_sample=True, temperature=TEMPERATURE["synthesize_response"]
-    )
+    if stream_callback:
+        chunks = []
+        async for chunk in model.generate_stream(
+            prompt, max_new_tokens=512, do_sample=True, temperature=TEMPERATURE["synthesize_response"]
+        ):
+            await stream_callback(chunk)
+            chunks.append(chunk)
+        response = "".join(chunks)
+    else:
+        response = model.generate(
+            prompt, max_new_tokens=512, do_sample=True, temperature=TEMPERATURE["synthesize_response"]
+        )
     return {**state, "final_response": response}
 
 
 @timed_node
-def direct_response(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
+async def direct_response(
+    state: DocGemmaState,
+    model: DocGemma,
+    stream_callback: StreamCallback = None,
+) -> DocGemmaState:
     """Generate direct response without tools (for simple queries)."""
     prompt = DIRECT_RESPONSE_PROMPT.format(user_input=state["user_input"])
-    response = model.generate(
-        prompt, max_new_tokens=256, do_sample=True, temperature=TEMPERATURE["direct_response"]
-    )
+
+    if stream_callback:
+        chunks: list[str] = []
+        async for chunk in model.generate_stream(
+            prompt, max_new_tokens=256, do_sample=True, temperature=TEMPERATURE["direct_response"]
+        ):
+            await stream_callback(chunk)
+            chunks.append(chunk)
+        response = "".join(chunks)
+    else:
+        response = model.generate(
+            prompt, max_new_tokens=256, do_sample=True, temperature=TEMPERATURE["direct_response"]
+        )
     return {**state, "final_response": response}

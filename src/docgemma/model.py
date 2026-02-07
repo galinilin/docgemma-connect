@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json as _json
 import os
+from collections.abc import AsyncGenerator
 from typing import TYPE_CHECKING
 
 import httpx
@@ -60,6 +62,7 @@ class DocGemma:
             headers["Authorization"] = f"Bearer {self._api_key}"
 
         self._client = httpx.Client(timeout=timeout, headers=headers)
+        self._async_client = httpx.AsyncClient(timeout=timeout, headers=headers)
 
     @property
     def is_loaded(self) -> bool:
@@ -123,6 +126,63 @@ class DocGemma:
         print("[*] Raw:", json.dumps({"input": messages, "response": response}, indent=2))
         print("*********************")
         return response
+
+    async def generate_stream(
+        self,
+        prompt: str,
+        max_new_tokens: int = 256,
+        do_sample: bool = False,
+        temperature: float = 0.6,
+    ) -> AsyncGenerator[str, None]:
+        """Stream free-form response token-by-token via SSE.
+
+        Args:
+            prompt: The input prompt.
+            max_new_tokens: Maximum tokens to generate.
+            do_sample: Whether to use sampling.
+            temperature: Sampling temperature (used if do_sample=True).
+
+        Yields:
+            Text chunks as they arrive.
+        """
+        messages = [{"role": "user", "content": prompt}]
+
+        payload = {
+            "model": self._model,
+            "messages": messages,
+            "max_tokens": max_new_tokens,
+            "stream": True,
+        }
+
+        if do_sample:
+            payload["temperature"] = temperature
+        else:
+            payload["temperature"] = 0.0
+
+        async with self._async_client.stream(
+            "POST",
+            f"{self._endpoint}/v1/chat/completions",
+            json=payload,
+        ) as response:
+            response.raise_for_status()
+            async for line in response.aiter_lines():
+                if not line.startswith("data: "):
+                    continue
+                data_str = line[len("data: "):]
+                if data_str.strip() == "[DONE]":
+                    break
+                try:
+                    chunk = _json.loads(data_str)
+                    delta = chunk.get("choices", [{}])[0].get("delta", {})
+                    content = delta.get("content")
+                    if content:
+                        yield content
+                except (_json.JSONDecodeError, IndexError, KeyError):
+                    continue
+
+    async def aclose(self) -> None:
+        """Close the async HTTP client."""
+        await self._async_client.aclose()
 
     def generate_outlines(
         self,
@@ -224,8 +284,16 @@ class DocGemma:
         )
 
     def close(self) -> None:
-        """Close HTTP client."""
+        """Close HTTP clients (sync and async)."""
         self._client.close()
+        # Async client should be closed via aclose() in async context,
+        # but we attempt cleanup here as a fallback
+        try:
+            import asyncio
+            loop = asyncio.get_running_loop()
+            loop.create_task(self._async_client.aclose())
+        except RuntimeError:
+            pass
 
     def __enter__(self) -> DocGemma:
         return self
