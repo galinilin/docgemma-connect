@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import json
 import logging
@@ -251,9 +252,98 @@ async def websocket_chat(
         await websocket.close(code=4003)
         return
 
+    # Track running agent task so cancel can stop it
+    agent_task: asyncio.Task | None = None
+    send_queue: asyncio.Queue[dict | None] = asyncio.Queue()
+
+    async def _run_agent_stream(event_gen) -> None:
+        """Run agent event generator and push events to send queue."""
+        try:
+            async for event in event_gen:
+                event_dict = event.model_dump(mode="json")
+                await send_queue.put(event_dict)
+
+                # If completion, also store the assistant message
+                if event.event == "completion":
+                    session.add_message("assistant", event.final_response)
+        except asyncio.CancelledError:
+            logger.info(f"Agent task cancelled for session {session_id}")
+        except Exception as e:
+            logger.exception(f"Agent task error for session {session_id}: {e}")
+            await send_queue.put({
+                "event": "error",
+                "error_type": "execution_error",
+                "message": str(e),
+                "recoverable": False,
+            })
+        finally:
+            # Close the generator to trigger _stream_execution's finally block,
+            # which cancels the internal graph task and stops LLM generation.
+            try:
+                await event_gen.aclose()
+            except Exception:
+                pass
+            await send_queue.put(None)  # Sentinel: agent done
+
+    async def _send_loop() -> None:
+        """Forward events from send queue to WebSocket."""
+        while True:
+            item = await send_queue.get()
+            if item is None:
+                break
+            try:
+                await websocket.send_json(item)
+            except Exception:
+                break
+
     try:
         while True:
-            # Wait for client message
+            # If an agent task is running, we need to concurrently:
+            # 1. Forward events from the agent to the client
+            # 2. Listen for client messages (e.g. cancel)
+            if agent_task is not None and not agent_task.done():
+                sender = asyncio.create_task(_send_loop())
+                try:
+                    # Wait for either: client message OR agent completion
+                    while not agent_task.done():
+                        receive_task = asyncio.create_task(websocket.receive_text())
+                        done, _ = await asyncio.wait(
+                            {receive_task, agent_task},
+                            return_when=asyncio.FIRST_COMPLETED,
+                        )
+
+                        if receive_task in done:
+                            raw_message = receive_task.result()
+                            try:
+                                message = json.loads(raw_message)
+                            except json.JSONDecodeError:
+                                continue
+
+                            if message.get("action") == "cancel":
+                                agent_task.cancel()
+                                try:
+                                    await agent_task
+                                except asyncio.CancelledError:
+                                    pass
+                                session.status = SessionStatus.ACTIVE
+                                session.pending_approval = None
+                                # Don't send a fake completion — the frontend
+                                # already resets its UI state in handleCancel().
+                                break
+                        else:
+                            # Agent finished, cancel the pending receive
+                            receive_task.cancel()
+                            try:
+                                await receive_task
+                            except (asyncio.CancelledError, Exception):
+                                pass
+                finally:
+                    # Drain remaining events from the queue
+                    await sender
+                    agent_task = None
+                continue
+
+            # Normal receive loop — no agent running
             raw_message = await websocket.receive_text()
             try:
                 message = json.loads(raw_message)
@@ -270,26 +360,29 @@ async def websocket_chat(
             data = message.get("data", {})
 
             if action == "send_message":
-                await _handle_send_message(websocket, session, runner, data)
+                event_gen = await _prepare_send_message(websocket, session, runner, data)
+                if event_gen is not None:
+                    send_queue = asyncio.Queue()
+                    agent_task = asyncio.create_task(_run_agent_stream(event_gen))
 
             elif action == "approve_tool":
-                await _handle_tool_approval(websocket, session, runner, approved=True)
+                event_gen = await _prepare_tool_approval(websocket, session, runner, approved=True)
+                if event_gen is not None:
+                    send_queue = asyncio.Queue()
+                    agent_task = asyncio.create_task(_run_agent_stream(event_gen))
 
             elif action == "reject_tool":
                 reason = data.get("reason")
-                await _handle_tool_approval(
+                event_gen = await _prepare_tool_approval(
                     websocket, session, runner, approved=False, reason=reason
                 )
+                if event_gen is not None:
+                    send_queue = asyncio.Queue()
+                    agent_task = asyncio.create_task(_run_agent_stream(event_gen))
 
             elif action == "cancel":
-                # Cancel current operation - just reset session status
-                session.status = SessionStatus.ACTIVE
-                session.pending_approval = None
-                await websocket.send_json({
-                    "event": "completion",
-                    "final_response": "Operation cancelled.",
-                    "tool_calls_made": 0,
-                })
+                # Nothing running to cancel
+                pass
 
             else:
                 await websocket.send_json({
@@ -301,8 +394,12 @@ async def websocket_chat(
 
     except WebSocketDisconnect:
         logger.info(f"WebSocket disconnected for session {session_id}")
+        if agent_task and not agent_task.done():
+            agent_task.cancel()
     except Exception as e:
         logger.exception(f"WebSocket error for session {session_id}: {e}")
+        if agent_task and not agent_task.done():
+            agent_task.cancel()
         try:
             await websocket.send_json({
                 "event": "error",
@@ -314,13 +411,17 @@ async def websocket_chat(
             pass
 
 
-async def _handle_send_message(
+async def _prepare_send_message(
     websocket: WebSocket,
     session: Session,
     runner: AgentRunner,
     data: dict[str, Any],
-) -> None:
-    """Handle a send_message action."""
+):
+    """Validate and prepare a send_message action.
+
+    Returns an async generator of events, or None if validation failed
+    (error already sent to client).
+    """
     content = data.get("content", "").strip()
     if not content:
         await websocket.send_json({
@@ -329,7 +430,7 @@ async def _handle_send_message(
             "message": "Message content cannot be empty",
             "recoverable": True,
         })
-        return
+        return None
 
     # Check if session is busy
     if session.status in (SessionStatus.PROCESSING, SessionStatus.WAITING_APPROVAL):
@@ -339,7 +440,7 @@ async def _handle_send_message(
             "message": f"Session is {session.status.value}. Please wait or cancel.",
             "recoverable": True,
         })
-        return
+        return None
 
     # Handle optional image
     image_data = None
@@ -354,7 +455,7 @@ async def _handle_send_message(
                 "message": "Invalid base64 image data",
                 "recoverable": True,
             })
-            return
+            return None
 
     # Add user message to session
     session.add_message("user", content)
@@ -362,28 +463,26 @@ async def _handle_send_message(
     # Build conversation history (last 2-3 turns for 4B model)
     history = _build_conversation_history(session, max_turns=3)
 
-    # Stream agent execution events
-    async for event in runner.start_turn(
+    # Return the event generator
+    return runner.start_turn(
         session=session,
         user_input=content,
         image_data=image_data,
         conversation_history=history,
-    ):
-        await websocket.send_json(event.model_dump(mode="json"))
-
-        # If completion, add assistant message to session
-        if event.event == "completion":
-            session.add_message("assistant", event.final_response)
+    )
 
 
-async def _handle_tool_approval(
+async def _prepare_tool_approval(
     websocket: WebSocket,
     session: Session,
     runner: AgentRunner,
     approved: bool,
     reason: str | None = None,
-) -> None:
-    """Handle tool approval or rejection."""
+):
+    """Validate and prepare a tool approval/rejection.
+
+    Returns an async generator of events, or None if validation failed.
+    """
     if session.status != SessionStatus.WAITING_APPROVAL or not session.pending_approval:
         await websocket.send_json({
             "event": "error",
@@ -391,19 +490,13 @@ async def _handle_tool_approval(
             "message": "No tool awaiting approval",
             "recoverable": True,
         })
-        return
+        return None
 
-    # Stream remaining execution
-    async for event in runner.resume_with_approval(
+    return runner.resume_with_approval(
         session=session,
         approved=approved,
         rejection_reason=reason,
-    ):
-        await websocket.send_json(event.model_dump(mode="json"))
-
-        # If completion, add assistant message
-        if event.event == "completion":
-            session.add_message("assistant", event.final_response)
+    )
 
 
 def _build_conversation_history(

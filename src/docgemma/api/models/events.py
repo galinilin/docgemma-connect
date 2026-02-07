@@ -60,6 +60,15 @@ class ToolExecutionEndEvent(BaseEvent):
     duration_ms: float = Field(..., description="Execution time in milliseconds")
 
 
+class AgentStatusEvent(BaseEvent):
+    """Event for human-readable agent status updates."""
+
+    event: Literal["agent_status"] = "agent_status"
+    status_text: str = Field(..., description="Human-readable status message")
+    node_id: str | None = Field(default=None, description="Current node identifier")
+    tool_name: str | None = Field(default=None, description="Tool being used")
+
+
 class StreamingTextEvent(BaseEvent):
     """Event for incremental text generation."""
 
@@ -124,6 +133,7 @@ class ErrorEvent(BaseEvent):
 AgentEvent = (
     NodeStartEvent
     | NodeEndEvent
+    | AgentStatusEvent
     | ToolApprovalRequestEvent
     | ToolExecutionStartEvent
     | ToolExecutionEndEvent

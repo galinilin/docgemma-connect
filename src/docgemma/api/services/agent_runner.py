@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import logging
 import time
 import uuid
@@ -12,11 +13,13 @@ from langgraph.checkpoint.memory import MemorySaver
 
 from ..models.events import (
     AgentEvent,
+    AgentStatusEvent,
     ClinicalTrace,
     CompletionEvent,
     ErrorEvent,
     NodeEndEvent,
     NodeStartEvent,
+    StreamingTextEvent,
     ToolApprovalRequestEvent,
     ToolExecutionEndEvent,
     ToolExecutionStartEvent,
@@ -47,6 +50,20 @@ TOOL_CLINICAL_LABELS = {
 }
 
 
+# Human-readable status labels for tool execution
+TOOL_STATUS_LABELS = {
+    "check_drug_safety": "Checking FDA safety database...",
+    "check_drug_interactions": "Checking drug interactions...",
+    "search_medical_literature": "Searching medical literature...",
+    "find_clinical_trials": "Searching clinical trials...",
+    "search_patient": "Searching patient records...",
+    "get_patient_chart": "Retrieving patient chart...",
+    "add_allergy": "Documenting allergy...",
+    "prescribe_medication": "Processing prescription...",
+    "save_clinical_note": "Saving clinical note...",
+}
+
+
 class AgentRunner:
     """Runs the DocGemma agent with interrupt support for tool approval.
 
@@ -70,14 +87,24 @@ class AgentRunner:
         self.model = model
         self.enable_tool_approval = enable_tool_approval
         self._checkpointer = MemorySaver()
+        self._interrupt_before = ["execute_tool"] if enable_tool_approval else None
 
-        # Build graph with interrupt support if tool approval enabled
-        interrupt_before = ["execute_tool"] if enable_tool_approval else None
+        # Build default graph (no streaming callback) for resume operations
         self._graph = build_graph(
             model=model,
             tool_executor=registry_execute_tool,
             checkpointer=self._checkpointer,
-            interrupt_before=interrupt_before,
+            interrupt_before=self._interrupt_before,
+        )
+
+    def _build_graph_with_callback(self, stream_callback=None):
+        """Build a graph with optional streaming callback."""
+        return build_graph(
+            model=self.model,
+            tool_executor=registry_execute_tool,
+            checkpointer=self._checkpointer,
+            interrupt_before=self._interrupt_before,
+            stream_callback=stream_callback,
         )
 
     def _make_thread_id(self, session_id: str) -> dict[str, str]:
@@ -244,6 +271,10 @@ class AgentRunner:
     ) -> AsyncGenerator[AgentEvent, None]:
         """Stream execution events from the graph.
 
+        Uses an asyncio.Queue bridge so that token-level streaming events
+        emitted during node execution (via stream_callback) can be yielded
+        to the caller before the node completes.
+
         Args:
             session: Session object to update
             initial_state: Initial state (None if resuming)
@@ -255,109 +286,196 @@ class AgentRunner:
         """
         node_start_times: dict[str, float] = {}
         node_durations: dict[str, float] = {}
-        completion_emitted = False  # Guard against multiple completions
+        completion_emitted = False
 
-        # Terminal nodes that produce final_response
         terminal_nodes = {"synthesize_response", "direct_response"}
-
         input_data = initial_state if not is_resume else None
 
-        async for event in self._graph.astream(
-            input_data, config=config, stream_mode="updates"
-        ):
-            # event is a dict like {node_name: state_update}
-            for node_name, state_update in event.items():
-                if node_name == "__interrupt__":
-                    # Interrupted before execute_tool - need approval
-                    current_state = self._graph.get_state(config)
-                    if current_state and current_state.values:
-                        planned_tool = current_state.values.get("_planned_tool")
-                        planned_args = current_state.values.get("_planned_args", {})
-                        subtasks = current_state.values.get("subtasks", [])
-                        idx = current_state.values.get("current_subtask_index", 0)
+        # Queue bridge: streaming tokens and graph updates flow through here
+        event_queue: asyncio.Queue[AgentEvent | dict | None] = asyncio.Queue()
 
-                        intent = ""
-                        if subtasks and idx < len(subtasks):
-                            intent = subtasks[idx].get("intent", "")
+        async def _stream_callback(text: str) -> None:
+            """Push streaming text tokens into the queue."""
+            await event_queue.put(
+                StreamingTextEvent(text=text, node_id="terminal")
+            )
 
-                        if planned_tool and planned_tool != "none":
-                            session.set_pending_approval(
-                                tool_name=planned_tool,
-                                tool_args=planned_args,
-                                subtask_intent=intent,
-                                checkpoint_id=str(current_state.config.get("configurable", {}).get("checkpoint_id", "")),
-                            )
+        # Build graph with streaming callback for this execution
+        graph = self._build_graph_with_callback(stream_callback=_stream_callback)
+        # Update default graph reference so get_state works
+        self._graph = graph
 
-                            yield ToolApprovalRequestEvent(
-                                tool_name=planned_tool,
-                                tool_args=planned_args,
-                                subtask_intent=intent,
-                            )
-                            return  # Stop streaming, wait for approval
+        async def _run_graph() -> None:
+            """Run graph iteration and push updates to queue.
+
+            Automatically resumes the graph when it interrupts before
+            execute_tool with a no-op tool (planned_tool is None or "none").
+            """
+            try:
+                data = input_data
+                while True:
+                    async for event in graph.astream(
+                        data, config=config, stream_mode="updates"
+                    ):
+                        await event_queue.put(event)
+
+                    # Check if graph paused at an interrupt (e.g. before execute_tool)
+                    current_state = graph.get_state(config)
+                    if current_state and current_state.next:
+                        # Graph is paused — check if it's a no-op tool
+                        planned_tool = (current_state.values or {}).get("_planned_tool")
+                        if not planned_tool or planned_tool == "none":
+                            # Auto-resume: skip the interrupt, let execute_tool
+                            # handle the "none" case
+                            data = None
+                            continue
+                    # Graph finished or paused for real tool approval
+                    break
+            except Exception as e:
+                await event_queue.put(
+                    ErrorEvent(
+                        error_type="execution_error",
+                        message=str(e),
+                        recoverable=False,
+                    )
+                )
+            finally:
+                await event_queue.put(None)  # Sentinel
+
+        graph_task = asyncio.create_task(_run_graph())
+
+        try:
+            while True:
+                item = await event_queue.get()
+
+                # Sentinel: graph is done
+                if item is None:
+                    break
+
+                # StreamingTextEvent from callback — yield directly
+                if isinstance(item, StreamingTextEvent):
+                    yield item
                     continue
 
-                # Regular node execution
-                start_time = node_start_times.get(node_name)
-                if start_time is None:
-                    # Node starting
-                    node_start_times[node_name] = time.perf_counter()
+                # ErrorEvent from graph task exception
+                if isinstance(item, ErrorEvent):
+                    yield item
+                    continue
+
+                # Regular graph update dict: {node_name: state_update}
+                event = item
+                for node_name, state_update in event.items():
+                    if node_name == "__interrupt__":
+                        current_state = graph.get_state(config)
+                        if current_state and current_state.values:
+                            planned_tool = current_state.values.get("_planned_tool")
+                            planned_args = current_state.values.get("_planned_args", {})
+                            subtasks = current_state.values.get("subtasks", [])
+                            idx = current_state.values.get("current_subtask_index", 0)
+
+                            intent = ""
+                            if subtasks and idx < len(subtasks):
+                                intent = subtasks[idx].get("intent", "")
+
+                            if planned_tool and planned_tool != "none":
+                                session.set_pending_approval(
+                                    tool_name=planned_tool,
+                                    tool_args=planned_args,
+                                    subtask_intent=intent,
+                                    checkpoint_id=str(current_state.config.get("configurable", {}).get("checkpoint_id", "")),
+                                )
+
+                                yield ToolApprovalRequestEvent(
+                                    tool_name=planned_tool,
+                                    tool_args=planned_args,
+                                    subtask_intent=intent,
+                                )
+                                return
+
+                            # No-op tool: _run_graph() will auto-resume.
+                            # Emit status so user sees progress.
+                            yield AgentStatusEvent(
+                                status_text="Composing response...",
+                                node_id="plan_tool",
+                            )
+                        continue
+
+                    # Regular node execution
+                    if node_name not in node_start_times:
+                        node_start_times[node_name] = time.perf_counter()
+                    else:
+                        # Re-entered node (agentic loop) — reset start time
+                        node_start_times[node_name] = time.perf_counter()
+
                     node_label = self._get_node_label(node_name)
                     session.current_node = node_name
 
                     yield NodeStartEvent(node_id=node_name, node_label=node_label)
 
-                # Node completed
-                elapsed_ms = (time.perf_counter() - node_start_times.get(node_name, time.perf_counter())) * 1000
-                node_label = self._get_node_label(node_name)
-                node_durations[node_name] = elapsed_ms
+                    elapsed_ms = (time.perf_counter() - node_start_times[node_name]) * 1000
+                    node_durations[node_name] = elapsed_ms
 
-                if node_name not in session.completed_nodes:
-                    session.completed_nodes.append(node_name)
+                    if node_name not in session.completed_nodes:
+                        session.completed_nodes.append(node_name)
 
-                yield NodeEndEvent(
-                    node_id=node_name,
-                    node_label=node_label,
-                    duration_ms=elapsed_ms,
-                )
-
-                # Check if this is a tool execution node
-                if node_name == "execute_tool" and state_update:
-                    tool_results = state_update.get("tool_results", [])
-                    if tool_results:
-                        last_result = tool_results[-1]
-                        yield ToolExecutionEndEvent(
-                            tool_name=last_result.get("tool_name", "unknown"),
-                            success=last_result.get("success", False),
-                            result=last_result.get("result", {}),
-                            duration_ms=elapsed_ms,
-                        )
-
-                # Only emit completion from terminal nodes and only once
-                if (
-                    not completion_emitted
-                    and node_name in terminal_nodes
-                    and state_update
-                    and state_update.get("final_response")
-                ):
-                    final_response = state_update["final_response"]
-                    completion_emitted = True
-
-                    # Get tool call count and build trace from state
-                    full_state = self._graph.get_state(config)
-                    tool_count = 0
-                    clinical_trace = None
-                    if full_state and full_state.values:
-                        tool_count = len(full_state.values.get("tool_results", []))
-                        clinical_trace = self._build_clinical_trace(
-                            full_state.values, node_durations
-                        )
-
-                    session.status = SessionStatus.ACTIVE
-                    yield CompletionEvent(
-                        final_response=final_response,
-                        tool_calls_made=tool_count,
-                        clinical_trace=clinical_trace,
+                    yield NodeEndEvent(
+                        node_id=node_name,
+                        node_label=node_label,
+                        duration_ms=elapsed_ms,
                     )
+
+                    # Emit forward-looking status: what's running NEXT
+                    next_status = self._get_next_status(
+                        node_name, state_update
+                    )
+                    if next_status:
+                        yield AgentStatusEvent(
+                            status_text=next_status,
+                            node_id=node_name,
+                        )
+
+                    if node_name == "execute_tool" and state_update:
+                        tool_results = state_update.get("tool_results", [])
+                        if tool_results:
+                            last_result = tool_results[-1]
+                            yield ToolExecutionEndEvent(
+                                tool_name=last_result.get("tool_name", "unknown"),
+                                success=last_result.get("success", False),
+                                result=last_result.get("result", {}),
+                                duration_ms=elapsed_ms,
+                            )
+
+                    if (
+                        not completion_emitted
+                        and node_name in terminal_nodes
+                        and state_update
+                        and state_update.get("final_response")
+                    ):
+                        final_response = state_update["final_response"]
+                        completion_emitted = True
+
+                        full_state = graph.get_state(config)
+                        tool_count = 0
+                        clinical_trace = None
+                        if full_state and full_state.values:
+                            tool_count = len(full_state.values.get("tool_results", []))
+                            clinical_trace = self._build_clinical_trace(
+                                full_state.values, node_durations
+                            )
+
+                        session.status = SessionStatus.ACTIVE
+                        yield CompletionEvent(
+                            final_response=final_response,
+                            tool_calls_made=tool_count,
+                            clinical_trace=clinical_trace,
+                        )
+        finally:
+            if not graph_task.done():
+                graph_task.cancel()
+                try:
+                    await graph_task
+                except asyncio.CancelledError:
+                    pass
 
     def _get_node_label(self, node_id: str) -> str:
         """Get human-readable label for a node."""
@@ -365,6 +483,53 @@ class AgentRunner:
             if node["id"] == node_id:
                 return node["label"]
         return node_id.replace("_", " ").title()
+
+    def _get_next_status(
+        self, node_name: str, state_update: dict | None
+    ) -> str | None:
+        """Return status text describing what will run NEXT after this node.
+
+        Since astream(stream_mode='updates') yields after each node completes,
+        status must describe the upcoming work, not the finished work.
+        """
+        state = state_update or {}
+
+        if node_name == "image_detection":
+            return "Analyzing query..."
+
+        if node_name == "complexity_router":
+            if state.get("complexity") == "direct":
+                return "Composing response..."
+            return "Clinical reasoning..."
+
+        if node_name == "thinking_mode":
+            return "Breaking down your question..."
+
+        if node_name == "decompose_intent":
+            if state.get("needs_user_input"):
+                return "Composing response..."
+            return "Planning approach..."
+
+        if node_name == "plan_tool":
+            planned_tool = state.get("_planned_tool")
+            if planned_tool and planned_tool != "none":
+                return TOOL_STATUS_LABELS.get(
+                    planned_tool,
+                    f"Using {planned_tool.replace('_', ' ')}...",
+                )
+            return None
+
+        if node_name == "execute_tool":
+            return "Processing results..."
+
+        if node_name == "check_result":
+            status = state.get("last_result_status", "done")
+            if status == "continue":
+                return "Planning next step..."
+            return "Composing response..."
+
+        # Terminal nodes — no next status (streaming/completion clears it)
+        return None
 
     def _describe_tool_call(self, result: dict) -> str:
         """Generate a clinical-friendly description of a tool call."""
