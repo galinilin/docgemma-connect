@@ -215,3 +215,26 @@ class ClinicalTrialsOutput(BaseModel):
         default_factory=list, description="List of clinical trials"
     )
     error: str | None = Field(None, description="Error message if the search failed")
+
+
+# =============================================================================
+# Medical Image Analysis Schemas
+# =============================================================================
+
+
+class ImageAnalysisInput(BaseModel):
+    """Input schema for analyzing a medical image."""
+
+    image_data: bytes = Field(..., description="Raw image bytes")
+    query: str = Field(
+        default="Describe this medical image in detail. Identify the imaging modality, anatomical region, and any notable findings.",
+        description="Analysis prompt / clinical question about the image",
+    )
+
+
+class ImageAnalysisOutput(BaseModel):
+    """Output schema for medical image analysis results."""
+
+    findings: str = Field(..., description="Clinical findings from the image")
+    query: str = Field(..., description="The analysis query used")
+    error: str | None = Field(None, description="Error message if analysis failed")

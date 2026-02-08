@@ -9,6 +9,7 @@ Available Tools:
     - search_medical_literature: PubMed article search
     - check_drug_interactions: Drug interaction checker (OpenFDA)
     - find_clinical_trials: Search recruiting trials (ClinicalTrials.gov)
+    - analyze_medical_image: Medical image analysis (MedGemma Vision)
 
 FHIR Store EHR Tools:
     - search_patient: Search patients by name/DOB
@@ -35,6 +36,7 @@ Usage:
 from .clinical_trials import find_clinical_trials
 from .drug_interactions import check_drug_interactions
 from .drug_safety import check_drug_safety
+from .image_analysis import analyze_medical_image
 from .medical_literature import search_medical_literature
 from .registry import (
     TOOL_REGISTRY,
@@ -52,6 +54,8 @@ from .schemas import (
     DrugInteractionsOutput,
     DrugSafetyInput,
     DrugSafetyOutput,
+    ImageAnalysisInput,
+    ImageAnalysisOutput,
     MedicalLiteratureInput,
     MedicalLiteratureOutput,
     PatientRecord,
@@ -91,18 +95,21 @@ __all__ = [
     "search_medical_literature",
     "check_drug_interactions",
     "find_clinical_trials",
+    "analyze_medical_image",
     # Input schemas
     "DrugSafetyInput",
     "MedicalLiteratureInput",
     "DrugInteractionsInput",
     "PatientRecordsInput",
     "ClinicalTrialsInput",
+    "ImageAnalysisInput",
     # Output schemas
     "DrugSafetyOutput",
     "MedicalLiteratureOutput",
     "DrugInteractionsOutput",
     "PatientRecordsOutput",
     "ClinicalTrialsOutput",
+    "ImageAnalysisOutput",
     # Supporting schemas
     "ArticleSummary",
     "DrugInteraction",

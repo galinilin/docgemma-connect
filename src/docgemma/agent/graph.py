@@ -120,8 +120,21 @@ class GraphConfig:
 
 # ── Helpers for the default GRAPH_CONFIG ─────────────────────────────────────
 
+# Tools that modify patient data — require explicit user approval
+_WRITE_TOOLS = frozenset({
+    "add_allergy",
+    "prescribe_medication",
+    "save_clinical_note",
+})
+
+
 def _extract_tool_proposal(state: dict) -> tuple[str | None, dict, str]:
-    """Read the planned tool from interrupt state."""
+    """Read the planned tool from interrupt state.
+
+    Returns (None, {}, "") for no-op or read-only tools so the graph
+    auto-resumes without user approval.  Only write operations (allergy,
+    prescription, clinical note) surface a ToolApprovalRequest.
+    """
     planned_tool = state.get("_planned_tool")
     planned_args = state.get("_planned_args", {})
     subtasks = state.get("subtasks", [])
@@ -133,6 +146,9 @@ def _extract_tool_proposal(state: dict) -> tuple[str | None, dict, str]:
     if not intent:
         intent = state.get("user_input", "")
     if not planned_tool or planned_tool == "none":
+        return (None, {}, "")
+    # Read-only tools auto-approve (no user prompt)
+    if planned_tool not in _WRITE_TOOLS:
         return (None, {}, "")
     return (planned_tool, planned_args, intent)
 

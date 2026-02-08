@@ -87,6 +87,7 @@ class DocGemma:
         max_new_tokens: int = 256,
         do_sample: bool = False,
         temperature: float = 0.6,
+        image_base64: str | None = None,
         **kwargs,
     ) -> str:
         """Generate free-form response via OpenAI-compatible API.
@@ -96,6 +97,7 @@ class DocGemma:
             max_new_tokens: Maximum tokens to generate.
             do_sample: Whether to use sampling.
             temperature: Sampling temperature (used if do_sample=True).
+            image_base64: Optional base64-encoded image for vision queries.
             **kwargs: Additional arguments (ignored for compatibility).
 
         Returns:
@@ -103,7 +105,13 @@ class DocGemma:
         """
         import json
 
-        messages = [{"role": "user", "content": prompt}]
+        if image_base64:
+            messages = [{"role": "user", "content": [
+                {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_base64}"}},
+                {"type": "text", "text": prompt},
+            ]}]
+        else:
+            messages = [{"role": "user", "content": prompt}]
 
         payload = {
             "model": self._model,
@@ -133,6 +141,7 @@ class DocGemma:
         max_new_tokens: int = 256,
         do_sample: bool = False,
         temperature: float = 0.6,
+        image_base64: str | None = None,
     ) -> AsyncGenerator[str, None]:
         """Stream free-form response token-by-token via SSE.
 
@@ -141,11 +150,18 @@ class DocGemma:
             max_new_tokens: Maximum tokens to generate.
             do_sample: Whether to use sampling.
             temperature: Sampling temperature (used if do_sample=True).
+            image_base64: Optional base64-encoded image for vision queries.
 
         Yields:
             Text chunks as they arrive.
         """
-        messages = [{"role": "user", "content": prompt}]
+        if image_base64:
+            messages = [{"role": "user", "content": [
+                {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_base64}"}},
+                {"type": "text", "text": prompt},
+            ]}]
+        else:
+            messages = [{"role": "user", "content": prompt}]
 
         payload = {
             "model": self._model,

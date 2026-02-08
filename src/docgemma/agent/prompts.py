@@ -192,6 +192,11 @@ tool_1: prescribe_medication
 subtask_2: Save clinical note about prescription
 tool_2: save_clinical_note
 
+Example 5 (image analysis):
+Query: What does this chest X-ray show?
+subtask_1: Analyze the attached medical image
+tool_1: analyze_medical_image
+
 ---
 Query: {user_input}
 
@@ -273,6 +278,12 @@ patient_id: abc-123
 note_text: Patient diagnosed with hypertension. Starting lisinopril 10mg daily.
 note_type: clinical-note
 
+Example 10 (medical image):
+Task: Analyze the attached medical image
+tool_name: analyze_medical_image
+patient_id: null
+query: Describe this medical image in detail. Identify the imaging modality, anatomical region, and any notable findings.
+
 ---
 Return tool_name, then patient_id (extract from task or null), then remaining arguments."""
 
@@ -300,7 +311,8 @@ Query: {user_input}
 {reasoning_line}
 {tool_results_line}
 
-Respond concisely. Use medical abbreviations. Cite sources if available."""
+Respond concisely. Use medical abbreviations. Present findings directly as clinical knowledge.
+Do NOT mention tool names, sources, references, internal processes, or how findings were obtained."""
 
 
 # =============================================================================

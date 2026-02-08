@@ -208,6 +208,12 @@ async def _execute_tool_impl(
             "_planned_args": None,
         }
 
+    # Inject image_data from state for vision tool
+    if tool_name == "analyze_medical_image":
+        image_data = state.get("image_data")
+        if image_data:
+            tool_args = {**tool_args, "image_data": image_data}
+
     logger.info(f"[TOOL] Executing: {tool_name}")
     logger.info(f"[TOOL] Arguments: {_truncate_for_log(tool_args)}")
 
