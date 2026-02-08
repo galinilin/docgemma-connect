@@ -70,35 +70,46 @@ class DecomposedIntentV2(BaseModel):
 
 
 class ToolCallV2(BaseModel):
-    """Tool selection with explicit argument fields for all 10 tools."""
+    """Tool selection with explicit argument fields for all 10 tools.
+
+    Field order matters for SLM generation: patient_id is early so the model
+    fills it before falling into a null pattern for irrelevant fields.
+    """
 
     tool_name: ToolName
+    # Patient/EHR (early — REQUIRED for EHR tools, model must decide early)
+    patient_id: str | None = Field(default=None, max_length=64)
     # Universal
     query: str | None = Field(default=None, max_length=128)
     # Drug-specific
     drug_name: str | None = Field(default=None, max_length=64)
     drug_list: str | None = Field(default=None, max_length=128)
-    # Patient/EHR
-    patient_id: str | None = Field(default=None, max_length=64)
+    # Patient identifiers
     name: str | None = Field(default=None, max_length=64)
     dob: str | None = Field(default=None, max_length=10)
+    # Allergy
     substance: str | None = Field(default=None, max_length=64)
     reaction: str | None = Field(default=None, max_length=64)
     severity: str | None = Field(default=None, max_length=16)
+    # Prescription
     medication_name: str | None = Field(default=None, max_length=64)
     dosage: str | None = Field(default=None, max_length=32)
     frequency: str | None = Field(default=None, max_length=32)
+    # Clinical note
     note_text: str | None = Field(default=None, max_length=512)
     note_type: str | None = Field(default=None, max_length=32)
 
 
 class FixedArgs(BaseModel):
-    """Corrected arguments after validation failure."""
+    """Corrected arguments after validation failure.
 
+    Field order matches ToolCallV2 (patient_id early).
+    """
+
+    patient_id: str | None = Field(default=None, max_length=64)
     query: str | None = Field(default=None, max_length=128)
     drug_name: str | None = Field(default=None, max_length=64)
     drug_list: str | None = Field(default=None, max_length=128)
-    patient_id: str | None = Field(default=None, max_length=64)
     name: str | None = Field(default=None, max_length=64)
     dob: str | None = Field(default=None, max_length=10)
     substance: str | None = Field(default=None, max_length=64)

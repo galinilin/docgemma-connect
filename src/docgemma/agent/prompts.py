@@ -39,9 +39,9 @@ TEMPERATURE = {
 TRIAGE_PROMPT = """Classify query into one route.
 
 DIRECT = answer from medical knowledge alone (definitions, mechanisms, guidelines)
-LOOKUP = needs exactly ONE tool call (drug check, literature search, patient lookup)
+LOOKUP = needs exactly ONE tool call (drug safety, drug interactions, literature, clinical trials, patient search)
 REASONING = needs clinical reasoning, may optionally need one tool
-MULTI_STEP = needs 2+ tool calls or sequential steps
+MULTI_STEP = needs 2+ different tool calls or sequential steps
 
 Examples:
 Query: What is hypertension?
@@ -52,10 +52,33 @@ route: lookup
 tool: check_drug_safety
 query: metformin
 
+Query: Check drug interactions between warfarin and aspirin
+route: lookup
+tool: check_drug_interactions
+query: warfarin, aspirin
+
+Query: Search PubMed for GLP-1 agonist weight loss studies
+route: lookup
+tool: search_medical_literature
+query: GLP-1 agonist weight loss
+
+Query: Find clinical trials for lung cancer
+route: lookup
+tool: find_clinical_trials
+query: lung cancer
+
+Query: Search for patient John Smith
+route: lookup
+tool: search_patient
+query: John Smith
+
 Query: Best antihypertensive for a patient with CKD stage 3?
 route: reasoning
 
 Query: Find warfarin safety warnings and check interactions with aspirin
+route: multi_step
+
+Query: Search for patient John Smith, get his chart, and check metformin safety
 route: multi_step
 
 ---
@@ -80,16 +103,40 @@ Query: {user_input}
 # EXTRACT TOOL NEEDS (Reasoning path)
 # =============================================================================
 
-EXTRACT_TOOL_NEEDS_PROMPT = """Given this reasoning, does the answer need a tool call?
+EXTRACT_TOOL_NEEDS_PROMPT = """Does this reasoning need a tool call to give a better answer?
 
+Rules:
+- If the reasoning mentions checking, looking up, searching, or verifying something → needs_tool=true
+- If the reasoning is complete and self-sufficient → needs_tool=false
+
+Example 1 (needs tool):
+Reasoning: Metformin has FDA warnings about lactic acidosis. I should check the current FDA boxed warnings.
+needs_tool: true
+tool: check_drug_safety
+query: metformin
+
+Example 2 (needs tool):
+Reasoning: SGLT2 inhibitors show cardiovascular benefits. I should search PubMed for the latest evidence.
+needs_tool: true
+tool: search_medical_literature
+query: SGLT2 inhibitors cardiovascular outcomes
+
+Example 3 (needs tool):
+Reasoning: Warfarin interacts with many drugs. I should verify the interaction with amiodarone.
+needs_tool: true
+tool: check_drug_interactions
+query: warfarin, amiodarone
+
+Example 4 (no tool):
+Reasoning: ACE inhibitors are first-line for CKD with proteinuria per KDIGO guidelines. The answer is clear.
+needs_tool: false
+
+---
 Reasoning: {reasoning}
 Query: {user_input}
 
 Tools:
-{tools}
-
-If a single tool would improve the answer, set needs_tool=true and specify tool+query.
-If the reasoning is self-sufficient, set needs_tool=false."""
+{tools}"""
 
 
 # =============================================================================
@@ -160,7 +207,7 @@ Return subtask_1, tool_1, and optionally subtask_2-5 with tool_2-5."""
 def get_plan_prompt(intent: str, suggested_tool: str) -> str:
     """Generate tool planning prompt with dynamic tool list."""
     tools = get_tools_for_prompt()
-    return f"""Select tool and fill in arguments.
+    return f"""Select tool and fill arguments. Output patient_id FIRST for EHR tools.
 
 Task: {intent}
 Suggested: {suggested_tool}
@@ -171,29 +218,39 @@ Tools:
 Example 1 (drug safety):
 Task: Look up FDA warnings for dofetilide
 tool_name: check_drug_safety
+patient_id: null
 drug_name: dofetilide
 
 Example 2 (literature):
 Task: Search for PCSK9 inhibitor studies
 tool_name: search_medical_literature
+patient_id: null
 query: PCSK9 inhibitors efficacy LDL lowering
 
 Example 3 (interactions):
 Task: Check interactions between warfarin and azithromycin
 tool_name: check_drug_interactions
+patient_id: null
 drug_list: warfarin, azithromycin
 
-Example 4 (patient search):
+Example 4 (clinical trials):
+Task: Find clinical trials for lung cancer
+tool_name: find_clinical_trials
+patient_id: null
+query: lung cancer
+
+Example 5 (patient search):
 Task: Find patient John Smith
 tool_name: search_patient
+patient_id: null
 name: John Smith
 
-Example 5 (patient chart):
+Example 6 (patient chart):
 Task: Get chart for patient abc-123
 tool_name: get_patient_chart
 patient_id: abc-123
 
-Example 6 (allergy):
+Example 7 (allergy):
 Task: Document penicillin allergy for patient abc-123
 tool_name: add_allergy
 patient_id: abc-123
@@ -201,7 +258,7 @@ substance: penicillin
 reaction: rash
 severity: moderate
 
-Example 7 (prescription):
+Example 8 (prescription — use medication_name NOT drug_name):
 Task: Prescribe lisinopril 10mg daily for patient abc-123
 tool_name: prescribe_medication
 patient_id: abc-123
@@ -209,7 +266,7 @@ medication_name: lisinopril
 dosage: 10mg
 frequency: once daily
 
-Example 8 (clinical note):
+Example 9 (clinical note):
 Task: Save note about hypertension diagnosis for patient abc-123
 tool_name: save_clinical_note
 patient_id: abc-123
@@ -217,7 +274,7 @@ note_text: Patient diagnosed with hypertension. Starting lisinopril 10mg daily.
 note_type: clinical-note
 
 ---
-Return tool_name and the appropriate arguments."""
+Return tool_name, then patient_id (extract from task or null), then remaining arguments."""
 
 
 # =============================================================================
