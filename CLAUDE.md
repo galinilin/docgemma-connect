@@ -118,7 +118,6 @@ from pydantic import BaseModel
 
 # Initialize and load
 gemma = DocGemma(model_id="google/medgemma-1.5-4b-it")
-gemma.load()
 
 # Free-form generation
 response = gemma.generate("What is hypertension?")
@@ -138,7 +137,6 @@ from docgemma import DocGemma, DocGemmaAgent
 
 # Initialize and load model
 model = DocGemma(model_id="google/medgemma-1.5-4b-it")
-model.load()
 
 # Create agent with tool executor
 async def my_tool_executor(tool_name: str, args: dict) -> dict:

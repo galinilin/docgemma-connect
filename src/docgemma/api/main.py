@@ -46,7 +46,6 @@ async def lifespan(app: FastAPI):
             from .services.agent_runner import AgentRunner
 
             _model = DocGemma(system_prompt=SYSTEM_PROMPT)
-            _model.load()
 
             # Create and set the agent runner
             runner = AgentRunner(

@@ -79,11 +79,6 @@ class DocGemma:
             return [{"role": "system", "content": self._system_prompt}] + messages
         return messages
 
-    @property
-    def is_loaded(self) -> bool:
-        """Remote model is always considered loaded (managed server-side)."""
-        return True
-
     def health_check(self) -> bool:
         """Check if remote endpoint is reachable."""
         try:
@@ -91,10 +86,6 @@ class DocGemma:
             return resp.status_code == 200
         except Exception:
             return False
-
-    def load(self) -> DocGemma:
-        """No-op for API compatibility. Remote model is always loaded."""
-        return self
 
     def generate(
         self,

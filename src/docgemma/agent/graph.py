@@ -825,8 +825,6 @@ class DocGemmaAgent:
     def graph(self):
         """Lazily build the graph."""
         if self._graph is None:
-            if not self.model.is_loaded:
-                raise RuntimeError("Model must be loaded before using agent")
             self._graph = build_graph(self.model, self.tool_executor)
         return self._graph
 
