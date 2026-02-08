@@ -21,6 +21,7 @@ StreamCallback = Callable[[str], Awaitable[None]] | None
 
 from .prompts import (
     CLARIFICATION_PROMPT,
+    DIRECT_CHAT_PROMPT,
     EXTRACT_TOOL_NEEDS_PROMPT,
     FIX_ARGS_PROMPT,
     REASONING_CONTINUATION_PROMPT,
@@ -137,22 +138,6 @@ def _format_tool_results(results: list[ToolResult]) -> str:
             lines.append(f"  Error: {r['result'].get('error', 'Unknown error')}")
     return "\n".join(lines)
 
-
-def _summarize_recent_turns(
-    history: list[dict], max_turns: int = 3
-) -> str:
-    """Summarize recent conversation turns for context."""
-    if not history:
-        return ""
-    recent = history[-max_turns * 2 :]  # 2 messages per turn (user+assistant)
-    lines = []
-    for msg in recent:
-        role = msg.get("role", "unknown")
-        content = msg.get("content", "")
-        if len(content) > 100:
-            content = content[:100] + "..."
-        lines.append(f"{role}: {content}")
-    return "\n".join(lines)
 
 
 def _validate_tool_call(
@@ -293,9 +278,6 @@ def clinical_context_assembler(state: DocGemmaState) -> DocGemmaState:
     context = {
         "user_input": state["user_input"],
         "image_present": state.get("image_present", False),
-        "conversation_summary": _summarize_recent_turns(
-            state.get("conversation_history", []), max_turns=3
-        ),
     }
     return {**state, "clinical_context": context}
 
@@ -317,18 +299,11 @@ def triage_router(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
             "triage_query": None,
         }
 
-    context = state.get("clinical_context") or {}
-    context_line = ""
-    conv_summary = context.get("conversation_summary", "")
-    if conv_summary:
-        context_line = f"Recent conversation:\n{conv_summary}"
-
-    prompt = TRIAGE_PROMPT.format(
-        user_input=state["user_input"],
-        context_line=context_line,
-    )
+    prompt = TRIAGE_PROMPT.format(user_input=state["user_input"])
+    history = state.get("conversation_history", [])
     result = model.generate_outlines(
-        prompt, TriageDecision, temperature=TEMPERATURE["triage_router"]
+        prompt, TriageDecision, temperature=TEMPERATURE["triage_router"],
+        messages=history,
     )
 
     return {
@@ -441,21 +416,14 @@ def fast_check(state: DocGemmaState) -> DocGemmaState:
 @timed_node
 def thinking_mode(state: DocGemmaState, model: DocGemma) -> DocGemmaState:
     """Generate reasoning for complex queries."""
-    context = state.get("clinical_context") or {}
-    context_line = ""
-    conv_summary = context.get("conversation_summary", "")
-    if conv_summary:
-        context_line = f"Context:\n{conv_summary}"
-
-    prompt = THINKING_PROMPT.format(
-        user_input=state["user_input"],
-        context_line=context_line,
-    )
+    prompt = THINKING_PROMPT.format(user_input=state["user_input"])
+    history = state.get("conversation_history", [])
     result = model.generate_outlines(
         prompt,
         ThinkingOutput,
         max_new_tokens=1024,
         temperature=TEMPERATURE["thinking_mode"],
+        messages=history,
     )
     return {**state, "reasoning": result.reasoning}
 
@@ -540,6 +508,7 @@ async def reasoning_continuation(
         reasoning=state.get("reasoning", ""),
         tool_result=tool_result_text,
     )
+    history = state.get("conversation_history", [])
 
     if stream_callback:
         chunks: list[str] = []
@@ -548,6 +517,7 @@ async def reasoning_continuation(
             max_new_tokens=512,
             do_sample=True,
             temperature=TEMPERATURE["reasoning_continuation"],
+            messages=history,
         ):
             await stream_callback(chunk)
             chunks.append(chunk)
@@ -558,6 +528,7 @@ async def reasoning_continuation(
             max_new_tokens=512,
             do_sample=True,
             temperature=TEMPERATURE["reasoning_continuation"],
+            messages=history,
         )
     return {**state, "reasoning_continuation": text}
 
@@ -820,6 +791,8 @@ async def synthesize_response(
 ) -> DocGemmaState:
     """Generate final response from accumulated context. All routes converge here."""
     # Handle clarification request
+    history = state.get("conversation_history", [])
+
     if state.get("needs_user_input"):
         prompt = CLARIFICATION_PROMPT.format(
             user_input=state["user_input"],
@@ -832,6 +805,7 @@ async def synthesize_response(
                 max_new_tokens=256,
                 do_sample=True,
                 temperature=TEMPERATURE["clarification"],
+                messages=history,
             ):
                 await stream_callback(chunk)
                 chunks.append(chunk)
@@ -842,6 +816,7 @@ async def synthesize_response(
                 max_new_tokens=256,
                 do_sample=True,
                 temperature=TEMPERATURE["clarification"],
+                messages=history,
             )
         return {**state, "final_response": response}
 
@@ -852,20 +827,25 @@ async def synthesize_response(
     if reasoning_cont:
         combined_reasoning = f"{reasoning}\n\n{reasoning_cont}"
 
-    reasoning_line = ""
-    if combined_reasoning:
-        reasoning_line = f"Reasoning:\n{combined_reasoning}"
-
     tool_results = state.get("tool_results", [])
-    tool_results_line = ""
-    if tool_results:
-        tool_results_line = f"Tool findings:\n{_format_tool_results(tool_results)}"
 
-    prompt = SYNTHESIS_PROMPT.format(
-        user_input=state["user_input"],
-        reasoning_line=reasoning_line,
-        tool_results_line=tool_results_line,
-    )
+    # Direct route with no reasoning or tool results: use conversational prompt
+    if state.get("triage_route") == "direct" and not combined_reasoning and not tool_results:
+        prompt = DIRECT_CHAT_PROMPT.format(user_input=state["user_input"])
+    else:
+        reasoning_line = ""
+        if combined_reasoning:
+            reasoning_line = f"Reasoning:\n{combined_reasoning}"
+
+        tool_results_line = ""
+        if tool_results:
+            tool_results_line = f"Tool findings:\n{_format_tool_results(tool_results)}"
+
+        prompt = SYNTHESIS_PROMPT.format(
+            user_input=state["user_input"],
+            reasoning_line=reasoning_line,
+            tool_results_line=tool_results_line,
+        )
 
     if stream_callback:
         chunks = []
@@ -874,6 +854,7 @@ async def synthesize_response(
             max_new_tokens=512,
             do_sample=True,
             temperature=TEMPERATURE["synthesize_response"],
+            messages=history,
         ):
             await stream_callback(chunk)
             chunks.append(chunk)
@@ -884,5 +865,6 @@ async def synthesize_response(
             max_new_tokens=512,
             do_sample=True,
             temperature=TEMPERATURE["synthesize_response"],
+            messages=history,
         )
     return {**state, "final_response": response}

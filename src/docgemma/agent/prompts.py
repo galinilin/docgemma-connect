@@ -17,6 +17,17 @@ Temperature Guide:
 from ..tools.registry import get_tools_for_prompt
 
 # =============================================================================
+# SYSTEM PROMPT (prepended to every API call via model.py)
+# =============================================================================
+
+SYSTEM_PROMPT = (
+    "You are DocGemma, a clinical decision-support assistant for healthcare professionals. "
+    "Be concise and use standard medical terminology. "
+    "For greetings or casual messages, respond naturally and briefly. "
+    "Never fabricate clinical data. State uncertainty when unsure."
+)
+
+# =============================================================================
 # TEMPERATURE SETTINGS
 # =============================================================================
 
@@ -38,12 +49,21 @@ TEMPERATURE = {
 
 TRIAGE_PROMPT = """Classify query into one route.
 
-DIRECT = answer from medical knowledge alone (definitions, mechanisms, guidelines)
+DIRECT = greetings, casual chat, or answerable from medical knowledge alone (definitions, mechanisms, guidelines)
 LOOKUP = needs exactly ONE tool call (drug safety, drug interactions, literature, clinical trials, patient search)
 REASONING = needs clinical reasoning, may optionally need one tool
 MULTI_STEP = needs 2+ different tool calls or sequential steps
 
 Examples:
+Query: hai
+route: direct
+
+Query: hello, how are you?
+route: direct
+
+Query: thanks!
+route: direct
+
 Query: What is hypertension?
 route: direct
 
@@ -82,8 +102,7 @@ Query: Search for patient John Smith, get his chart, and check metformin safety
 route: multi_step
 
 ---
-Query: {user_input}
-{context_line}"""
+Query: {user_input}"""
 
 
 # =============================================================================
@@ -95,8 +114,7 @@ THINKING_PROMPT = """Analyze this clinical query step by step. Consider:
 - What data sources or tools might help?
 - What are the key considerations?
 
-Query: {user_input}
-{context_line}"""
+Query: {user_input}"""
 
 
 # =============================================================================
@@ -313,6 +331,10 @@ Query: {user_input}
 
 Respond concisely. Use medical abbreviations. Present findings directly as clinical knowledge.
 Do NOT mention tool names, sources, references, internal processes, or how findings were obtained."""
+
+DIRECT_CHAT_PROMPT = """Respond to the user. Keep it natural and concise.
+
+Query: {user_input}"""
 
 
 # =============================================================================

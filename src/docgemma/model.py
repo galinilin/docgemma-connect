@@ -7,10 +7,16 @@ import os
 from collections.abc import AsyncGenerator
 from typing import TYPE_CHECKING
 
+import re
+
 import httpx
 
 if TYPE_CHECKING:
     from pydantic import BaseModel
+
+# MedGemma wraps internal thinking in <unused94>...<unused95> tokens.
+# Strip these from all free-form output so they never reach the user.
+_THINKING_RE = re.compile(r"<unused94>.*?<unused95>", re.DOTALL)
 
 
 class DocGemma:
@@ -34,6 +40,7 @@ class DocGemma:
         api_key: str | None = None,
         model: str | None = None,
         timeout: float = 120.0,
+        system_prompt: str | None = None,
     ) -> None:
         """Initialize remote client.
 
@@ -44,6 +51,7 @@ class DocGemma:
                      If None, uses DOCGEMMA_API_KEY env var.
             model: Model ID to use. If None, uses DOCGEMMA_MODEL env var.
             timeout: HTTP request timeout in seconds.
+            system_prompt: Optional system prompt prepended to every API call.
         """
         self._endpoint = endpoint or os.environ.get("DOCGEMMA_ENDPOINT")
         if not self._endpoint:
@@ -56,6 +64,7 @@ class DocGemma:
         self._api_key = api_key or os.environ.get("DOCGEMMA_API_KEY", "")
         self._model = model or os.environ.get("DOCGEMMA_MODEL", "google/medgemma-1.5-4b-it")
         self._timeout = timeout
+        self._system_prompt = system_prompt
 
         headers = {"Content-Type": "application/json"}
         if self._api_key:
@@ -63,6 +72,12 @@ class DocGemma:
 
         self._client = httpx.Client(timeout=timeout, headers=headers)
         self._async_client = httpx.AsyncClient(timeout=timeout, headers=headers)
+
+    def _build_messages(self, messages: list[dict]) -> list[dict]:
+        """Prepend system prompt (if set) to a messages array."""
+        if self._system_prompt:
+            return [{"role": "system", "content": self._system_prompt}] + messages
+        return messages
 
     @property
     def is_loaded(self) -> bool:
@@ -88,6 +103,7 @@ class DocGemma:
         do_sample: bool = False,
         temperature: float = 0.6,
         image_base64: str | None = None,
+        messages: list[dict] | None = None,
         **kwargs,
     ) -> str:
         """Generate free-form response via OpenAI-compatible API.
@@ -98,6 +114,7 @@ class DocGemma:
             do_sample: Whether to use sampling.
             temperature: Sampling temperature (used if do_sample=True).
             image_base64: Optional base64-encoded image for vision queries.
+            messages: Optional prior conversation turns to prepend.
             **kwargs: Additional arguments (ignored for compatibility).
 
         Returns:
@@ -106,16 +123,18 @@ class DocGemma:
         import json
 
         if image_base64:
-            messages = [{"role": "user", "content": [
+            current_msg = {"role": "user", "content": [
                 {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_base64}"}},
                 {"type": "text", "text": prompt},
-            ]}]
+            ]}
         else:
-            messages = [{"role": "user", "content": prompt}]
+            current_msg = {"role": "user", "content": prompt}
+
+        all_messages = self._build_messages(list(messages or []) + [current_msg])
 
         payload = {
             "model": self._model,
-            "messages": messages,
+            "messages": all_messages,
             "max_tokens": max_new_tokens,
         }
 
@@ -131,9 +150,9 @@ class DocGemma:
         resp.raise_for_status()
 
         response = resp.json()["choices"][0]["message"]["content"]
-        print("[*] Raw:", json.dumps({"input": messages, "response": response}, indent=2))
+        print("[*] Raw:", json.dumps({"input": all_messages, "response": response}, indent=2))
         print("*********************")
-        return response
+        return _THINKING_RE.sub("", response).strip()
 
     async def generate_stream(
         self,
@@ -142,6 +161,7 @@ class DocGemma:
         do_sample: bool = False,
         temperature: float = 0.6,
         image_base64: str | None = None,
+        messages: list[dict] | None = None,
     ) -> AsyncGenerator[str, None]:
         """Stream free-form response token-by-token via SSE.
 
@@ -151,21 +171,24 @@ class DocGemma:
             do_sample: Whether to use sampling.
             temperature: Sampling temperature (used if do_sample=True).
             image_base64: Optional base64-encoded image for vision queries.
+            messages: Optional prior conversation turns to prepend.
 
         Yields:
             Text chunks as they arrive.
         """
         if image_base64:
-            messages = [{"role": "user", "content": [
+            current_msg = {"role": "user", "content": [
                 {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_base64}"}},
                 {"type": "text", "text": prompt},
-            ]}]
+            ]}
         else:
-            messages = [{"role": "user", "content": prompt}]
+            current_msg = {"role": "user", "content": prompt}
+
+        all_messages = self._build_messages(list(messages or []) + [current_msg])
 
         payload = {
             "model": self._model,
-            "messages": messages,
+            "messages": all_messages,
             "max_tokens": max_new_tokens,
             "stream": True,
         }
@@ -174,6 +197,8 @@ class DocGemma:
             payload["temperature"] = temperature
         else:
             payload["temperature"] = 0.0
+
+        in_thinking = False
 
         async with self._async_client.stream(
             "POST",
@@ -191,8 +216,27 @@ class DocGemma:
                     chunk = _json.loads(data_str)
                     delta = chunk.get("choices", [{}])[0].get("delta", {})
                     content = delta.get("content")
-                    if content:
-                        yield content
+                    if not content:
+                        continue
+
+                    # Filter out <unused94>...<unused95> thinking blocks
+                    while content:
+                        if not in_thinking:
+                            idx = content.find("<unused94>")
+                            if idx == -1:
+                                yield content
+                                break
+                            if idx > 0:
+                                yield content[:idx]
+                            in_thinking = True
+                            content = content[idx + len("<unused94>"):]
+                        else:
+                            idx = content.find("<unused95>")
+                            if idx == -1:
+                                break  # still inside thinking, drop entire chunk
+                            in_thinking = False
+                            content = content[idx + len("<unused95>"):]
+
                 except (_json.JSONDecodeError, IndexError, KeyError):
                     continue
 
@@ -207,6 +251,7 @@ class DocGemma:
         max_new_tokens: int = 256,
         temperature: float = 0.1,
         max_retries: int = 3,
+        messages: list[dict] | None = None,
     ) -> BaseModel:
         """Generate structured response matching Pydantic schema.
 
@@ -220,6 +265,7 @@ class DocGemma:
             temperature: Sampling temperature. Lower = more deterministic.
                          Recommended: 0.0-0.2 for structured output.
             max_retries: Maximum retry attempts for JSON parsing failures.
+            messages: Optional prior conversation turns to prepend.
 
         Returns:
             Instance of out_type with generated values.
@@ -230,7 +276,9 @@ class DocGemma:
         import json
         import time
 
-        messages = [{"role": "user", "content": prompt}]
+        all_messages = self._build_messages(
+            list(messages or []) + [{"role": "user", "content": prompt}]
+        )
         schema = out_type.model_json_schema()
 
         last_error = None
@@ -242,7 +290,7 @@ class DocGemma:
 
             payload = {
                 "model": self._model,
-                "messages": messages,
+                "messages": all_messages,
                 "max_tokens": tokens_for_attempt,
                 "temperature": temperature,
                 # vLLM guided decoding via response_format
