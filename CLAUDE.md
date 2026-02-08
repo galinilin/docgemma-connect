@@ -34,29 +34,30 @@ Medical AI assistant for the **Google MedGemma Impact Challenge** on Kaggle.
 docgemma-connect/
 ├── src/docgemma/
 │   ├── __init__.py
-│   ├── model.py              # DocGemma remote client (vLLM/OpenAI API)
+│   ├── model.py              # DocGemma remote client (vLLM/OpenAI API + system prompt + thinking filter)
 │   ├── agent/
 │   │   ├── __init__.py
 │   │   ├── state.py          # DocGemmaState TypedDict
-│   │   ├── schemas.py        # Pydantic schemas for LLM nodes
-│   │   ├── prompts.py        # System/user prompts for LLM nodes
-│   │   ├── nodes.py          # All node implementations
-│   │   └── graph.py          # LangGraph workflow + DocGemmaAgent
+│   │   ├── schemas.py        # Pydantic schemas (TriageDecision, ToolCallV2, DecomposedIntentV2, etc.)
+│   │   ├── prompts.py        # SYSTEM_PROMPT + node prompts (TRIAGE, THINKING, SYNTHESIS, etc.)
+│   │   ├── nodes.py          # All 18 node implementations
+│   │   └── graph.py          # LangGraph workflow + GraphConfig + GRAPH_CONFIG + build_graph()
 │   ├── api/
 │   │   ├── __init__.py
-│   │   ├── main.py           # FastAPI app factory, lifespan
+│   │   ├── main.py           # FastAPI app factory, lifespan (wires SYSTEM_PROMPT → DocGemma)
 │   │   ├── config.py         # Configuration from env vars
 │   │   ├── models/           # Pydantic request/response models
-│   │   │   ├── events.py     # WebSocket event types
+│   │   │   ├── events.py     # WebSocket event types (ClinicalTrace, CompletionEvent, etc.)
 │   │   │   ├── requests.py
 │   │   │   ├── responses.py
 │   │   │   └── session.py
 │   │   ├── routers/          # API endpoint handlers
 │   │   │   ├── health.py     # /api/health
-│   │   │   ├── sessions.py   # /api/sessions/*
-│   │   │   └── tools.py      # /api/tools
+│   │   │   ├── sessions.py   # /api/sessions/* + WebSocket (persists image metadata)
+│   │   │   ├── tools.py      # /api/tools
+│   │   │   └── patients.py   # /api/patients/* (EHR UI endpoints)
 │   │   └── services/         # Business logic
-│   │       ├── agent_runner.py   # Async agent execution + WebSocket
+│   │       ├── agent_runner.py   # Graph-agnostic WebSocket streaming (consumes GraphConfig)
 │   │       └── session_store.py  # In-memory session management
 │   └── tools/
 │       ├── __init__.py
@@ -65,13 +66,22 @@ docgemma-connect/
 │       ├── drug_safety.py    # OpenFDA boxed warnings
 │       ├── drug_interactions.py  # RxNav drug interactions
 │       ├── medical_literature.py # PubMed search
-│       └── clinical_trials.py    # ClinicalTrials.gov search
+│       ├── clinical_trials.py    # ClinicalTrials.gov search
+│       └── fhir_store/       # Local FHIR JSON store
+│           ├── store.py      # FhirJsonStore class (get/post interface)
+│           ├── search.py     # Patient search by name/DOB
+│           ├── chart.py      # Clinical summary builder
+│           ├── allergies.py  # Allergy documentation
+│           ├── medications.py # Medication orders
+│           ├── notes.py      # Clinical notes
+│           └── seed.py       # Seed from Synthea bundles
 ├── doc/
-│   ├── DOCGEMMA_IMPLEMENTATION_GUIDE.md  # Full architecture spec
-│   ├── DOCGEMMA_FLOWCHART.md             # Mermaid diagram
+│   ├── DOCGEMMA_IMPLEMENTATION_GUIDE.md  # v1 architecture spec (see FLOWCHART_V2 for current)
+│   ├── DOCGEMMA_FLOWCHART_V2.md          # v2 Mermaid diagram + architecture changes
 │   └── DOCGEMMA_TEST_CASES_V2.md         # 120 test cases (YAML)
 ├── main.py                   # Model test script
 ├── test_agent.py             # Agent pipeline test script
+├── test_tool_planning.py     # 50 prompt engineering test cases
 ├── test_tools.py
 ├── pyproject.toml
 └── .env                      # Environment (RunPod endpoint)
@@ -92,65 +102,73 @@ docgemma-connect/
 | `save_clinical_note` | Local FHIR JSON store | ✅ Done |
 | `analyze_medical_image` | MedGemma Vision | ❌ TODO |
 
-## Agent Pipeline
+## Agent Pipeline (v2 — 4-Way Triage)
 
 ```
-                                    ┌─ "direct" → Direct Response → END
-Image Detection → Complexity Router ┤
-                                    └─ "complex" → Thinking Mode → Decompose Intent → Agentic Loop → Synthesis → END
+                                        ┌─ "direct"     → Synthesize (DIRECT_CHAT_PROMPT) → END
+                                        │
+Image Detection → Context Assembler →   │─ "lookup"     → Validate → Execute → Check → Synthesize → END
+                                  Triage│
+                                  Router│─ "reasoning"  → Think → Extract Tool Needs → [Execute → Continue Reasoning] → Synthesize → END
+                                        │
+                                        └─ "multi_step" → Decompose → Plan → Validate → Execute → Assess → Synthesize → END
 ```
 
-Nodes (all implemented in `agent/nodes.py`):
-1. **Image Detection** - Pure code, detect medical image attachments
-2. **Complexity Router** - LLM + Outlines, route direct vs complex queries
-3. **Thinking Mode** - LLM + Outlines, generate reasoning for complex queries
-4. **Decompose Intent** - LLM + Outlines, break query into subtasks (uses reasoning)
-5. **Plan Tool** - LLM + Outlines, select tool for current subtask
-6. **Execute Tool** - Pure code, call tool via executor
-7. **Check Result** - Pure code, loop control logic
-8. **Synthesize Response** - Free-form LLM generation
+18-node graph (all implemented in `agent/nodes.py`):
 
-## Model Usage
+| Node | Type | Route(s) | Purpose |
+|------|------|----------|---------|
+| Image Detection | Pure code | all | Detect medical image attachments |
+| Clinical Context Assembler | Pure code | all | Gather patient context, image metadata |
+| Triage Router | LLM + Outlines | all | 4-way route: direct/lookup/reasoning/multi_step |
+| Fast Validate | Pure code | lookup | Validate tool args from triage output |
+| Fast Execute | Pure code (MCP) | lookup | Execute single tool (interrupt point) |
+| Fast Check | Pure code | lookup | Check result, retry if needed |
+| Fix Args | LLM + Outlines | lookup, multi_step | Reformulate invalid tool args |
+| Thinking Mode | LLM (free-form) | reasoning | Clinical reasoning chain (max 1024 tokens) |
+| Extract Tool Needs | LLM + Outlines | reasoning | Identify if reasoning needs a tool call |
+| Reasoning Execute | Pure code (MCP) | reasoning | Execute tool for reasoning path (interrupt point) |
+| Reasoning Continuation | LLM (free-form) | reasoning | Reason over tool results |
+| Decompose Intent | LLM + Outlines | multi_step | Break query into subtasks (max 5) |
+| Plan Tool | LLM + Outlines | multi_step | Select tool for current subtask |
+| Loop Validate | Pure code | multi_step | Validate tool call before execution |
+| Loop Execute | Pure code (MCP) | multi_step | Execute tool in agentic loop (interrupt point) |
+| Assess Result | Pure code | multi_step | Success/retry/skip/error decision |
+| Error Handler | Pure code | multi_step | retry_same / retry_reformulate / skip_subtask |
+| Synthesize Response | LLM (free-form) | all | Generate final clinical response |
+
+**3 interrupt points** (tool approval): fast_execute, reasoning_execute, loop_execute
+**1 terminal node**: synthesize_response (handles all routes, including direct)
+
+## Model Client (`model.py`)
 
 ```python
 from docgemma import DocGemma
+from docgemma.agent.prompts import SYSTEM_PROMPT
+
+# Initialize with system prompt (auto-prepended to every API call)
+model = DocGemma(system_prompt=SYSTEM_PROMPT)
+
+# Free-form generation (with conversation history)
+response = model.generate("What is hypertension?", messages=history)
+
+# Streaming generation
+async for chunk in model.generate_stream("Explain HTN", messages=history):
+    print(chunk, end="")
+
+# Structured generation (vLLM guided decoding)
 from pydantic import BaseModel
-
-# Initialize and load
-gemma = DocGemma(model_id="google/medgemma-1.5-4b-it")
-
-# Free-form generation
-response = gemma.generate("What is hypertension?")
-
-# Structured generation (Outlines)
 class Result(BaseModel):
     answer: str
     confidence: float
 
-result = gemma.generate_outlines(prompt, Result)
+result = model.generate_outlines(prompt, Result, messages=history)
 ```
 
-## Agent Usage
-
-```python
-from docgemma import DocGemma, DocGemmaAgent
-
-# Initialize and load model
-model = DocGemma(model_id="google/medgemma-1.5-4b-it")
-
-# Create agent with tool executor
-async def my_tool_executor(tool_name: str, args: dict) -> dict:
-    # Implement tool dispatch logic
-    ...
-
-agent = DocGemmaAgent(model, tool_executor=my_tool_executor)
-
-# Run async
-response = await agent.run("Check drug interactions between warfarin and aspirin")
-
-# Or sync
-response = agent.run_sync("What is hypertension?")
-```
+**Key features:**
+- `system_prompt` parameter → `_build_messages()` prepends system message to every API call
+- `messages` parameter on `generate()`, `generate_stream()`, `generate_outlines()` → real multi-turn conversation context
+- Thinking token filtering: `<unused94>...<unused95>` stripped automatically (regex for sync, stateful filter for streaming)
 
 ## Commands
 
@@ -224,15 +242,10 @@ Built by `AgentRunner._build_clinical_trace()` using `TOOL_CLINICAL_LABELS` for 
 ### LangGraph Checkpoint State Leakage
 **Problem**: With `MemorySaver` checkpointer, state fields like `final_response` persist across turns, causing stale responses.
 
-**Fix** (in `agent_runner.py`):
-1. Reset ALL state at turn start: `final_response: None`, `complexity: None`, etc.
-2. Only emit `CompletionEvent` from terminal nodes (`synthesize_response`, `direct_response`)
-3. Use `completion_emitted` flag to prevent duplicate events
+**Fix**: `GraphConfig.make_initial_state()` resets all fields + `GraphConfig.terminal_nodes` tells `agent_runner.py` which nodes produce final output + `completion_emitted` flag prevents duplicate events.
 
-### Terminal Nodes
-Only these nodes produce `final_response`:
-- `synthesize_response` - Complex query path
-- `direct_response` - Simple query path
+### Terminal Node
+Only `synthesize_response` produces `final_response` (handles all 4 routes, including direct via `DIRECT_CHAT_PROMPT`).
 
 ## 4B Model Guidelines
 

@@ -4,8 +4,8 @@
 flowchart TD
     subgraph Turn["<b>PER-TURN PROCESSING</b>"]
         T1([💬 User Message<br/>+ Optional Image]) --> T2["<b>🖼️ Image Detection</b><br/><i>Pure code: MIME check</i><br/>→ image_present, image_data"]
-        T2 --> T2B["<b>📋 Clinical Context Assembler</b><br/><i>Pure code: no LLM</i><br/>→ patient summary, active meds,<br/>conversation history, image metadata"]
-        T2B --> T3{"<b>🔀 Triage Router</b><br/><i>LLM + Outlines</i>"}
+        T2 --> T2B["<b>📋 Clinical Context Assembler</b><br/><i>Pure code: no LLM</i><br/>→ patient summary, active meds,<br/>image metadata"]
+        T2B --> T3{"<b>🔀 Triage Router</b><br/><i>LLM + Outlines<br/>+ conversation history as messages</i>"}
         T3 -->|"DIRECT<br/>(greeting, factual Q<br/>from model knowledge)"| SYNTH
         T3 -->|"LOOKUP<br/>(single tool call,<br/>no planning needed)"| FAST["<b>⚡ Fast Tool Path</b><br/><i>Pure code: extract tool + query<br/>from triage output</i>"]
         T3 -->|"REASONING<br/>(clinical reasoning needed,<br/>may need 0-2 tools)"| T4["<b>🧠 Thinking Mode</b><br/><i>LLM extended generation</i><br/>→ clinical reasoning chain<br/>(max 1024 tokens)"]
@@ -50,11 +50,11 @@ flowchart TD
         L2 -->|"check_drug_interactions"| TOOL_INT["⚠️ openFDA<br/>Interactions"]
         L2 -->|"search_medical_literature"| TOOL_PUB["📚 Europe PMC"]
         L2 -->|"find_clinical_trials"| TOOL_CT["🔬 ClinicalTrials<br/>.gov"]
-        L2 -->|"search_patient"| TOOL_SP["🔎 Medplum<br/>Patient Search"]
-        L2 -->|"get_patient_chart"| TOOL_EHR["📋 Medplum<br/>Patient Chart"]
-        L2 -->|"add_allergy"| TOOL_AL["🤧 Medplum<br/>Allergy"]
-        L2 -->|"prescribe_medication"| TOOL_RX["💉 Medplum<br/>Prescription"]
-        L2 -->|"save_clinical_note"| TOOL_NOTE["📝 Medplum<br/>Clinical Note"]
+        L2 -->|"search_patient"| TOOL_SP["🔎 Local FHIR<br/>Patient Search"]
+        L2 -->|"get_patient_chart"| TOOL_EHR["📋 Local FHIR<br/>Patient Chart"]
+        L2 -->|"add_allergy"| TOOL_AL["🤧 Local FHIR<br/>Allergy"]
+        L2 -->|"prescribe_medication"| TOOL_RX["💉 Local FHIR<br/>Prescription"]
+        L2 -->|"save_clinical_note"| TOOL_NOTE["📝 Local FHIR<br/>Clinical Note"]
 
         TOOL_IMG --> L3
         TOOL_FDA --> L3
@@ -112,7 +112,7 @@ flowchart TD
     style TOOL_PUB fill:#74c0fc,color:#000,stroke:#339af0
     style TOOL_CT fill:#74c0fc,color:#000,stroke:#339af0
 
-    %% Tool colors — Medplum/EHR
+    %% Tool colors — Local FHIR JSON Store
     style TOOL_SP fill:#69db7c,color:#000,stroke:#40c057
     style TOOL_EHR fill:#69db7c,color:#000,stroke:#40c057
     style TOOL_AL fill:#69db7c,color:#000,stroke:#40c057
@@ -170,10 +170,11 @@ def assemble_clinical_context(state: DocGemmaState) -> dict:
     context = {
         "user_input": state["user_input"],
         "image_present": state.get("image_present", False),
-        "conversation_summary": summarize_recent_turns(state, max_turns=3),
         "active_patient_id": state.get("active_patient_id"),
         "patient_summary": None,
     }
+    # Conversation history is now passed as messages array directly to the model
+    # (not summarized as text — see model.py messages parameter)
     # Pre-fetch active patient context if available
     if context["active_patient_id"]:
         chart = fetch_patient_summary(context["active_patient_id"])
@@ -265,18 +266,18 @@ The `reasoning_timeline` populates the UX's expandable details panel:
 
 ### 8. 🛠️ Updated Tool Registry
 
-Reflects actual Medplum MCP tools instead of placeholder names:
+Reflects actual tool implementations:
 
 | Tool | Source | Purpose |
 |------|--------|---------|
-| `search_patient` | Medplum | Find patient by name/ID |
-| `get_patient_chart` | Medplum | Full FHIR patient chart |
-| `add_allergy` | Medplum | Record allergy |
-| `prescribe_medication` | Medplum | Create prescription |
-| `save_clinical_note` | Medplum | Save encounter note |
-| `check_drug_safety` | openFDA | Adverse events, warnings |
-| `check_drug_interactions` | openFDA | Drug-drug interactions |
-| `search_medical_literature` | Europe PMC | Research articles |
+| `search_patient` | Local FHIR JSON Store | Find patient by name/DOB |
+| `get_patient_chart` | Local FHIR JSON Store | Full clinical summary |
+| `add_allergy` | Local FHIR JSON Store | Record allergy |
+| `prescribe_medication` | Local FHIR JSON Store | Create medication order |
+| `save_clinical_note` | Local FHIR JSON Store | Save encounter note |
+| `check_drug_safety` | openFDA | Adverse events, boxed warnings |
+| `check_drug_interactions` | RxNav | Drug-drug interactions |
+| `search_medical_literature` | PubMed | Research articles |
 | `find_clinical_trials` | ClinicalTrials.gov | Active trials |
 | `analyze_medical_image` | MedGemma Vision | Image interpretation |
 
@@ -287,7 +288,7 @@ Reflects actual Medplum MCP tools instead of placeholder names:
 | Node | Type | LLM Calls | Purpose |
 |------|------|-----------|---------|
 | Image Detection | Pure code | 0 | Check MIME type for attached images |
-| Clinical Context Assembler | Pure code | 0 | Gather patient context, conversation history, image metadata |
+| Clinical Context Assembler | Pure code | 0 | Gather patient context, image metadata (conversation history passed as messages array) |
 | Triage Router | LLM + Outlines | 1 | 4-way route: DIRECT / LOOKUP / REASONING / MULTI_STEP |
 | Fast Tool Path | Pure code + MCP | 0 | Validate → Execute → Return (skips planning) |
 | Fix Args (Fast/Loop) | LLM + Outlines | 1 | Reformulate invalid tool query |
@@ -314,3 +315,20 @@ Reflects actual Medplum MCP tools instead of placeholder names:
 | MULTI_STEP | 3 + N | 3 + 3N | ~5 (triage + decompose + N×plan + synthesize) |
 
 *N = number of subtasks (max 5)*
+
+---
+
+## Cross-Cutting Concerns (added after v2)
+
+### System Prompt
+`SYSTEM_PROMPT` in `prompts.py` is passed to `DocGemma(system_prompt=...)` at boot and auto-prepended to every API call via `_build_messages()`.
+
+### Conversation History as Messages
+All LLM nodes (triage, thinking, synthesis, reasoning continuation) pass `conversation_history` from state as the `messages=` parameter. The model receives real multi-turn context instead of a text summary.
+
+### Thinking Token Filtering
+MedGemma wraps internal thinking in `<unused94>...<unused95>` tokens. These are stripped at the model client level: regex for sync `generate()`, stateful filter for `generate_stream()`.
+
+### Greeting / Casual Message Handling
+- Triage prompt includes explicit greeting examples (hai, hello, thanks) → routes to DIRECT
+- Direct route uses `DIRECT_CHAT_PROMPT` (lightweight) instead of `SYNTHESIS_PROMPT` when no reasoning/tool results present
