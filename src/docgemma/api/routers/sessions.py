@@ -387,7 +387,11 @@ async def _prepare_send_message(
             return None
 
     # Add user message to session
-    session.add_message("user", content)
+    metadata: dict[str, Any] = {}
+    if image_base64:
+        metadata["has_image"] = True
+        metadata["image_url"] = f"data:image/jpeg;base64,{image_base64}"
+    session.add_message("user", content, metadata=metadata)
 
     # Build conversation history (last 2-3 turns for 4B model)
     history = _build_conversation_history(session, max_turns=3)
