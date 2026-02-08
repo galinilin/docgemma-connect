@@ -1,4 +1,4 @@
-"""Clinical note documentation tool for Medplum FHIR API.
+"""Clinical note documentation tool for local FHIR JSON store.
 
 Creates DocumentReference resources for clinical notes.
 """
@@ -8,9 +8,7 @@ from __future__ import annotations
 import base64
 from datetime import datetime, timezone
 
-import httpx
-
-from .client import get_client
+from .store import get_client
 from .schemas import SaveClinicalNoteInput, SaveClinicalNoteOutput
 
 
@@ -25,15 +23,6 @@ async def save_clinical_note(input_data: SaveClinicalNoteInput) -> SaveClinicalN
 
     Returns:
         SaveClinicalNoteOutput with confirmation including document ID, or error
-
-    Example:
-        >>> result = await save_clinical_note(SaveClinicalNoteInput(
-        ...     patient_id="abc-123",
-        ...     note_text="Patient presents with chest pain...",
-        ...     note_type="progress-note"
-        ... ))
-        >>> print(result.result)
-        Note saved to Patient abc-123's chart (Doc ID: doc-456)
     """
     client = get_client()
     patient_id = input_data.patient_id.strip()
@@ -100,31 +89,6 @@ async def save_clinical_note(input_data: SaveClinicalNoteInput) -> SaveClinicalN
             error=None,
         )
 
-    except httpx.TimeoutException:
-        return SaveClinicalNoteOutput(
-            result="",
-            error="Request timed out while saving clinical note",
-        )
-    except httpx.HTTPStatusError as e:
-        if e.response.status_code == 404:
-            return SaveClinicalNoteOutput(
-                result="",
-                error=f"Patient not found: {patient_id}",
-            )
-        if e.response.status_code == 401:
-            return SaveClinicalNoteOutput(
-                result="",
-                error="Authentication failed - check Medplum credentials",
-            )
-        if e.response.status_code == 422:
-            return SaveClinicalNoteOutput(
-                result="",
-                error=f"Invalid note data: {e.response.text[:200]}",
-            )
-        return SaveClinicalNoteOutput(
-            result="",
-            error=f"EHR error {e.response.status_code}: {e.response.text[:200]}",
-        )
     except Exception as e:
         return SaveClinicalNoteOutput(
             result="",

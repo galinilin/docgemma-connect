@@ -218,3 +218,5 @@ __marimo__/
 # Test logs
 test_logs/
 test_agent/
+data/
+test_tool_planning/

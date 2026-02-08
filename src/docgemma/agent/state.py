@@ -1,4 +1,4 @@
-"""Agent state definition."""
+"""Agent state definition (v2: 4-way triage architecture)."""
 
 from typing import TypedDict
 
@@ -28,10 +28,10 @@ class ConversationMessage(TypedDict):
 
 
 class DocGemmaState(TypedDict, total=False):
-    """State object for the DocGemma agent pipeline.
+    """State object for the DocGemma v2 agent pipeline.
 
-    Flows through: image_detection -> complexity_router -> decompose_intent
-                   -> [plan -> execute -> check]* -> synthesize
+    Flows through: image_detection -> clinical_context_assembler -> triage_router
+                   -> [direct|lookup|reasoning|multi_step] -> synthesize_response
     """
 
     # === Turn-level inputs ===
@@ -40,23 +40,38 @@ class DocGemmaState(TypedDict, total=False):
     image_data: bytes | None
 
     # === Multi-turn context ===
-    conversation_history: list[ConversationMessage]  # Previous messages for context
+    conversation_history: list[ConversationMessage]
 
-    # === Routing decisions ===
-    complexity: str  # "direct" | "complex"
-    reasoning: str | None  # from thinking_mode node
+    # === Clinical context (assembled before triage) ===
+    clinical_context: dict | None
 
-    # === Agentic loop state ===
+    # === Routing (4-way triage) ===
+    triage_route: str | None  # "direct" | "lookup" | "reasoning" | "multi_step"
+    triage_tool: str | None  # Tool name from triage (LOOKUP only)
+    triage_query: str | None  # Query from triage (LOOKUP only)
+
+    # === Reasoning path ===
+    reasoning: str | None  # From thinking_mode
+    reasoning_tool_needs: dict | None  # From extract_tool_needs: {tool, query} or None
+    reasoning_continuation: str | None  # From reasoning_continuation node
+
+    # === Agentic loop state (max 5 subtasks) ===
     subtasks: list[Subtask]
     current_subtask_index: int
     tool_results: list[ToolResult]
     loop_iterations: int
     tool_retries: int
-    last_result_status: str  # "success" | "error" | "needs_more_action" | "needs_user_input"
+    last_result_status: str  # "success"|"error"|"needs_more_action"|"needs_user_input"|"done"|"continue"
 
     # === Tool execution (internal) ===
-    _planned_tool: str | None  # Tool name from plan_tool
-    _planned_args: dict | None  # Tool arguments from plan_tool
+    _planned_tool: str | None
+    _planned_args: dict | None
+
+    # === Validation ===
+    validation_error: str | None
+
+    # === Error handling ===
+    error_strategy: str | None  # "retry_same" | "retry_reformulate" | "skip_subtask"
 
     # === Control flags ===
     needs_user_input: bool

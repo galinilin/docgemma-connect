@@ -1,7 +1,7 @@
 """Patient/EHR API endpoints.
 
 Provides REST endpoints for browsing and managing patient data
-via the Medplum FHIR API.
+via the local FHIR JSON store.
 """
 
 from __future__ import annotations
@@ -27,8 +27,11 @@ from ..models.responses import (
     PatientChartResponse,
     PatientListResponse,
     PatientSummary,
+    ScreeningResult,
+    VitalSign,
+    VisitNote,
 )
-from ...tools.medplum import (
+from ...tools.fhir_store import (
     AddAllergyInput,
     GetPatientChartInput,
     PrescribeMedicationInput,
@@ -134,6 +137,7 @@ async def get_patient(patient_id: str) -> PatientChartResponse:
         name = _extract_patient_name(patient_data)
         dob = patient_data.get("birthDate", "unknown")
         gender = patient_data.get("gender")
+        specialty = _extract_specialty_tag(patient_data)
 
         # Fetch related resources
         conditions = await _fetch_conditions(client, patient_id)
@@ -141,17 +145,24 @@ async def get_patient(patient_id: str) -> PatientChartResponse:
         allergies = await _fetch_allergies(client, patient_id)
         labs = await _fetch_labs(client, patient_id)
         notes = await _fetch_notes(client, patient_id)
+        vitals = await _fetch_vitals(client, patient_id)
+        screenings = await _fetch_screenings(client, patient_id)
+        visit_notes = await _fetch_visit_notes(client, patient_id)
 
         return PatientChartResponse(
             patient_id=patient_id,
             name=name,
             dob=dob,
             gender=gender,
+            specialty=specialty,
             conditions=conditions,
             medications=medications,
             allergies=allergies,
             labs=labs,
             notes=notes,
+            vitals=vitals,
+            screenings=screenings,
+            visit_notes=visit_notes,
         )
 
     except Exception as e:
@@ -301,6 +312,7 @@ def _parse_patient_bundle(data: dict) -> list[PatientSummary]:
         name = _extract_patient_name(resource)
         dob = resource.get("birthDate", "unknown")
         gender = resource.get("gender")
+        specialty = _extract_specialty_tag(resource)
 
         patients.append(
             PatientSummary(
@@ -308,6 +320,7 @@ def _parse_patient_bundle(data: dict) -> list[PatientSummary]:
                 name=name,
                 dob=dob,
                 gender=gender,
+                specialty=specialty,
             )
         )
 
@@ -323,6 +336,15 @@ def _extract_patient_name(patient: dict) -> str:
         family = name_obj.get("family", "")
         return f"{given} {family}".strip() or "Unknown"
     return "Unknown"
+
+
+def _extract_specialty_tag(patient: dict) -> str | None:
+    """Extract specialty display from meta.tag if present."""
+    tags = patient.get("meta", {}).get("tag", [])
+    for tag in tags:
+        if tag.get("system") == "http://docgemma.dev/specialty":
+            return tag.get("display") or tag.get("code")
+    return None
 
 
 def _extract_id_from_message(message: str, id_label: str) -> str | None:
@@ -491,6 +513,162 @@ async def _fetch_notes(client, patient_id: str) -> list:
                 )
             )
         return notes
+    except Exception:
+        return []
+
+
+async def _fetch_vitals(client, patient_id: str) -> list[VitalSign]:
+    """Fetch latest vital signs, one per vital type."""
+    try:
+        data = await client.get(
+            "/Observation",
+            params={
+                "subject": patient_id,
+                "category": "vital-signs",
+                "_count": "50",
+                "_sort": "-date",
+            },
+        )
+        # Group by LOINC code, keep only latest per vital type
+        seen_codes: set[str] = set()
+        vitals: list[VitalSign] = []
+        for entry in data.get("entry", []):
+            resource = entry.get("resource", {})
+            code = resource.get("code", {})
+            codings = code.get("coding", [])
+            loinc_code = codings[0].get("code", "") if codings else ""
+            if loinc_code in seen_codes:
+                continue
+            seen_codes.add(loinc_code)
+
+            name = code.get("text") or _get_coding_display(code)
+            if not name:
+                continue
+
+            vq = resource.get("valueQuantity", {})
+            value = vq.get("value")
+            if value is None:
+                continue
+
+            vitals.append(
+                VitalSign(
+                    id=resource.get("id"),
+                    name=name,
+                    value=float(value),
+                    unit=vq.get("unit", ""),
+                    date=resource.get("effectiveDateTime", "")[:10]
+                    if resource.get("effectiveDateTime")
+                    else None,
+                )
+            )
+        return vitals
+    except Exception:
+        return []
+
+
+async def _fetch_screenings(client, patient_id: str) -> list[ScreeningResult]:
+    """Fetch screening assessment results (survey category)."""
+    try:
+        data = await client.get(
+            "/Observation",
+            params={
+                "subject": patient_id,
+                "category": "survey",
+                "_count": "20",
+                "_sort": "-date",
+            },
+        )
+        screenings: list[ScreeningResult] = []
+        for entry in data.get("entry", []):
+            resource = entry.get("resource", {})
+            code = resource.get("code", {})
+            name = code.get("text") or _get_coding_display(code)
+            if not name:
+                continue
+
+            # Score from valueQuantity or valueCodeableConcept
+            score = ""
+            if "valueQuantity" in resource:
+                score = str(resource["valueQuantity"].get("value", ""))
+            elif "valueCodeableConcept" in resource:
+                score = resource["valueCodeableConcept"].get("text", "")
+            elif "valueString" in resource:
+                score = resource["valueString"]
+
+            if not score:
+                continue
+
+            screenings.append(
+                ScreeningResult(
+                    id=resource.get("id"),
+                    name=name,
+                    score=score,
+                    date=resource.get("effectiveDateTime", "")[:10]
+                    if resource.get("effectiveDateTime")
+                    else None,
+                )
+            )
+        return screenings
+    except Exception:
+        return []
+
+
+async def _fetch_visit_notes(client, patient_id: str) -> list[VisitNote]:
+    """Fetch visit documentation (HPI, Review of Systems, Physical Exam)."""
+    import base64
+
+    loinc_map = {
+        "10164-2": "HPI",
+        "10187-3": "Review of Systems",
+        "29545-1": "Physical Exam",
+    }
+
+    all_notes: list[VisitNote] = []
+    try:
+        for loinc_code, note_type in loinc_map.items():
+            data = await client.get(
+                "/DocumentReference",
+                params={
+                    "subject": patient_id,
+                    "type": loinc_code,
+                    "_count": "5",
+                    "_sort": "-date",
+                },
+            )
+            for entry in data.get("entry", []):
+                resource = entry.get("resource", {})
+
+                # Decode base64 content
+                content_list = resource.get("content", [])
+                text = ""
+                if content_list:
+                    attachment = content_list[0].get("attachment", {})
+                    b64_data = attachment.get("data", "")
+                    if b64_data:
+                        try:
+                            text = base64.b64decode(b64_data).decode("utf-8")
+                        except Exception:
+                            text = ""
+
+                # Extract author
+                authors = resource.get("author", [])
+                author = authors[0].get("display") if authors else None
+
+                all_notes.append(
+                    VisitNote(
+                        id=resource.get("id"),
+                        note_type=note_type,
+                        date=resource.get("date", "")[:10]
+                        if resource.get("date")
+                        else None,
+                        author=author,
+                        content=text,
+                    )
+                )
+
+        # Sort all notes by date descending
+        all_notes.sort(key=lambda n: n.date or "", reverse=True)
+        return all_notes
     except Exception:
         return []
 

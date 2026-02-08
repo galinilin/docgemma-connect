@@ -49,18 +49,6 @@ class Session(BaseModel):
         default=None,
         description="Tool awaiting approval, if any",
     )
-    checkpoint_id: str | None = Field(
-        default=None,
-        description="Current LangGraph checkpoint ID",
-    )
-    current_node: str | None = Field(
-        default=None,
-        description="Current node in the graph execution",
-    )
-    completed_nodes: list[str] = Field(
-        default_factory=list,
-        description="Nodes that have completed in current turn",
-    )
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
@@ -91,7 +79,6 @@ class Session(BaseModel):
             checkpoint_id=checkpoint_id,
         )
         self.status = SessionStatus.WAITING_APPROVAL
-        self.checkpoint_id = checkpoint_id
         self.updated_at = datetime.utcnow()
 
     def clear_pending_approval(self) -> None:
@@ -102,6 +89,4 @@ class Session(BaseModel):
 
     def reset_for_new_turn(self) -> None:
         """Reset turn-level state for a new user message."""
-        self.current_node = None
-        self.completed_nodes = []
         self.updated_at = datetime.utcnow()

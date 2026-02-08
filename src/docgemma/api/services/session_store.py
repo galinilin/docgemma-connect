@@ -87,25 +87,6 @@ class SessionStore:
             session.clear_pending_approval()
         return session
 
-    def update_graph_state(
-        self,
-        session_id: str,
-        current_node: str | None = None,
-        completed_node: str | None = None,
-        checkpoint_id: str | None = None,
-    ) -> Session | None:
-        """Update graph execution state."""
-        session = self._sessions.get(session_id)
-        if session:
-            if current_node is not None:
-                session.current_node = current_node
-            if completed_node is not None and completed_node not in session.completed_nodes:
-                session.completed_nodes.append(completed_node)
-            if checkpoint_id is not None:
-                session.checkpoint_id = checkpoint_id
-            session.updated_at = datetime.utcnow()
-        return session
-
     def reset_for_new_turn(self, session_id: str) -> Session | None:
         """Reset turn-level state for a new user message."""
         session = self._sessions.get(session_id)

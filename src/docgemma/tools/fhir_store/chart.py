@@ -1,4 +1,4 @@
-"""Patient chart retrieval tool for Medplum FHIR API.
+"""Patient chart retrieval tool for local FHIR JSON store.
 
 Retrieves comprehensive patient chart including demographics, conditions,
 medications, allergies, and recent lab results.
@@ -6,9 +6,7 @@ medications, allergies, and recent lab results.
 
 from __future__ import annotations
 
-import httpx
-
-from .client import get_client
+from .store import ResourceNotFoundError, get_client
 from .schemas import GetPatientChartInput, GetPatientChartOutput
 
 
@@ -23,15 +21,6 @@ async def get_patient_chart(input_data: GetPatientChartInput) -> GetPatientChart
 
     Returns:
         GetPatientChartOutput with formatted clinical summary or error
-
-    Example:
-        >>> result = await get_patient_chart(GetPatientChartInput(patient_id="abc-123"))
-        >>> print(result.result)
-        PATIENT: John Smith (M, DOB: 1978-03-15)
-        CONDITIONS: Hypertension, Type 2 Diabetes
-        MEDICATIONS: Metformin 500mg BID, Lisinopril 10mg daily
-        ALLERGIES: Penicillin (severe - anaphylaxis)
-        LABS: HbA1c 7.2% (2024-01-15), Creatinine 1.1 (2024-01-15)
     """
     client = get_client()
     patient_id = input_data.patient_id.strip()
@@ -121,25 +110,10 @@ async def get_patient_chart(input_data: GetPatientChartInput) -> GetPatientChart
 
         return GetPatientChartOutput(result="\n".join(lines), error=None)
 
-    except httpx.TimeoutException:
+    except ResourceNotFoundError:
         return GetPatientChartOutput(
             result="",
-            error="Request timed out while fetching patient chart",
-        )
-    except httpx.HTTPStatusError as e:
-        if e.response.status_code == 404:
-            return GetPatientChartOutput(
-                result="",
-                error=f"Patient not found: {patient_id}",
-            )
-        if e.response.status_code == 401:
-            return GetPatientChartOutput(
-                result="",
-                error="Authentication failed - check Medplum credentials",
-            )
-        return GetPatientChartOutput(
-            result="",
-            error=f"EHR error {e.response.status_code}: {e.response.text[:200]}",
+            error=f"Patient not found: {patient_id}",
         )
     except Exception as e:
         return GetPatientChartOutput(

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import json
 import logging
@@ -12,9 +13,6 @@ from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisco
 from ..models.events import ErrorEvent
 from ..models.requests import CreateSessionRequest
 from ..models.responses import (
-    GraphEdge,
-    GraphNode,
-    GraphStateResponse,
     MessageResponse,
     SessionListResponse,
     SessionResponse,
@@ -59,8 +57,6 @@ def _session_to_response(session: Session) -> SessionResponse:
             for msg in session.messages
         ],
         pending_approval=session.pending_approval.model_dump() if session.pending_approval else None,
-        current_node=session.current_node,
-        completed_nodes=session.completed_nodes,
         created_at=session.created_at,
         updated_at=session.updated_at,
     )
@@ -131,72 +127,6 @@ async def get_messages(
     ]
 
 
-@router.get("/{session_id}/graph", response_model=GraphStateResponse)
-async def get_graph_state(
-    session_id: str,
-    store: SessionStore = Depends(get_session_store),
-) -> GraphStateResponse:
-    """Get graph state for visualization.
-
-    Returns the current state of the agent graph including:
-    - All nodes with their status (pending/active/completed)
-    - Edges between nodes with active state
-    - Current executing node
-    - Subtasks and tool results
-    """
-    session = store.get(session_id)
-    if not session:
-        raise HTTPException(status_code=404, detail=f"Session '{session_id}' not found")
-
-    # Import here to avoid circular imports
-    from ...agent.graph import GRAPH_EDGES, GRAPH_NODES
-
-    # Build nodes with status
-    nodes = []
-    for node_def in GRAPH_NODES:
-        status = "pending"
-        if node_def["id"] in session.completed_nodes:
-            status = "completed"
-        elif node_def["id"] == session.current_node:
-            status = "active"
-
-        nodes.append(
-            GraphNode(
-                id=node_def["id"],
-                label=node_def["label"],
-                status=status,
-                node_type=node_def["type"],
-            )
-        )
-
-    # Build edges with active state
-    edges = []
-    for edge_def in GRAPH_EDGES:
-        active = (
-            edge_def["source"] in session.completed_nodes
-            and (
-                edge_def["target"] == session.current_node
-                or edge_def["target"] in session.completed_nodes
-            )
-        )
-        edges.append(
-            GraphEdge(
-                source=edge_def["source"],
-                target=edge_def["target"],
-                label=edge_def["label"],
-                active=active,
-            )
-        )
-
-    return GraphStateResponse(
-        nodes=nodes,
-        edges=edges,
-        current_node=session.current_node,
-        subtasks=[],  # Would need agent runner to get these
-        tool_results=[],
-    )
-
-
 # =============================================================================
 # WebSocket Handler
 # =============================================================================
@@ -251,9 +181,98 @@ async def websocket_chat(
         await websocket.close(code=4003)
         return
 
+    # Track running agent task so cancel can stop it
+    agent_task: asyncio.Task | None = None
+    send_queue: asyncio.Queue[dict | None] = asyncio.Queue()
+
+    async def _run_agent_stream(event_gen) -> None:
+        """Run agent event generator and push events to send queue."""
+        try:
+            async for event in event_gen:
+                event_dict = event.model_dump(mode="json")
+                await send_queue.put(event_dict)
+
+                # If completion, also store the assistant message
+                if event.event == "completion":
+                    session.add_message("assistant", event.final_response)
+        except asyncio.CancelledError:
+            logger.info(f"Agent task cancelled for session {session_id}")
+        except Exception as e:
+            logger.exception(f"Agent task error for session {session_id}: {e}")
+            await send_queue.put({
+                "event": "error",
+                "error_type": "execution_error",
+                "message": str(e),
+                "recoverable": False,
+            })
+        finally:
+            # Close the generator to trigger _stream_execution's finally block,
+            # which cancels the internal graph task and stops LLM generation.
+            try:
+                await event_gen.aclose()
+            except Exception:
+                pass
+            await send_queue.put(None)  # Sentinel: agent done
+
+    async def _send_loop() -> None:
+        """Forward events from send queue to WebSocket."""
+        while True:
+            item = await send_queue.get()
+            if item is None:
+                break
+            try:
+                await websocket.send_json(item)
+            except Exception:
+                break
+
     try:
         while True:
-            # Wait for client message
+            # If an agent task is running, we need to concurrently:
+            # 1. Forward events from the agent to the client
+            # 2. Listen for client messages (e.g. cancel)
+            if agent_task is not None and not agent_task.done():
+                sender = asyncio.create_task(_send_loop())
+                try:
+                    # Wait for either: client message OR agent completion
+                    while not agent_task.done():
+                        receive_task = asyncio.create_task(websocket.receive_text())
+                        done, _ = await asyncio.wait(
+                            {receive_task, agent_task},
+                            return_when=asyncio.FIRST_COMPLETED,
+                        )
+
+                        if receive_task in done:
+                            raw_message = receive_task.result()
+                            try:
+                                message = json.loads(raw_message)
+                            except json.JSONDecodeError:
+                                continue
+
+                            if message.get("action") == "cancel":
+                                agent_task.cancel()
+                                try:
+                                    await agent_task
+                                except asyncio.CancelledError:
+                                    pass
+                                session.status = SessionStatus.ACTIVE
+                                session.pending_approval = None
+                                # Don't send a fake completion — the frontend
+                                # already resets its UI state in handleCancel().
+                                break
+                        else:
+                            # Agent finished, cancel the pending receive
+                            receive_task.cancel()
+                            try:
+                                await receive_task
+                            except (asyncio.CancelledError, Exception):
+                                pass
+                finally:
+                    # Drain remaining events from the queue
+                    await sender
+                    agent_task = None
+                continue
+
+            # Normal receive loop — no agent running
             raw_message = await websocket.receive_text()
             try:
                 message = json.loads(raw_message)
@@ -270,26 +289,29 @@ async def websocket_chat(
             data = message.get("data", {})
 
             if action == "send_message":
-                await _handle_send_message(websocket, session, runner, data)
+                event_gen = await _prepare_send_message(websocket, session, runner, data)
+                if event_gen is not None:
+                    send_queue = asyncio.Queue()
+                    agent_task = asyncio.create_task(_run_agent_stream(event_gen))
 
             elif action == "approve_tool":
-                await _handle_tool_approval(websocket, session, runner, approved=True)
+                event_gen = await _prepare_tool_approval(websocket, session, runner, approved=True)
+                if event_gen is not None:
+                    send_queue = asyncio.Queue()
+                    agent_task = asyncio.create_task(_run_agent_stream(event_gen))
 
             elif action == "reject_tool":
                 reason = data.get("reason")
-                await _handle_tool_approval(
+                event_gen = await _prepare_tool_approval(
                     websocket, session, runner, approved=False, reason=reason
                 )
+                if event_gen is not None:
+                    send_queue = asyncio.Queue()
+                    agent_task = asyncio.create_task(_run_agent_stream(event_gen))
 
             elif action == "cancel":
-                # Cancel current operation - just reset session status
-                session.status = SessionStatus.ACTIVE
-                session.pending_approval = None
-                await websocket.send_json({
-                    "event": "completion",
-                    "final_response": "Operation cancelled.",
-                    "tool_calls_made": 0,
-                })
+                # Nothing running to cancel
+                pass
 
             else:
                 await websocket.send_json({
@@ -301,8 +323,12 @@ async def websocket_chat(
 
     except WebSocketDisconnect:
         logger.info(f"WebSocket disconnected for session {session_id}")
+        if agent_task and not agent_task.done():
+            agent_task.cancel()
     except Exception as e:
         logger.exception(f"WebSocket error for session {session_id}: {e}")
+        if agent_task and not agent_task.done():
+            agent_task.cancel()
         try:
             await websocket.send_json({
                 "event": "error",
@@ -314,13 +340,17 @@ async def websocket_chat(
             pass
 
 
-async def _handle_send_message(
+async def _prepare_send_message(
     websocket: WebSocket,
     session: Session,
     runner: AgentRunner,
     data: dict[str, Any],
-) -> None:
-    """Handle a send_message action."""
+):
+    """Validate and prepare a send_message action.
+
+    Returns an async generator of events, or None if validation failed
+    (error already sent to client).
+    """
     content = data.get("content", "").strip()
     if not content:
         await websocket.send_json({
@@ -329,7 +359,7 @@ async def _handle_send_message(
             "message": "Message content cannot be empty",
             "recoverable": True,
         })
-        return
+        return None
 
     # Check if session is busy
     if session.status in (SessionStatus.PROCESSING, SessionStatus.WAITING_APPROVAL):
@@ -339,7 +369,7 @@ async def _handle_send_message(
             "message": f"Session is {session.status.value}. Please wait or cancel.",
             "recoverable": True,
         })
-        return
+        return None
 
     # Handle optional image
     image_data = None
@@ -354,36 +384,38 @@ async def _handle_send_message(
                 "message": "Invalid base64 image data",
                 "recoverable": True,
             })
-            return
+            return None
 
     # Add user message to session
-    session.add_message("user", content)
+    metadata: dict[str, Any] = {}
+    if image_base64:
+        metadata["has_image"] = True
+        metadata["image_url"] = f"data:image/jpeg;base64,{image_base64}"
+    session.add_message("user", content, metadata=metadata)
 
     # Build conversation history (last 2-3 turns for 4B model)
     history = _build_conversation_history(session, max_turns=3)
 
-    # Stream agent execution events
-    async for event in runner.start_turn(
+    # Return the event generator
+    return runner.start_turn(
         session=session,
         user_input=content,
         image_data=image_data,
         conversation_history=history,
-    ):
-        await websocket.send_json(event.model_dump(mode="json"))
-
-        # If completion, add assistant message to session
-        if event.event == "completion":
-            session.add_message("assistant", event.final_response)
+    )
 
 
-async def _handle_tool_approval(
+async def _prepare_tool_approval(
     websocket: WebSocket,
     session: Session,
     runner: AgentRunner,
     approved: bool,
     reason: str | None = None,
-) -> None:
-    """Handle tool approval or rejection."""
+):
+    """Validate and prepare a tool approval/rejection.
+
+    Returns an async generator of events, or None if validation failed.
+    """
     if session.status != SessionStatus.WAITING_APPROVAL or not session.pending_approval:
         await websocket.send_json({
             "event": "error",
@@ -391,19 +423,13 @@ async def _handle_tool_approval(
             "message": "No tool awaiting approval",
             "recoverable": True,
         })
-        return
+        return None
 
-    # Stream remaining execution
-    async for event in runner.resume_with_approval(
+    return runner.resume_with_approval(
         session=session,
         approved=approved,
         rejection_reason=reason,
-    ):
-        await websocket.send_json(event.model_dump(mode="json"))
-
-        # If completion, add assistant message
-        if event.event == "completion":
-            session.add_message("assistant", event.final_response)
+    )
 
 
 def _build_conversation_history(

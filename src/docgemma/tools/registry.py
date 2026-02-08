@@ -191,8 +191,8 @@ from ..tools.schemas import (
     ClinicalTrialsInput,
 )
 
-# Medplum FHIR tools
-from ..tools.medplum import (
+# FHIR store tools
+from ..tools.fhir_store import (
     search_patient,
     get_patient_chart,
     add_allergy,
@@ -278,7 +278,7 @@ TOOL_REGISTRY.register_tool(
 
 
 # =============================================================================
-# MEDPLUM FHIR TOOLS
+# FHIR STORE TOOLS
 # =============================================================================
 
 
@@ -402,6 +402,32 @@ TOOL_REGISTRY.register_tool(
         "note_type": "note type (default: clinical-note)",
     },
     executor=_save_clinical_note,
+)
+
+
+# =============================================================================
+# MEDICAL IMAGE ANALYSIS
+# =============================================================================
+
+from ..tools.image_analysis import analyze_medical_image as _analyze_medical_image_impl
+
+
+async def _analyze_medical_image(image_data: bytes = b"", query: str = "") -> dict:
+    """Execute medical image analysis."""
+    if not image_data:
+        return {"error": "No image data provided"}
+    from .schemas import ImageAnalysisInput
+    result = await _analyze_medical_image_impl(
+        ImageAnalysisInput(image_data=image_data, query=query)
+    )
+    return result.model_dump()
+
+
+TOOL_REGISTRY.register_tool(
+    name="analyze_medical_image",
+    description="Analyze medical image using MedGemma vision",
+    args={"image_data": "raw image bytes", "query": "clinical question about the image"},
+    executor=_analyze_medical_image,
 )
 
 

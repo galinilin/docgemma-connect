@@ -1,15 +1,14 @@
-"""Medication prescribing tool for Medplum FHIR API.
+"""Medication prescribing tool for local FHIR JSON store.
 
 Creates MedicationRequest resources for prescribing medications.
 """
 
 from __future__ import annotations
 
+import re
 from datetime import datetime, timezone
 
-import httpx
-
-from .client import get_client
+from .store import get_client
 from .schemas import PrescribeMedicationInput, PrescribeMedicationOutput
 
 
@@ -26,16 +25,6 @@ async def prescribe_medication(
 
     Returns:
         PrescribeMedicationOutput with confirmation including order ID, or error
-
-    Example:
-        >>> result = await prescribe_medication(PrescribeMedicationInput(
-        ...     patient_id="abc-123",
-        ...     medication_name="Metformin",
-        ...     dosage="500mg",
-        ...     frequency="twice daily"
-        ... ))
-        >>> print(result.result)
-        Prescribed: Metformin 500mg twice daily for Patient abc-123 (Order ID: xyz-789)
     """
     client = get_client()
     patient_id = input_data.patient_id.strip()
@@ -89,31 +78,6 @@ async def prescribe_medication(
             error=None,
         )
 
-    except httpx.TimeoutException:
-        return PrescribeMedicationOutput(
-            result="",
-            error="Request timed out while prescribing medication",
-        )
-    except httpx.HTTPStatusError as e:
-        if e.response.status_code == 404:
-            return PrescribeMedicationOutput(
-                result="",
-                error=f"Patient not found: {patient_id}",
-            )
-        if e.response.status_code == 401:
-            return PrescribeMedicationOutput(
-                result="",
-                error="Authentication failed - check Medplum credentials",
-            )
-        if e.response.status_code == 422:
-            return PrescribeMedicationOutput(
-                result="",
-                error=f"Invalid prescription data: {e.response.text[:200]}",
-            )
-        return PrescribeMedicationOutput(
-            result="",
-            error=f"EHR error {e.response.status_code}: {e.response.text[:200]}",
-        )
     except Exception as e:
         return PrescribeMedicationOutput(
             result="",
@@ -123,8 +87,6 @@ async def prescribe_medication(
 
 def _extract_dose_value(dosage: str) -> float:
     """Extract numeric value from dosage string like '500mg' -> 500."""
-    import re
-
     match = re.search(r"(\d+(?:\.\d+)?)", dosage)
     if match:
         return float(match.group(1))
@@ -133,8 +95,6 @@ def _extract_dose_value(dosage: str) -> float:
 
 def _extract_dose_unit(dosage: str) -> str:
     """Extract unit from dosage string like '500mg' -> 'mg'."""
-    import re
-
     match = re.search(r"\d+(?:\.\d+)?\s*(\w+)", dosage)
     if match:
         return match.group(1)

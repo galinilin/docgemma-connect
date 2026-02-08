@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from enum import Enum
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field
@@ -59,6 +60,15 @@ class ToolExecutionEndEvent(BaseEvent):
     duration_ms: float = Field(..., description="Execution time in milliseconds")
 
 
+class AgentStatusEvent(BaseEvent):
+    """Event for human-readable agent status updates."""
+
+    event: Literal["agent_status"] = "agent_status"
+    status_text: str = Field(..., description="Human-readable status message")
+    node_id: str | None = Field(default=None, description="Current node identifier")
+    tool_name: str | None = Field(default=None, description="Tool being used")
+
+
 class StreamingTextEvent(BaseEvent):
     """Event for incremental text generation."""
 
@@ -67,12 +77,44 @@ class StreamingTextEvent(BaseEvent):
     node_id: str = Field(..., description="Node generating the text")
 
 
+class TraceStepType(str, Enum):
+    """Type of step in the clinical reasoning trace."""
+
+    THOUGHT = "thought"
+    TOOL_CALL = "tool_call"
+    SYNTHESIS = "synthesis"
+
+
+class TraceStep(BaseModel):
+    """A single step in the clinical reasoning trace."""
+
+    type: TraceStepType
+    label: str = Field(..., description="Clinical-friendly label")
+    description: str
+    duration_ms: float | None = None
+    tool_name: str | None = None
+    tool_result_summary: str | None = None
+    success: bool | None = None
+    reasoning_text: str | None = None
+
+
+class ClinicalTrace(BaseModel):
+    """Complete clinical reasoning trace."""
+
+    steps: list[TraceStep]
+    total_duration_ms: float
+    tools_consulted: int
+
+
 class CompletionEvent(BaseEvent):
     """Event when agent completes processing."""
 
     event: Literal["completion"] = "completion"
     final_response: str = Field(..., description="Final agent response")
     tool_calls_made: int = Field(default=0, description="Number of tool calls made")
+    clinical_trace: ClinicalTrace | None = Field(
+        default=None, description="Clinical reasoning trace for UI display"
+    )
 
 
 class ErrorEvent(BaseEvent):
@@ -91,6 +133,7 @@ class ErrorEvent(BaseEvent):
 AgentEvent = (
     NodeStartEvent
     | NodeEndEvent
+    | AgentStatusEvent
     | ToolApprovalRequestEvent
     | ToolExecutionStartEvent
     | ToolExecutionEndEvent

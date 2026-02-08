@@ -1,4 +1,4 @@
-"""Pydantic schemas for Medplum FHIR tools.
+"""Pydantic schemas for FHIR store tools.
 
 Input and output schemas for patient search, chart retrieval,
 allergy documentation, medication prescribing, and clinical notes.

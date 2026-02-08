@@ -1,13 +1,11 @@
-"""Patient search tool for Medplum FHIR API.
+"""Patient search tool for local FHIR JSON store.
 
 Searches patients by name and/or date of birth using FHIR Patient resource.
 """
 
 from __future__ import annotations
 
-import httpx
-
-from .client import get_client
+from .store import get_client
 from .schemas import SearchPatientInput, SearchPatientOutput
 
 
@@ -19,17 +17,10 @@ async def search_patient(input_data: SearchPatientInput) -> SearchPatientOutput:
 
     Returns:
         SearchPatientOutput with formatted results or error
-
-    Example:
-        >>> result = await search_patient(SearchPatientInput(name="Smith"))
-        >>> print(result.result)
-        Found 2 patients:
-        1. John Smith (ID: abc-123) DOB: 1978-03-15
-        2. Jane Smith (ID: def-456) DOB: 1985-07-22
     """
     client = get_client()
 
-    # Check credentials
+    # Check credentials (always None for local store)
     cred_error = client._check_credentials()
     if cred_error:
         return SearchPatientOutput(result="", error=cred_error)
@@ -80,21 +71,6 @@ async def search_patient(input_data: SearchPatientInput) -> SearchPatientOutput:
 
         return SearchPatientOutput(result="\n".join(lines), error=None)
 
-    except httpx.TimeoutException:
-        return SearchPatientOutput(
-            result="",
-            error="Request timed out while searching patients",
-        )
-    except httpx.HTTPStatusError as e:
-        if e.response.status_code == 401:
-            return SearchPatientOutput(
-                result="",
-                error="Authentication failed - check Medplum credentials",
-            )
-        return SearchPatientOutput(
-            result="",
-            error=f"EHR error {e.response.status_code}: {e.response.text[:200]}",
-        )
     except Exception as e:
         return SearchPatientOutput(
             result="",

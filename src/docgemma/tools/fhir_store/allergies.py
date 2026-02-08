@@ -1,4 +1,4 @@
-"""Allergy documentation tool for Medplum FHIR API.
+"""Allergy documentation tool for local FHIR JSON store.
 
 Creates AllergyIntolerance resources in the patient's chart.
 """
@@ -7,9 +7,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-import httpx
-
-from .client import get_client
+from .store import get_client
 from .schemas import AddAllergyInput, AddAllergyOutput
 
 
@@ -24,16 +22,6 @@ async def add_allergy(input_data: AddAllergyInput) -> AddAllergyOutput:
 
     Returns:
         AddAllergyOutput with confirmation or error
-
-    Example:
-        >>> result = await add_allergy(AddAllergyInput(
-        ...     patient_id="abc-123",
-        ...     substance="Penicillin",
-        ...     reaction="anaphylaxis",
-        ...     severity="severe"
-        ... ))
-        >>> print(result.result)
-        Allergy documented: Penicillin (severe) for Patient abc-123
     """
     client = get_client()
     patient_id = input_data.patient_id.strip()
@@ -111,31 +99,6 @@ async def add_allergy(input_data: AddAllergyInput) -> AddAllergyOutput:
             error=None,
         )
 
-    except httpx.TimeoutException:
-        return AddAllergyOutput(
-            result="",
-            error="Request timed out while documenting allergy",
-        )
-    except httpx.HTTPStatusError as e:
-        if e.response.status_code == 404:
-            return AddAllergyOutput(
-                result="",
-                error=f"Patient not found: {patient_id}",
-            )
-        if e.response.status_code == 401:
-            return AddAllergyOutput(
-                result="",
-                error="Authentication failed - check Medplum credentials",
-            )
-        if e.response.status_code == 422:
-            return AddAllergyOutput(
-                result="",
-                error=f"Invalid allergy data: {e.response.text[:200]}",
-            )
-        return AddAllergyOutput(
-            result="",
-            error=f"EHR error {e.response.status_code}: {e.response.text[:200]}",
-        )
     except Exception as e:
         return AddAllergyOutput(
             result="",
