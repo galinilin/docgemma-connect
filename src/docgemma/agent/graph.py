@@ -11,6 +11,7 @@
 from __future__ import annotations
 
 import logging
+import random
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Callable
 
@@ -63,19 +64,160 @@ TOOL_CLINICAL_LABELS = {
     "analyze_medical_image": "Medical Image Analysis",
 }
 
-# Human-readable status labels for tool execution
-TOOL_STATUS_LABELS = {
-    "check_drug_safety": "Checking FDA safety database...",
-    "check_drug_interactions": "Checking drug interactions...",
-    "search_medical_literature": "Searching medical literature...",
-    "find_clinical_trials": "Searching clinical trials...",
-    "search_patient": "Searching patient records...",
-    "get_patient_chart": "Retrieving patient chart...",
-    "add_allergy": "Documenting allergy...",
-    "prescribe_medication": "Processing prescription...",
-    "save_clinical_note": "Saving clinical note...",
-    "analyze_medical_image": "Analyzing medical image...",
+# Human-readable status labels for tool execution (randomized pools)
+_TOOL_STATUS_POOLS: dict[str, list[str]] = {
+    "check_drug_safety": [
+        "Checking FDA safety database...",
+        "Reviewing drug safety profile...",
+        "Looking up safety information...",
+        "Consulting FDA records...",
+    ],
+    "check_drug_interactions": [
+        "Checking drug interactions...",
+        "Screening for interactions...",
+        "Cross-referencing medications...",
+        "Reviewing potential interactions...",
+    ],
+    "search_medical_literature": [
+        "Searching medical literature...",
+        "Reviewing published research...",
+        "Consulting PubMed...",
+        "Looking up relevant studies...",
+    ],
+    "find_clinical_trials": [
+        "Searching clinical trials...",
+        "Looking up active trials...",
+        "Checking trial registries...",
+        "Reviewing ongoing studies...",
+    ],
+    "search_patient": [
+        "Searching patient records...",
+        "Looking up patient information...",
+        "Querying patient database...",
+    ],
+    "get_patient_chart": [
+        "Retrieving patient chart...",
+        "Pulling up patient chart...",
+        "Loading clinical history...",
+    ],
+    "add_allergy": [
+        "Documenting allergy...",
+        "Recording allergy information...",
+        "Updating allergy list...",
+    ],
+    "prescribe_medication": [
+        "Processing prescription...",
+        "Preparing medication order...",
+        "Writing prescription...",
+    ],
+    "save_clinical_note": [
+        "Saving clinical note...",
+        "Recording clinical note...",
+        "Writing to patient record...",
+    ],
+    "analyze_medical_image": [
+        "Analyzing medical image...",
+        "Reviewing image findings...",
+        "Processing medical image...",
+    ],
 }
+
+# Pools for general (non-tool) status messages
+_STATUS_POOLS: dict[str, list[str]] = {
+    "assembling_context": [
+        "Assembling context...",
+        "Gathering context...",
+        "Preparing clinical context...",
+    ],
+    "analyzing_query": [
+        "Analyzing query...",
+        "Understanding your question...",
+        "Evaluating your request...",
+        "Processing your question...",
+    ],
+    "composing_response": [
+        "Composing response...",
+        "Preparing response...",
+        "Drafting response...",
+        "Putting it all together...",
+        "Synthesizing findings...",
+    ],
+    "quick_lookup": [
+        "Quick lookup...",
+        "Running a quick search...",
+        "Looking that up...",
+    ],
+    "clinical_reasoning": [
+        "Clinical reasoning...",
+        "Thinking through this...",
+        "Applying clinical reasoning...",
+        "Working through the details...",
+    ],
+    "breaking_down": [
+        "Breaking down your question...",
+        "Planning my approach...",
+        "Mapping out the steps...",
+    ],
+    "fixing_args": [
+        "Fixing arguments...",
+        "Adjusting parameters...",
+        "Refining the query...",
+    ],
+    "processing_results": [
+        "Processing results...",
+        "Reviewing results...",
+        "Interpreting findings...",
+        "Analyzing the data...",
+    ],
+    "retrying": [
+        "Retrying...",
+        "Trying again...",
+        "Giving it another shot...",
+    ],
+    "analyzing_tool_needs": [
+        "Analyzing tool needs...",
+        "Determining next steps...",
+        "Deciding what to look up...",
+    ],
+    "planning_approach": [
+        "Planning approach...",
+        "Mapping out the steps...",
+        "Organizing my approach...",
+    ],
+    "planning_next_step": [
+        "Planning next step...",
+        "Moving to next step...",
+        "Preparing next action...",
+    ],
+    "handling_error": [
+        "Handling error...",
+        "Working around an issue...",
+        "Recovering from error...",
+    ],
+    "trying_different": [
+        "Trying different approach...",
+        "Switching strategy...",
+        "Taking a different angle...",
+    ],
+    "moving_on": [
+        "Moving on...",
+        "Skipping ahead...",
+        "Continuing to next step...",
+    ],
+}
+
+
+def _pick(pool_key: str) -> str:
+    """Pick a random status text from a general pool."""
+    return random.choice(_STATUS_POOLS[pool_key])
+
+
+def _pick_tool(tool_name: str) -> str:
+    """Pick a random status text for a tool, with fallback."""
+    pool = _TOOL_STATUS_POOLS.get(tool_name)
+    if pool:
+        return random.choice(pool)
+    return f"Using {tool_name.replace('_', ' ')}..."
 
 
 # ── GraphConfig ──────────────────────────────────────────────────────────────
@@ -220,79 +362,70 @@ def _get_status_text(node_name: str, state_update: dict) -> str | None:
     state = state_update or {}
 
     if node_name == "image_detection":
-        return "Assembling context..."
+        return _pick("assembling_context")
 
     if node_name == "clinical_context_assembler":
-        return "Analyzing query..."
+        return _pick("analyzing_query")
 
     if node_name == "triage_router":
         route = state.get("triage_route", "direct")
         if route == "direct":
-            return "Composing response..."
+            return _pick("composing_response")
         if route == "lookup":
-            return "Quick lookup..."
+            return _pick("quick_lookup")
         if route == "reasoning":
-            return "Clinical reasoning..."
-        return "Breaking down your question..."
+            return _pick("clinical_reasoning")
+        return _pick("breaking_down")
 
     if node_name == "fast_tool_validate":
         if state.get("validation_error"):
-            return "Fixing arguments..."
+            return _pick("fixing_args")
         planned_tool = state.get("_planned_tool")
         if planned_tool:
-            return TOOL_STATUS_LABELS.get(
-                planned_tool, f"Using {planned_tool.replace('_', ' ')}..."
-            )
+            return _pick_tool(planned_tool)
         return None
 
     if node_name == "fast_fix_args":
         planned_tool = state.get("_planned_tool")
         if planned_tool:
-            return TOOL_STATUS_LABELS.get(
-                planned_tool, f"Using {planned_tool.replace('_', ' ')}..."
-            )
+            return _pick_tool(planned_tool)
         return None
 
     if node_name in ("fast_execute", "reasoning_execute", "loop_execute"):
-        return "Processing results..."
+        return _pick("processing_results")
 
     if node_name == "fast_check":
         status = state.get("last_result_status", "done")
         if status == "error":
-            return "Retrying..."
-        return "Composing response..."
+            return _pick("retrying")
+        return _pick("composing_response")
 
     if node_name == "thinking_mode":
-        return "Analyzing tool needs..."
+        return _pick("analyzing_tool_needs")
 
     if node_name == "extract_tool_needs":
         if state.get("reasoning_tool_needs"):
             tool = state["reasoning_tool_needs"].get("tool", "")
-            return TOOL_STATUS_LABELS.get(
-                tool, f"Using {tool.replace('_', ' ')}..."
-            )
-        return "Composing response..."
+            return _pick_tool(tool)
+        return _pick("composing_response")
 
     if node_name == "reasoning_continuation":
-        return "Composing response..."
+        return _pick("composing_response")
 
     if node_name == "decompose_intent":
         if state.get("needs_user_input"):
-            return "Composing response..."
-        return "Planning approach..."
+            return _pick("composing_response")
+        return _pick("planning_approach")
 
     if node_name == "plan_tool":
         planned_tool = state.get("_planned_tool")
         if planned_tool and planned_tool != "none":
-            return TOOL_STATUS_LABELS.get(
-                planned_tool,
-                f"Using {planned_tool.replace('_', ' ')}...",
-            )
+            return _pick_tool(planned_tool)
         return None
 
     if node_name == "loop_validate":
         if state.get("validation_error"):
-            return "Fixing arguments..."
+            return _pick("fixing_args")
         return None
 
     if node_name == "loop_fix_args":
@@ -301,19 +434,19 @@ def _get_status_text(node_name: str, state_update: dict) -> str | None:
     if node_name == "assess_result":
         status = state.get("last_result_status", "done")
         if status == "error":
-            return "Handling error..."
+            return _pick("handling_error")
         if status == "continue":
-            return "Planning next step..."
-        return "Composing response..."
+            return _pick("planning_next_step")
+        return _pick("composing_response")
 
     if node_name == "error_handler":
         strategy = state.get("error_strategy", "")
         if strategy == "retry_same":
-            return "Retrying..."
+            return _pick("retrying")
         if strategy == "retry_reformulate":
-            return "Trying different approach..."
+            return _pick("trying_different")
         if strategy == "skip_subtask":
-            return "Moving on..."
+            return _pick("moving_on")
         return None
 
     # Terminal nodes — no next status
