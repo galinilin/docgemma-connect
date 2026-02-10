@@ -37,20 +37,6 @@ class SessionListResponse(BaseModel):
     total: int
 
 
-class ToolInfo(BaseModel):
-    """Information about an available tool."""
-
-    name: str = Field(..., description="Tool name")
-    description: str = Field(..., description="Tool description")
-    args: dict[str, str] = Field(..., description="Argument name -> description mapping")
-
-
-class ToolListResponse(BaseModel):
-    """Response for listing tools."""
-
-    tools: list[ToolInfo]
-
-
 class HealthResponse(BaseModel):
     """Health check response."""
 
