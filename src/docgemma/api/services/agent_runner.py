@@ -10,6 +10,8 @@ from typing import TYPE_CHECKING, Any
 
 from langgraph.checkpoint.memory import MemorySaver
 
+import httpx
+
 from ..models.events import (
     AgentEvent,
     AgentStatusEvent,
@@ -29,6 +31,23 @@ if TYPE_CHECKING:
     from ...model import DocGemma
 
 logger = logging.getLogger(__name__)
+
+_ENDPOINT_DOWN_RESPONSE = (
+    "I'm sorry, I'm temporarily unable to process your request. Please try again in a few moments."
+)
+
+
+def _is_endpoint_error(exc: Exception) -> bool:
+    """Check if an exception indicates the model endpoint is unreachable."""
+    if isinstance(exc, httpx.HTTPStatusError):
+        return exc.response.status_code in (404, 502, 503, 504)
+    if isinstance(exc, (httpx.ConnectError, httpx.ReadError, httpx.TimeoutException)):
+        return True
+    # Check wrapped cause
+    cause = exc.__cause__ or exc.__context__
+    if cause and cause is not exc:
+        return _is_endpoint_error(cause)
+    return False
 
 
 class AgentRunner:
@@ -261,13 +280,23 @@ class AgentRunner:
                     # Graph finished or paused for real tool approval
                     break
             except Exception as e:
-                await event_queue.put(
-                    ErrorEvent(
-                        error_type="execution_error",
-                        message=str(e),
-                        recoverable=False,
+                if _is_endpoint_error(e):
+                    logger.warning(f"Model endpoint unavailable: {e}")
+                    await event_queue.put(
+                        CompletionEvent(
+                            final_response=_ENDPOINT_DOWN_RESPONSE,
+                            tool_calls_made=0,
+                            clinical_trace=None,
+                        )
                     )
-                )
+                else:
+                    await event_queue.put(
+                        ErrorEvent(
+                            error_type="execution_error",
+                            message=str(e),
+                            recoverable=False,
+                        )
+                    )
             finally:
                 await event_queue.put(None)  # Sentinel
 
@@ -288,6 +317,13 @@ class AgentRunner:
 
                 # ErrorEvent from graph task exception
                 if isinstance(item, ErrorEvent):
+                    yield item
+                    continue
+
+                # CompletionEvent from graph task (e.g. endpoint-down fallback)
+                if isinstance(item, CompletionEvent):
+                    completion_emitted = True
+                    session.status = SessionStatus.ACTIVE
                     yield item
                     continue
 
