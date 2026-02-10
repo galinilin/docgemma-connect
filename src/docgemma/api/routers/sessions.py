@@ -106,27 +106,6 @@ async def delete_session(
         raise HTTPException(status_code=404, detail=f"Session '{session_id}' not found")
 
 
-@router.get("/{session_id}/messages", response_model=list[MessageResponse])
-async def get_messages(
-    session_id: str,
-    store: SessionStore = Depends(get_session_store),
-) -> list[MessageResponse]:
-    """Get conversation history for a session."""
-    session = store.get(session_id)
-    if not session:
-        raise HTTPException(status_code=404, detail=f"Session '{session_id}' not found")
-
-    return [
-        MessageResponse(
-            role=msg.role,
-            content=msg.content,
-            timestamp=msg.timestamp,
-            metadata=msg.metadata,
-        )
-        for msg in session.messages
-    ]
-
-
 # =============================================================================
 # WebSocket Handler
 # =============================================================================

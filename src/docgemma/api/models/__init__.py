@@ -5,7 +5,6 @@ from .requests import CreateSessionRequest, SendMessageRequest, ToolApprovalRequ
 from .responses import (
     MessageResponse,
     SessionResponse,
-    ToolInfo,
 )
 from .events import (
     BaseEvent,
@@ -32,7 +31,6 @@ __all__ = [
     # Response models
     "SessionResponse",
     "MessageResponse",
-    "ToolInfo",
     # Event models
     "BaseEvent",
     "NodeStartEvent",
