@@ -4,10 +4,13 @@ from __future__ import annotations
 
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.staticfiles import StaticFiles
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .config import APIConfig, get_config
 from .routers import health_router, patients_router, sessions_router
@@ -18,6 +21,18 @@ if TYPE_CHECKING:
     from ..model import DocGemma
 
 logger = logging.getLogger(__name__)
+
+
+class SPAStaticFiles(StaticFiles):
+    """Static files handler that falls back to index.html for SPA routing."""
+
+    async def get_response(self, path: str, scope):
+        try:
+            return await super().get_response(path, scope)
+        except StarletteHTTPException as ex:
+            if ex.status_code == 404:
+                return await super().get_response("index.html", scope)
+            raise
 
 # Global model instance
 _model: DocGemma | None = None
@@ -103,6 +118,11 @@ def create_app(config: APIConfig | None = None) -> FastAPI:
     app.include_router(health_router, prefix="/api")
     app.include_router(sessions_router, prefix="/api")
     app.include_router(patients_router, prefix="/api")
+
+    # Serve built frontend SPA (no-op if static/ doesn't exist, e.g. during dev)
+    static_dir = Path(__file__).resolve().parent.parent.parent.parent / "static"
+    if static_dir.is_dir():
+        app.mount("/", SPAStaticFiles(directory=str(static_dir), html=True), name="spa")
 
     return app
 
