@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "631e10f2-c26e-4383-bccc-eb2b13e3dac4",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/5e01cb6f-c7e5-043c-3617-4b7d6e7d9660"
+  },
+  "date": "2025-01-13T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCBuaWdodCBzd2VhdHMsIG9yIHJlY2VudCB3ZWlnaHQgY2hhbmdlcy4gUmVwb3J0cyBvY2Nhc2lvbmFsIGZhdGlndWUgcmVsYXRlZCB0byBhY3Rpdml0eSBsaW1pdGF0aW9uIGZyb20gY2hlc3QgcGFpbi4KQ2FyZGlvdmFzY3VsYXI6IFJlcG9ydHMgcHJvZ3Jlc3NpdmUgZXhlcnRpb25hbCBjaGVzdCBwYWluIGFzIGRlc2NyaWJlZCBhYm92ZS4gRGVuaWVzIHBhbHBpdGF0aW9ucywgb3J0aG9wbmVhLCBwYXJveHlzbWFsIG5vY3R1cm5hbCBkeXNwbmVhLCBvciBzeW5jb3BlLgpSZXNwaXJhdG9yeTogUmVwb3J0cyBkeXNwbmVhIG9uIGV4ZXJ0aW9uIGFzc29jaWF0ZWQgd2l0aCBjaGVzdCBwYWluLiBEZW5pZXMgY291Z2gsIHdoZWV6aW5nLCBvciBoZW1vcHR5c2lzLgpHYXN0cm9pbnRlc3RpbmFsOiBEZW5pZXMgbmF1c2VhLCB2b21pdGluZywgZGlhcnJoZWEsIGNvbnN0aXBhdGlvbiwgb3IgYWJkb21pbmFsIHBhaW4uCk11c2N1bG9za2VsZXRhbDogRGVuaWVzIGFydGhyYWxnaWFzLCBteWFsZ2lhcywgb3Igam9pbnQgc3dlbGxpbmcuCk5ldXJvbG9naWNhbDogRGVuaWVzIGhlYWRhY2hlcywgZGl6emluZXNzLCBudW1ibmVzcywgdGluZ2xpbmcsIG9yIGZvY2FsIHdlYWtuZXNzLgpQZXJpcGhlcmFsIFZhc2N1bGFyOiBEZW5pZXMgbGVnIHBhaW4sIGNsYXVkaWNhdGlvbiwgb3IgbG93ZXIgZXh0cmVtaXR5IGVkZW1hLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:59fb6f15-7794-4b80-8e94-85a82a0fda0f"
+      }
+    ],
+    "period": {
+      "start": "2025-01-13T00:00:00+00:00",
+      "end": "2025-01-13T00:00:00+00:00"
+    }
+  }
+}

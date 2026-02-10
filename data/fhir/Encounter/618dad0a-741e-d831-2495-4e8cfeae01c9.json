@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "618dad0a-741e-d831-2495-4e8cfeae01c9",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "618dad0a-741e-d831-2495-4e8cfeae01c9"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "162673000",
+          "display": "General examination of patient (procedure)"
+        }
+      ],
+      "text": "General examination of patient (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/618dad0a-741e-d831-e40e-89bc0e65d90b",
+    "display": "Mr. Ben667 Moen819"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2026-01-16T00:05:20-08:00",
+        "end": "2026-01-16T00:20:20-08:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999980698",
+        "display": "Dr. Danelle47 Ondricka197"
+      }
+    }
+  ],
+  "period": {
+    "start": "2026-01-16T00:05:20-08:00",
+    "end": "2026-01-16T00:20:20-08:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|7985b913-07b9-3efe-9c88-1d1b80065745",
+        "display": "MANET COMMUNITY HEALTH CENTER, INC."
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|f480acd0-7ef1-350d-aae6-d8e7d53ace57",
+    "display": "MANET COMMUNITY HEALTH CENTER, INC."
+  }
+}

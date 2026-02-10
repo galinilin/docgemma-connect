@@ -1,0 +1,79 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "ffff1a73-40bd-4f06-e8e1-1c5f5de79eeb",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "identifier": [
+    {
+      "system": "urn:ietf:rfc:3986",
+      "value": "urn:uuid:dccea6b3-2808-6517-1a52-4bfd24a58158"
+    }
+  ],
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "34117-2",
+        "display": "History and physical note"
+      },
+      {
+        "system": "http://loinc.org",
+        "code": "51847-2",
+        "display": "Evaluation + Plan note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/ff09f16a-d80d-8b8f-9907-213819b87dc0"
+  },
+  "date": "2025-03-29T15:25:17.355-07:00",
+  "author": [
+    {
+      "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999958991",
+      "display": "Dr. Nicholle822 Satterfield305"
+    }
+  ],
+  "custodian": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|8d5880eb-1dd8-31ea-b7c5-21709f3bb341",
+    "display": "MELROSE INTERNAL MEDICINE ASSOC PC"
+  },
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "CjIwMjUtMDMtMjkKCiMgQ2hpZWYgQ29tcGxhaW50Ck5vIGNvbXBsYWludHMuCgojIEhpc3Rvcnkgb2YgUHJlc2VudCBJbGxuZXNzCkNpbmRpZTI4OCBDbGFyaW5kYTE5NiBpcyBhIDUzIHllYXItb2xkIG5vbmhpc3BhbmljIGJsYWNrIGZlbWFsZS4KCiMgU29jaWFsIEhpc3RvcnkKUGF0aWVudCBpcyBtYXJyaWVkLiBQYXRpZW50IGhhcyBuZXZlciBzbW9rZWQuCiBQYXRpZW50IGlkZW50aWZpZXMgYXMgaGV0ZXJvc2V4dWFsLgoKUGF0aWVudCBjb21lcyBmcm9tIGEgbWlkZGxlIHNvY2lvZWNvbm9taWMgYmFja2dyb3VuZC4KIFBhdGllbnQgaGFzIGNvbXBsZXRlZCBzb21lIGNvbGxlZ2UgY291cnNlcy4KUGF0aWVudCBjdXJyZW50bHkgaGFzIE1lZGljYWlkLgoKIyBBbGxlcmdpZXMKTm8gS25vd24gQWxsZXJnaWVzLgoKIyBNZWRpY2F0aW9ucwpObyBBY3RpdmUgTWVkaWNhdGlvbnMuCgojIEFzc2Vzc21lbnQgYW5kIFBsYW4KCgoKIyMgUGxhbgpQYXRpZW50IHdhcyBnaXZlbiB0aGUgZm9sbG93aW5nIGltbXVuaXphdGlvbnM6IGluZmx1ZW56YSwgc3BsaXQgdmlydXMsIHRyaXZhbGVudCwgcGYuIAo="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:ff09f16a-d80d-8b8f-a9de-ef0ae90580c4"
+      }
+    ],
+    "period": {
+      "start": "2025-03-29T15:25:17-07:00",
+      "end": "2025-03-29T15:40:17-07:00"
+    }
+  }
+}

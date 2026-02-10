@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "0fe6f8b4-5292-4ac8-9f56-de3e593e52ed",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/14608b8f-4f29-70ff-b78c-c4f23fe6dafb"
+  },
+  "date": "2025-09-01T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogQWxlcnQgYW5kIG9yaWVudGVkIHgzLCBubyBhY3V0ZSBkaXN0cmVzcy4gQXBwZWFycyBjb21mb3J0YWJsZS4KQ2FyZGlvdmFzY3VsYXI6IElycmVndWxhcmx5IGlycmVndWxhciByaHl0aG0gd2l0aCBub3JtYWwgUzEgYW5kIFMyLiBObyBtdXJtdXJzLCBydWJzLCBvciBnYWxsb3BzIGFwcHJlY2lhdGVkLiBDYXJvdGlkIHVwc3Ryb2tlcyBhcmUgYnJpc2ssIHdpdGhvdXQgYnJ1aXRzLiBObyBqdWd1bGFyIHZlbm91cyBkaXN0ZW50aW9uLgpQdWxtb25hcnk6IEx1bmdzIGNsZWFyIHRvIGF1c2N1bHRhdGlvbiBiaWxhdGVyYWxseS4gTm8gY3JhY2tsZXMsIHdoZWV6ZXMsIG9yIHJob25jaGkuCkFiZG9tZW46IFNvZnQsIG5vbi10ZW5kZXIsIG5vbi1kaXN0ZW5kZWQuIE5vcm1vYWN0aXZlIGJvd2VsIHNvdW5kcy4gTm8gaGVwYXRvc3BsZW5vbWVnYWx5LgpFeHRyZW1pdGllczogTm8gY2x1YmJpbmcsIGN5YW5vc2lzLCBvciBlZGVtYS4gUGVyaXBoZXJhbCBwdWxzZXMgMisgYW5kIHN5bW1ldHJpYyBiaWxhdGVyYWxseS4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:fe1daae8-cb07-444d-a3de-31d1b947b833"
+      }
+    ],
+    "period": {
+      "start": "2025-09-01T00:00:00+00:00",
+      "end": "2025-09-01T00:00:00+00:00"
+    }
+  }
+}

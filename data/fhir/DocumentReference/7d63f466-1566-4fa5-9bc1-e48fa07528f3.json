@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "7d63f466-1566-4fa5-9bc1-e48fa07528f3",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/5ccff5ae-a4c8-c4ce-1c07-0fe2d3ae8299"
+  },
+  "date": "2024-04-10T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCkFjdXRlLW9uc2V0IHNldmVyZSByaWdodCBmbGFuayBwYWluIHJhZGlhdGluZyB0byBncm9pbi4KCkhJU1RPUlkgT0YgUFJFU0VOVCBJTExORVNTCkNhdGhlcmluYSBpcyBhIDM4LXllYXItb2xkIGZlbWFsZSBwcmVzZW50aW5nIHdpdGggYWN1dGUtb25zZXQgc2V2ZXJlIHJpZ2h0IGZsYW5rIHBhaW4sIHdoaWNoIGJlZ2FuIHRvZGF5LCAyMDI0LTA0LTEwLiBUaGUgcGFpbiBpcyBkZXNjcmliZWQgYXMgY29saWNreSBhbmQgc2hhcnAsIHJhZGlhdGluZyBmcm9tIGhlciByaWdodCBmbGFuayB0byB0aGUgcmlnaHQgZ3JvaW4uIFNoZSByYXRlcyB0aGUgcGFpbiBhcyA4LzEwIGF0IGl0cyB3b3JzdC4gU2hlIHJlcG9ydHMgYXNzb2NpYXRlZCBuYXVzZWEgYnV0IGRlbmllcyB2b21pdGluZy4gU2hlIGRlbmllcyBhbnkgZHlzdXJpYSwgaGVtYXR1cmlhLCBmZXZlciwgY2hpbGxzLCBvciB1cmluYXJ5IGZyZXF1ZW5jeS4gU2hlIGhhcyBubyBwcmlvciBoaXN0b3J5IG9mIGtpZG5leSBzdG9uZXMgb3Igc2ltaWxhciBzeW1wdG9tcy4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:0c892f59-8fbb-4600-8563-b2d9d0471925"
+      }
+    ],
+    "period": {
+      "start": "2024-04-10T00:00:00+00:00",
+      "end": "2024-04-10T00:00:00+00:00"
+    }
+  }
+}

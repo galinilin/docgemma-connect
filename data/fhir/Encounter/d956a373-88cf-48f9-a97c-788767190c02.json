@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "d956a373-88cf-48f9-a97c-788767190c02",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Cardiology Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-02-16T00:00:00+00:00",
+    "end": "2025-02-16T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/14608b8f-4f29-70ff-b78c-c4f23fe6dafb"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "42343007",
+          "display": "Congestive heart failure"
+        }
+      ]
+    }
+  ]
+}

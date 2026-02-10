@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "e89c2c45-eaa3-4808-9878-aad2ad26b24d",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Respiratory Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-03-28T00:00:00+00:00",
+    "end": "2024-03-28T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/33ab2d2e-5ae3-7b2d-2066-47c13640e6a3"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "13645005",
+          "display": "Chronic obstructive pulmonary disease"
+        }
+      ]
+    }
+  ]
+}

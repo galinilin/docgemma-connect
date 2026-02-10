@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "23f9ab85-9613-468d-9bb8-f751d21ed4ca",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "13457-7",
+        "display": "LDL Cholesterol"
+      }
+    ],
+    "text": "LDL Cholesterol"
+  },
+  "subject": {
+    "reference": "Patient/ff09f16a-d80d-8b8f-9907-213819b87dc0"
+  },
+  "encounter": {
+    "reference": "urn:uuid:5b20536c-88f7-41ed-ae85-7ab40e8cd43d"
+  },
+  "effectiveDateTime": "2024-11-21T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 82.13,
+    "unit": "mg/dL",
+    "system": "http://unitsofmeasure.org"
+  }
+}

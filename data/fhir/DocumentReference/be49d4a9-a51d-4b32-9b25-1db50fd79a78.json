@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "be49d4a9-a51d-4b32-9b25-1db50fd79a78",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/ed1192c8-8b0d-8f03-0139-7964d94b3fc1"
+  },
+  "date": "2024-02-05T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCBuaWdodCBzd2VhdHMsIG9yIHNpZ25pZmljYW50IHdlaWdodCBjaGFuZ2VzLiBSZXBvcnRzIG9jY2FzaW9uYWwgbWlsZCBkaXNjb21mb3J0IHJlbGF0ZWQgdG8gdGhlIGFiZG9taW5hbCBidWxnZS4KR2FzdHJvaW50ZXN0aW5hbDogUmVwb3J0cyBhIHJlZHVjaWJsZSBwZXJpdW1iaWxpY2FsIGJ1bGdlIHdpdGggb2NjYXNpb25hbCBtaWxkIGRpc2NvbWZvcnQuIERlbmllcyBuYXVzZWEsIHZvbWl0aW5nLCBkaWFycmhlYSwgY29uc3RpcGF0aW9uLCBtZWxlbmEsIGhlbWF0b2NoZXppYSwgb3IgY2hhbmdlcyBpbiBib3dlbCBoYWJpdHMuIE5vIGRpZmZpY3VsdHkgc3dhbGxvd2luZy4KQ2FyZGlvdmFzY3VsYXI6IERlbmllcyBjaGVzdCBwYWluLCBwYWxwaXRhdGlvbnMsIG9yIGR5c3BuZWEgb24gZXhlcnRpb24uClB1bG1vbmFyeTogRGVuaWVzIGNvdWdoLCBzaG9ydG5lc3Mgb2YgYnJlYXRoLCBvciB3aGVlemluZy4KTXVzY3Vsb3NrZWxldGFsOiBEZW5pZXMgam9pbnQgcGFpbiwgc3RpZmZuZXNzLCBvciBtdXNjbGUgd2Vha25lc3MuCkludGVndW1lbnRhcnk6IERlbmllcyByYXNoZXMsIGxlc2lvbnMsIG9yIGNoYW5nZXMgaW4gc2tpbiB0ZXh0dXJlLiBTa2luIG92ZXIgdGhlIGJ1bGdlIGlzIHVucmVtYXJrYWJsZS4KTmV1cm9sb2dpY2FsOiBEZW5pZXMgaGVhZGFjaGVzLCBkaXp6aW5lc3MsIHN5bmNvcGUsIG9yIG51bWJuZXNzL3RpbmdsaW5nLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:4d582ffa-4c53-4894-8f39-eefc9cded395"
+      }
+    ],
+    "period": {
+      "start": "2024-02-05T00:00:00+00:00",
+      "end": "2024-02-05T00:00:00+00:00"
+    }
+  }
+}

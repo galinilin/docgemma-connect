@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "4f91e4df-95a6-4e9b-9572-8dd06c5c51d7",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Endocrine Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-03-13T00:00:00+00:00",
+    "end": "2024-03-13T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/d2eba07f-ffa9-807a-f0de-6f79b1bfa826"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "40930008",
+          "display": "Hypothyroidism"
+        }
+      ]
+    }
+  ]
+}

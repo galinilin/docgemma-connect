@@ -1,0 +1,47 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "e38dfa58-e3f8-4477-a81e-3614e854b853",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "34117-2",
+        "display": "History and Physical note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/9b8a9da0-4c66-f703-02c0-cf55279ca489"
+  },
+  "date": "2025-03-04",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "TXIuIEh5bWFuODkgQmluczYzNiwgYSBtYWxlIHBhdGllbnQgYm9ybiBvbiBPY3RvYmVyIDI5LCAxOTcwLCBmaXJzdCBwcmVzZW50ZWQgdG8gQ2FyZGlvdmFzY3VsYXIgU3VyZ2VyeSBvbiBNYXJjaCA0LCAyMDI1LiBIaXMgcHJpbWFyeSBkaWFnbm9zaXMgYXQgdGhpcyB2aXNpdCB3YXMgc2lnbmlmaWNhbnQgY29yb25hcnkgYXJ0ZXJ5IGRpc2Vhc2UuCgpEdWUgdG8gdGhlIGV4dGVudCBhbmQgc2V2ZXJpdHkgb2YgaGlzIGNvcm9uYXJ5IGFydGVyeSBkaXNlYXNlLCBzdXJnaWNhbCBpbnRlcnZlbnRpb24gd2FzIGRlZW1lZCBuZWNlc3NhcnkuIFRoZSBwYXRpZW50IHdhcyBpZGVudGlmaWVkIGFzIHJlcXVpcmluZyBDb3JvbmFyeSBBcnRlcnkgQnlwYXNzIEdyYWZ0aW5nIChDQUJHKSB0byBhY2hpZXZlIG15b2NhcmRpYWwgcmV2YXNjdWxhcml6YXRpb24uIFRoaXMgdHJlYXRtZW50IHBsYW4gd2FzIGVzdGFibGlzaGVkIHRvIGFkZHJlc3MgdGhlIGlzY2hlbWljIGJ1cmRlbiBhbmQgaW1wcm92ZSBjYXJkaWFjIGZ1bmN0aW9uLgoKVGhlIGNsaW5pY2FsIHRyYWplY3RvcnkgZm9sbG93aW5nIHRoZSBkZWNpc2lvbiBmb3IgQ0FCRyB3aWxsIGZvY3VzIG9uIHRoZSBzdWNjZXNzZnVsIGV4ZWN1dGlvbiBvZiB0aGUgcHJvY2VkdXJlLCBwb3N0LW9wZXJhdGl2ZSByZWNvdmVyeSwgYW5kIHN1YnNlcXVlbnQgbWFuYWdlbWVudCBvZiBoaXMgY29yb25hcnkgYXJ0ZXJ5IGRpc2Vhc2UgdGhyb3VnaCBtZWRpY2FsIHRoZXJhcHkgYW5kIGxpZmVzdHlsZSBtb2RpZmljYXRpb25zLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "f482972b-c7bc-4cd0-ba0b-e9152a548084",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Dermatology Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-04-13T00:00:00+00:00",
+    "end": "2024-04-13T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/3371e581-d99e-a9de-9ed2-4532b7a66ead"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "43116000",
+          "display": "Eczema"
+        }
+      ]
+    }
+  ]
+}

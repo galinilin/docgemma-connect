@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "ba2afff3-9d90-42f4-801f-10b5511a79a3",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Urology Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-01-31T00:00:00+00:00",
+    "end": "2025-01-31T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/5ccff5ae-a4c8-c4ce-1c07-0fe2d3ae8299"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "266569009",
+          "display": "Benign prostatic hyperplasia"
+        }
+      ]
+    }
+  ]
+}

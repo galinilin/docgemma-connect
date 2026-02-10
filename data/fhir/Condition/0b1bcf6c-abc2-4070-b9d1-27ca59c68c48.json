@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "0b1bcf6c-abc2-4070-b9d1-27ca59c68c48",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "235595009",
+        "display": "Gastroesophageal reflux disease"
+      }
+    ],
+    "text": "Gastroesophageal reflux disease"
+  },
+  "subject": {
+    "reference": "Patient/dbad602c-0b81-47e5-9016-0f079c6b8cdd"
+  },
+  "encounter": {
+    "reference": "urn:uuid:50da0408-f536-423f-b860-169e15faad4e"
+  },
+  "onsetDateTime": "2024-12-24T00:00:00+00:00"
+}

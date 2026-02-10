@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "48a8028b-6ce8-4571-a64f-e51e2d31e056",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "4544-3",
+        "display": "Hematocrit"
+      }
+    ],
+    "text": "Hematocrit"
+  },
+  "subject": {
+    "reference": "Patient/79c53c80-7350-3e2a-d87b-d7f512721249"
+  },
+  "encounter": {
+    "reference": "urn:uuid:c961ebe1-4797-4cea-a07c-a5a994ea19bd"
+  },
+  "effectiveDateTime": "2025-12-22T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 40.25,
+    "unit": "%",
+    "system": "http://unitsofmeasure.org"
+  }
+}

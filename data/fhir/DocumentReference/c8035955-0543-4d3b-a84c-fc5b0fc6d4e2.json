@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "c8035955-0543-4d3b-a84c-fc5b0fc6d4e2",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/3b55dc50-2127-6fd3-2d34-629ed98a9152"
+  },
+  "date": "2025-09-05T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogV2VsbC1hcHBlYXJpbmcsIGNvb3BlcmF0aXZlLCBpbiBubyBhY3V0ZSBkaXN0cmVzcy4KQWJkb21lbjogU29mdCwgZ3JhdmlkLCBub24tdGVuZGVyIHRvIHN1cGVyZmljaWFsIGFuZCBkZWVwIHBhbHBhdGlvbi4gRnVuZGFsIGhlaWdodCBjb25zaXN0ZW50IHdpdGggZXN0aW1hdGVkIGdlc3RhdGlvbmFsIGFnZS4gQm93ZWwgc291bmRzIG5vcm1vYWN0aXZlLgpQZWx2aWMgRXhhbTogRXh0ZXJuYWwgR2VuaXRhbGlhOiBOb3JtYWwgZmVtYWxlIGRpc3RyaWJ1dGlvbiwgbm8gbGVzaW9ucywgZXJ5dGhlbWEsIG9yIGRpc2NoYXJnZS4gVmFnaW5hbDogTXVjb3NhIHBpbmsgYW5kIG1vaXN0LCBubyBsZXNpb25zIG9yIGRpc2NoYXJnZS4gQ2Vydml4OiBDbG9zZWQsIHBhcm91cywgbm9uLXRlbmRlciB0byBwYWxwYXRpb24gb3IgbW90aW9uLiBObyBjZXJ2aWNhbCBsZXNpb25zLiBVdGVydXM6IEdyYXZpZCB1dGVydXMsIHNpemUgY29uc2lzdGVudCB3aXRoIGVzdGltYXRlZCBnZXN0YXRpb25hbCBhZ2UsIG5vbi10ZW5kZXIuIEFkbmV4YTogQmlsYXRlcmFsbHkgdGVuZGVyIHRvIHBhbHBhdGlvbiwgbm8gbWFzc2VzIGFwcHJlY2lhdGVkLgpFeHRyZW1pdGllczogTm8gZWRlbWEsIGN5YW5vc2lzLCBvciBjbHViYmluZy4KU2tpbjogV2FybSwgZHJ5LCBpbnRhY3QsIHdpdGhvdXQgcmFzaGVzIG9yIHBhbGxvci4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:4c504cd0-aeee-49f8-9c53-73b1b9422f61"
+      }
+    ],
+    "period": {
+      "start": "2025-09-05T00:00:00+00:00",
+      "end": "2025-09-05T00:00:00+00:00"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "54df78f6-7c28-4cdb-ab04-7475ac976a42",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/467741c8-0d81-5b8e-4f7b-f966cbdd5dd4"
+  },
+  "date": "2026-01-14T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCjYxLXllYXItb2xkIG1hbGUgcHJlc2VudGluZyB3aXRoIHNwb250YW5lb3VzIGxlZnQgcG5ldW1vdGhvcmF4LgoKSElTVE9SWSBPRiBQUkVTRU5UIElMTE5FU1MKQmxhaXIgaXMgYSA2MS15ZWFyLW9sZCBtYWxlIHByZXNlbnRpbmcgdG8gdGhlIENoZXN0IFN1cmdlcnkgY2xpbmljIHRvZGF5IHdpdGggYSBuZXcgZGlhZ25vc2lzIG9mIHNwb250YW5lb3VzIGxlZnQgcG5ldW1vdGhvcmF4LiBIZSByZXBvcnRzIGFjdXRlIG9uc2V0IG9mIGxlZnQtc2lkZWQgcGxldXJpdGljIGNoZXN0IHBhaW4gYW5kIHNob3J0bmVzcyBvZiBicmVhdGggdG9kYXksIDIwMjYtMDEtMTQuIFN5bXB0b21zIGJlZ2FuIHN1ZGRlbmx5IHdpdGhvdXQgcHJlY2VkaW5nIHRyYXVtYSBvciBzdHJlbnVvdXMgYWN0aXZpdHkuIEhlIGRlbmllcyBjb3VnaCwgZmV2ZXIsIG9yIGhlbW9wdHlzaXMuIEhpcyBtZWRpY2FsIGhpc3RvcnkgaXMgc2lnbmlmaWNhbnQgZm9yIG5vbi1zbWFsbCBjZWxsIGx1bmcgY2FuY2VyIChUTk0gc3RhZ2UgMSkgZGlhZ25vc2VkIGluIDIwMjEgYW5kIGEgc29saXRhcnkgcHVsbW9uYXJ5IG5vZHVsZSBpZGVudGlmaWVkIGluIDIwMjUuIEhlIGlzIGN1cnJlbnRseSBub3QgdGFraW5nIGFueSBtZWRpY2F0aW9ucy4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:4133230e-bc07-446c-8739-a48ec0f91c88"
+      }
+    ],
+    "period": {
+      "start": "2026-01-14T00:00:00+00:00",
+      "end": "2026-01-14T00:00:00+00:00"
+    }
+  }
+}

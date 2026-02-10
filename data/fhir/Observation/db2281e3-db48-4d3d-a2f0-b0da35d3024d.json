@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "db2281e3-db48-4d3d-a2f0-b0da35d3024d",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "4537-7",
+        "display": "ESR [Erythrocyte Sedimentation Rate]"
+      }
+    ],
+    "text": "ESR [Erythrocyte Sedimentation Rate]"
+  },
+  "subject": {
+    "reference": "Patient/bdd98669-825f-4d4e-74a2-e91ee3f05afb"
+  },
+  "encounter": {
+    "reference": "urn:uuid:62b1b8e3-2803-40bb-85d7-7084b474fb3d"
+  },
+  "effectiveDateTime": "2025-10-17T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 15.13,
+    "unit": "mm/h",
+    "system": "http://unitsofmeasure.org"
+  }
+}

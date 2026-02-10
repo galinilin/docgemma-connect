@@ -1,0 +1,39 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "id": "1f4f7a58-da67-4703-955e-8cfb8d3161a7",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+        "code": "active",
+        "display": "Active"
+      }
+    ]
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+        "code": "confirmed",
+        "display": "Confirmed"
+      }
+    ]
+  },
+  "criticality": "high",
+  "code": {
+    "text": "Aspirin"
+  },
+  "patient": {
+    "reference": "Patient/ed513785-c1da-aebb-0b45-621c89e85d44"
+  },
+  "reaction": [
+    {
+      "manifestation": [
+        {
+          "text": "Bronchospasm"
+        }
+      ],
+      "severity": "severe"
+    }
+  ]
+}

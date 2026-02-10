@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "26dc324b-b7c3-48ba-aeb2-f4c15abba789",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/17b5b8a5-5eb1-bebe-ce76-a34acf418a14"
+  },
+  "date": "2025-11-04T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogNzQteWVhci1vbGQgbWFsZSwgYXdha2UsIGFsZXJ0LCBhcHBlYXJzIGNvbWZvcnRhYmxlLCBubyBhY3V0ZSBkaXN0cmVzcy4KQ2FyZGlvdmFzY3VsYXI6IFJlZ3VsYXIgcmF0ZSBhbmQgcmh5dGhtLCBTMVMyIHByZXNlbnQsIG5vIG11cm11cnMsIHJ1YnMsIG9yIGdhbGxvcHMuIEpWUCBub3QgZWxldmF0ZWQuCkx1bmdzOiBDbGVhciB0byBhdXNjdWx0YXRpb24gYmlsYXRlcmFsbHksIG5vIHdoZWV6ZXMsIHJhbGVzLCBvciByaG9uY2hpLiBHb29kIGFpciBlbnRyeS4KQWJkb21lbjogU29mdCwgbm9uLXRlbmRlciwgbm9uLWRpc3RlbmRlZC4gQm93ZWwgc291bmRzIHByZXNlbnQuIE5vIG9yZ2Fub21lZ2FseSBvciBtYXNzZXMgcGFscGF0ZWQuCkV4dHJlbWl0aWVzOiAxKyBwaXR0aW5nIGVkZW1hIG5vdGVkIGJpbGF0ZXJhbGx5IGluIGFua2xlcyBhbmQgcHJldGliaWFsIGFyZWFzLiBQdWxzZXMgMisgYW5kIHN5bW1ldHJpYy4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:bbbf2306-b6ed-419e-83de-d12c46878ee4"
+      }
+    ],
+    "period": {
+      "start": "2025-11-04T00:00:00+00:00",
+      "end": "2025-11-04T00:00:00+00:00"
+    }
+  }
+}

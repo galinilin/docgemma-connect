@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "151514db-f648-4b20-9b66-3caa60c52dd6",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "5770-3",
+        "display": "Leukocyte esterase"
+      }
+    ],
+    "text": "Leukocyte esterase"
+  },
+  "subject": {
+    "reference": "Patient/1caa4b4a-c7f3-76b0-fe16-e04fc5a106f9"
+  },
+  "encounter": {
+    "reference": "urn:uuid:501346e7-d082-4d68-bc50-4493d1aae28c"
+  },
+  "effectiveDateTime": "2025-11-14T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 0.0,
+    "unit": "{presence}",
+    "system": "http://unitsofmeasure.org"
+  }
+}

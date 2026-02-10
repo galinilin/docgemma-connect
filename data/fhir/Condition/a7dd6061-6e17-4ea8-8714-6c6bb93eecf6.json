@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "a7dd6061-6e17-4ea8-8714-6c6bb93eecf6",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "233604007",
+        "display": "Pneumonia"
+      }
+    ],
+    "text": "Pneumonia"
+  },
+  "subject": {
+    "reference": "Patient/cf90a4c2-2eff-de73-6b3e-904aaae6f1b8"
+  },
+  "encounter": {
+    "reference": "urn:uuid:ff888e3d-f3d2-4950-8c04-9b2dcfbdfd7c"
+  },
+  "onsetDateTime": "2024-07-12T00:00:00+00:00"
+}

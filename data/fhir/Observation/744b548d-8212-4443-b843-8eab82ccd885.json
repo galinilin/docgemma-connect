@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "744b548d-8212-4443-b843-8eab82ccd885",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "718-7",
+        "display": "Hemoglobin"
+      }
+    ],
+    "text": "Hemoglobin"
+  },
+  "subject": {
+    "reference": "Patient/65ba7fb5-d904-3959-5e3a-ab460f62762f"
+  },
+  "encounter": {
+    "reference": "urn:uuid:54dae444-7841-4761-a097-b00213eac182"
+  },
+  "effectiveDateTime": "2025-08-14T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 16.7,
+    "unit": "g/dL",
+    "system": "http://unitsofmeasure.org"
+  }
+}

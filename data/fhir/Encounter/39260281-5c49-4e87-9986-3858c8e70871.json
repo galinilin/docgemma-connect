@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "39260281-5c49-4e87-9986-3858c8e70871",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Radiology Reports Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-03-09T00:00:00+00:00",
+    "end": "2024-03-09T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/6cb591ce-3465-f678-3a3e-f8fb8eb2e7c7"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "128613002",
+          "display": "Cerebral lesion"
+        }
+      ]
+    }
+  ]
+}

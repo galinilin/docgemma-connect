@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "664edbe7-48ea-467a-94ce-244f7c204a32",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Ophthalmology Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-04-01T00:00:00+00:00",
+    "end": "2024-04-01T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/8f6da6b5-fdfa-2dc3-9745-441b9e9b64cd"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "77075001",
+          "display": "Primary open-angle glaucoma"
+        }
+      ]
+    }
+  ]
+}

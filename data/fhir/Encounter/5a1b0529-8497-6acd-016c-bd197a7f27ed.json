@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "5a1b0529-8497-6acd-016c-bd197a7f27ed",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "5a1b0529-8497-6acd-016c-bd197a7f27ed"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "162673000",
+          "display": "General examination of patient (procedure)"
+        }
+      ],
+      "text": "General examination of patient (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/5a1b0529-8497-6acd-eb98-a1baff1b00ca",
+    "display": "Ms. Leonila462 Leuschke194"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2024-07-19T08:43:00-07:00",
+        "end": "2024-07-19T08:58:00-07:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999964494",
+        "display": "Dr. Janee223 Harvey63"
+      }
+    }
+  ],
+  "period": {
+    "start": "2024-07-19T08:43:00-07:00",
+    "end": "2024-07-19T08:58:00-07:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|f10e2877-98fb-3af1-a88b-9f747c80436b",
+        "display": "RHEUMATOLOGY AND INTERNAL MEDICINE ASSOCIATES PC"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|411f14a5-de79-3e08-81d6-301270cc2275",
+    "display": "RHEUMATOLOGY AND INTERNAL MEDICINE ASSOCIATES PC"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "391f1603-e873-4bad-a789-165e7c993108",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Paediatric Surgery Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-10-11T00:00:00+00:00",
+    "end": "2024-10-11T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/c51f5cd5-f860-77ac-33e9-041091373b6f"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "78668007",
+          "display": "Pyloric stenosis"
+        }
+      ]
+    }
+  ]
+}

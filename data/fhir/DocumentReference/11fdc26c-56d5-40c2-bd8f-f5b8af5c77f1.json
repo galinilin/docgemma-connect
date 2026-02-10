@@ -1,0 +1,47 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "11fdc26c-56d5-40c2-bd8f-f5b8af5c77f1",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "34117-2",
+        "display": "History and Physical note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/ed1192c8-8b0d-8f03-0139-7964d94b3fc1"
+  },
+  "date": "2024-03-23",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "TXMuIElzYWJlbGEgRXNjYW1pbGxhLCBib3JuIEF1Z3VzdCAxOSwgMTk4MCwgaGFzIHByZXNlbnRlZCB0byBHZW5lcmFsIFN1cmdlcnkgb24gdHdvIG9jY2FzaW9ucyB3aXRoaW4gYSByZWNlbnQgcGVyaW9kLiBIZXIgaW5pdGlhbCB2aXNpdCBvbiBGZWJydWFyeSA1LCAyMDI0LCB3YXMgZm9yIGV2YWx1YXRpb24gb2YgYW4gdW1iaWxpY2FsIGhlcm5pYS4gCgpTdWJzZXF1ZW50bHksIG9uIE1hcmNoIDIzLCAyMDI0LCBNcy4gRXNjYW1pbGxhIHByZXNlbnRlZCBhZ2FpbiB0byBHZW5lcmFsIFN1cmdlcnksIHRoaXMgdGltZSB3aXRoIGEgbmV3IGRpYWdub3NpcyBvZiBhbiBpbmd1aW5hbCBoZXJuaWEuIFRoZXNlIHR3byBkaXN0aW5jdCBoZXJuaWEgZGlhZ25vc2VzIHdlcmUgbWFkZSBhcHByb3hpbWF0ZWx5IHNpeCB3ZWVrcyBhcGFydC4gCgpUaGUgcGF0aWVudCdzIGNsaW5pY2FsIHRyYWplY3RvcnkgaW5kaWNhdGVzIHRoZSBkZXZlbG9wbWVudCBvZiB0d28gc2VwYXJhdGUgYWJkb21pbmFsIHdhbGwgZGVmZWN0cyByZXF1aXJpbmcgZ2VuZXJhbCBzdXJnaWNhbCBhc3Nlc3NtZW50LiBGdXJ0aGVyIGRldGFpbHMgcmVnYXJkaW5nIG1hbmFnZW1lbnQgcGxhbnMsIHN1cmdpY2FsIGludGVydmVudGlvbnMsIGFuZCBwb3N0LW9wZXJhdGl2ZSBjb3Vyc2UgZm9yIGVpdGhlciBjb25kaXRpb24gYXJlIG5vdCBhdmFpbGFibGUgaW4gdGhlIHByb3ZpZGVkIHZpc2l0IGhpc3RvcnksIGJ1dCB0aGUgcHJlc2VuY2Ugb2YgdGhlc2UgZGlhZ25vc2VzIHN1Z2dlc3RzIHBvdGVudGlhbCBmb3Igc3VyZ2ljYWwgcmVwYWlyLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ]
+}

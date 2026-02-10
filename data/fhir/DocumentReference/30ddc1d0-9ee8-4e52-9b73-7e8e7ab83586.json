@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "30ddc1d0-9ee8-4e52-9b73-7e8e7ab83586",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/ed513785-c1da-aebb-0b45-621c89e85d44"
+  },
+  "date": "2025-09-16T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogV2VsbC1hcHBlYXJpbmcsIGluIG5vIGFjdXRlIGRpc3RyZXNzLiBBbGVydCBhbmQgb3JpZW50ZWQuCkNhcmRpb3Zhc2N1bGFyOiBSZWd1bGFyIHJhdGUgYW5kIHJoeXRobSwgUzEvUzIgYXVkaWJsZSwgbm8gbXVybXVycywgcnVicywgb3IgZ2FsbG9wcy4gTm8gcGVyaXBoZXJhbCBlZGVtYS4KUmVzcGlyYXRvcnk6IEx1bmdzIGNsZWFyIHRvIGF1c2N1bHRhdGlvbiBiaWxhdGVyYWxseSwgbm8gd2hlZXplcywgcmFsZXMsIG9yIHJob25jaGkuIE5vcm1hbCByZXNwaXJhdG9yeSBlZmZvcnQuCkFiZG9tZW46IEdyYXZpZCwgc29mdCwgbm9uLXRlbmRlciB0byBwYWxwYXRpb24uIEZ1bmRhbCBoZWlnaHQgY29uc2lzdGVudCB3aXRoIDI4IHdlZWtzIGdlc3RhdGlvbi4gRmV0YWwgaGVhcnQgdG9uZXMgYXVkaWJsZS4KRXh0cmVtaXRpZXM6IE5vIGNsdWJiaW5nLCBjeWFub3Npcywgb3IgZWRlbWEu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:b66e5543-89fd-4e20-9043-eb5a8b7b25de"
+      }
+    ],
+    "period": {
+      "start": "2025-09-16T00:00:00+00:00",
+      "end": "2025-09-16T00:00:00+00:00"
+    }
+  }
+}

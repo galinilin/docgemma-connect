@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "5e01cb6f-c7e5-043c-1151-d986c882fa02",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "5e01cb6f-c7e5-043c-1151-d986c882fa02"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "162673000",
+          "display": "General examination of patient (procedure)"
+        }
+      ],
+      "text": "General examination of patient (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/5e01cb6f-c7e5-043c-3617-4b7d6e7d9660",
+    "display": "Mr. Emory494 Pasquale620 Borer986"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2025-06-04T18:44:00-07:00",
+        "end": "2025-06-04T18:59:00-07:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999972190",
+        "display": "Dr. Cora299 Pagac496"
+      }
+    }
+  ],
+  "period": {
+    "start": "2025-06-04T18:44:00-07:00",
+    "end": "2025-06-04T18:59:00-07:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|fd8b940f-d153-39d0-9445-313aa12f8a83",
+        "display": "FAIRVIEW HOSPITAL"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|2fbb592e-2154-3a4d-856e-467d7ba5bed7",
+    "display": "FAIRVIEW HOSPITAL"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "5dc71cd4-558d-4db3-b835-cfc374f74a78",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Gastroenterology Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-09-03T00:00:00+00:00",
+    "end": "2024-09-03T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/76d630b6-f8f3-8025-2766-023a473178bf"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "34000006",
+          "display": "Crohn disease"
+        }
+      ]
+    }
+  ]
+}

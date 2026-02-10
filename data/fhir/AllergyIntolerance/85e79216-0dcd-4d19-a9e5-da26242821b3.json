@@ -1,0 +1,39 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "id": "85e79216-0dcd-4d19-a9e5-da26242821b3",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+        "code": "active",
+        "display": "Active"
+      }
+    ]
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+        "code": "confirmed",
+        "display": "Confirmed"
+      }
+    ]
+  },
+  "criticality": "high",
+  "code": {
+    "text": "Iodine contrast"
+  },
+  "patient": {
+    "reference": "Patient/14608b8f-4f29-70ff-b78c-c4f23fe6dafb"
+  },
+  "reaction": [
+    {
+      "manifestation": [
+        {
+          "text": "Anaphylaxis"
+        }
+      ],
+      "severity": "severe"
+    }
+  ]
+}

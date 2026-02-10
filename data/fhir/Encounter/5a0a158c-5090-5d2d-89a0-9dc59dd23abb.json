@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "5a0a158c-5090-5d2d-89a0-9dc59dd23abb",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "5a0a158c-5090-5d2d-89a0-9dc59dd23abb"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "162673000",
+          "display": "General examination of patient (procedure)"
+        }
+      ],
+      "text": "General examination of patient (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/5a0a158c-5090-5d2d-002f-b32e87281de6",
+    "display": "Mr. Bill567 Bergstrom287"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2023-05-03T06:20:34-07:00",
+        "end": "2023-05-03T06:35:34-07:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999977595",
+        "display": "Dr. Luis Miguel102 Gamboa193"
+      }
+    }
+  ],
+  "period": {
+    "start": "2023-05-03T06:20:34-07:00",
+    "end": "2023-05-03T06:35:34-07:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|9185a49f-22c1-3487-a9fb-b04f00a15861",
+        "display": "NORTH END COMMUNITY HEALTH COMMITTEE INC"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|9f2f60a6-87a4-3f45-b753-b63b5b7e9993",
+    "display": "NORTH END COMMUNITY HEALTH COMMITTEE INC"
+  }
+}

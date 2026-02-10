@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "7bfba494-1e3f-4f5f-aa27-b29debba98cb",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Pathology Reports Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-03-31T00:00:00+00:00",
+    "end": "2025-03-31T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/8b6f1762-8814-6301-b09a-0647839deb7c"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "68496003",
+          "display": "Colorectal adenoma"
+        }
+      ]
+    }
+  ]
+}

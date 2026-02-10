@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "f76599ce-e3e5-42d3-972a-cb3397c0cb7e",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/ed513785-c1da-aebb-0b45-621c89e85d44"
+  },
+  "date": "2025-09-16T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCBnZW5lcmFsaXplZCB3ZWFrbmVzcywgb3Igc2lnbmlmaWNhbnQgZmF0aWd1ZSBiZXlvbmQgbm9ybWFsIHByZWduYW5jeS1yZWxhdGVkIHRpcmVkbmVzcy4KRW5kb2NyaW5lOiBEZW5pZXMgcG9seXVyaWEsIHBvbHlkaXBzaWEsIG9yIHBvbHlwaGFnaWEuCkNhcmRpb3Zhc2N1bGFyOiBEZW5pZXMgY2hlc3QgcGFpbiwgcGFscGl0YXRpb25zLCBvciBuZXcgb25zZXQgZWRlbWEuClJlc3BpcmF0b3J5OiBEZW5pZXMgY291Z2gsIHNob3J0bmVzcyBvZiBicmVhdGgsIG9yIHdoZWV6aW5nLgpHYXN0cm9pbnRlc3RpbmFsOiBEZW5pZXMgbmF1c2VhLCB2b21pdGluZywgZGlhcnJoZWEsIG9yIGNvbnN0aXBhdGlvbi4KR2VuaXRvdXJpbmFyeTogRGVuaWVzIGR5c3VyaWEsIHVyZ2VuY3ksIGZyZXF1ZW5jeSwgb3IgdmFnaW5hbCBibGVlZGluZy4gTm8gbGVha2FnZSBvZiBmbHVpZC4gVXJpbmUgc3R1ZGllcyBzaG93IHByb3RlaW4gMi4zMyBtZy9kTCBhbmQgcEggMi42My4KSGVtYXRvbG9naWM6IERlbmllcyBlYXN5IGJydWlzaW5nIG9yIGJsZWVkaW5nLiBIZW1vZ2xvYmluIDE2LjE4IGcvZEwsIFBsYXRlbGV0cyAyNDQuNDkgMTAqMy91TC4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:b66e5543-89fd-4e20-9043-eb5a8b7b25de"
+      }
+    ],
+    "period": {
+      "start": "2025-09-16T00:00:00+00:00",
+      "end": "2025-09-16T00:00:00+00:00"
+    }
+  }
+}

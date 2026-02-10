@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "164df043-6d82-48f7-baed-f9620afb76ce",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/b27c7b8d-29d7-9210-9b08-2ca00a8ffe41"
+  },
+  "date": "2025-02-06T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCjYyLXllYXItb2xkIG1hbGUgcHJlc2VudGluZyB3aXRoIHNjaWF0aWNhIHRoYXQgaGFzIG5vdCBpbXByb3ZlZCB3aXRoIHBoeXNpY2FsIHRoZXJhcHkgYWZ0ZXIgOCB3ZWVrcy4KCkhJU1RPUlkgT0YgUFJFU0VOVCBJTExORVNTCk1yLiBSZW1wZWwgaXMgYSA2Mi15ZWFyLW9sZCBtYWxlIHByZXNlbnRpbmcgZm9yIGV2YWx1YXRpb24gb2YgcGVyc2lzdGVudCBsZWZ0IGxlZyBwYWluIGNvbnNpc3RlbnQgd2l0aCBzY2lhdGljYS4gU3ltcHRvbXMgYmVnYW4gYXBwcm94aW1hdGVseSA4IHdlZWtzIGFnbywgY2hhcmFjdGVyaXplZCBieSBsb3cgYmFjayBwYWluIHJhZGlhdGluZyBkb3duIHRoZSBwb3N0ZXJpb3IgYXNwZWN0IG9mIGhpcyBsZWZ0IGxlZywgZXh0ZW5kaW5nIHRvIHRoZSBmb290LiBUaGUgcGFpbiBpcyBkZXNjcmliZWQgYXMgc2hhcnAgYW5kIGJ1cm5pbmcsIGFjY29tcGFuaWVkIGJ5IG51bWJuZXNzIGFuZCB0aW5nbGluZyBpbiB0aGUgc2FtZSBkaXN0cmlidXRpb24uIEhlIHJlcG9ydHMgdGhlIHBhaW4gaXMgZXhhY2VyYmF0ZWQgYnkgcHJvbG9uZ2VkIHNpdHRpbmcgYW5kIHN0YW5kaW5nLCBhbmQgc29tZXdoYXQgcmVsaWV2ZWQgYnkgbHlpbmcgZG93bi4gSGUgaGFzIGNvbXBsZXRlZCA4IHdlZWtzIG9mIHBoeXNpY2FsIHRoZXJhcHkgd2l0aG91dCBzaWduaWZpY2FudCBpbXByb3ZlbWVudCBpbiBoaXMgc3ltcHRvbXMuIEhlIGRlbmllcyBhbnkgYm93ZWwgb3IgYmxhZGRlciBpbmNvbnRpbmVuY2UsIHNhZGRsZSBhbmVzdGhlc2lhLCBvciBwcm9ncmVzc2l2ZSBtb3RvciB3ZWFrbmVzcyBpbiBib3RoIGxlZ3Mu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:2e8bc1fc-fc0b-452a-b388-e6978dfad048"
+      }
+    ],
+    "period": {
+      "start": "2025-02-06T00:00:00+00:00",
+      "end": "2025-02-06T00:00:00+00:00"
+    }
+  }
+}

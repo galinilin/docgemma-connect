@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "56054682-b6d0-49f9-ba33-616abdc0e905",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/6bc90a8a-0916-9110-8323-b05dc7ecdd41"
+  },
+  "date": "2024-06-12T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCBmYXRpZ3VlLCBvciB1bmludGVuZGVkIHdlaWdodCBjaGFuZ2VzLgpDYXJkaW92YXNjdWxhcjogRGVuaWVzIGNoZXN0IHBhaW4sIHBhbHBpdGF0aW9ucywgb3Igc3luY29wZS4gUmVwb3J0cyBlbGV2YXRlZCBibG9vZCBwcmVzc3VyZSByZWFkaW5ncyBhdCBhIHBoYXJtYWN5IHNjcmVlbmluZy4KUmVzcGlyYXRvcnk6IERlbmllcyBzaG9ydG5lc3Mgb2YgYnJlYXRoLCBjb3VnaCwgb3Igd2hlZXppbmcuCk5ldXJvbG9naWNhbDogUmVwb3J0cyBvY2Nhc2lvbmFsIGhlYWRhY2hlcyBhbmQgZGl6emluZXNzLiBEZW5pZXMgbnVtYm5lc3MsIHRpbmdsaW5nLCB3ZWFrbmVzcywgb3IgZm9jYWwgbmV1cm9sb2dpY2FsIGRlZmljaXRzLgpHYXN0cm9pbnRlc3RpbmFsOiBEZW5pZXMgbmF1c2VhLCB2b21pdGluZywgZGlhcnJoZWEsIGNvbnN0aXBhdGlvbiwgb3IgYWJkb21pbmFsIHBhaW4uCk11c2N1bG9za2VsZXRhbDogRGVuaWVzIGpvaW50IHBhaW4sIHN3ZWxsaW5nLCBvciBtdXNjbGUgd2Vha25lc3Mu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:606af93e-e2c5-4a0f-b699-1347a5f465c4"
+      }
+    ],
+    "period": {
+      "start": "2024-06-12T00:00:00+00:00",
+      "end": "2024-06-12T00:00:00+00:00"
+    }
+  }
+}

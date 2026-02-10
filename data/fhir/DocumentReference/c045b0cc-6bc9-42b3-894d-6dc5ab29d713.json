@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "c045b0cc-6bc9-42b3-894d-6dc5ab29d713",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/e2393406-d73d-fae8-aa00-16068365a72d"
+  },
+  "date": "2025-04-15T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IFJlcG9ydHMgc2lnbmlmaWNhbnQgZmF0aWd1ZSwgdW5pbnRlbnRpb25hbCB3ZWlnaHQgZ2FpbiBvZiBhcHByb3hpbWF0ZWx5IDEwIGxicyBvdmVyIDIgbW9udGhzLCBhbmQgY29sZCBpbnRvbGVyYW5jZS4gRGVuaWVzIGZldmVyLCBjaGlsbHMsIG5pZ2h0IHN3ZWF0cy4KU2tpbjogUmVwb3J0cyBkcnkgc2tpbi4gRGVuaWVzIHJhc2hlcywgaXRjaGluZywgY2hhbmdlcyBpbiBoYWlyIG9yIG5haWwgdGV4dHVyZS4KSEVFTlQ6IERlbmllcyB2aXNpb24gY2hhbmdlcywgZGlwbG9waWEsIHBob3RvcGhvYmlhLCBzb3JlIHRocm9hdCwgZHlzcGhhZ2lhLCBvciBob2Fyc2VuZXNzLgpDYXJkaW92YXNjdWxhcjogRGVuaWVzIGNoZXN0IHBhaW4sIHBhbHBpdGF0aW9ucywgb3J0aG9wbmVhLCBvciBwZXJpcGhlcmFsIGVkZW1hLgpHYXN0cm9pbnRlc3RpbmFsOiBSZXBvcnRzIG5ldyBvbnNldCBjb25zdGlwYXRpb24sIHdpdGggYm93ZWwgbW92ZW1lbnRzIG9jY3VycmluZyBldmVyeSAzLTQgZGF5cy4gRGVuaWVzIG5hdXNlYSwgdm9taXRpbmcsIGRpYXJyaGVhLCBvciBhYmRvbWluYWwgcGFpbi4KTmV1cm9sb2dpY2FsOiBSZXBvcnRzIGRpZmZpY3VsdHkgY29uY2VudHJhdGluZyBhbmQgZ2VuZXJhbGl6ZWQgc2x1Z2dpc2huZXNzLiBEZW5pZXMgaGVhZGFjaGVzLCBkaXp6aW5lc3MsIHN5bmNvcGUsIG51bWJuZXNzLCBvciB0aW5nbGluZy4KRW5kb2NyaW5lOiBIaXN0b3J5IG9mIGh5cGVydGh5cm9pZGlzbS4gUmVwb3J0cyBzeW1wdG9tcyBjb25zaXN0ZW50IHdpdGggaHlwb3RoeXJvaWQgc3RhdGUuIFJlY2VudCBsYWJzIHNob3cgVFNIIDAuMzUgbUlVL0wsIEZyZWUgVDQgMS4wMyBuZy9kTCwgQ2FsY2l1bSA4Ljk5IG1nL2RMLCBhbmQgQ2hsb3JpZGUgMTAwLjkzIG1tb2wvTC4gRGVuaWVzIHBvbHl1cmlhLCBwb2x5ZGlwc2lhLCBoZWF0IGludG9sZXJhbmNlLCBvciB0cmVtb3JzLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:887c5f07-1ae1-4dbf-9a36-f46990f1517c"
+      }
+    ],
+    "period": {
+      "start": "2025-04-15T00:00:00+00:00",
+      "end": "2025-04-15T00:00:00+00:00"
+    }
+  }
+}

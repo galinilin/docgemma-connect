@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "dfe08cea-edb5-43bc-a71a-9ad556b2ad1e",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/797d4ba0-3685-df46-9654-060101206de1"
+  },
+  "date": "2024-09-07T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCkV2YWx1YXRpb24gb2YgbmV3bHkgZGlhZ25vc2VkIGNocm9uaWMga2lkbmV5IGRpc2Vhc2UgYW5kIGh5cGVyY2FsY2VtaWEuCgpISVNUT1JZIE9GIFBSRVNFTlQgSUxMTkVTUwpWaWN0b3JpbmEgaXMgYSA2OC15ZWFyLW9sZCBmZW1hbGUgcHJlc2VudGluZyBmb3IgaW5pdGlhbCBuZXBocm9sb2d5IGV2YWx1YXRpb24gZm9sbG93aW5nIHJlY2VudCBsYWJvcmF0b3J5IGZpbmRpbmdzIHN1Z2dlc3RpdmUgb2YgY2hyb25pYyBraWRuZXkgZGlzZWFzZSBhbmQgc2lnbmlmaWNhbnQgaHlwZXJjYWxjZW1pYS4gSGVyIHByaW1hcnkgY2FyZSBwaHlzaWNpYW4gcmVmZXJyZWQgaGVyIGFmdGVyIHJvdXRpbmUgYmxvb2Qgd29yayByZXZlYWxlZCBhbiBlbGV2YXRlZCBjYWxjaXVtIGxldmVsIG9mIDE0LjQxIG1nL2RMLiBGdXJ0aGVyIHJldmlldyBvZiBoZXIgbGFicyBhbHNvIGluZGljYXRlZCBmaW5kaW5ncyBjb25zaXN0ZW50IHdpdGggQ0tELCB3aXRoIGFuIG9uc2V0IGRhdGUgb2YgdG9kYXkuIFNoZSBkZW5pZXMgYW55IG5ldyBzeW1wdG9tcyBvZiBmYXRpZ3VlLCBpbmNyZWFzZWQgdGhpcnN0LCBwb2x5dXJpYSwgYm9uZSBwYWluLCBvciBjaGFuZ2VzIGluIG1lbnRhbCBzdGF0dXMgdHlwaWNhbGx5IGFzc29jaWF0ZWQgd2l0aCBoeXBlcmNhbGNlbWlhLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:3b2a1aa9-6af9-4877-a48b-589440d1b9b3"
+      }
+    ],
+    "period": {
+      "start": "2024-09-07T00:00:00+00:00",
+      "end": "2024-09-07T00:00:00+00:00"
+    }
+  }
+}

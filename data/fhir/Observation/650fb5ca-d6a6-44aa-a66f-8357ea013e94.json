@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "650fb5ca-d6a6-44aa-a66f-8357ea013e94",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "3173-2",
+        "display": "aPTT"
+      }
+    ],
+    "text": "aPTT"
+  },
+  "subject": {
+    "reference": "Patient/5e01cb6f-c7e5-043c-3617-4b7d6e7d9660"
+  },
+  "encounter": {
+    "reference": "urn:uuid:59fb6f15-7794-4b80-8e94-85a82a0fda0f"
+  },
+  "effectiveDateTime": "2025-01-13T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 42.29,
+    "unit": "s",
+    "system": "http://unitsofmeasure.org"
+  }
+}

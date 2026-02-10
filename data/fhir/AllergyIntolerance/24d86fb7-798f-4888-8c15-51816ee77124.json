@@ -1,0 +1,39 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "id": "24d86fb7-798f-4888-8c15-51816ee77124",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+        "code": "active",
+        "display": "Active"
+      }
+    ]
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+        "code": "confirmed",
+        "display": "Confirmed"
+      }
+    ]
+  },
+  "criticality": "low",
+  "code": {
+    "text": "Sulfonamide"
+  },
+  "patient": {
+    "reference": "Patient/d2eba07f-ffa9-807a-f0de-6f79b1bfa826"
+  },
+  "reaction": [
+    {
+      "manifestation": [
+        {
+          "text": "Rash"
+        }
+      ],
+      "severity": "mild"
+    }
+  ]
+}

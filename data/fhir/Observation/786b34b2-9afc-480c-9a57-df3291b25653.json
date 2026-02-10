@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "786b34b2-9afc-480c-9a57-df3291b25653",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2069-3",
+        "display": "Chloride"
+      }
+    ],
+    "text": "Chloride"
+  },
+  "subject": {
+    "reference": "Patient/5a0a158c-5090-5d2d-002f-b32e87281de6"
+  },
+  "encounter": {
+    "reference": "urn:uuid:0049f080-a74e-4228-8f78-6f3d3fd678b9"
+  },
+  "effectiveDateTime": "2025-01-13T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 100.12,
+    "unit": "mmol/L",
+    "system": "http://unitsofmeasure.org"
+  }
+}

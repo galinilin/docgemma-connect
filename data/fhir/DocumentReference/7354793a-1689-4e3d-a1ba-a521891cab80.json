@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "7354793a-1689-4e3d-a1ba-a521891cab80",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/42285243-dd83-90d6-922d-0231364fa398"
+  },
+  "date": "2025-02-09T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IFBvc2l0aXZlIGZvciBzdWJqZWN0aXZlIGZldmVyLiBEZW5pZXMgY2hpbGxzLCBuaWdodCBzd2VhdHMsIG9yIHNpZ25pZmljYW50IGZhdGlndWUuCkhFRU5UOiBQb3NpdGl2ZSBmb3Igc2V2ZXJlIHNvcmUgdGhyb2F0IGFuZCBvZHlub3BoYWdpYS4gRGVuaWVzIGJsdXJyeSB2aXNpb24sIGV5ZSBwYWluLCBlYXIgcGFpbiwgdGlubml0dXMsIG9yIGhlYXJpbmcgY2hhbmdlcy4gRGVuaWVzIG5hc2FsIGNvbmdlc3Rpb24gb3Igcmhpbm9ycmhlYS4KUmVzcGlyYXRvcnk6IERlbmllcyBjb3VnaCwgZHlzcG5lYSwgb3Igd2hlZXppbmcuCkdhc3Ryb2ludGVzdGluYWw6IERlbmllcyBuYXVzZWEsIHZvbWl0aW5nLCBkaWFycmhlYSwgY29uc3RpcGF0aW9uLCBvciBhYmRvbWluYWwgcGFpbi4KTXVzY3Vsb3NrZWxldGFsOiBEZW5pZXMgbXlhbGdpYXMgb3IgYXJ0aHJhbGdpYXMuCk5ldXJvbG9naWNhbDogRGVuaWVzIGhlYWRhY2hlLCBkaXp6aW5lc3MsIG9yIGZvY2FsIHdlYWtuZXNzLgpMeW1waGF0aWM6IERlbmllcyBnZW5lcmFsaXplZCBseW1waGFkZW5vcGF0aHksIGJ1dCB1bmFibGUgdG8gc2VsZi1hc3Nlc3MgbmVjayBub2Rlcy4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:3099ee77-450f-4626-b164-f028d32a1a62"
+      }
+    ],
+    "period": {
+      "start": "2025-02-09T00:00:00+00:00",
+      "end": "2025-02-09T00:00:00+00:00"
+    }
+  }
+}

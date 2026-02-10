@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "3bfc37f0-bfb5-4b33-ac08-c38f51c4bed7",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/86014c39-6ab1-d221-4857-b8f6e11ddad7"
+  },
+  "date": "2024-03-17T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCkNoZXN0IFgtcmF5IGZvciBwcm9kdWN0aXZlIGNvdWdoIGFuZCBmZXZlciDigJQgY29uc29saWRhdGlvbiBpZGVudGlmaWVkLgoKSElTVE9SWSBPRiBQUkVTRU5UIElMTE5FU1MKR2VvcmdpYW5hIGlzIGEgNzAteWVhci1vbGQgZmVtYWxlIHByZXNlbnRpbmcgZm9yIGEgY2hlc3QgWC1yYXkgZHVlIHRvIGEgcHJvZHVjdGl2ZSBjb3VnaCBhbmQgZmV2ZXIuIFRoZSBwYXRpZW50IGhhcyBiZWVuIGV4cGVyaWVuY2luZyB0aGVzZSBzeW1wdG9tcywgcHJvbXB0aW5nIGEgcmFkaW9ncmFwaGljIGV2YWx1YXRpb24gdG8gYXNzZXNzIGZvciBwdWxtb25hcnkgcGF0aG9sb2d5LiBUaGUgaW1hZ2luZyBzdHVkeSByZXZlYWxlZCBjb25zb2xpZGF0aW9uLCBjb25zaXN0ZW50IHdpdGggYSBkaWFnbm9zaXMgb2YgcG5ldW1vbmlhLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:f08b7915-4fb3-485d-b433-ac615c97ea05"
+      }
+    ],
+    "period": {
+      "start": "2024-03-17T00:00:00+00:00",
+      "end": "2024-03-17T00:00:00+00:00"
+    }
+  }
+}

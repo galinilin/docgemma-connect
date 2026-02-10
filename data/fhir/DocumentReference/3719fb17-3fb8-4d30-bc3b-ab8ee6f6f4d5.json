@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "3719fb17-3fb8-4d30-bc3b-ab8ee6f6f4d5",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/5e6b19a5-5944-9a73-500b-3772430c1c8a"
+  },
+  "date": "2026-01-18T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCkFubnVhbCBMRENUIHNjcmVlbmluZyBmb2xsb3ctdXAsIHByaW9yIDRtbSBncm91bmQtZ2xhc3Mgbm9kdWxlLgoKSElTVE9SWSBPRiBQUkVTRU5UIElMTE5FU1MKU2hpenVrbyBpcyBhIDMzLXllYXItb2xkIGZlbWFsZSBwcmVzZW50aW5nIGZvciBoZXIgYW5udWFsIGxvdy1kb3NlIENUIGx1bmcgY2FuY2VyIHNjcmVlbmluZy4gU2hlIGhhcyBhIGhpc3Rvcnkgb2YgYSA0bW0gZ3JvdW5kLWdsYXNzIG5vZHVsZSBpZGVudGlmaWVkIG9uIGEgcHJpb3IgTERDVCBzY2FuLiBUaGUgcGF0aWVudCByZXBvcnRzIG5vIG5ldyByZXNwaXJhdG9yeSBzeW1wdG9tcyBzdWNoIGFzIGNvdWdoLCBkeXNwbmVhLCBvciBjaGVzdCBwYWluIHNpbmNlIGhlciBsYXN0IHNjcmVlbmluZy4gU2hlIGRlbmllcyBhbnkgaGVtb3B0eXNpcywgZmV2ZXJzLCBvciB1bmludGVuZGVkIHdlaWdodCBsb3NzLiBUaGlzIHZpc2l0IGlzIGZvciByb3V0aW5lIGZvbGxvdy11cCBvZiB0aGUgcHJldmlvdXNseSBub3RlZCBmaW5kaW5nIGFzIHBhcnQgb2YgaGVyIGx1bmcgY2FuY2VyIHNjcmVlbmluZyBwcm9ncmFtLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:1ee98445-a62b-4ddf-beea-c1346c6fcd8c"
+      }
+    ],
+    "period": {
+      "start": "2026-01-18T00:00:00+00:00",
+      "end": "2026-01-18T00:00:00+00:00"
+    }
+  }
+}

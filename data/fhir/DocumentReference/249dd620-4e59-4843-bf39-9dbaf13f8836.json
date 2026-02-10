@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "249dd620-4e59-4843-bf39-9dbaf13f8836",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/8b6f1762-8814-6301-b09a-0647839deb7c"
+  },
+  "date": "2025-09-24T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UClNoYXZlIGJpb3BzeSBvZiBjaGFuZ2luZyBtb2xlIG9uIHJpZ2h0IGNhbGYsIGFzeW1tZXRyaWMgd2l0aCBjb2xvciB2YXJpYXRpb24uCgpISVNUT1JZIE9GIFBSRVNFTlQgSUxMTkVTUwpSb24gV2lzb3prLCBhIDU4LXllYXItb2xkIG1hbGUsIHByZXNlbnRzIGZvciBldmFsdWF0aW9uIG9mIGEgc2hhdmUgYmlvcHN5IHNwZWNpbWVuIGZyb20gYSBjaGFuZ2luZyBtb2xlIG9uIGhpcyByaWdodCBjYWxmLiBUaGUgbGVzaW9uIHdhcyBub3RlZCB0byBiZSBhc3ltbWV0cmljIHdpdGggY29sb3IgdmFyaWF0aW9uIGFuZCBpcnJlZ3VsYXIgYm9yZGVycywgcHJvbXB0aW5nIGV4Y2lzaW9uYWwgYmlvcHN5IGZvciBkZWZpbml0aXZlIGRpYWdub3Npcy4gVGhlIGJpb3BzeSB3YXMgcGVyZm9ybWVkIG9uIDIwMjUtMDktMjQsIGFuZCBzdWJzZXF1ZW50IHBhdGhvbG9naWNhbCBhbmFseXNpcyBjb25maXJtZWQgYSBkaWFnbm9zaXMgb2YgbWVsYW5vbWEu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:5f171241-cbf2-44ac-bd26-89b42b2d8148"
+      }
+    ],
+    "period": {
+      "start": "2025-09-24T00:00:00+00:00",
+      "end": "2025-09-24T00:00:00+00:00"
+    }
+  }
+}

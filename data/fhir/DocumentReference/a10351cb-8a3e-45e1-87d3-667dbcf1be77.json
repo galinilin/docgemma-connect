@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "a10351cb-8a3e-45e1-87d3-667dbcf1be77",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/7078f970-3f57-cb9c-4165-c9d836a298c2"
+  },
+  "date": "2026-01-23T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UClN0ZXJlb3RhY3RpYyBiaW9wc3kgb2Ygc3VzcGljaW91cyBtaWNyb2NhbGNpZmljYXRpb25zIGluIGxlZnQgYnJlYXN0IGZvciBkaWFnbm9zdGljIGV2YWx1YXRpb24uCgpISVNUT1JZIE9GIFBSRVNFTlQgSUxMTkVTUwpNci4gTWFydmluMTk1IGlzIGEgNjMteWVhci1vbGQgbWFsZSB3aG8gdW5kZXJ3ZW50IGEgc3RlcmVvdGFjdGljIGJpb3BzeSBvZiBzdXNwaWNpb3VzIG1pY3JvY2FsY2lmaWNhdGlvbnMgaW4gaGlzIGxlZnQgYnJlYXN0IG9uIDIwMjYtMDEtMjMuIFRoZSBiaW9wc3kgd2FzIHBlcmZvcm1lZCBkdWUgdG8gaW1hZ2luZyBmaW5kaW5ncyBjb25jZXJuaW5nIGZvciBtYWxpZ25hbmN5LiBQYXRob2xvZ3kgcmVzdWx0cyBjb25maXJtIHRoZSBkaWFnbm9zaXMgb2YgYnJlYXN0IGNhcmNpbm9tYS4gVGhlIHBhdGllbnQgaXMgY3VycmVudGx5IGFzeW1wdG9tYXRpYyBmcm9tIHRoZSBjYXJjaW5vbWEsIHdpdGggdGhlIGRpYWdub3NpcyBtYWRlIHNvbGVseSBiYXNlZCBvbiBiaW9wc3kgZmluZGluZ3Mu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:b9c4a702-ce61-4fd7-9ce4-8d7cf4727eea"
+      }
+    ],
+    "period": {
+      "start": "2026-01-23T00:00:00+00:00",
+      "end": "2026-01-23T00:00:00+00:00"
+    }
+  }
+}

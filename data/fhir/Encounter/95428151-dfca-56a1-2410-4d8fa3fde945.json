@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "95428151-dfca-56a1-2410-4d8fa3fde945",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "95428151-dfca-56a1-2410-4d8fa3fde945"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "162673000",
+          "display": "General examination of patient (procedure)"
+        }
+      ],
+      "text": "General examination of patient (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/95428151-dfca-56a1-dca1-0a2836467e90",
+    "display": "Mr. Chi716 Prohaska837"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2024-11-01T03:10:26-07:00",
+        "end": "2024-11-01T03:25:26-07:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999981993",
+        "display": "Dr. Glennis930 Erdman779"
+      }
+    }
+  ],
+  "period": {
+    "start": "2024-11-01T03:10:26-07:00",
+    "end": "2024-11-01T03:25:26-07:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|55d9d4ba-5a95-36b0-a6b3-41e602cf45c8",
+        "display": "HARBOR HEALTH SERVICES INC"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|f22bc2ac-f8bd-3f9f-9a40-93db37639d3f",
+    "display": "HARBOR HEALTH SERVICES INC"
+  }
+}

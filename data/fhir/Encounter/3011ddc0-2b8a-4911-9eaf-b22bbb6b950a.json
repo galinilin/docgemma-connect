@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "3011ddc0-2b8a-4911-9eaf-b22bbb6b950a",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Ent Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-10-29T00:00:00+00:00",
+    "end": "2024-10-29T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/42285243-dd83-90d6-922d-0231364fa398"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "65363002",
+          "display": "Otitis media"
+        }
+      ]
+    }
+  ]
+}

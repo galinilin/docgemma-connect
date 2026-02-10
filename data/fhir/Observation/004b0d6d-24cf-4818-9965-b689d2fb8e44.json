@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "004b0d6d-24cf-4818-9965-b689d2fb8e44",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "30522-7",
+        "display": "CRP [C-Reactive Protein]"
+      }
+    ],
+    "text": "CRP [C-Reactive Protein]"
+  },
+  "subject": {
+    "reference": "Patient/2b92316a-37ef-e5aa-b1c9-8fe5964df210"
+  },
+  "encounter": {
+    "reference": "urn:uuid:a556877a-83dd-4fdf-b2a9-4ea93223bb2b"
+  },
+  "effectiveDateTime": "2024-09-11T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 0.29,
+    "unit": "mg/L",
+    "system": "http://unitsofmeasure.org"
+  }
+}

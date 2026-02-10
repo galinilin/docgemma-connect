@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "e18aa62c-5ce6-480b-acae-f0b8b787b63b",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2160-0",
+        "display": "Creatinine"
+      }
+    ],
+    "text": "Creatinine"
+  },
+  "subject": {
+    "reference": "Patient/6bc90a8a-0916-9110-8323-b05dc7ecdd41"
+  },
+  "encounter": {
+    "reference": "urn:uuid:e571b821-a339-41f7-b1d4-c65d77de1284"
+  },
+  "effectiveDateTime": "2025-02-13T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 1.59,
+    "unit": "mg/dL",
+    "system": "http://unitsofmeasure.org"
+  }
+}

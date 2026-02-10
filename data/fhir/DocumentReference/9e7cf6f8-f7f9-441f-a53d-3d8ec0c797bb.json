@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "9e7cf6f8-f7f9-441f-a53d-3d8ec0c797bb",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/c238518c-2350-c0bd-1fc3-eff02ec7f7ef"
+  },
+  "date": "2025-07-08T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogQWxlcnQgYW5kIG9yaWVudGVkIHgzLCBhcHBlYXJzIGNvbWZvcnRhYmxlIGFuZCBpbiBubyBhY3V0ZSBkaXN0cmVzcy4KT2N1bGFyOiBWaXN1YWwgQWN1aXR5ICh1bmNvcnJlY3RlZCk6IE9EIDIwLzcwLCBPUyAyMC8yNS4gUHVwaWxzIGFyZSBlcXVhbCwgcm91bmQsIGFuZCByZWFjdGl2ZSB0byBsaWdodCBhbmQgYWNjb21tb2RhdGlvbiAoUEVSUkxBKSBiaWxhdGVyYWxseS4gRXh0cmFvY3VsYXIgbW92ZW1lbnRzIGFyZSBmdWxsIGFuZCB1bnJlc3RyaWN0ZWQgaW4gYWxsIGdhemVzLiBDb25mcm9udGF0aW9uYWwgdmlzdWFsIGZpZWxkcyBhcmUgZnVsbCB0byBmaW5nZXIgY291bnRpbmcgT0QgYW5kIE9TLiBTbGl0IExhbXAgRXhhbTogTGlkcyBhbmQgbGFzaGVzIGNsZWFyIE9EL09TLiBDb25qdW5jdGl2YSBjbGVhciBhbmQgcXVpZXQgT0QvT1MuIENvcm5lYSBjbGVhciBPRC9PUy4gQW50ZXJpb3IgY2hhbWJlciBkZWVwIGFuZCBxdWlldCBPRC9PUy4gSXJpcyBmbGF0IGFuZCBpbnRhY3QgT0QvT1MuIExlbnMgT0Qgd2l0aCAyKyBudWNsZWFyIHNjbGVyb3NpcyBhbmQgcG9zdGVyaW9yIHN1YmNhcHN1bGFyIGNhdGFyYWN0OyBPUyBsZW5zIGNsZWFyLiBJbnRyYW9jdWxhciBQcmVzc3VyZSAoSU9QKTogT0QgMTYgbW1IZywgT1MgMTcgbW1IZy4gRnVuZHVzIEV4YW0gKGRpbGF0ZWQpOiBPcHRpYyBuZXJ2ZXMgc2hhcnAgd2l0aCBnb29kIHJpbSBwZXJmdXNpb24gT0QvT1MuIE1hY3VsYSBmbGF0IHdpdGggaGVhbHRoeSBmb3ZlYWwgcmVmbGV4IE9EL09TLiBQZXJpcGhlcmFsIHJldGluYSBhdHRhY2hlZCBhbmQgdW5yZW1hcmthYmxlIE9EL09TLgpIRUVOVDogTm9ybW9jZXBoYWxpYywgYXRyYXVtYXRpYy4gTmFzYWwgbXVjb3NhIHBpbmsgYW5kIG1vaXN0LiBPcm9waGFyeW54IGNsZWFyIHdpdGhvdXQgZXJ5dGhlbWEgb3IgZXh1ZGF0ZXMuCkNhcmRpb3Zhc2N1bGFyOiBSZWd1bGFyIHJhdGUgYW5kIHJoeXRobSwgUzEvUzIgYXVkaWJsZS4gTm8gbXVybXVycywgcnVicywgb3IgZ2FsbG9wcy4KUmVzcGlyYXRvcnk6IEx1bmdzIGNsZWFyIHRvIGF1c2N1bHRhdGlvbiBiaWxhdGVyYWxseSB3aXRoIGdvb2QgYWlyIGVudHJ5LiBObyB3aGVlemVzLCByYWxlcywgb3IgcmhvbmNoaS4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:fc959af9-3910-4e3e-8ecf-e1382eada7a9"
+      }
+    ],
+    "period": {
+      "start": "2025-07-08T00:00:00+00:00",
+      "end": "2025-07-08T00:00:00+00:00"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "34f23e95-8bff-44b0-a285-e137dfe3d657",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "36225005",
+        "display": "Nephrotic syndrome"
+      }
+    ],
+    "text": "Nephrotic syndrome"
+  },
+  "subject": {
+    "reference": "Patient/797d4ba0-3685-df46-9654-060101206de1"
+  },
+  "encounter": {
+    "reference": "urn:uuid:a2e8f474-b84c-488a-8249-84bb69aa1bfe"
+  },
+  "onsetDateTime": "2025-12-31T00:00:00+00:00"
+}

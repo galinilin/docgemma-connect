@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "a776218c-6637-455f-8f3a-429d1b80dfb2",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/5ccff5ae-a4c8-c4ce-1c07-0fe2d3ae8299"
+  },
+  "date": "2025-01-31T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogQWxlcnQgYW5kIG9yaWVudGVkIHggMywgYXBwZWFycyBjb21mb3J0YWJsZSBhbmQgd2VsbC1ub3VyaXNoZWQuCkFiZG9tZW46IFNvZnQsIG5vbi10ZW5kZXIgdG8gcGFscGF0aW9uIGluIGFsbCBxdWFkcmFudHMuIE5vIHJlYm91bmQgb3IgZ3VhcmRpbmcuIE5vIHBhbHBhYmxlIG1hc3Nlcy4gTm8gY29zdG92ZXJ0ZWJyYWwgYW5nbGUgdGVuZGVybmVzcyBiaWxhdGVyYWxseS4KR2VuaXRvdXJpbmFyeTogRXh0ZXJuYWwgZ2VuaXRhbGlhIG1hdHVyZSBmZW1hbGUsIHdpdGhvdXQgbGVzaW9ucyBvciBkaXNjaGFyZ2UuIFVyZXRocmFsIG1lYXR1cyBhcHBlYXJzIG5vcm1hbC4gTm8gc3VwcmFwdWJpYyB0ZW5kZXJuZXNzLgpFeHRyZW1pdGllczogTm8gcGVyaXBoZXJhbCBlZGVtYS4gUHVsc2VzIDIrIGJpbGF0ZXJhbGx5IGluIHVwcGVyIGFuZCBsb3dlciBleHRyZW1pdGllcy4KTmV1cm9sb2dpY2FsOiBDcmFuaWFsIG5lcnZlcyBJSS1YSUkgZ3Jvc3NseSBpbnRhY3QuIE1vdG9yIGFuZCBzZW5zb3J5IGZ1bmN0aW9uIGludGFjdCBpbiBhbGwgZm91ciBleHRyZW1pdGllcy4gUmVmbGV4ZXMgMisgdGhyb3VnaG91dC4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:ba2afff3-9d90-42f4-801f-10b5511a79a3"
+      }
+    ],
+    "period": {
+      "start": "2025-01-31T00:00:00+00:00",
+      "end": "2025-01-31T00:00:00+00:00"
+    }
+  }
+}

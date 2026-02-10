@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "a556877a-83dd-4fdf-b2a9-4ea93223bb2b",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Orthopaedics Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-09-11T00:00:00+00:00",
+    "end": "2024-09-11T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/2b92316a-37ef-e5aa-b1c9-8fe5964df210"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "396275006",
+          "display": "Osteoarthritis"
+        }
+      ]
+    }
+  ]
+}

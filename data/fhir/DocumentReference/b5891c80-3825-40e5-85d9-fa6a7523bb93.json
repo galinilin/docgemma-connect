@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "b5891c80-3825-40e5-85d9-fa6a7523bb93",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/8703e9b1-34f3-748d-0291-6e070e332243"
+  },
+  "date": "2025-12-10T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogTGV0aGFyZ2ljIGJ1dCBhcm91c2FibGUgaW5mYW50LCBpcnJpdGFibGUgd2l0aCBleGFtaW5hdGlvbi4gQXBwZWFycyBkZWh5ZHJhdGVkLiBQb29yIG11c2NsZSB0b25lLiBDcnlpbmcgd2l0aCB3ZWFrIGNyeS4KSEVFTlQ6IEFudGVyaW9yIGZvbnRhbmVsbGUgc2xpZ2h0bHkgc3Vua2VuLiBPcmFsIG11Y29zYSBkcnkgd2l0aCBkZWNyZWFzZWQgY2FwaWxsYXJ5IHJlZmlsbC4gRXllcyBhcHBlYXIgc29tZXdoYXQgc3Vua2VuLiBObyBzY2xlcmFsIGljdGVydXMuIFB1cGlscyBlcXVhbCwgcm91bmQsIGFuZCByZWFjdGl2ZSB0byBsaWdodC4gVHltcGFuaWMgbWVtYnJhbmVzIGNsZWFyLgpDYXJkaW92YXNjdWxhcjogVGFjaHljYXJkaWMsIFMxUzIgYXVkaWJsZSwgbm8gbXVybXVycywgcnVicywgb3IgZ2FsbG9wcy4gUGVyaXBoZXJhbCBwdWxzZXMgYXJlIHdlYWsgYnV0IHN5bW1ldHJpYy4gQ2FwaWxsYXJ5IHJlZmlsbCB0aW1lID4zIHNlY29uZHMuClJlc3BpcmF0b3J5OiBMdW5ncyBjbGVhciB0byBhdXNjdWx0YXRpb24gYmlsYXRlcmFsbHksIG5vIHJldHJhY3Rpb25zIG9yIGdydW50aW5nLiBSZXNwaXJhdG9yeSByYXRlIGlzIHNsaWdodGx5IGVsZXZhdGVkLgpBYmRvbWVuOiBTb2Z0LCBzY2FwaG9pZCwgbm9uLWRpc3RlbmRlZC4gQm93ZWwgc291bmRzIHByZXNlbnQgYW5kIGh5cGVyYWN0aXZlLiBQYWxwYXRpb24gb2YgdGhlIHJpZ2h0IHVwcGVyIHF1YWRyYW50IHJldmVhbHMgYSBmaXJtLCBvbGl2ZS1zaGFwZWQgbWFzcyAocHlsb3JpYyB0dW1vcikgYXBwcm94aW1hdGVseSAxLjUgY20gaW4gc2l6ZSwgbW9iaWxlIGFuZCBub24tdGVuZGVyLiBObyBoZXBhdG9zcGxlbm9tZWdhbHkuIE5vIGd1YXJkaW5nIG9yIHJlYm91bmQgdGVuZGVybmVzcy4KU2tpbjogUGFsZSwgY29vbCwgYW5kIGRyeS4gUG9vciBza2luIHR1cmdvciB3aXRoIHRlbnRpbmcgcHJlc2VudC4gTm8gcmFzaGVzIG9yIGxlc2lvbnMu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:eb0b83e2-9799-43bb-9648-ba4f166efd97"
+      }
+    ],
+    "period": {
+      "start": "2025-12-10T00:00:00+00:00",
+      "end": "2025-12-10T00:00:00+00:00"
+    }
+  }
+}

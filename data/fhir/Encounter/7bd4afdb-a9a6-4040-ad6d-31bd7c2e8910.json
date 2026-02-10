@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "7bd4afdb-a9a6-4040-ad6d-31bd7c2e8910",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Dermatology Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-11-21T00:00:00+00:00",
+    "end": "2024-11-21T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/888277e8-768f-028f-6524-31941dc17069"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "128045006",
+          "display": "Cellulitis"
+        }
+      ]
+    }
+  ]
+}

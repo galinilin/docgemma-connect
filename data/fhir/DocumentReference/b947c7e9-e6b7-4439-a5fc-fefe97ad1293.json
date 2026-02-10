@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "b947c7e9-e6b7-4439-a5fc-fefe97ad1293",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/797d4ba0-3685-df46-9654-060101206de1"
+  },
+  "date": "2025-12-31T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogQWxlcnQgYW5kIG9yaWVudGVkIHgzLCBubyBhY3V0ZSBkaXN0cmVzcy4KQ2FyZGlvdmFzY3VsYXI6IFJSUiwgUzEvUzIgbm9ybWFsLCBubyBtdXJtdXJzLCBydWJzLCBvciBnYWxsb3BzLiBKVlAgbm90IGVsZXZhdGVkLgpQdWxtb25hcnk6IEx1bmdzIGNsZWFyIHRvIGF1c2N1bHRhdGlvbiBiaWxhdGVyYWxseS4gTm8gd2hlZXplcywgcmFsZXMsIG9yIHJob25jaGkuCkFiZG9tZW46IFNvZnQsIG5vbi10ZW5kZXIsIG5vbi1kaXN0ZW5kZWQuIEJvd2VsIHNvdW5kcyBub3Jtb2FjdGl2ZS4gTm8gb3JnYW5vbWVnYWx5LgpFeHRyZW1pdGllczogMisgcGl0dGluZyBlZGVtYSBiaWxhdGVyYWxseSB0byB0aGUgbWlkLXNoaW4uIFB1bHNlcyAyKyBhbmQgc3ltbWV0cmljLgpTa2luOiBTa2luIG92ZXIgbG93ZXIgZXh0cmVtaXRpZXMgYXBwZWFycyBzb21ld2hhdCB0YXV0IGFuZCBzaGlueSBkdWUgdG8gZWRlbWEuIE5vIHJhc2hlcyBvciBsZXNpb25zLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:a2e8f474-b84c-488a-8249-84bb69aa1bfe"
+      }
+    ],
+    "period": {
+      "start": "2025-12-31T00:00:00+00:00",
+      "end": "2025-12-31T00:00:00+00:00"
+    }
+  }
+}

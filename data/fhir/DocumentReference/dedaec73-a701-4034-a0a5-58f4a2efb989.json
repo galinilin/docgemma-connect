@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "dedaec73-a701-4034-a0a5-58f4a2efb989",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/65ba7fb5-d904-3959-5e3a-ab460f62762f"
+  },
+  "date": "2025-08-14T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IFJlcG9ydHMgbWlsZCBmYXRpZ3VlLCB3aGljaCBzaGUgYXR0cmlidXRlcyB0byBwb3N0LXN1cmdpY2FsIHJlY292ZXJ5LiBEZW5pZXMgZmV2ZXIsIGNoaWxscywgb3Igc2lnbmlmaWNhbnQgd2VpZ2h0IGNoYW5nZXMuCk11c2N1bG9za2VsZXRhbDogUmVwb3J0cyByaWdodCBrbmVlIHBhaW4gcmF0ZWQgNC8xMCBhdCByZXN0LCA2LzEwIHdpdGggYWN0aXZpdHksIGRlc2NyaWJlZCBhcyBhY2hpbmcgYW5kIHN0aWZmLiBOb3RlcyBsaW1pdGVkIHJpZ2h0IGtuZWUgZmxleGlvbiBhbmQgZXh0ZW5zaW9uLiBEZW5pZXMgbmV3IHBhaW4sIHN3ZWxsaW5nLCBvciBzdGlmZm5lc3MgaW4gb3RoZXIgam9pbnRzLgpOZXVyb2xvZ2ljYWw6IERlbmllcyBuZXcgbnVtYm5lc3MsIHRpbmdsaW5nLCBvciB3ZWFrbmVzcy4gUmVwb3J0cyBzdGFibGUgYmFzZWxpbmUgbmV1cm9sb2dpY2FsIHN0YXR1cyBzaW5jZSBoZXIgc3Ryb2tlIHJlaGFiaWxpdGF0aW9uLiBObyBuZXcgaGVhZGFjaGVzIG9yIGRpenppbmVzcy4KQ2FyZGlvdmFzY3VsYXI6IERlbmllcyBjaGVzdCBwYWluLCBwYWxwaXRhdGlvbnMsIG9yIHNob3J0bmVzcyBvZiBicmVhdGguIE5vIGxlZyBzd2VsbGluZyBiZXlvbmQgdGhlIG9wZXJhdGl2ZSBsaW1iLiBEZW5pZXMgaGlzdG9yeSBvZiBEVlQuCkhlbWF0b2xvZ2ljOiBSZXBvcnRzIG1pbGQgZmF0aWd1ZS4gRGVuaWVzIGVhc3kgYnJ1aXNpbmcgb3IgYmxlZWRpbmcuIExhYm9yYXRvcnkgcmVzdWx0cyBzaG93IEVyeXRocm9jeXRlcyAoUkJDKSAyLjcxIDEwKjYvdUwgYW5kIEhlbW9nbG9iaW4gMTYuNyBnL2RMLgpSZW5hbDogRGVuaWVzIGR5c3VyaWEsIGZyZXF1ZW5jeSwgb3IgY2hhbmdlcyBpbiB1cmluZSBvdXRwdXQuIExhYm9yYXRvcnkgcmVzdWx0IHNob3dzIENyZWF0aW5pbmUgMS4wIG1nL2RMLgpFbmRvY3JpbmU6IERlbmllcyBoZWF0L2NvbGQgaW50b2xlcmFuY2UsIHBvbHl1cmlhLCBvciBwb2x5ZGlwc2lhLiBMYWJvcmF0b3J5IHJlc3VsdCBzaG93cyBDYWxjaXVtIDguNTIgbWcvZEwu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:54dae444-7841-4761-a097-b00213eac182"
+      }
+    ],
+    "period": {
+      "start": "2025-08-14T00:00:00+00:00",
+      "end": "2025-08-14T00:00:00+00:00"
+    }
+  }
+}

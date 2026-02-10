@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "6dadc71c-e3ba-409f-8a40-07c56177b0ea",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/79c53c80-7350-3e2a-d87b-d7f512721249"
+  },
+  "date": "2024-05-31T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCjI4LXllYXItb2xkIGZlbWFsZSBwcmVzZW50aW5nIHdpdGggYWN1dGUtb25zZXQgc2V2ZXJlIHJpZ2h0IGZsYW5rIHBhaW4gcmFkaWF0aW5nIHRvIHRoZSBncm9pbi4KCkhJU1RPUlkgT0YgUFJFU0VOVCBJTExORVNTClBhb2xhIGlzIGEgMjgteWVhci1vbGQgZmVtYWxlIHByZXNlbnRpbmcgd2l0aCBhY3V0ZSBvbnNldCBvZiBzZXZlcmUgcmlnaHQgZmxhbmsgcGFpbiB0aGF0IGJlZ2FuIHN1ZGRlbmx5IHRvZGF5LiBUaGUgcGFpbiBpcyBkZXNjcmliZWQgYXMgc2hhcnAsIGNvbnN0YW50LCBhbmQgcmFkaWF0ZXMgYW50ZXJpb3JseSB0byB0aGUgcmlnaHQgbG93ZXIgcXVhZHJhbnQgYW5kIGdyb2luLiBTaGUgcmF0ZXMgdGhlIHBhaW4gYXMgOC8xMCBpbiBzZXZlcml0eS4gQXNzb2NpYXRlZCBzeW1wdG9tcyBpbmNsdWRlIG5hdXNlYSBhbmQgb25lIGVwaXNvZGUgb2Ygbm9uLWJsb29keSwgbm9uLWJpbGlvdXMgdm9taXRpbmcuIFNoZSBkZW5pZXMgZmV2ZXIsIGNoaWxscywgZHlzdXJpYSwgaGVtYXR1cmlhLCBvciBjaGFuZ2VzIGluIGJvd2VsIGhhYml0cy4gU2hlIGhhcyBubyBwcmlvciBoaXN0b3J5IG9mIGtpZG5leSBzdG9uZXMuIFNoZSBoYXMgbm8ga25vd24gYWxsZXJnaWVzIGFuZCBpcyBub3QgY3VycmVudGx5IG9uIGFueSBtZWRpY2F0aW9ucy4gSGVyIGxhc3QgbWVuc3RydWFsIHBlcmlvZCB3YXMgMiB3ZWVrcyBhZ28u"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:f0baed49-20c4-411d-bb6e-0494ae3ff8c7"
+      }
+    ],
+    "period": {
+      "start": "2024-05-31T00:00:00+00:00",
+      "end": "2024-05-31T00:00:00+00:00"
+    }
+  }
+}

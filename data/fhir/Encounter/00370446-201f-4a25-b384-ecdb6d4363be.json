@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "00370446-201f-4a25-b384-ecdb6d4363be",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Nephrology Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-10-10T00:00:00+00:00",
+    "end": "2025-10-10T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/618dad0a-741e-d831-e40e-89bc0e65d90b"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "709044004",
+          "display": "Chronic kidney disease"
+        }
+      ]
+    }
+  ]
+}

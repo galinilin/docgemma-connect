@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "4956a96f-43c9-4db3-af8e-3a74cd6225a6",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "20565-8",
+        "display": "Carbon dioxide [Bicarb]"
+      }
+    ],
+    "text": "Carbon dioxide [Bicarb]"
+  },
+  "subject": {
+    "reference": "Patient/0e5ee9e3-bc27-4026-4b1b-18159bceb262"
+  },
+  "encounter": {
+    "reference": "urn:uuid:f17fece6-1a53-40d0-a522-d166fadc9a61"
+  },
+  "effectiveDateTime": "2025-04-21T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 25.17,
+    "unit": "mmol/L",
+    "system": "http://unitsofmeasure.org"
+  }
+}

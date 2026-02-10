@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "c9848b08-813e-4a67-974e-c04522ad0317",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/5a1b0529-8497-6acd-eb98-a1baff1b00ca"
+  },
+  "date": "2024-05-04T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCjczLXllYXItb2xkIGZlbWFsZSBwcmVzZW50aW5nIGZvciBldmFsdWF0aW9uIG9mIGFuIGluY2lkZW50YWwgMi41IGNtIHJpZ2h0IHVwcGVyIGxvYmUgcHVsbW9uYXJ5IG5vZHVsZSBmb3VuZCBvbiBhIHJlY2VudCBDVCBjaGVzdC4KCkhJU1RPUlkgT0YgUFJFU0VOVCBJTExORVNTCkxlb25pbGEgaXMgYSA3My15ZWFyLW9sZCBmZW1hbGUgcmVmZXJyZWQgdG8gQ2hlc3QgU3VyZ2VyeSBmb3IgZXZhbHVhdGlvbiBvZiBhIG5ld2x5IGlkZW50aWZpZWQgc29saXRhcnkgcHVsbW9uYXJ5IG5vZHVsZS4gVGhlIG5vZHVsZSwgbWVhc3VyaW5nIDIuNSBjbSwgd2FzIGluY2lkZW50YWxseSBkaXNjb3ZlcmVkIGluIHRoZSByaWdodCB1cHBlciBsb2JlIG9uIGEgcmVjZW50IENUIGNoZXN0IHNjYW4gcGVyZm9ybWVkIGZvciBhbiB1bnJlbGF0ZWQgcmVhc29uLiBTaGUgZGVuaWVzIGFueSBhc3NvY2lhdGVkIHJlc3BpcmF0b3J5IHN5bXB0b21zIHN1Y2ggYXMgY291Z2gsIGR5c3BuZWEsIGhlbW9wdHlzaXMsIG9yIGNoZXN0IHBhaW4uIFNoZSBhbHNvIGRlbmllcyBjb25zdGl0dXRpb25hbCBzeW1wdG9tcyBpbmNsdWRpbmcgZmV2ZXIsIGNoaWxscywgbmlnaHQgc3dlYXRzLCBvciB1bmludGVudGlvbmFsIHdlaWdodCBsb3NzLiBUaGUgcGF0aWVudCByZXBvcnRzIG1pbGQgZmF0aWd1ZSwgaW5jcmVhc2VkIHRoaXJzdCwgYW5kIGluY3JlYXNlZCB1cmluYXRpb24sIGFsb25nIHdpdGggbWlsZCBjb25zdGlwYXRpb24sIHdoaWNoIHNoZSBhdHRyaWJ1dGVzIHRvIHJlY2VudCBjaGFuZ2VzIGluIGhlciBkaWV0LCB0aG91Z2ggdGhlc2Ugc3ltcHRvbXMgbWF5IGJlIHJlbGF0ZWQgdG8gaGVyIHNpZ25pZmljYW50bHkgZWxldmF0ZWQgY2FsY2l1bSBsZXZlbC4gU2hlIGhhcyBubyBzaWduaWZpY2FudCBwYXN0IG1lZGljYWwgaGlzdG9yeSBhbmQgdGFrZXMgbm8gcmVndWxhciBtZWRpY2F0aW9ucy4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:f861c40c-187b-4ae1-8646-3fefacf7b596"
+      }
+    ],
+    "period": {
+      "start": "2024-05-04T00:00:00+00:00",
+      "end": "2024-05-04T00:00:00+00:00"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "636a4291-5cdf-4b3f-a0bd-f619351404e7",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "13645005",
+        "display": "Chronic obstructive pulmonary disease"
+      }
+    ],
+    "text": "Chronic obstructive pulmonary disease"
+  },
+  "subject": {
+    "reference": "Patient/33ab2d2e-5ae3-7b2d-2066-47c13640e6a3"
+  },
+  "encounter": {
+    "reference": "urn:uuid:e89c2c45-eaa3-4808-9878-aad2ad26b24d"
+  },
+  "onsetDateTime": "2024-03-28T00:00:00+00:00"
+}

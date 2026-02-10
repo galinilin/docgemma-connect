@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "e8dc0e2a-544c-4e58-b6dc-5d762bcae9ad",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/7f8cf296-1a4b-2af9-0bc0-3f432a85a499"
+  },
+  "date": "2026-02-01T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCBmYXRpZ3VlLCBvciB1bmV4cGxhaW5lZCB3ZWlnaHQgbG9zcy4KUmVzcGlyYXRvcnk6IEVuZG9yc2VzIHBlcnNpc3RlbnQgY291Z2guIERlbmllcyBkeXNwbmVhLCB3aGVlemluZywgb3IgaGVtb3B0eXNpcy4gSGlzdG9yeSBvZiBwbmV1bW9uaWEgbm90ZWQuCkNhcmRpb3Zhc2N1bGFyOiBEZW5pZXMgY2hlc3QgcGFpbiwgcGFscGl0YXRpb25zLCBvciBlZGVtYS4KR2FzdHJvaW50ZXN0aW5hbDogRGVuaWVzIG5hdXNlYSwgdm9taXRpbmcsIGRpYXJyaGVhLCBvciBhYmRvbWluYWwgcGFpbi4KR2VuaXRvdXJpbmFyeTogRGVuaWVzIGR5c3VyaWEsIGhlbWF0dXJpYSwgb3IgZmxhbmsgcGFpbi4gSGlzdG9yeSBvZiByZW5hbCBtYXNzIG5vdGVkLgpJbnRlZ3VtZW50YXJ5OiBEZW5pZXMgcmFzaGVzLCBsZXNpb25zLCBvciBjaGFuZ2VzIGluIHNraW4u"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:e8fd5611-8335-456a-b0f8-2e637ba2a38e"
+      }
+    ],
+    "period": {
+      "start": "2026-02-01T00:00:00+00:00",
+      "end": "2026-02-01T00:00:00+00:00"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "3f665d93-9a95-4953-888a-b23fe76e297e",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Respiratory Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-12-02T00:00:00+00:00",
+    "end": "2025-12-02T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/c5d41910-a2da-dcbf-ac2b-8962798b2dfe"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "195967001",
+          "display": "Asthma"
+        }
+      ]
+    }
+  ]
+}

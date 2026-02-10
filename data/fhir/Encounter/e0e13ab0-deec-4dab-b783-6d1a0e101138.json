@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "e0e13ab0-deec-4dab-b783-6d1a0e101138",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Radiology Reports Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-08-04T00:00:00+00:00",
+    "end": "2024-08-04T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/cf90a4c2-2eff-de73-6b3e-904aaae6f1b8"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "126885006",
+          "display": "Renal mass"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "6cb591ce-3465-f678-5bc8-bf085504f4aa",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "6cb591ce-3465-f678-5bc8-bf085504f4aa"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "162673000",
+          "display": "General examination of patient (procedure)"
+        }
+      ],
+      "text": "General examination of patient (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/6cb591ce-3465-f678-3a3e-f8fb8eb2e7c7",
+    "display": "Mr. Gregorio366 Dominick530 Towne435"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2024-04-30T06:19:46-07:00",
+        "end": "2024-04-30T06:34:46-07:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999958892",
+        "display": "Dr. Melodie819 Schmeler639"
+      }
+    }
+  ],
+  "period": {
+    "start": "2024-04-30T06:19:46-07:00",
+    "end": "2024-04-30T06:34:46-07:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|62d5a6e6-99e2-3539-b155-6ef9775d3173",
+        "display": "LONGFELLOW PRIMARY CARE, PC"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|14036728-b721-3e4b-8755-8ee8ab6ed15e",
+    "display": "LONGFELLOW PRIMARY CARE, PC"
+  }
+}

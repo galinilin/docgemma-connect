@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "d17cca97-a131-414b-978a-3cdec887b4c4",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "5902-2",
+        "display": "PT [Prothrombin time]"
+      }
+    ],
+    "text": "PT [Prothrombin time]"
+  },
+  "subject": {
+    "reference": "Patient/9b8a9da0-4c66-f703-02c0-cf55279ca489"
+  },
+  "encounter": {
+    "reference": "urn:uuid:3fd84409-410b-4074-b49e-f4d47dbc419e"
+  },
+  "effectiveDateTime": "2025-03-04T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 12.57,
+    "unit": "s",
+    "system": "http://unitsofmeasure.org"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "d08f3b62-145d-47ca-9913-ab9af19d7797",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "42637-9",
+        "display": "Natriuretic peptide B [BNP]"
+      }
+    ],
+    "text": "Natriuretic peptide B [BNP]"
+  },
+  "subject": {
+    "reference": "Patient/0e3e4857-749b-8804-9990-a876ca66536c"
+  },
+  "encounter": {
+    "reference": "urn:uuid:a7dc7d3a-b1fb-4f40-b283-4abd61145974"
+  },
+  "effectiveDateTime": "2025-10-27T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 14.05,
+    "unit": "pg/mL",
+    "system": "http://unitsofmeasure.org"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "fd3e632f-57b7-4d8f-8714-0727107ceed4",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/8f6da6b5-fdfa-2dc3-9745-441b9e9b64cd"
+  },
+  "date": "2025-11-26T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCk1pY2hhbGUgaXMgYSA2MS15ZWFyLW9sZCBtYWxlIHByZXNlbnRpbmcgd2l0aCBwcm9ncmVzc2l2ZSBibHVycmVkIHZpc2lvbiBpbiBoaXMgbGVmdCBleWUgb3ZlciB0aGUgcGFzdCAxMiBtb250aHMuCgpISVNUT1JZIE9GIFBSRVNFTlQgSUxMTkVTUwpNci4gR29yY3phbnkgcmVwb3J0cyBhIGdyYWR1YWwgd29yc2VuaW5nIG9mIHZpc2lvbiBpbiBoaXMgbGVmdCBleWUgb3ZlciB0aGUgbGFzdCB5ZWFyLiBIZSBkZXNjcmliZXMgdGhlIGJsdXJyZWQgdmlzaW9uIGFzIG1ha2luZyBkYWlseSBhY3Rpdml0aWVzIHN1Y2ggYXMgcmVhZGluZyBhbmQgZHJpdmluZywgZXNwZWNpYWxseSBhdCBuaWdodCwgaW5jcmVhc2luZ2x5IGRpZmZpY3VsdC4gSGUgZGVuaWVzIGFueSBhc3NvY2lhdGVkIGV5ZSBwYWluLCByZWRuZXNzLCBkaXNjaGFyZ2UsIGZsYXNoZXMsIG9yIGZsb2F0ZXJzLiBIaXMgcmlnaHQgZXllIHZpc2lvbiByZW1haW5zIHN0YWJsZS4gSGUgaGFzIGEgaGlzdG9yeSBvZiBwcmltYXJ5IG9wZW4tYW5nbGUgZ2xhdWNvbWEsIGRpYWdub3NlZCBpbiBBcHJpbCAyMDI0LCB3aGljaCBpcyBjdXJyZW50bHkgbm90IGJlaW5nIHRyZWF0ZWQgd2l0aCBtZWRpY2F0aW9uLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:d7d7be49-9a11-4e9d-841c-bdbb1365c413"
+      }
+    ],
+    "period": {
+      "start": "2025-11-26T00:00:00+00:00",
+      "end": "2025-11-26T00:00:00+00:00"
+    }
+  }
+}

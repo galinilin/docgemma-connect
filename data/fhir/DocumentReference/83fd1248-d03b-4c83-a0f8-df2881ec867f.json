@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "83fd1248-d03b-4c83-a0f8-df2881ec867f",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/95428151-dfca-56a1-dca1-0a2836467e90"
+  },
+  "date": "2024-05-27T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCjY4LXllYXItb2xkIG1hbGUgcHJlc2VudGluZyB3aXRoIHN1ZGRlbiBvbnNldCBsZWZ0LXNpZGVkIHdlYWtuZXNzIGFuZCBzbHVycmVkIHNwZWVjaC4KCkhJU1RPUlkgT0YgUFJFU0VOVCBJTExORVNTClRoZSBwYXRpZW50IGlzIGEgNjgteWVhci1vbGQgbWFsZSB3aXRoIGEgaGlzdG9yeSBvZiBlcGlsZXBzeSBhbmQgZGVtZW50aWEsIHByZXNlbnRpbmcgdG9kYXkgd2l0aCBhY3V0ZSBvbnNldCBsZWZ0LXNpZGVkIHdlYWtuZXNzIGFuZCBzbHVycmVkIHNwZWVjaC4gU3ltcHRvbXMgcmVwb3J0ZWRseSBiZWdhbiBlYXJsaWVyIHRoaXMgbW9ybmluZywgZGV2ZWxvcGluZyBhYnJ1cHRseS4gSGUgZGVzY3JpYmVzIGRpZmZpY3VsdHkgbW92aW5nIGhpcyBsZWZ0IGFybSBhbmQgbGVnLCBhbG9uZyB3aXRoIG5vdGljZWFibGUgY2hhbmdlcyBpbiBoaXMgYWJpbGl0eSB0byBhcnRpY3VsYXRlIHdvcmRzIGNsZWFybHkuIFRoZSBzeW1wdG9tcyBoYXZlIGJlZW4gcGVyc2lzdGVudCBzaW5jZSBvbnNldC4gSGUgZGVuaWVzIGFueSBwcmVjZWRpbmcgdHJhdW1hLCBoZWFkYWNoZSwgdmlzaW9uIGNoYW5nZXMsIG9yIGxvc3Mgb2YgY29uc2Npb3VzbmVzcy4gVGhlcmUgYXJlIG5vIGN1cnJlbnQgbWVkaWNhdGlvbnMuIEhpcyBmYW1pbHkgcmVwb3J0cyBubyByZWNlbnQgc2VpenVyZXMgb3Igc2lnbmlmaWNhbnQgY2hhbmdlcyBpbiBoaXMgYmFzZWxpbmUgY29nbml0aXZlIGZ1bmN0aW9uIHByaW9yIHRvIHRoaXMgYWN1dGUgZXZlbnQu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:7c225821-7b15-4230-a68c-0c2fb0aae521"
+      }
+    ],
+    "period": {
+      "start": "2024-05-27T00:00:00+00:00",
+      "end": "2024-05-27T00:00:00+00:00"
+    }
+  }
+}

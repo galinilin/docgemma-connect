@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "3c4de5f5-0b13-48ae-ad64-49291227abf8",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Pt Rehab Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-03-18T00:00:00+00:00",
+    "end": "2024-03-18T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/53f7814f-cc70-0492-c58a-5ae2617a0221"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "422504002",
+          "display": "Stroke rehabilitation"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "9bcaeb07-d908-4555-9123-55a04adab875",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "34117-2",
+        "display": "History and Physical note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/888277e8-768f-028f-6524-31941dc17069"
+  },
+  "date": "2025-12-31",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "TXMuIE5ldmE1MTQgTWFjZWprb3ZpYzQyNCwgYSAyNy15ZWFyLW9sZCBmZW1hbGUsIGluaXRpYWxseSBwcmVzZW50ZWQgdG8gZGVybWF0b2xvZ3kgb24gMjAyNC0xMS0yMSB3aXRoIGEgZGlhZ25vc2lzIG9mIGNlbGx1bGl0aXMuIERldGFpbHMgcmVnYXJkaW5nIHRoZSBzcGVjaWZpYyBsb2NhdGlvbiwgc2V2ZXJpdHksIGFuZCB0cmVhdG1lbnQgb2YgdGhpcyBhY3V0ZSBiYWN0ZXJpYWwgc2tpbiBpbmZlY3Rpb24gYXJlIG5vdCBleHBsaWNpdGx5IGRvY3VtZW50ZWQgaW4gdGhlIHByb3ZpZGVkIHZpc2l0IGhpc3RvcnksIGJ1dCBpdCBtYXJrZWQgaGVyIGZpcnN0IHJlY29yZGVkIGRlcm1hdG9sb2dpY2FsIGVuY291bnRlci4KCkFwcHJveGltYXRlbHkgb25lIHllYXIgbGF0ZXIsIG9uIDIwMjUtMTItMzEsIE1zLiBNYWNlamtvdmljNDI0IGhhZCBhIGZvbGxvdy11cCBkZXJtYXRvbG9neSB2aXNpdCwgdGhpcyB0aW1lIGZvciBhIG5ldyBkaWFnbm9zaXMgb2YgZWN6ZW1hLiBUaGlzIGluZGljYXRlcyBhIHNlcGFyYXRlLCBjaHJvbmljIGluZmxhbW1hdG9yeSBza2luIGNvbmRpdGlvbiBkaXN0aW5jdCBmcm9tIGhlciBwcmlvciBhY3V0ZSBpbmZlY3Rpb24uIFRoZSBjbGluaWNhbCB0cmFqZWN0b3J5IHN1Z2dlc3RzIGVwaXNvZGljIGRlcm1hdG9sb2dpY2FsIGNvbmNlcm5zIHJhdGhlciB0aGFuIGEgY29udGludW91cyBvciBkaXJlY3RseSByZWxhdGVkIHByb2dyZXNzaW9uIGJldHdlZW4gdGhlIHR3byBkaWFnbm9zZXMu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ]
+}

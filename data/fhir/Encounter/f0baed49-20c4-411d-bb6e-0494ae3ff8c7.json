@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "f0baed49-20c4-411d-bb6e-0494ae3ff8c7",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Urology Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-05-31T00:00:00+00:00",
+    "end": "2024-05-31T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/79c53c80-7350-3e2a-d87b-d7f512721249"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "95570007",
+          "display": "Kidney stone"
+        }
+      ]
+    }
+  ]
+}

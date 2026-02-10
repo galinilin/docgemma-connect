@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "38d0f451-a51d-498c-bb24-7f7537878bad",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "42343007",
+        "display": "Congestive heart failure"
+      }
+    ],
+    "text": "Congestive heart failure"
+  },
+  "subject": {
+    "reference": "Patient/14608b8f-4f29-70ff-b78c-c4f23fe6dafb"
+  },
+  "encounter": {
+    "reference": "urn:uuid:d956a373-88cf-48f9-a97c-788767190c02"
+  },
+  "onsetDateTime": "2025-02-16T00:00:00+00:00"
+}

@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "80e52159-b6ba-4a5d-a127-992fe9c1eb10",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Obgyn Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-08-14T00:00:00+00:00",
+    "end": "2024-08-14T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/3b55dc50-2127-6fd3-2d34-629ed98a9152"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "129103003",
+          "display": "Endometriosis"
+        }
+      ]
+    }
+  ]
+}

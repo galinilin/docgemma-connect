@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "2a0147fc-04a1-46de-906a-db6c1419fdad",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/bdd98669-825f-4d4e-74a2-e91ee3f05afb"
+  },
+  "date": "2025-10-17T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IFBvc2l0aXZlIGZvciBmYXRpZ3VlLiBEZW5pZXMgZmV2ZXIsIGNoaWxscywgb3IgdW5pbnRlbnRpb25hbCB3ZWlnaHQgY2hhbmdlcy4KSEVFTlQ6IFBvc2l0aXZlIGZvciBwYWluZnVsIG9yYWwgdWxjZXJzIG9uIGJ1Y2NhbCBtdWNvc2EgYW5kIHBhbGF0ZS4gRGVuaWVzIGJsdXJyeSB2aXNpb24sIGRyeSBleWVzLCBvciBkcnkgbW91dGguCkRlcm1hdG9sb2dpYzogRGVuaWVzIG5ldyByYXNoZXMsIHBob3Rvc2Vuc2l0aXZpdHksIGFsb3BlY2lhLCBvciBSYXluYXVkJ3MgcGhlbm9tZW5vbi4KTXVzY3Vsb3NrZWxldGFsOiBQb3NpdGl2ZSBmb3IgbWlncmF0b3J5IHBvbHlhcnRocmFsZ2lhIGFmZmVjdGluZyBoYW5kcywgd3Jpc3RzLCBhbmQga25lZXMgd2l0aCBtb3JuaW5nIHN0aWZmbmVzcyBsYXN0aW5nIDQ1IG1pbnV0ZXMuIERlbmllcyBteWFsZ2lhIG9yIGpvaW50IHN3ZWxsaW5nLgpHYXN0cm9pbnRlc3RpbmFsOiBEZW5pZXMgbmF1c2VhLCB2b21pdGluZywgZGlhcnJoZWEsIGNvbnN0aXBhdGlvbiwgb3IgYWJkb21pbmFsIHBhaW4uClB1bG1vbmFyeTogRGVuaWVzIGNvdWdoLCBkeXNwbmVhLCBvciBwbGV1cml0aWMgY2hlc3QgcGFpbi4KQ2FyZGlvdmFzY3VsYXI6IERlbmllcyBjaGVzdCBwYWluLCBwYWxwaXRhdGlvbnMsIG9yIHBlcmlwaGVyYWwgZWRlbWEuClJlbmFsOiBEZW5pZXMgZHlzdXJpYSwgaGVtYXR1cmlhLCBvciBpbmNyZWFzZWQgdXJpbmFyeSBmcmVxdWVuY3kuCkhlbWF0b2xvZ2ljOiBEZW5pZXMgZWFzeSBicnVpc2luZyBvciBibGVlZGluZy4KTmV1cm9sb2dpYzogRGVuaWVzIGhlYWRhY2hlcywgc2VpenVyZXMsIGZvY2FsIHdlYWtuZXNzLCBvciBudW1ibmVzcy4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:62b1b8e3-2803-40bb-85d7-7084b474fb3d"
+      }
+    ],
+    "period": {
+      "start": "2025-10-17T00:00:00+00:00",
+      "end": "2025-10-17T00:00:00+00:00"
+    }
+  }
+}

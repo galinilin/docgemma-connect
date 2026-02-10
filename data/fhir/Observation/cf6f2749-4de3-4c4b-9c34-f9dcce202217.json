@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "cf6f2749-4de3-4c4b-9c34-f9dcce202217",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "5811-5",
+        "display": "Specific gravity"
+      }
+    ],
+    "text": "Specific gravity"
+  },
+  "subject": {
+    "reference": "Patient/1caa4b4a-c7f3-76b0-fe16-e04fc5a106f9"
+  },
+  "encounter": {
+    "reference": "urn:uuid:501346e7-d082-4d68-bc50-4493d1aae28c"
+  },
+  "effectiveDateTime": "2025-11-14T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 1.02,
+    "unit": "{ratio}",
+    "system": "http://unitsofmeasure.org"
+  }
+}

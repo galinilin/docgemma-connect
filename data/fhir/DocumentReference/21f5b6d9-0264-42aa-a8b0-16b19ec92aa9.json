@@ -1,0 +1,47 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "21f5b6d9-0264-42aa-a8b0-16b19ec92aa9",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "34117-2",
+        "display": "History and Physical note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/95428151-dfca-56a1-dca1-0a2836467e90"
+  },
+  "date": "2024-05-27",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "TXIuIENoaTcxNiBQcm9oYXNrYTgzNywgYSA2OC15ZWFyLW9sZCBtYWxlLCBpbml0aWFsbHkgcHJlc2VudGVkIHRvIE5ldXJvbG9neSBvbiAyMDI0LTA0LTA3IHdpdGggY29uY3VycmVudCBkaWFnbm9zZXMgb2YgRXBpbGVwc3kgYW5kIERlbWVudGlhLiBUaGUgc3BlY2lmaWMgY2hhcmFjdGVyaXN0aWNzIG9mIGhpcyBzZWl6dXJlIGRpc29yZGVyIGFuZCB0aGUgdHlwZSBvciBzZXZlcml0eSBvZiBkZW1lbnRpYSBhcmUgbm90IGRldGFpbGVkIGluIHRoZSBwcm92aWRlZCB2aXNpdCBoaXN0b3J5LCBidXQgdGhlc2UgdHdvIHNpZ25pZmljYW50IG5ldXJvbG9naWNhbCBjb25kaXRpb25zIHdlcmUgZXN0YWJsaXNoZWQgZHVyaW5nIGhpcyBpbml0aWFsIGV2YWx1YXRpb24uCgpBcHByb3hpbWF0ZWx5IHNldmVuIHdlZWtzIGxhdGVyLCBvbiAyMDI0LTA1LTI3LCBNci4gUHJvaGFza2E4Mzcgd2FzIGV2YWx1YXRlZCBmb3IgYSBDZXJlYnJvdmFzY3VsYXIgQWNjaWRlbnQgKENWQSkuIFRoaXMgYWN1dGUgZXZlbnQgcmVwcmVzZW50cyBhIHNpZ25pZmljYW50IGRldmVsb3BtZW50IGluIGhpcyBuZXVyb2xvZ2ljYWwgcHJvZmlsZSwgb2NjdXJyaW5nIGFmdGVyIHRoZSBpbml0aWFsIGRpYWdub3NlcyBvZiBjaHJvbmljIGVwaWxlcHN5IGFuZCBkZW1lbnRpYS4KClRoZSBjbGluaWNhbCB0cmFqZWN0b3J5IGZvciBNci4gUHJvaGFza2E4MzcgZGVtb25zdHJhdGVzIGEgY29tcGxleCBhbmQgZXZvbHZpbmcgbmV1cm9sb2dpY2FsIHN0YXR1cywgbWFya2VkIGJ5IHRoZSBwcmVzZW5jZSBvZiBjaHJvbmljIGNvbmRpdGlvbnMgZm9sbG93ZWQgYnkgYW4gYWN1dGUgY2VyZWJyb3Zhc2N1bGFyIGV2ZW50IHdpdGhpbiBhIHJlbGF0aXZlbHkgc2hvcnQgcGVyaW9kLiBUaGlzIHNlcXVlbmNlIHN1Z2dlc3RzIGEgcGF0aWVudCB3aXRoIGNvbXBvdW5kaW5nIG5ldXJvbG9naWNhbCBjaGFsbGVuZ2VzIHJlcXVpcmluZyBvbmdvaW5nIGNvbXByZWhlbnNpdmUgbWFuYWdlbWVudCBhbmQgY2xvc2UgbW9uaXRvcmluZyBmb3IgcG90ZW50aWFsIGludGVyYWN0aW9ucyBiZXR3ZWVuIHRoZXNlIGNvbmRpdGlvbnMu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ]
+}

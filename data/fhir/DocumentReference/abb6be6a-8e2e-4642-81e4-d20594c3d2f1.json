@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "abb6be6a-8e2e-4642-81e4-d20594c3d2f1",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/33ab2d2e-5ae3-7b2d-2066-47c13640e6a3"
+  },
+  "date": "2024-03-28T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogNjEteWVhci1vbGQgbWFsZSwgYXdha2UsIGFsZXJ0LCBhbmQgb3JpZW50ZWQgeDMuIEFwcGVhcnMgbWlsZGx5IGRpc3RyZXNzZWQgd2l0aCBpbmNyZWFzZWQgd29yayBvZiBicmVhdGhpbmcgYXQgcmVzdC4gTm8gYWN1dGUgcmVzcGlyYXRvcnkgZGlzdHJlc3MuClJlc3BpcmF0b3J5OiBJbmNyZWFzZWQgcmVzcGlyYXRvcnkgcmF0ZSB3aXRoIG1pbGQgYWNjZXNzb3J5IG11c2NsZSB1c2UuIENoZXN0IHdhbGwgc3ltbWV0cmljIHdpdGggZ29vZCBleHBhbnNpb24uIEF1c2N1bHRhdGlvbiByZXZlYWxzIGRpZmZ1c2UgZXhwaXJhdG9yeSB3aGVlemVzIGFuZCBwcm9sb25nZWQgZXhwaXJhdGlvbiBiaWxhdGVyYWxseS4gQnJlYXRoIHNvdW5kcyBhcmUgc29tZXdoYXQgZGltaW5pc2hlZCwgZXNwZWNpYWxseSBhdCBiYXNlcy4gTm8gY3JhY2tsZXMgb3IgcmhvbmNoaS4KQ2FyZGlvdmFzY3VsYXI6IFJlZ3VsYXIgcmF0ZSBhbmQgcmh5dGhtLCBTMS9TMiBhdWRpYmxlLiBObyBtdXJtdXJzLCBydWJzLCBvciBnYWxsb3BzLiBDYXBpbGxhcnkgcmVmaWxsIDwyIHNlY29uZHMuIE5vIGNhcm90aWQgYnJ1aXRzLgpFeHRyZW1pdGllczogV2FybSBhbmQgd2VsbC1wZXJmdXNlZC4gTm8gY2x1YmJpbmcsIGN5YW5vc2lzLCBvciBlZGVtYS4gUGVyaXBoZXJhbCBwdWxzZXMgMisgYW5kIHN5bW1ldHJpYy4KU2tpbjogU2tpbiB3YXJtLCBkcnksIGFuZCBpbnRhY3Qgd2l0aCBnb29kIHR1cmdvci4gTm8gcmFzaGVzLCBsZXNpb25zLCBvciBzaWducyBvZiBjeWFub3Npcy4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:e89c2c45-eaa3-4808-9878-aad2ad26b24d"
+      }
+    ],
+    "period": {
+      "start": "2024-03-28T00:00:00+00:00",
+      "end": "2024-03-28T00:00:00+00:00"
+    }
+  }
+}

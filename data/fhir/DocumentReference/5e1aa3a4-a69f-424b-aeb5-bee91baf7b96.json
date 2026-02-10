@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "5e1aa3a4-a69f-424b-aeb5-bee91baf7b96",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/e2393406-d73d-fae8-aa00-16068365a72d"
+  },
+  "date": "2025-04-15T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCkZhdGlndWUsIHdlaWdodCBnYWluLCBhbmQgY29sZCBpbnRvbGVyYW5jZSBmb3IgMiBtb250aHMuCgpISVNUT1JZIE9GIFBSRVNFTlQgSUxMTkVTUwpUaGVyZXNhIGlzIGEgNDgteWVhci1vbGQgZmVtYWxlIHByZXNlbnRpbmcgdG8gdGhlIGVuZG9jcmluZSBjbGluaWMgd2l0aCBhIDItbW9udGggaGlzdG9yeSBvZiBpbmNyZWFzaW5nIGZhdGlndWUsIHVuaW50ZW50aW9uYWwgd2VpZ2h0IGdhaW4gb2YgYXBwcm94aW1hdGVseSAxMCBsYnMsIGFuZCBjb2xkIGludG9sZXJhbmNlLiBTaGUgcmVwb3J0cyBmZWVsaW5nIHNsdWdnaXNoLCBoYXZpbmcgZGlmZmljdWx0eSBjb25jZW50cmF0aW5nLCBhbmQgZXhwZXJpZW5jaW5nIGRyeSBza2luIGFuZCBjb25zdGlwYXRpb24uIFRoZXNlIHN5bXB0b21zIGFyZSBwcm9ncmVzc2l2ZWx5IHdvcnNlbmluZyBhbmQgYXJlIGltcGFjdGluZyBoZXIgZGFpbHkgYWN0aXZpdGllcy4gSGVyIG1lZGljYWwgaGlzdG9yeSBpcyBub3RhYmxlIGZvciBoeXBlcnRoeXJvaWRpc20sIGRpYWdub3NlZCBpbiBEZWNlbWJlciAyMDI0LCBmb3Igd2hpY2ggc2hlIGlzIGN1cnJlbnRseSBub3Qgb24gbWVkaWNhdGlvbi4gU2hlIGlzIGhlcmUgdG9kYXkgZm9yIGV2YWx1YXRpb24gb2YgaGVyIG5ldyBvbnNldCBzeW1wdG9tcyBjb25jZXJuaW5nIGZvciBoeXBvdGh5cm9pZGlzbS4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:887c5f07-1ae1-4dbf-9a36-f46990f1517c"
+      }
+    ],
+    "period": {
+      "start": "2025-04-15T00:00:00+00:00",
+      "end": "2025-04-15T00:00:00+00:00"
+    }
+  }
+}

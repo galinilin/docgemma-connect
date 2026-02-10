@@ -1,0 +1,88 @@
+{
+  "resourceType": "Encounter",
+  "id": "76d630b6-f8f3-8025-abc0-eacc3299e7fb",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "76d630b6-f8f3-8025-abc0-eacc3299e7fb"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "185349003",
+          "display": "Encounter for check up (procedure)"
+        }
+      ],
+      "text": "Encounter for check up (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/76d630b6-f8f3-8025-2766-023a473178bf",
+    "display": "Mrs. Tonie631 Shavon903 Sipes176 JD"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2023-08-26T11:31:12-07:00",
+        "end": "2023-08-26T12:12:32-07:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999992198",
+        "display": "Dr. Randy380 Bergstrom287"
+      }
+    }
+  ],
+  "period": {
+    "start": "2023-08-26T11:31:12-07:00",
+    "end": "2023-08-26T12:12:32-07:00"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "275978004",
+          "display": "Screening for malignant neoplasm of colon (procedure)"
+        }
+      ]
+    }
+  ],
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|92b97a14-2913-30e3-99ba-39c987e4a9f6",
+        "display": "CAPE COD HOSPITAL INC"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|497f39dd-280e-3d58-af5b-c5e3a3a09b10",
+    "display": "CAPE COD HOSPITAL INC"
+  }
+}

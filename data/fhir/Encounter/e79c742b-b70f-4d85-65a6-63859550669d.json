@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "e79c742b-b70f-4d85-65a6-63859550669d",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "e79c742b-b70f-4d85-65a6-63859550669d"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "162673000",
+          "display": "General examination of patient (procedure)"
+        }
+      ],
+      "text": "General examination of patient (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/e79c742b-b70f-4d85-b722-bb3f288324e3",
+    "display": "Mr. Dennis979 Tracey100 Satterfield305"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2012-04-21T13:59:10-07:00",
+        "end": "2012-04-21T14:14:10-07:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999959890",
+        "display": "Dr. Beverlee316 Haag279"
+      }
+    }
+  ],
+  "period": {
+    "start": "2012-04-21T13:59:10-07:00",
+    "end": "2012-04-21T14:14:10-07:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|1bbb79e2-b09f-3783-9586-5f156f5d4229",
+        "display": "GREATER LOWELL FAMILY PRACTICE PC"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|2e8b42f8-4300-30a9-a576-d513d1021a0a",
+    "display": "GREATER LOWELL FAMILY PRACTICE PC"
+  }
+}

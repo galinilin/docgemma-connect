@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "be3c0005-714b-4bb4-bd90-73f2558660ce",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "3016-3",
+        "display": "TSH"
+      }
+    ],
+    "text": "TSH"
+  },
+  "subject": {
+    "reference": "Patient/e2393406-d73d-fae8-aa00-16068365a72d"
+  },
+  "encounter": {
+    "reference": "urn:uuid:ba258188-3208-4cdc-ac09-664d4dadee02"
+  },
+  "effectiveDateTime": "2024-12-30T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 1.2,
+    "unit": "mIU/L",
+    "system": "http://unitsofmeasure.org"
+  }
+}

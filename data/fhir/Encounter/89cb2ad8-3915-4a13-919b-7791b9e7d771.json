@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "89cb2ad8-3915-4a13-919b-7791b9e7d771",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Infectious Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-09-09T00:00:00+00:00",
+    "end": "2024-09-09T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/1caa4b4a-c7f3-76b0-fe16-e04fc5a106f9"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "186747009",
+          "display": "COVID-19"
+        }
+      ]
+    }
+  ]
+}

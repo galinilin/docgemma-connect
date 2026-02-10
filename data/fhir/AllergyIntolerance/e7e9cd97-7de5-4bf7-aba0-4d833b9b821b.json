@@ -1,0 +1,39 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "id": "e7e9cd97-7de5-4bf7-aba0-4d833b9b821b",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+        "code": "active",
+        "display": "Active"
+      }
+    ]
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+        "code": "confirmed",
+        "display": "Confirmed"
+      }
+    ]
+  },
+  "criticality": "low",
+  "code": {
+    "text": "Codeine"
+  },
+  "patient": {
+    "reference": "Patient/3371e581-d99e-a9de-9ed2-4532b7a66ead"
+  },
+  "reaction": [
+    {
+      "manifestation": [
+        {
+          "text": "Nausea"
+        }
+      ],
+      "severity": "mild"
+    }
+  ]
+}

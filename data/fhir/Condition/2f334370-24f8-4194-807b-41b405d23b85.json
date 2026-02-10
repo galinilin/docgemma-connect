@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "2f334370-24f8-4194-807b-41b405d23b85",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "254837009",
+        "display": "Breast carcinoma"
+      }
+    ],
+    "text": "Breast carcinoma"
+  },
+  "subject": {
+    "reference": "Patient/7078f970-3f57-cb9c-4165-c9d836a298c2"
+  },
+  "encounter": {
+    "reference": "urn:uuid:b9c4a702-ce61-4fd7-9ce4-8d7cf4727eea"
+  },
+  "onsetDateTime": "2026-01-23T00:00:00+00:00"
+}

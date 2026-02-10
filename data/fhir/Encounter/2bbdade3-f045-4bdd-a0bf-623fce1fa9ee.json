@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "2bbdade3-f045-4bdd-a0bf-623fce1fa9ee",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "General Surgery Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-07-04T00:00:00+00:00",
+    "end": "2024-07-04T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/ed36214b-0385-f87f-3308-410acb57d760"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "85189001",
+          "display": "Umbilical hernia"
+        }
+      ]
+    }
+  ]
+}

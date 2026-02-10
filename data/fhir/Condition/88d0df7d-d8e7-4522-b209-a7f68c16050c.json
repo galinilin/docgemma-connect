@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "88d0df7d-d8e7-4522-b209-a7f68c16050c",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "709044004",
+        "display": "Chronic kidney disease"
+      }
+    ],
+    "text": "Chronic kidney disease"
+  },
+  "subject": {
+    "reference": "Patient/618dad0a-741e-d831-e40e-89bc0e65d90b"
+  },
+  "encounter": {
+    "reference": "urn:uuid:00370446-201f-4a25-b384-ecdb6d4363be"
+  },
+  "onsetDateTime": "2025-10-10T00:00:00+00:00"
+}

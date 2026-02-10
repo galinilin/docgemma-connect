@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "3b802b83-df51-4206-8313-5f2353cb4ae8",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/42285243-dd83-90d6-922d-0231364fa398"
+  },
+  "date": "2025-02-09T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UClBhdGllbnQgcHJlc2VudHMgd2l0aCBhIDQtZGF5IGhpc3Rvcnkgb2Ygc29yZSB0aHJvYXQsIGZldmVyLCBhbmQgZGlmZmljdWx0eSBzd2FsbG93aW5nLgoKSElTVE9SWSBPRiBQUkVTRU5UIElMTE5FU1MKTG9yZW4gaXMgYSAzNC15ZWFyLW9sZCBtYWxlIHByZXNlbnRpbmcgd2l0aCBhIDQtZGF5IGhpc3Rvcnkgb2Ygc2V2ZXJlIHNvcmUgdGhyb2F0LCBzdWJqZWN0aXZlIGZldmVyLCBhbmQgZGlmZmljdWx0eSBzd2FsbG93aW5nLiBUaGUgc29yZSB0aHJvYXQgaXMgY29uc3RhbnQgYW5kIHNpZ25pZmljYW50bHkgd29yc2VuZWQgd2l0aCBzd2FsbG93aW5nIGJvdGggc29saWRzIGFuZCBsaXF1aWRzLiBIZSByZXBvcnRzIGFuIGFzc29jaWF0ZWQgc3ViamVjdGl2ZSBmZXZlciBidXQgZGVuaWVzIGNoaWxscyBvciBzd2VhdHMuIEhlIGRlbmllcyBjb3VnaCwgcmhpbm9ycmhlYSwgb3Igc2hvcnRuZXNzIG9mIGJyZWF0aC4gSGUgaGFzIGEgaGlzdG9yeSBvZiBjaHJvbmljIHNpbnVzaXRpcyBhbmQgb3RpdGlzIG1lZGlhLCBidXQgY3VycmVudGx5IGRlbmllcyBlYXIgcGFpbiwgbmFzYWwgY29uZ2VzdGlvbiwgb3Igc2lnbmlmaWNhbnQgc2ludXMgcHJlc3N1cmUuIEhlIGhhcyBub3QgdGFrZW4gYW55IG1lZGljYXRpb25zIGZvciB0aGVzZSBzeW1wdG9tcy4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:3099ee77-450f-4626-b164-f028d32a1a62"
+      }
+    ],
+    "period": {
+      "start": "2025-02-09T00:00:00+00:00",
+      "end": "2025-02-09T00:00:00+00:00"
+    }
+  }
+}

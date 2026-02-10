@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "9787b063-d6e8-45a6-b839-381769878fcf",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/6719e3fc-6d3f-cb16-23d6-4ca49bcf652a"
+  },
+  "date": "2024-10-04T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UClByb2dyZXNzaXZlIG1lbW9yeSBsb3NzIGFuZCBkaWZmaWN1bHR5IG1hbmFnaW5nIGZpbmFuY2VzIG92ZXIgMSB5ZWFyLgoKSElTVE9SWSBPRiBQUkVTRU5UIElMTE5FU1MKU2hlbHRvbiwgYSA2Ny15ZWFyLW9sZCBtYWxlLCBwcmVzZW50cyB3aXRoIGEgMS15ZWFyIGhpc3Rvcnkgb2YgcHJvZ3Jlc3NpdmUgbWVtb3J5IGxvc3MgYW5kIGluY3JlYXNpbmcgZGlmZmljdWx0eSBtYW5hZ2luZyBoaXMgcGVyc29uYWwgZmluYW5jZXMuIEluaXRpYWxseSwgaGUgbm90aWNlZCBtaWxkIGZvcmdldGZ1bG5lc3MsIGJ1dCBvdmVyIHRoZSBwYXN0IHllYXIsIHRoZXNlIGlzc3VlcyBoYXZlIHdvcnNlbmVkIHNpZ25pZmljYW50bHkuIEhlIHJlcG9ydHMgZGlmZmljdWx0eSByZWNhbGxpbmcgcmVjZW50IGV2ZW50cywgbmFtZXMgb2YgYWNxdWFpbnRhbmNlcywgYW5kIGFwcG9pbnRtZW50cy4gSGlzIGZhbWlseSByZXBvcnRzIHRoYXQgaGUgaGFzIG1hZGUgZXJyb3JzIGluIGJpbGwgcGF5bWVudHMsIGZvcmdvdHRlbiB0byBwYXkgYmlsbHMgZW50aXJlbHksIGFuZCBoYXMgaGFkIHRyb3VibGUgYmFsYW5jaW5nIGhpcyBjaGVja2Jvb2ssIHdoaWNoIHdhcyBwcmV2aW91c2x5IGFuIGVhc3kgdGFzayBmb3IgaGltLiBIZSBkZW5pZXMgYW55IGFjdXRlIGhlYWQgdHJhdW1hLCBzZWl6dXJlcywgb3Igc2lnbmlmaWNhbnQgY2hhbmdlcyBpbiBkaWV0IG9yIHdlaWdodC4KClRoZSBtZW1vcnkgZGVmaWNpdHMgYXJlIGNvbnN0YW50IGFuZCBub24tZmx1Y3R1YXRpbmcuIEhlIGRlbmllcyBmb2NhbCB3ZWFrbmVzcywgbnVtYm5lc3MsIHZpc3VhbCBjaGFuZ2VzLCBvciBwcm9ibGVtcyB3aXRoIGdhaXQgb3IgYmFsYW5jZS4gVGhlcmUgYXJlIG5vIHJlcG9ydGVkIGNoYW5nZXMgaW4gbW9vZCBvciBwZXJzb25hbGl0eSwgYWx0aG91Z2ggaGlzIGZhbWlseSBleHByZXNzZXMgY29uY2VybiBhYm91dCBoaXMgaW5jcmVhc2luZyByZWxpYW5jZSBvbiB0aGVtIGZvciBkYWlseSB0YXNrcyB0aGF0IGhlIHByZXZpb3VzbHkgbWFuYWdlZCBpbmRlcGVuZGVudGx5Lg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:df53eb04-538d-4bfc-8653-27b0643ac59f"
+      }
+    ],
+    "period": {
+      "start": "2024-10-04T00:00:00+00:00",
+      "end": "2024-10-04T00:00:00+00:00"
+    }
+  }
+}

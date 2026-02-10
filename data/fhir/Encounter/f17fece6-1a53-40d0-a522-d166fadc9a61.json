@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "f17fece6-1a53-40d0-a522-d166fadc9a61",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Geriatrics Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-04-21T00:00:00+00:00",
+    "end": "2025-04-21T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/0e5ee9e3-bc27-4026-4b1b-18159bceb262"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "85898001",
+          "display": "Polypharmacy management"
+        }
+      ]
+    }
+  ]
+}

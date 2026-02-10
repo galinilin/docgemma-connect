@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "d0b5a3b4-566d-484f-bfe1-e00a0f10bbf0",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/2b92316a-37ef-e5aa-b1c9-8fe5964df210"
+  },
+  "date": "2024-09-11T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCBvciB1bmludGVudGlvbmFsIHdlaWdodCBsb3NzLgpNdXNjdWxvc2tlbGV0YWw6IEVuZG9yc2VzIHJpZ2h0IGtuZWUgcGFpbiwgc3RpZmZuZXNzLCBhbmQgZGlmZmljdWx0eSB3aXRoIHN0YWlycy4gRGVuaWVzIG90aGVyIGpvaW50IHBhaW4sIHN3ZWxsaW5nLCBvciBtdXNjbGUgd2Vha25lc3MuCk5ldXJvbG9naWNhbDogRGVuaWVzIG51bWJuZXNzLCB0aW5nbGluZywgb3Igd2Vha25lc3MgaW4gdGhlIGV4dHJlbWl0aWVzLgpDYXJkaW92YXNjdWxhcjogRGVuaWVzIGNoZXN0IHBhaW4sIHBhbHBpdGF0aW9ucywgb3IgbG93ZXIgZXh0cmVtaXR5IGVkZW1hLgpSZXNwaXJhdG9yeTogRGVuaWVzIGNvdWdoLCBkeXNwbmVhLCBvciB3aGVlemluZy4KR2FzdHJvaW50ZXN0aW5hbDogRGVuaWVzIGFiZG9taW5hbCBwYWluLCBuYXVzZWEsIHZvbWl0aW5nLCBvciBjaGFuZ2VzIGluIGJvd2VsIGhhYml0cy4KSW50ZWd1bWVudGFyeTogRGVuaWVzIHJhc2hlcywgbGVzaW9ucywgb3IgY2hhbmdlcyBpbiBza2luIGNvbG9yLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:a556877a-83dd-4fdf-b2a9-4ea93223bb2b"
+      }
+    ],
+    "period": {
+      "start": "2024-09-11T00:00:00+00:00",
+      "end": "2024-09-11T00:00:00+00:00"
+    }
+  }
+}

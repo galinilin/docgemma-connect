@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "3099ee77-450f-4626-b164-f028d32a1a62",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Ent Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-02-09T00:00:00+00:00",
+    "end": "2025-02-09T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/42285243-dd83-90d6-922d-0231364fa398"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "195528001",
+          "display": "Tonsillitis"
+        }
+      ]
+    }
+  ]
+}

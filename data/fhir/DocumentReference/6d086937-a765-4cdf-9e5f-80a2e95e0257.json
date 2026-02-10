@@ -1,0 +1,47 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "6d086937-a765-4cdf-9e5f-80a2e95e0257",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "34117-2",
+        "display": "History and Physical note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/8f6da6b5-fdfa-2dc3-9745-441b9e9b64cd"
+  },
+  "date": "2025-11-26",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "TXIuIE1pY2hhbGUyMzEgR29yY3phbnkyNjksIGJvcm4gTWFyY2ggMjIsIDE5NjQsIGluaXRpYXRlZCBvcGh0aGFsbW9sb2dpYyBjYXJlIG9uIEFwcmlsIDEsIDIwMjQuIER1cmluZyB0aGlzIGluaXRpYWwgdmlzaXQsIGhlIHdhcyBkaWFnbm9zZWQgd2l0aCBwcmltYXJ5IG9wZW4tYW5nbGUgZ2xhdWNvbWEgKFBPQUcpLiBUaGUgc3BlY2lmaWMgdHJlYXRtZW50IHJlZ2ltZW4gb3IgbWFuYWdlbWVudCBwbGFuIGltcGxlbWVudGVkIGZvciBoaXMgUE9BRyBhdCB0aGF0IHRpbWUgaXMgbm90IGRldGFpbGVkIGluIHRoZSBwcm92aWRlZCBoaXN0b3J5LgoKQXBwcm94aW1hdGVseSBvbmUgeWVhciBhbmQgc2V2ZW4gbW9udGhzIGxhdGVyLCBvbiBOb3ZlbWJlciAyNiwgMjAyNSwgTXIuIEdvcmN6YW55MjY5IHJldHVybmVkIGZvciBhbm90aGVyIG9waHRoYWxtb2xvZ3kgdmlzaXQuIEF0IHRoaXMgc3Vic2VxdWVudCBlbmNvdW50ZXIsIGhlIHJlY2VpdmVkIGEgZGlhZ25vc2lzIG9mIGNhdGFyYWN0LiBUaGlzIGluZGljYXRlcyB0aGUgZGV2ZWxvcG1lbnQgb2YgYSBzZWNvbmQgc2lnbmlmaWNhbnQgb2N1bGFyIHBhdGhvbG9neSwgcmVxdWlyaW5nIG9uZ29pbmcgYXNzZXNzbWVudCBhbmQgbWFuYWdlbWVudCBpbiBhZGRpdGlvbiB0byBoaXMgcHJldmlvdXNseSBkaWFnbm9zZWQgUE9BRy4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "570a440a-9f68-4981-9e0f-5e785084dc71",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/52232f8f-dfd4-f0c9-0aa3-9ff468602be4"
+  },
+  "date": "2024-07-15T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCBuaWdodCBzd2VhdHMsIG9yIHNpZ25pZmljYW50IGZhdGlndWUuCkdlbml0b3VyaW5hcnk6IEVuZG9yc2VzIGR5c3VyaWEsIHVyaW5hcnkgZnJlcXVlbmN5LCBhbmQgdXJnZW5jeSBmb3IgMyBkYXlzLiBEZW5pZXMgaGVtYXR1cmlhLCBmbGFuayBwYWluLCBzdXByYXB1YmljIHBhaW4sIG9yIGRpZmZpY3VsdHkgd2l0aCB1cmluYXRpb24uIERlbmllcyB2YWdpbmFsIGRpc2NoYXJnZSBvciBpdGNoaW5nLgpHYXN0cm9pbnRlc3RpbmFsOiBEZW5pZXMgbmF1c2VhLCB2b21pdGluZywgZGlhcnJoZWEsIGNvbnN0aXBhdGlvbiwgb3IgYWJkb21pbmFsIHBhaW4uCk11c2N1bG9za2VsZXRhbDogRGVuaWVzIG15YWxnaWFzLCBhcnRocmFsZ2lhcywgb3IgYmFjayBwYWluLgpEZXJtYXRvbG9naWM6IERlbmllcyByYXNoZXMsIGxlc2lvbnMsIG9yIGNoYW5nZXMgaW4gc2tpbi4KTmV1cm9sb2dpY2FsOiBEZW5pZXMgaGVhZGFjaGUsIGRpenppbmVzcywgc3luY29wZSwgbnVtYm5lc3MsIG9yIHRpbmdsaW5nLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:1d3b2b93-d453-43db-bb71-fa6dd76b8f82"
+      }
+    ],
+    "period": {
+      "start": "2024-07-15T00:00:00+00:00",
+      "end": "2024-07-15T00:00:00+00:00"
+    }
+  }
+}

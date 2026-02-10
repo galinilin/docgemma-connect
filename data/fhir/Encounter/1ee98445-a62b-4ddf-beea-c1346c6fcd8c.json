@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "1ee98445-a62b-4ddf-beea-c1346c6fcd8c",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Radiology Visit"
+    }
+  ],
+  "period": {
+    "start": "2026-01-18T00:00:00+00:00",
+    "end": "2026-01-18T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/5e6b19a5-5944-9a73-500b-3772430c1c8a"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "268525008",
+          "display": "Lung cancer screening"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "e8fd5611-8335-456a-b0f8-2e637ba2a38e",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Radiology Reports Visit"
+    }
+  ],
+  "period": {
+    "start": "2026-02-01T00:00:00+00:00",
+    "end": "2026-02-01T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/7f8cf296-1a4b-2af9-0bc0-3f432a85a499"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "126713003",
+          "display": "Pulmonary nodule"
+        }
+      ]
+    }
+  ]
+}

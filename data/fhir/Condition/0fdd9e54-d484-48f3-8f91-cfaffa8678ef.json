@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "0fdd9e54-d484-48f3-8f91-cfaffa8678ef",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "193570009",
+        "display": "Cataract"
+      }
+    ],
+    "text": "Cataract"
+  },
+  "subject": {
+    "reference": "Patient/c238518c-2350-c0bd-1fc3-eff02ec7f7ef"
+  },
+  "encounter": {
+    "reference": "urn:uuid:fc959af9-3910-4e3e-8ecf-e1382eada7a9"
+  },
+  "onsetDateTime": "2025-07-08T00:00:00+00:00"
+}

@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "a63b3c33-271a-4b29-8607-6b4634cd132d",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2885-2",
+        "display": "Total Protein [Serum]"
+      }
+    ],
+    "text": "Total Protein [Serum]"
+  },
+  "subject": {
+    "reference": "Patient/17b5b8a5-5eb1-bebe-ce76-a34acf418a14"
+  },
+  "encounter": {
+    "reference": "urn:uuid:6904caf6-3d26-415b-80b6-a37174f068cb"
+  },
+  "effectiveDateTime": "2024-05-01T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 6.35,
+    "unit": "g/dL",
+    "system": "http://unitsofmeasure.org"
+  }
+}

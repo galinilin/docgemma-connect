@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "2040138b-158c-4ff2-a0c9-096303d6ec80",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/18311806-a178-5067-ba05-d34d9d95cb71"
+  },
+  "date": "2024-10-04T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IFBvc2l0aXZlIGZvciBmZXZlciBhbmQgaXJyaXRhYmlsaXR5LiBEZW5pZXMgY2hpbGxzLCBnZW5lcmFsaXplZCB3ZWFrbmVzcywgb3IgZmF0aWd1ZS4KSEVFTlQ6IFBvc2l0aXZlIGZvciByaWdodCBlYXIgcGFpbiBhbmQgcHVsbGluZyBhdCB0aGUgcmlnaHQgZWFyLiBEZW5pZXMgdmlzaW9uIGNoYW5nZXMsIGV5ZSBkaXNjaGFyZ2UsIG5hc2FsIGNvbmdlc3Rpb24sIHJoaW5vcnJoZWEsIHNvcmUgdGhyb2F0LCBvciBkeXNwaGFnaWEuClJlc3BpcmF0b3J5OiBEZW5pZXMgY291Z2gsIHNob3J0bmVzcyBvZiBicmVhdGgsIG9yIHdoZWV6aW5nLgpDYXJkaW92YXNjdWxhcjogRGVuaWVzIGNoZXN0IHBhaW4gb3IgcGFscGl0YXRpb25zLgpHYXN0cm9pbnRlc3RpbmFsOiBEZW5pZXMgbmF1c2VhLCB2b21pdGluZywgZGlhcnJoZWEsIGNvbnN0aXBhdGlvbiwgb3IgYWJkb21pbmFsIHBhaW4uCk5ldXJvbG9naWNhbDogRGVuaWVzIGhlYWRhY2hlLCBkaXp6aW5lc3MsIG9yIHNlaXp1cmVzLgpTa2luOiBEZW5pZXMgcmFzaGVzIG9yIGxlc2lvbnMu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:fabe0b30-b634-42f0-938b-924788883179"
+      }
+    ],
+    "period": {
+      "start": "2024-10-04T00:00:00+00:00",
+      "end": "2024-10-04T00:00:00+00:00"
+    }
+  }
+}

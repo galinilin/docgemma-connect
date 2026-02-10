@@ -1,0 +1,47 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "5fa386b5-87bf-4cc5-aa63-2238aec7ba46",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "34117-2",
+        "display": "History and Physical note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/79c53c80-7350-3e2a-d87b-d7f512721249"
+  },
+  "date": "2025-12-22",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "TXMuIExvd2U1NzcsIGEgMjkteWVhci1vbGQgZmVtYWxlLCBmaXJzdCBwcmVzZW50ZWQgdG8gVXJvbG9neSBvbiAyMDI0LTA1LTMxIHdpdGggYSBkaWFnbm9zaXMgb2Yga2lkbmV5IHN0b25lLiBTcGVjaWZpYyBkZXRhaWxzIHJlZ2FyZGluZyB0aGUgc3RvbmUncyBjaGFyYWN0ZXJpc3RpY3MsIG1hbmFnZW1lbnQsIG9yIHN1YnNlcXVlbnQgcmVzb2x1dGlvbiBhcmUgbm90IGV4cGxpY2l0bHkgZG9jdW1lbnRlZCBpbiB0aGUgcHJvdmlkZWQgdmlzaXQgaGlzdG9yeS4gCgpBcHByb3hpbWF0ZWx5IG9uZSBhbmQgYSBoYWxmIHllYXJzIGxhdGVyLCBvbiAyMDI1LTEyLTIyLCBNcy4gTG93ZTU3NyBoYWQgYSBzdWJzZXF1ZW50IHVyb2xvZ3kgdmlzaXQgd2hlcmUgc2hlIHdhcyBkaWFnbm9zZWQgd2l0aCBjaHJvbmljIHByb3N0YXRpdGlzLiBUaGlzIGRpYWdub3Npcywgd2hpbGUgYXR5cGljYWwgZm9yIGEgZmVtYWxlIHBhdGllbnQsIGlzIHJlY29yZGVkIGluIGhlciBjaGFydC4gVGhlIGNsaW5pY2FsIHRyYWplY3RvcnkgYW5kIGFueSBzcGVjaWZpYyB0cmVhdG1lbnRzIGluaXRpYXRlZCBmb3IgZWl0aGVyIHRoZSBraWRuZXkgc3RvbmUgb3IgdGhlIGNocm9uaWMgcHJvc3RhdGl0aXMgYXJlIG5vdCBkZXRhaWxlZCB3aXRoaW4gdGhlIHByb3ZpZGVkIHZpc2l0IGhpc3Rvcnku"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ]
+}

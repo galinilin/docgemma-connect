@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "ed513785-c1da-aebb-1a62-1d91eb2fe5af",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "ed513785-c1da-aebb-1a62-1d91eb2fe5af"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "162673000",
+          "display": "General examination of patient (procedure)"
+        }
+      ],
+      "text": "General examination of patient (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/ed513785-c1da-aebb-0b45-621c89e85d44",
+    "display": "Mrs. Reatha769 Sawayn19"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2019-11-08T21:07:12-08:00",
+        "end": "2019-11-08T21:22:12-08:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999976092",
+        "display": "Dr. Karl184 Hansen121"
+      }
+    }
+  ],
+  "period": {
+    "start": "2019-11-08T21:07:12-08:00",
+    "end": "2019-11-08T21:22:12-08:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|f3a58013-ca86-36d3-8ef1-27f1cbb85fe5",
+        "display": "COMMUNITY HEALTH CENTER OF CAPE COD, INC."
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|7e97f720-f99d-3402-98a4-a144aaa5bd01",
+    "display": "COMMUNITY HEALTH CENTER OF CAPE COD, INC."
+  }
+}

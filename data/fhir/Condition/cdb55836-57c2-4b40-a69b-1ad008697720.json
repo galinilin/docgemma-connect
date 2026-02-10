@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "cdb55836-57c2-4b40-a69b-1ad008697720",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "190268003",
+        "display": "Hyperthyroidism"
+      }
+    ],
+    "text": "Hyperthyroidism"
+  },
+  "subject": {
+    "reference": "Patient/e2393406-d73d-fae8-aa00-16068365a72d"
+  },
+  "encounter": {
+    "reference": "urn:uuid:ba258188-3208-4cdc-ac09-664d4dadee02"
+  },
+  "onsetDateTime": "2024-12-30T00:00:00+00:00"
+}

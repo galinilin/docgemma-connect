@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "8ec37087-2acb-496f-bb62-54adb8176f24",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/8f6da6b5-fdfa-2dc3-9745-441b9e9b64cd"
+  },
+  "date": "2025-11-26T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogNjEteWVhci1vbGQgbWFsZSwgd2VsbC1hcHBlYXJpbmcsIGluIG5vIGFjdXRlIGRpc3RyZXNzLgpPY3VsYXI6IFZpc3VhbCBBY3VpdHk6IE9EIDIwLzI1LCBPUyAyMC83MCAodW5jb3JyZWN0ZWQpLiBFeHRlcm5hbCBleGFtOiBMaWRzLCBsYXNoZXMsIGNvbmp1bmN0aXZhIG5vcm1hbCBPVS4gUHVwaWxzOiBQRVJSTEEsIG5vIEFQRC4gRU9NOiBGdWxsIGFuZCB1bnJlc3RyaWN0ZWQgT1UuIElPUDogT0QgMTYgbW1IZywgT1MgMTggbW1IZy4gU2xpdCBMYW1wIEV4YW06IENvcm5lYSBjbGVhciBPVS4gQW50ZXJpb3IgY2hhbWJlciBkZWVwIGFuZCBxdWlldCBPVS4gSXJpcyBub3JtYWwgT1UuIExlbnM6IE9EOiBUcmFjZSBudWNsZWFyIHNjbGVyb3Npcy4gT1M6IDIrIG51Y2xlYXIgc2NsZXJvc2lzIHdpdGggcG9zdGVyaW9yIHN1YmNhcHN1bGFyIGNhdGFyYWN0LiBGdW5kdXNjb3BpYyBFeGFtIChEaWxhdGVkKTogT3B0aWMgTmVydmVzOiBPRCBDL0QgMC40LCBwaW5rIHJpbS4gT1MgQy9EIDAuNSwgcGluayByaW0sIHN0YWJsZS4gTWFjdWxhOiBGbGF0LCBubyBkcnVzZW4gb3IgZWRlbWEgT1UuIFBlcmlwaGVyeTogQXR0YWNoZWQsIG5vIHRlYXJzIG9yIGRldGFjaG1lbnRzIE9VLgpIRUVOVDogTm9ybW9jZXBoYWxpYywgYXRyYXVtYXRpYy4gT3JhbCBtdWNvc2EgbW9pc3QuIFBoYXJ5bnggY2xlYXIuCkNhcmRpb3Zhc2N1bGFyOiBSZWd1bGFyIHJhdGUgYW5kIHJoeXRobS4gTm8gbXVybXVycywgcnVicywgb3IgZ2FsbG9wcy4KUmVzcGlyYXRvcnk6IEx1bmdzIGNsZWFyIHRvIGF1c2N1bHRhdGlvbiBiaWxhdGVyYWxseS4gTm8gd2hlZXplcywgcmFsZXMsIG9yIHJob25jaGku"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:d7d7be49-9a11-4e9d-841c-bdbb1365c413"
+      }
+    ],
+    "period": {
+      "start": "2025-11-26T00:00:00+00:00",
+      "end": "2025-11-26T00:00:00+00:00"
+    }
+  }
+}

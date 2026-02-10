@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "6b856415-97c3-42bc-89d3-dd377d0ce25e",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "422504002",
+        "display": "Stroke rehabilitation"
+      }
+    ],
+    "text": "Stroke rehabilitation"
+  },
+  "subject": {
+    "reference": "Patient/65ba7fb5-d904-3959-5e3a-ab460f62762f"
+  },
+  "encounter": {
+    "reference": "urn:uuid:ca637888-5858-4bc6-b656-10a0a980b2bc"
+  },
+  "onsetDateTime": "2025-05-06T00:00:00+00:00"
+}

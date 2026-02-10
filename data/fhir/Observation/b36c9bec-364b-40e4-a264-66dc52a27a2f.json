@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "b36c9bec-364b-40e4-a264-66dc52a27a2f",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "6690-2",
+        "display": "Leukocytes [WBC]"
+      }
+    ],
+    "text": "Leukocytes [WBC]"
+  },
+  "subject": {
+    "reference": "Patient/7f8cf296-1a4b-2af9-0bc0-3f432a85a499"
+  },
+  "encounter": {
+    "reference": "urn:uuid:e8fd5611-8335-456a-b0f8-2e637ba2a38e"
+  },
+  "effectiveDateTime": "2026-02-01T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 8.79,
+    "unit": "10*3/uL",
+    "system": "http://unitsofmeasure.org"
+  }
+}

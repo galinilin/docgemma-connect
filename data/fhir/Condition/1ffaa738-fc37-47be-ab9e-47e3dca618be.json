@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "1ffaa738-fc37-47be-ab9e-47e3dca618be",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "68496003",
+        "display": "Colorectal adenoma"
+      }
+    ],
+    "text": "Colorectal adenoma"
+  },
+  "subject": {
+    "reference": "Patient/5a0a158c-5090-5d2d-002f-b32e87281de6"
+  },
+  "encounter": {
+    "reference": "urn:uuid:127b902e-5fe5-4442-abe8-324ba1cbf2f7"
+  },
+  "onsetDateTime": "2025-04-07T00:00:00+00:00"
+}

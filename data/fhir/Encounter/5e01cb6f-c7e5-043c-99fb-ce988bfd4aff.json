@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "5e01cb6f-c7e5-043c-99fb-ce988bfd4aff",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "5e01cb6f-c7e5-043c-99fb-ce988bfd4aff"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "33879002",
+          "display": "Administration of vaccine to produce active immunity (procedure)"
+        }
+      ],
+      "text": "Administration of vaccine to produce active immunity (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/5e01cb6f-c7e5-043c-3617-4b7d6e7d9660",
+    "display": "Mr. Emory494 Pasquale620 Borer986"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2021-05-05T18:44:00-07:00",
+        "end": "2021-05-05T18:59:00-07:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999986190",
+        "display": "Dr. Terri848 Ankunding277"
+      }
+    }
+  ],
+  "period": {
+    "start": "2021-05-05T18:44:00-07:00",
+    "end": "2021-05-05T18:59:00-07:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|13b4306d-4328-3fdf-b2f1-88d2dbd4bc31",
+        "display": "FAIRVIEW HOSPITAL"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|1faab3d1-2ae5-3110-8e5f-c65b92ca906d",
+    "display": "FAIRVIEW HOSPITAL"
+  }
+}

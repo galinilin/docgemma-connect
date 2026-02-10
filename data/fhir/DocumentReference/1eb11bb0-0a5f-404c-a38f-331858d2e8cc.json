@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "1eb11bb0-0a5f-404c-a38f-331858d2e8cc",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/86014c39-6ab1-d221-4857-b8f6e11ddad7"
+  },
+  "date": "2024-03-17T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogUGF0aWVudCBhcHBlYXJzIHVuY29tZm9ydGFibGUgYnV0IGNvb3BlcmF0aXZlIGZvciBpbWFnaW5nLiBObyBhY3V0ZSBkaXN0cmVzcyBvYnNlcnZlZCBkdXJpbmcgdGhlIHN0dWR5LgpMdW5nczogSW5zcGVjdGlvbiBvZiBjaGVzdCB3YWxsIHJldmVhbHMgbm8gb2J2aW91cyBkZWZvcm1pdHkuIEF1c2N1bHRhdGlvbiBhbmQgcGFscGF0aW9uIG5vdCBwZXJmb3JtZWQgYnkgcmFkaW9sb2dpc3QuCkNhcmRpb3Zhc2N1bGFyOiBObyBncm9zcyBzaWducyBvZiBjeWFub3NpcyBvciBwZXJpcGhlcmFsIGVkZW1hIG9ic2VydmVkLgpBYmRvbWVuOiBObyBvYnZpb3VzIGFiZG9taW5hbCBkaXN0ZW5zaW9uIG5vdGVkLgpFeHRyZW1pdGllczogTm8gZ3Jvc3Mgc3dlbGxpbmcgb3IgZGVmb3JtaXR5LgpWaXRhbHM6IFZpdGFsIHNpZ25zIG5vdCByZWNvcmRlZCBmb3IgdGhpcyBlbmNvdW50ZXIu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:f08b7915-4fb3-485d-b433-ac615c97ea05"
+      }
+    ],
+    "period": {
+      "start": "2024-03-17T00:00:00+00:00",
+      "end": "2024-03-17T00:00:00+00:00"
+    }
+  }
+}

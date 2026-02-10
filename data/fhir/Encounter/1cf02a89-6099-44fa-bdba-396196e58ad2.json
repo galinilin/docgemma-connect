@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "1cf02a89-6099-44fa-bdba-396196e58ad2",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Radiology Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-03-06T00:00:00+00:00",
+    "end": "2025-03-06T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/db6f2298-121c-18c9-b606-07c967e326c8"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "128613002",
+          "display": "Abnormal imaging finding"
+        }
+      ]
+    }
+  ]
+}

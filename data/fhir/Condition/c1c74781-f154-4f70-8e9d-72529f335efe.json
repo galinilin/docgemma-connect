@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "c1c74781-f154-4f70-8e9d-72529f335efe",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "129103003",
+        "display": "Endometriosis"
+      }
+    ],
+    "text": "Endometriosis"
+  },
+  "subject": {
+    "reference": "Patient/ed513785-c1da-aebb-0b45-621c89e85d44"
+  },
+  "encounter": {
+    "reference": "urn:uuid:bb0614f2-84dd-436f-a685-39043f779151"
+  },
+  "onsetDateTime": "2025-07-06T00:00:00+00:00"
+}

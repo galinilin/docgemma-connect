@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "c1039c43-3989-4389-a11a-0b448702e5e8",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/0e3e4857-749b-8804-9990-a876ca66536c"
+  },
+  "date": "2025-10-27T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCB3ZWlnaHQgY2hhbmdlcywgb3Igc2lnbmlmaWNhbnQgZmF0aWd1ZS4KQ2FyZGlvdmFzY3VsYXI6IERlbmllcyBwYWxwaXRhdGlvbnMsIGNoZXN0IHBhaW4sIG9ydGhvcG5lYSwgb3IgcGFyb3h5c21hbCBub2N0dXJuYWwgZHlzcG5lYS4gTm8ga25vd24gaGlzdG9yeSBvZiBzeW5jb3BlLgpSZXNwaXJhdG9yeTogRGVuaWVzIGNvdWdoLCB3aGVlemluZywgb3IgaGVtb3B0eXNpcy4gUmVwb3J0cyBubyBpbmNyZWFzZWQgc2hvcnRuZXNzIG9mIGJyZWF0aCB3aXRoIGV4ZXJ0aW9uLgpHYXN0cm9pbnRlc3RpbmFsOiBEZW5pZXMgbmF1c2VhLCB2b21pdGluZywgZGlhcnJoZWEsIGNvbnN0aXBhdGlvbiwgb3IgYWJkb21pbmFsIHBhaW4uCk5ldXJvbG9naWNhbDogRGVuaWVzIGhlYWRhY2hlLCBkaXp6aW5lc3MsIGxpZ2h0aGVhZGVkbmVzcywgb3IgZm9jYWwgd2Vha25lc3MuCk11c2N1bG9za2VsZXRhbDogRGVuaWVzIGFydGhyYWxnaWFzIG9yIG15YWxnaWFzLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:a7dc7d3a-b1fb-4f40-b283-4abd61145974"
+      }
+    ],
+    "period": {
+      "start": "2025-10-27T00:00:00+00:00",
+      "end": "2025-10-27T00:00:00+00:00"
+    }
+  }
+}

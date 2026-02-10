@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "412a5087-ebf0-43b0-9459-07d23f607a31",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/53f7814f-cc70-0492-c58a-5ae2617a0221"
+  },
+  "date": "2025-07-28T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCBvciBuaWdodCBzd2VhdHMuIFJlcG9ydHMgbWlsZCBnZW5lcmFsaXplZCBmYXRpZ3VlLCBjb25zaXN0ZW50IHdpdGggcG9zdC1zdXJnaWNhbCByZWNvdmVyeS4KQ2FyZGlvdmFzY3VsYXI6IERlbmllcyBjaGVzdCBwYWluLCBwYWxwaXRhdGlvbnMsIG9yIHN5bmNvcGUuIFJlcG9ydHMgbWlsZCBleGVydGlvbmFsIGR5c3BuZWEsIGltcHJvdmluZyBzaW5jZSBzdXJnZXJ5LgpSZXNwaXJhdG9yeTogRGVuaWVzIGNvdWdoIG9yIHdoZWV6aW5nLiBSZXBvcnRzIG1pbGQgc2hvcnRuZXNzIG9mIGJyZWF0aCB3aXRoIGluY3JlYXNlZCBhY3Rpdml0eS4KR2FzdHJvaW50ZXN0aW5hbDogRGVuaWVzIG5hdXNlYSwgdm9taXRpbmcsIGRpYXJyaGVhLCBvciBjb25zdGlwYXRpb24uIFJlcG9ydHMgbm9ybWFsIGFwcGV0aXRlLgpNdXNjdWxvc2tlbGV0YWw6IFJlcG9ydHMgc3Rlcm5hbCBwcmVjYXV0aW9ucyBkdWUgdG8gcmVjZW50IHN1cmdlcnkuIERlbmllcyBhY3V0ZSBqb2ludCBwYWluIG9yIHN3ZWxsaW5nIGluIG90aGVyIGFyZWFzLiBSZXBvcnRzIHJlc2lkdWFsIGxlZnQtc2lkZWQgd2Vha25lc3MgZnJvbSBwcmlvciBzdHJva2UuCk5ldXJvbG9naWNhbDogUmVwb3J0cyBzdGFibGUgcmVzaWR1YWwgbGVmdC1zaWRlZCB3ZWFrbmVzcyBhbmQgbWlsZCBnYWl0IGluc3RhYmlsaXR5IGZyb20gcHJpb3Igc3Ryb2tlLiBEZW5pZXMgbmV3IG51bWJuZXNzLCB0aW5nbGluZywgaGVhZGFjaGUsIG9yIGFjdXRlIGNoYW5nZXMgaW4gdmlzaW9uIG9yIHNwZWVjaC4KSGVtYXRvbG9naWM6IERlbmllcyBuZXcgYnJ1aXNpbmcsIGJsZWVkaW5nLCBvciBwZXRlY2hpYWUu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:495d32dc-a851-47f3-96e7-d1e4811c6a17"
+      }
+    ],
+    "period": {
+      "start": "2025-07-28T00:00:00+00:00",
+      "end": "2025-07-28T00:00:00+00:00"
+    }
+  }
+}

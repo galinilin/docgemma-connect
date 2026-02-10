@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "42f091f3-8878-4839-b1d1-8a8b125817b7",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "95570007",
+        "display": "Kidney stone"
+      }
+    ],
+    "text": "Kidney stone"
+  },
+  "subject": {
+    "reference": "Patient/5ccff5ae-a4c8-c4ce-1c07-0fe2d3ae8299"
+  },
+  "encounter": {
+    "reference": "urn:uuid:0c892f59-8fbb-4600-8563-b2d9d0471925"
+  },
+  "onsetDateTime": "2024-04-10T00:00:00+00:00"
+}

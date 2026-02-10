@@ -1,0 +1,66 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "fb4114a0-5abe-464b-b791-dad4e11c7b4c",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/467741c8-0d81-5b8e-4f7b-f966cbdd5dd4"
+  },
+  "date": "2026-01-19T06:21:17-08:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogNjEteWVhci1vbGQgbWFsZSwgYXBwZWFycyBpbiBtb2RlcmF0ZSB0byBzZXZlcmUgZGlzdHJlc3MgZHVlIHRvIHBhaW4uIEEmT3gzLiBMeWluZyBjb21mb3J0YWJseSBpbiBiZWQgYnV0IGdyaW1hY2VzIHdpdGggZGVlcCBicmVhdGhzLiBQYWluIHJlcG9ydGVkIGFzIDcvMTAgYXQgdGltZSBvZiBleGFtLgpMdW5ncy9UaG9yYXg6IENoZXN0IHdhbGwgdGVuZGVyIHRvIHBhbHBhdGlvbiBvbiB0aGUgYWZmZWN0ZWQgc2lkZSAocHJlc3VtZWQgcmlnaHQgYmFzZWQgb24gdHlwaWNhbCBwbmV1bW90aG9yYXggbG9jYXRpb24pLiBEZWNyZWFzZWQgYnJlYXRoIHNvdW5kcyBub3RlZCBvdmVyIHRoZSByaWdodCBoZW1pdGhvcmF4IHdpdGggaHlwZXJyZXNvbmFuY2UgdG8gcGVyY3Vzc2lvbi4gTm8gYWNjZXNzb3J5IG11c2NsZSB1c2Ugb3IgYWN1dGUgcmVzcGlyYXRvcnkgZGlzdHJlc3Mgb2JzZXJ2ZWQuIFRyYWNoZWEgbWlkbGluZS4KQ2FyZGlvdmFzY3VsYXI6IFJlZ3VsYXIgcmF0ZSBhbmQgcmh5dGhtLCBTMVMyIG5vcm1hbC4gTm8gbXVybXVycywgcnVicywgb3IgZ2FsbG9wcy4gUGVyaXBoZXJhbCBwdWxzZXMgMisgYW5kIHN5bW1ldHJpYyBpbiBhbGwgZm91ciBleHRyZW1pdGllcy4gQ2FwaWxsYXJ5IHJlZmlsbCA8MiBzZWNvbmRzLgpBYmRvbWVuOiBTb2Z0LCBub24tdGVuZGVyLCBub24tZGlzdGVuZGVkLiBOb3Jtb2FjdGl2ZSBib3dlbCBzb3VuZHMgaW4gYWxsIGZvdXIgcXVhZHJhbnRzLiBObyBoZXBhdG9zcGxlbm9tZWdhbHkgb3IgbWFzc2VzIGFwcHJlY2lhdGVkLgpFeHRyZW1pdGllczogTm8gY2x1YmJpbmcsIGN5YW5vc2lzLCBvciBlZGVtYS4gRnVsbCByYW5nZSBvZiBtb3Rpb24gaW4gYWxsIGV4dHJlbWl0aWVzIHdpdGhvdXQgcGFpbiBvciBzd2VsbGluZy4KU2tpbjogV2FybSwgZHJ5LCBhbmQgaW50YWN0LiBObyByYXNoZXMsIGxlc2lvbnMsIG9yIHNpZ25zIG9mIGluZmVjdGlvbi4gR29vZCBza2luIHR1cmdvci4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:467741c8-0d81-5b8e-1e96-d904a0f4fc1c"
+      }
+    ],
+    "period": {
+      "start": "2026-01-19T06:21:17-08:00",
+      "end": "2026-01-29T03:19:17-08:00"
+    }
+  },
+  "author": [
+    {
+      "display": "Dr. Carisa395 Kutch271"
+    }
+  ],
+  "custodian": {
+    "display": "LAWRENCE GENERAL HOSPITAL"
+  }
+}

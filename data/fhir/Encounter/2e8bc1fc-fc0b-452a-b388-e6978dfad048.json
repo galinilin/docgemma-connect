@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "2e8bc1fc-fc0b-452a-b388-e6978dfad048",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Orthopaedics Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-02-06T00:00:00+00:00",
+    "end": "2025-02-06T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/b27c7b8d-29d7-9210-9b08-2ca00a8ffe41"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "202855006",
+          "display": "Lumbar disc herniation"
+        }
+      ]
+    }
+  ]
+}

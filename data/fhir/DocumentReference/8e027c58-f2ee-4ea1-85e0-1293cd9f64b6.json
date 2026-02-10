@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "8e027c58-f2ee-4ea1-85e0-1293cd9f64b6",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/79c53c80-7350-3e2a-d87b-d7f512721249"
+  },
+  "date": "2024-05-31T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogUGF0aWVudCBpcyBhIHlvdW5nIGZlbWFsZSBhcHBlYXJpbmcgYWN1dGVseSB1bmNvbWZvcnRhYmxlLCB3cml0aGluZyBpbiBwYWluIG9uIHRoZSBleGFtIHRhYmxlLgpBYmRvbWVuOiBTb2Z0LCBub24tZGlzdGVuZGVkLiBNaWxkIHRlbmRlcm5lc3MgdG8gcGFscGF0aW9uIGluIHRoZSByaWdodCBsb3dlciBxdWFkcmFudCBhbmQgc3VwcmFwdWJpYyBhcmVhLCBidXQgbm8gcmVib3VuZCBvciBndWFyZGluZy4gQm93ZWwgc291bmRzIG5vcm1vYWN0aXZlIGluIGFsbCBxdWFkcmFudHMuCkNvc3RvdmVydGVicmFsIEFuZ2xlIChDVkEpOiBTaWduaWZpY2FudCByaWdodCBDVkEgdGVuZGVybmVzcyB0byBwZXJjdXNzaW9uLiBMZWZ0IENWQSBub24tdGVuZGVyLgpFeHRyZW1pdGllczogTm8gZWRlbWEsIGNsdWJiaW5nLCBvciBjeWFub3Npcy4gUHVsc2VzIDIrIGJpbGF0ZXJhbGx5IGluIGFsbCBleHRyZW1pdGllcy4KTmV1cm9sb2dpY2FsOiBBbGVydCBhbmQgb3JpZW50ZWQgdG8gcGVyc29uLCBwbGFjZSwgYW5kIHRpbWUuIENyYW5pYWwgbmVydmVzIElJLVhJSSBncm9zc2x5IGludGFjdC4gTW90b3IgYW5kIHNlbnNvcnkgZXhhbXMgZGVmZXJyZWQgZHVlIHRvIHBhdGllbnQgZGlzY29tZm9ydCwgYnV0IG5vIGZvY2FsIGRlZmljaXRzIG5vdGVkLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:f0baed49-20c4-411d-bb6e-0494ae3ff8c7"
+      }
+    ],
+    "period": {
+      "start": "2024-05-31T00:00:00+00:00",
+      "end": "2024-05-31T00:00:00+00:00"
+    }
+  }
+}

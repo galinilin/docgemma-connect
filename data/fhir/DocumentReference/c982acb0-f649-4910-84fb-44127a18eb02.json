@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "c982acb0-f649-4910-84fb-44127a18eb02",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/18311806-a178-5067-ba05-d34d9d95cb71"
+  },
+  "date": "2025-07-20T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCBvciBzaWduaWZpY2FudCBmYXRpZ3VlIGJleW9uZCB0aGF0IGNhdXNlZCBieSBzbGVlcCBkaXNydXB0aW9uIGZyb20gY291Z2guCkhFRU5UOiBEZW5pZXMgbmFzYWwgY29uZ2VzdGlvbiwgcmhpbm9ycmhlYSwgc29yZSB0aHJvYXQsIGVhciBwYWluLCBvciBkaXNjaGFyZ2UuIFZpc2lvbiBhbmQgaGVhcmluZyByZXBvcnRlZCBhcyBub3JtYWwgYnkgbW90aGVyLgpSZXNwaXJhdG9yeTogUG9zaXRpdmUgZm9yIGNocm9uaWMgbmlnaHQtdGltZSBjb3VnaCwgb2NjYXNpb25hbCB3aGVlemluZywgYW5kIHNvbWUgc2hvcnRuZXNzIG9mIGJyZWF0aCB3aXRoIGV4ZXJ0aW9uLiBEZW5pZXMgaGVtb3B0eXNpcyBvciBwbGV1cml0aWMgY2hlc3QgcGFpbi4KQ2FyZGlvdmFzY3VsYXI6IERlbmllcyBjaGVzdCBwYWluLCBwYWxwaXRhdGlvbnMsIG9yIGN5YW5vc2lzLgpHYXN0cm9pbnRlc3RpbmFsOiBEZW5pZXMgbmF1c2VhLCB2b21pdGluZywgZGlhcnJoZWEsIGNvbnN0aXBhdGlvbiwgb3IgYWJkb21pbmFsIHBhaW4uClNraW46IERlbmllcyByYXNoZXMsIGl0Y2hpbmcsIG9yIG5ldyBsZXNpb25zLgpOZXVyb2xvZ2ljYWw6IERlbmllcyBoZWFkYWNoZXMsIGRpenppbmVzcywgc3luY29wZSwgb3Igc2VpenVyZXMuIEFsZXJ0IGFuZCBhZ2UtYXBwcm9wcmlhdGUgZm9yIGRldmVsb3BtZW50Lg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:7682eb64-9811-4c0e-a7bf-e7a52dc62760"
+      }
+    ],
+    "period": {
+      "start": "2025-07-20T00:00:00+00:00",
+      "end": "2025-07-20T00:00:00+00:00"
+    }
+  }
+}

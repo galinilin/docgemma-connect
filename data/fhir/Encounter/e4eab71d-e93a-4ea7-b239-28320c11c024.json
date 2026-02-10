@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "e4eab71d-e93a-4ea7-b239-28320c11c024",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Nephrology Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-10-06T00:00:00+00:00",
+    "end": "2025-10-06T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/618dad0a-741e-d831-e40e-89bc0e65d90b"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "36225005",
+          "display": "Nephrotic syndrome"
+        }
+      ]
+    }
+  ]
+}

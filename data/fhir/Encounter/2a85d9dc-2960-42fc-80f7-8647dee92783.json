@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "2a85d9dc-2960-42fc-80f7-8647dee92783",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Rheumatology Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-03-23T00:00:00+00:00",
+    "end": "2024-03-23T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/bdd98669-825f-4d4e-74a2-e91ee3f05afb"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "69896004",
+          "display": "Rheumatoid arthritis"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "76a8859d-f8a8-49b1-981f-3fc54243634c",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2947-0",
+        "display": "Sodium"
+      }
+    ],
+    "text": "Sodium"
+  },
+  "subject": {
+    "reference": "Patient/5a1b0529-8497-6acd-eb98-a1baff1b00ca"
+  },
+  "encounter": {
+    "reference": "urn:uuid:755e687b-9dd7-4eab-9810-1ed97504fdda"
+  },
+  "effectiveDateTime": "2024-11-11T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 201.45,
+    "unit": "mmol/L",
+    "system": "http://unitsofmeasure.org"
+  }
+}

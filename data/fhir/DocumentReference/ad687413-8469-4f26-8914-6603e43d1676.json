@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "ad687413-8469-4f26-8914-6603e43d1676",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/618dad0a-741e-d831-e40e-89bc0e65d90b"
+  },
+  "date": "2025-10-10T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCBzaWduaWZpY2FudCBmYXRpZ3VlLCBvciB1bmV4cGxhaW5lZCB3ZWlnaHQgY2hhbmdlcy4KQ2FyZGlvdmFzY3VsYXI6IERlbmllcyBjaGVzdCBwYWluLCBwYWxwaXRhdGlvbnMsIG9ydGhvcG5lYSwgb3IgcGVyaXBoZXJhbCBlZGVtYS4KR2VuaXRvdXJpbmFyeTogRGVuaWVzIGR5c3VyaWEsIGhlbWF0dXJpYSwgZnJlcXVlbmN5LCB1cmdlbmN5LCBub2N0dXJpYSwgb3IgY2hhbmdlcyBpbiB1cmluZSBvdXRwdXQuCkdhc3Ryb2ludGVzdGluYWw6IERlbmllcyBuYXVzZWEsIHZvbWl0aW5nLCBkaWFycmhlYSwgY29uc3RpcGF0aW9uLCBvciBhYmRvbWluYWwgcGFpbi4KTmV1cm9sb2dpY2FsOiBEZW5pZXMgaGVhZGFjaGUsIGRpenppbmVzcywgc3luY29wZSwgbnVtYm5lc3MsIG9yIHRpbmdsaW5nLgpTa2luOiBEZW5pZXMgcmFzaGVzLCBwcnVyaXR1cywgb3IgbmV3IGxlc2lvbnMu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:00370446-201f-4a25-b384-ecdb6d4363be"
+      }
+    ],
+    "period": {
+      "start": "2025-10-10T00:00:00+00:00",
+      "end": "2025-10-10T00:00:00+00:00"
+    }
+  }
+}

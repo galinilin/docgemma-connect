@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "ff09f16a-d80d-8b8f-3bc0-f4a0f2eff354",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "ff09f16a-d80d-8b8f-3bc0-f4a0f2eff354"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "162673000",
+          "display": "General examination of patient (procedure)"
+        }
+      ],
+      "text": "General examination of patient (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/ff09f16a-d80d-8b8f-9907-213819b87dc0",
+    "display": "Mrs. Cindie288 Clarinda196 Beier427"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2024-03-23T15:25:17-07:00",
+        "end": "2024-03-23T15:40:17-07:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999958991",
+        "display": "Dr. Nicholle822 Satterfield305"
+      }
+    }
+  ],
+  "period": {
+    "start": "2024-03-23T15:25:17-07:00",
+    "end": "2024-03-23T15:40:17-07:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|94a36583-c094-3312-b728-d4a42ec39538",
+        "display": "MELROSE INTERNAL MEDICINE ASSOC PC"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|8d5880eb-1dd8-31ea-b7c5-21709f3bb341",
+    "display": "MELROSE INTERNAL MEDICINE ASSOC PC"
+  }
+}

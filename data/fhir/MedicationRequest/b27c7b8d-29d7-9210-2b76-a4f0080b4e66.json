@@ -1,0 +1,50 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "b27c7b8d-29d7-9210-2b76-a4f0080b4e66",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-medicationrequest"
+    ]
+  },
+  "status": "active",
+  "intent": "order",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/medicationrequest-category",
+          "code": "community",
+          "display": "Community"
+        }
+      ],
+      "text": "Community"
+    }
+  ],
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "849574",
+        "display": "Naproxen sodium 220 MG Oral Tablet"
+      }
+    ],
+    "text": "Naproxen sodium 220 MG Oral Tablet"
+  },
+  "subject": {
+    "reference": "Patient/b27c7b8d-29d7-9210-9b08-2ca00a8ffe41"
+  },
+  "encounter": {
+    "reference": "urn:uuid:b27c7b8d-29d7-9210-5e16-4ddc4529e6c1"
+  },
+  "authoredOn": "2004-08-25T05:50:14-07:00",
+  "requester": {
+    "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999996793",
+    "display": "Dr. Bennie663 Abbott774"
+  },
+  "reasonReference": [
+    {
+      "reference": "urn:uuid:b27c7b8d-29d7-9210-e8cd-c51af7f4ba35",
+      "display": "Localized, primary osteoarthritis of the hand (disorder)"
+    }
+  ]
+}

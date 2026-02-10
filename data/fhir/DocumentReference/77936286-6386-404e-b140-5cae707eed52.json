@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "77936286-6386-404e-b140-5cae707eed52",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/65ba7fb5-d904-3959-5e3a-ab460f62762f"
+  },
+  "date": "2025-05-06T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogNTMteWVhci1vbGQgZmVtYWxlLCBhbGVydCBhbmQgb3JpZW50ZWQgdG8gcGVyc29uLCBwbGFjZSwgYW5kIHRpbWUuIEFwcGVhcnMgY29tZm9ydGFibGUgYW5kIGNvb3BlcmF0aXZlIHdpdGggZXhhbWluYXRpb24uCk5ldXJvbG9naWNhbDogQ3JhbmlhbCBuZXJ2ZXMgZ3Jvc3NseSBpbnRhY3QuIE1vdG9yIHN0cmVuZ3RoIGRlY3JlYXNlZCBvbiB0aGUgYWZmZWN0ZWQgc2lkZSAoZS5nLiwgdXBwZXIgYW5kIGxvd2VyIGV4dHJlbWl0eSBoZW1pcGFyZXNpcykuIFNlbnNhdGlvbiBpbnRhY3QgdG8gbGlnaHQgdG91Y2ggYW5kIHByb3ByaW9jZXB0aW9uIG9uIHVuYWZmZWN0ZWQgc2lkZTsgZGltaW5pc2hlZCBvbiBhZmZlY3RlZCBzaWRlLiBDb29yZGluYXRpb24gaW1wYWlyZWQgb24gYWZmZWN0ZWQgc2lkZSB3aXRoIGZpbmdlci10by1ub3NlIGFuZCBoZWVsLXRvLXNoaW4gdGVzdGluZy4gRGVlcCB0ZW5kb24gcmVmbGV4ZXMgMisgYW5kIHN5bW1ldHJpYywgZXhjZXB0IGZvciBhZmZlY3RlZCBzaWRlIHdoaWNoIGlzIDErLiBCYWxhbmNlIGltcGFpcmVkIHdpdGggc3RhdGljIGFuZCBkeW5hbWljIHRhc2tzLgpNdXNjdWxvc2tlbGV0YWw6IFJlZHVjZWQgYWN0aXZlIHJhbmdlIG9mIG1vdGlvbiBpbiBhZmZlY3RlZCBleHRyZW1pdGllcyBkdWUgdG8gd2Vha25lc3MuIE11c2NsZSB0b25lIHZhcmlhYmxlIG9uIGFmZmVjdGVkIHNpZGUsIHdpdGhvdXQgc2lnbmlmaWNhbnQgc3Bhc3RpY2l0eSBub3RlZCBhdCByZXN0LiBObyBqb2ludCBlZmZ1c2lvbnMgb3IgdGVuZGVybmVzcy4KR2FpdCBhbmQgQmFsYW5jZTogSGVtaXBhcmV0aWMgZ2FpdCBwYXR0ZXJuIG9ic2VydmVkLCBjaGFyYWN0ZXJpemVkIGJ5IGNpcmN1bWR1Y3Rpb24gb2YgdGhlIGFmZmVjdGVkIGxlZyBhbmQgcmVkdWNlZCBhcm0gc3dpbmcuIFJlcXVpcmVzIG1pbmltYWwgdG8gbW9kZXJhdGUgYXNzaXN0YW5jZSBmb3Igc2FmZSBhbWJ1bGF0aW9uLiBJbXBhaXJlZCBzdGF0aWMgYW5kIGR5bmFtaWMgYmFsYW5jZSwgd2l0aCBpbmNyZWFzZWQgc3dheSBhbmQgdGVuZGVuY3kgdG8gbG9zZSBiYWxhbmNlIHdpdGggcGVydHVyYmF0aW9ucy4KU3BlZWNoIGFuZCBDb21tdW5pY2F0aW9uOiBTcGVlY2ggY2xlYXIsIG5vIGR5c2FydGhyaWEgb3IgYXBoYXNpYSBub3RlZC4gQ29tcHJlaGVuc2lvbiBpbnRhY3QuCkNhcmRpb3Zhc2N1bGFyOiBTMVMyIHJlZ3VsYXIgcmF0ZSBhbmQgcmh5dGhtLCBubyBtdXJtdXJzLCBydWJzLCBvciBnYWxsb3BzLiBQZXJpcGhlcmFsIHB1bHNlcyAyKyBhbmQgc3ltbWV0cmljLgpQdWxtb25hcnk6IEx1bmdzIGNsZWFyIHRvIGF1c2N1bHRhdGlvbiBiaWxhdGVyYWxseSwgbm8gcmFsZXMsIHJob25jaGksIG9yIHdoZWV6ZXMuIFJlc3BpcmF0b3J5IGVmZm9ydCBub3JtYWwu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:ca637888-5858-4bc6-b656-10a0a980b2bc"
+      }
+    ],
+    "period": {
+      "start": "2025-05-06T00:00:00+00:00",
+      "end": "2025-05-06T00:00:00+00:00"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "0fe5e44a-5b4b-44cb-8a42-bbc959880da7",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Neurology Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-04-07T00:00:00+00:00",
+    "end": "2024-04-07T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/95428151-dfca-56a1-dca1-0a2836467e90"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "52448006",
+          "display": "Dementia"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "f5572b1d-5923-45b2-9165-dbb4841307f5",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "34117-2",
+        "display": "History and Physical note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/e79c742b-b70f-4d85-b722-bb3f288324e3"
+  },
+  "date": "2024-08-31",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "RGVubmlzOTc5IFNhdHRlcmZpZWxkMzA1J3MgdmlzaXQgaGlzdG9yeSBiZWdhbiBpbiBNYXJjaCAyMDEwIHdpdGggdGhlIGlkZW50aWZpY2F0aW9uIG9mIGEgY29sb24gcG9seXAgZHVyaW5nIGEgcm91dGluZSBjaGVjay11cC4gSGlzIGNsaW5pY2FsIGNvdXJzZSBwcm9ncmVzc2VkIHNpZ25pZmljYW50bHkgaW4gTWF5IDIwMTEsIHdoZW4gYSByZWN1cnJlbnQgcmVjdGFsIHBvbHlwIHdhcyBub3RlZCwgc3dpZnRseSBmb2xsb3dlZCBieSBhIGRpYWdub3NpcyBvZiBtYWxpZ25hbnQgbmVvcGxhc20gb2YgdGhlIGNvbG9uIG9uIE1heSAzMCwgMjAxMS4KCkZvbGxvd2luZyB0aGUgZGlhZ25vc2lzIG9mIGNvbG9uIG1hbGlnbmFuY3ksIE1yLiBTYXR0ZXJmaWVsZDMwNSBlbmdhZ2VkIGluIGEgc2VyaWVzIG9mIHJvdXRpbmUgZm9sbG93LXVwIHZpc2l0cyBmcm9tIEp1bmUgdG8gRGVjZW1iZXIgMjAxMSwgcHJlc3VtYWJseSBmb3IgcG9zdC10cmVhdG1lbnQgbW9uaXRvcmluZy4gSGlzIGNsaW5pY2FsIHRyYWplY3RvcnkgY3VsbWluYXRlZCBpbiBkZWF0aCwgd2hpY2ggd2FzIGNlcnRpZmllZCBvbiBNYXJjaCA3LCAyMDE1Lg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ]
+}

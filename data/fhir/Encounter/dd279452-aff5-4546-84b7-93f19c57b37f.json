@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "dd279452-aff5-4546-84b7-93f19c57b37f",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Radiology Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-09-19T00:00:00+00:00",
+    "end": "2025-09-19T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/5e6b19a5-5944-9a73-500b-3772430c1c8a"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "23986001",
+          "display": "Bone density screening"
+        }
+      ]
+    }
+  ]
+}

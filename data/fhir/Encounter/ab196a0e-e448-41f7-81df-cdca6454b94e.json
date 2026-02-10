@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "ab196a0e-e448-41f7-81df-cdca6454b94e",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Radiology Reports Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-09-15T00:00:00+00:00",
+    "end": "2025-09-15T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/7f8cf296-1a4b-2af9-0bc0-3f432a85a499"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "233604007",
+          "display": "Pneumonia"
+        }
+      ]
+    }
+  ]
+}

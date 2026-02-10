@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "b66e5543-89fd-4e20-9043-eb5a8b7b25de",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Obgyn Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-09-16T00:00:00+00:00",
+    "end": "2025-09-16T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/ed513785-c1da-aebb-0b45-621c89e85d44"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "72892002",
+          "display": "Normal pregnancy"
+        }
+      ]
+    }
+  ]
+}

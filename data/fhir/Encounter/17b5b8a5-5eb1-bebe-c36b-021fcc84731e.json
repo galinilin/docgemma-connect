@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "17b5b8a5-5eb1-bebe-c36b-021fcc84731e",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "17b5b8a5-5eb1-bebe-c36b-021fcc84731e"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "162673000",
+          "display": "General examination of patient (procedure)"
+        }
+      ],
+      "text": "General examination of patient (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/17b5b8a5-5eb1-bebe-ce76-a34acf418a14",
+    "display": "Mr. Hilario934 Lonny638 Huels583"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2023-07-22T19:14:17-07:00",
+        "end": "2023-07-22T19:29:17-07:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999967893",
+        "display": "Dr. Anh979 Schroeder447"
+      }
+    }
+  ],
+  "period": {
+    "start": "2023-07-22T19:14:17-07:00",
+    "end": "2023-07-22T19:29:17-07:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|4485298a-aaef-3aa4-aedf-fc01a612fd28",
+        "display": "FAMILY PRACTICE GROUP PC"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|69cb2157-b620-3c51-9c94-f516462d2d55",
+    "display": "FAMILY PRACTICE GROUP PC"
+  }
+}

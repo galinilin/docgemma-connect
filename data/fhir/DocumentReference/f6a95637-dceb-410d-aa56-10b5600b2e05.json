@@ -1,0 +1,60 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "f6a95637-dceb-410d-aa56-10b5600b2e05",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "18748-4",
+        "display": "Diagnostic imaging study"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/86014c39-6ab1-d221-4857-b8f6e11ddad7"
+  },
+  "date": "2024-03-17T00:00:00+00:00",
+  "description": "CT Abdomen and Pelvis with Contrast",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "RVhBTUlOQVRJT046IENUIEFiZG9tZW4gYW5kIFBlbHZpcyB3aXRoIElWIENvbnRyYXN0CkNMSU5JQ0FMIElORElDQVRJT046IEZsYW5rIHBhaW4gLyBoZW1hdHVyaWEgd29ya3VwCgpURUNITklRVUU6IEhlbGljYWwgQ1Qgb2YgdGhlIGFiZG9tZW4gYW5kIHBlbHZpcyB3YXMgcGVyZm9ybWVkIGZvbGxvd2luZyBJViBhZG1pbmlzdHJhdGlvbiBvZiAxMDAgbUwgT21uaXBhcXVlIDM1MC4KCkNPTVBBUklTT046IE5vbmUgYXZhaWxhYmxlLgoKRklORElOR1M6CkxJVkVSOiBOb3JtYWwgc2l6ZSBhbmQgYXR0ZW51YXRpb24uIE5vIGZvY2FsIGhlcGF0aWMgbGVzaW9uLgpHQUxMQkxBRERFUiBBTkQgQklMSUFSWTogR2FsbGJsYWRkZXIgaXMgdW5yZW1hcmthYmxlLiBObyBiaWxpYXJ5IGRpbGF0YXRpb24uClBBTkNSRUFTOiBOb3JtYWwgaW4gc2l6ZSBhbmQgZW5oYW5jZW1lbnQuIE5vIHBhbmNyZWF0aWMgbWFzcyBvciBkdWN0IGRpbGF0YXRpb24uClNQTEVFTjogTm9ybWFsIGluIHNpemUuIE5vIHNwbGVuaWMgbGVzaW9uLgpBRFJFTkFMUzogQmlsYXRlcmFsIGFkcmVuYWwgZ2xhbmRzIGFyZSB1bnJlbWFya2FibGUuCktJRE5FWVM6IEEgMTUgY20gaGV0ZXJvZ2VuZW91c2x5IGVuaGFuY2luZyBtYXNzIGlzIGlkZW50aWZpZWQgYXJpc2luZyBmcm9tIHRoZSByaWdodCBraWRuZXkgKHNlcmllcyAzLCBpbWFnZSA4NykuIE5vIGh5ZHJvbmVwaHJvc2lzLiBUaGUgY29udHJhbGF0ZXJhbCBraWRuZXkgaXMgdW5yZW1hcmthYmxlLgpCT1dFTDogTm8gYm93ZWwgb2JzdHJ1Y3Rpb24gb3Igd2FsbCB0aGlja2VuaW5nLgpWQVNDVUxBVFVSRTogVGhlIGFiZG9taW5hbCBhb3J0YSBpcyBub3JtYWwgaW4gY2FsaWJlci4KTFlNUEggTk9ERVM6IE5vIHBhdGhvbG9naWNhbGx5IGVubGFyZ2VkIHJldHJvcGVyaXRvbmVhbCBvciBwZWx2aWMgbHltcGggbm9kZXMuClBFTFZJUzogVXJpbmFyeSBibGFkZGVyIGlzIHVucmVtYXJrYWJsZS4KQk9ORVM6IE5vIHN1c3BpY2lvdXMgb3NzZW91cyBsZXNpb24uCgpJTVBSRVNTSU9OOgoxLiAxNSBjbSBoZXRlcm9nZW5lb3VzbHkgZW5oYW5jaW5nIG1hc3MgaW4gdGhlIHJpZ2h0IGtpZG5leS4gRmluZGluZ3Mgc3VzcGljaW91cyBmb3IgcmVuYWwgY2VsbCBjYXJjaW5vbWEuIFJlY29tbWVuZCB1cm9sb2d5IGNvbnN1bHRhdGlvbi4KMi4gTm8gbHltcGhhZGVub3BhdGh5IG9yIG1ldGFzdGF0aWMgZGlzZWFzZSBpZGVudGlmaWVkLg==",
+        "title": "CT Abdomen and Pelvis with Contrast"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:f08b7915-4fb3-485d-b433-ac615c97ea05"
+      }
+    ],
+    "period": {
+      "start": "2024-03-17T00:00:00+00:00",
+      "end": "2024-03-17T00:00:00+00:00"
+    }
+  }
+}

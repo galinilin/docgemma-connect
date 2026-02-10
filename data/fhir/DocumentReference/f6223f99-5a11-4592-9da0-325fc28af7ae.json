@@ -1,0 +1,60 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "f6223f99-5a11-4592-9da0-325fc28af7ae",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "22034-1",
+        "display": "Pathology report"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/5a0a158c-5090-5d2d-002f-b32e87281de6"
+  },
+  "date": "2025-04-07T00:00:00+00:00",
+  "description": "Skin Excisional Biopsy",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEFUSE9MT0dZIFJFUE9SVCDigJQgU3VyZ2ljYWwgUGF0aG9sb2d5CgpTUEVDSU1FTjogU2tpbiwgc2lnbW9pZCwgZXhjaXNpb25hbCBiaW9wc3kKCkNMSU5JQ0FMIEhJU1RPUlk6IDY5LXllYXItb2xkIG1hbGUgd2l0aCBjaGFuZ2luZyBwaWdtZW50ZWQgbGVzaW9uIG9uIHNpZ21vaWQuIENsaW5pY2FsIGNvbmNlcm4gZm9yIG1lbGFub21hLgoKR1JPU1MgREVTQ1JJUFRJT046ClJlY2VpdmVkIGluIGZvcm1hbGluIGxhYmVsZWQgInNraW4gc2lnbW9pZCIgaXMgYW4gZWxsaXBzZSBvZiBza2luIG1lYXN1cmluZyAyLjEgeCAxLjAgeCAwLjYgY20uIFRoZSBzdXJmYWNlIHNob3dzIGEgMS4yIGNtIGlycmVndWxhcmx5IHBpZ21lbnRlZCBtYWN1bGUgd2l0aCB2YXJpZWdhdGVkIGJyb3duLWJsYWNrIGNvbG9yYXRpb24gYW5kIGlycmVndWxhciBib3JkZXJzLiBTcGVjaW1lbiBzZXJpYWxseSBzZWN0aW9uZWQgYW5kIGVudGlyZWx5IHN1Ym1pdHRlZC4KCk1JQ1JPU0NPUElDIERFU0NSSVBUSU9OOgpTZWN0aW9ucyBzaG93IGFuIGFzeW1tZXRyaWMgbWVsYW5vY3l0aWMgcHJvbGlmZXJhdGlvbiB3aXRoIGF0eXBpY2FsIG1lbGFub2N5dGVzIGFycmFuZ2VkIGluIG5lc3RzIGFuZCBhcyBzaW5nbGUgY2VsbHMgYXQgdGhlIGRlcm1vZXBpZGVybWFsIGp1bmN0aW9uIGFuZCB3aXRoaW4gdGhlIGVwaWRlcm1pcy4gVGhlcmUgaXMgcGFnZXRvaWQgc3ByZWFkIG9mIGF0eXBpY2FsIG1lbGFub2N5dGVzLiBBbiBpbnZhc2l2ZSBjb21wb25lbnQgaXMgcHJlc2VudCBleHRlbmRpbmcgaW50byB0aGUgcGFwaWxsYXJ5IGRlcm1pcy4KCkJyZXNsb3cgdGhpY2tuZXNzOiAwLjggbW0KQ2xhcmsgbGV2ZWw6IElJSQpVbGNlcmF0aW9uOiBBYnNlbnQKTWl0b3RpYyByYXRlOiAxL21tMgpNaWNyb3NhdGVsbGl0ZXM6IE5vbmUgaWRlbnRpZmllZApQZXJpcGhlcmFsIG1hcmdpbnM6IENsZWFyIChuZWFyZXN0IG1hcmdpbiAzIG1tKQpEZWVwIG1hcmdpbjogQ2xlYXIKCkRJQUdOT1NJUzoKU2tpbiwgc2lnbW9pZCwgZXhjaXNpb25hbCBiaW9wc3k6IE1hbGlnbmFudCBtZWxhbm9tYSwgc3VwZXJmaWNpYWwgc3ByZWFkaW5nIHR5cGUuCi0gQnJlc2xvdyB0aGlja25lc3M6IDAuOCBtbSAocFQxYSkKLSBObyB1bGNlcmF0aW9uCi0gTWFyZ2lucyBjbGVhcgoKQ09NTUVOVDogUmVjb21tZW5kIHdpZGUgbG9jYWwgZXhjaXNpb24gd2l0aCAxIGNtIG1hcmdpbnMuIFNlbnRpbmVsIGx5bXBoIG5vZGUgYmlvcHN5IG1heSBiZSBjb25zaWRlcmVkIGdpdmVuIEJyZXNsb3cgdGhpY2tuZXNzIGFwcHJvYWNoaW5nIDEgbW0gdGhyZXNob2xkLg==",
+        "title": "Skin Excisional Biopsy"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:127b902e-5fe5-4442-abe8-324ba1cbf2f7"
+      }
+    ],
+    "period": {
+      "start": "2025-04-07T00:00:00+00:00",
+      "end": "2025-04-07T00:00:00+00:00"
+    }
+  }
+}

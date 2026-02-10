@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "e8c302e1-c664-455d-ba67-75aa3fce1bc6",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Pathology Reports Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-12-08T00:00:00+00:00",
+    "end": "2024-12-08T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/5a0a158c-5090-5d2d-002f-b32e87281de6"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "93655004",
+          "display": "Melanoma"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "50da0408-f536-423f-b860-169e15faad4e",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Gastroenterology Visit"
+    }
+  ],
+  "period": {
+    "start": "2024-12-24T00:00:00+00:00",
+    "end": "2024-12-24T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/dbad602c-0b81-47e5-9016-0f079c6b8cdd"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "235595009",
+          "display": "Gastroesophageal reflux disease"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "86489430-ae3b-4f74-8771-3dd5409ac25c",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems Narrative - Reported"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/79c53c80-7350-3e2a-d87b-d7f512721249"
+  },
+  "date": "2025-12-22T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UkVWSUVXIE9GIFNZU1RFTVMKQ29uc3RpdHV0aW9uYWw6IERlbmllcyBmZXZlciwgY2hpbGxzLCBmYXRpZ3VlLCBvciB3ZWlnaHQgY2hhbmdlcy4KR2VuaXRvdXJpbmFyeTogUG9zaXRpdmUgZm9yIHVyaW5hcnkgdXJnZW5jeSBhbmQgcmVjdXJyZW50IHBlcmluZWFsIGRpc2NvbWZvcnQuIERlbmllcyBkeXN1cmlhLCBoZW1hdHVyaWEsIGZsYW5rIHBhaW4sIG9yIGluY29udGluZW5jZS4gTm8gcmVjZW50IFVUSXMgcmVwb3J0ZWQuCkdhc3Ryb2ludGVzdGluYWw6IERlbmllcyBuYXVzZWEsIHZvbWl0aW5nLCBkaWFycmhlYSwgY29uc3RpcGF0aW9uLCBvciBhYmRvbWluYWwgcGFpbi4KTXVzY3Vsb3NrZWxldGFsOiBEZW5pZXMgYmFjayBwYWluLCBqb2ludCBwYWluLCBvciBtdXNjbGUgYWNoZXMuCk5ldXJvbG9naWNhbDogRGVuaWVzIGhlYWRhY2hlLCBkaXp6aW5lc3MsIHN5bmNvcGUsIG51bWJuZXNzLCBvciB0aW5nbGluZy4KSW50ZWd1bWVudGFyeTogRGVuaWVzIHJhc2hlcywgbGVzaW9ucywgb3Igc2tpbiBjaGFuZ2VzLg=="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:c961ebe1-4797-4cea-a07c-a5a994ea19bd"
+      }
+    ],
+    "period": {
+      "start": "2025-12-22T00:00:00+00:00",
+      "end": "2025-12-22T00:00:00+00:00"
+    }
+  }
+}

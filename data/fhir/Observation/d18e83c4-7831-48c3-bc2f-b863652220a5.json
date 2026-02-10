@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "d18e83c4-7831-48c3-bc2f-b863652220a5",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "789-8",
+        "display": "Erythrocytes [RBC]"
+      }
+    ],
+    "text": "Erythrocytes [RBC]"
+  },
+  "subject": {
+    "reference": "Patient/5e6b19a5-5944-9a73-500b-3772430c1c8a"
+  },
+  "encounter": {
+    "reference": "urn:uuid:1ee98445-a62b-4ddf-beea-c1346c6fcd8c"
+  },
+  "effectiveDateTime": "2026-01-18T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 5.34,
+    "unit": "10*6/uL",
+    "system": "http://unitsofmeasure.org"
+  }
+}

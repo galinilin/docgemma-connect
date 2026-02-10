@@ -1,0 +1,38 @@
+{
+  "resourceType": "Observation",
+  "id": "210b679e-6fd9-4e8e-8d80-e8de8091f83e",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "777-3",
+        "display": "Platelets"
+      }
+    ],
+    "text": "Platelets"
+  },
+  "subject": {
+    "reference": "Patient/b27c7b8d-29d7-9210-9b08-2ca00a8ffe41"
+  },
+  "encounter": {
+    "reference": "urn:uuid:d72be72a-3944-4ae6-8908-aa960ea6d122"
+  },
+  "effectiveDateTime": "2024-04-21T00:00:00+00:00",
+  "valueQuantity": {
+    "value": 242.54,
+    "unit": "10*3/uL",
+    "system": "http://unitsofmeasure.org"
+  }
+}

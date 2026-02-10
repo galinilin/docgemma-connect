@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "06016b8b-59b2-423b-9350-8334155fc12e",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "93655004",
+        "display": "Melanoma"
+      }
+    ],
+    "text": "Melanoma"
+  },
+  "subject": {
+    "reference": "Patient/7078f970-3f57-cb9c-4165-c9d836a298c2"
+  },
+  "encounter": {
+    "reference": "urn:uuid:6d6a6f4a-b2e2-4360-92db-e3cfaa03f823"
+  },
+  "onsetDateTime": "2025-09-09T00:00:00+00:00"
+}

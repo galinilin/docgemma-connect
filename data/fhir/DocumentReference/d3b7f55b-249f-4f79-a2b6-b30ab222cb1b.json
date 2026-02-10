@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "d3b7f55b-249f-4f79-a2b6-b30ab222cb1b",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/5ccff5ae-a4c8-c4ce-1c07-0fe2d3ae8299"
+  },
+  "date": "2025-01-31T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCkluY3JlYXNpbmcgdXJpbmFyeSBmcmVxdWVuY3kgYW5kIG5vY3R1cmlhIGZvciAzIG1vbnRocy4KCkhJU1RPUlkgT0YgUFJFU0VOVCBJTExORVNTCkNhdGhlcmluYSBpcyBhIDM5LXllYXItb2xkIGZlbWFsZSBwcmVzZW50aW5nIHdpdGggYSAzLW1vbnRoIGhpc3Rvcnkgb2YgaW5jcmVhc2luZyB1cmluYXJ5IGZyZXF1ZW5jeSBhbmQgbm9jdHVyaWEuIFNoZSByZXBvcnRzIHZvaWRpbmcgZXZlcnkgMS0yIGhvdXJzIGR1cmluZyB0aGUgZGF5IGFuZCB3YWtpbmcgMy00IHRpbWVzIHBlciBuaWdodCB0byB1cmluYXRlLCBzaWduaWZpY2FudGx5IGltcGFjdGluZyBoZXIgc2xlZXAgYW5kIGRhaWx5IGFjdGl2aXRpZXMuIFNoZSBkZW5pZXMgZHlzdXJpYSwgaGVtYXR1cmlhLCBvciB1cmdlbmN5IGF0IHRoaXMgdGltZS4gU2hlIGhhcyBhIGhpc3Rvcnkgb2YgYSBraWRuZXkgc3RvbmUgZGlhZ25vc2VkIGluIEFwcmlsIDIwMjQsIGJ1dCBjdXJyZW50bHkgZGVuaWVzIGZsYW5rIHBhaW4gb3Igc3ltcHRvbXMgZGlyZWN0bHkgcmVsYXRlZCB0byB0aGUgc3RvbmUu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:ba2afff3-9d90-42f4-801f-10b5511a79a3"
+      }
+    ],
+    "period": {
+      "start": "2025-01-31T00:00:00+00:00",
+      "end": "2025-01-31T00:00:00+00:00"
+    }
+  }
+}

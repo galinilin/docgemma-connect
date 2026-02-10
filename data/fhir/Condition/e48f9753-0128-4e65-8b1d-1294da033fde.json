@@ -1,0 +1,29 @@
+{
+  "resourceType": "Condition",
+  "id": "e48f9753-0128-4e65-8b1d-1294da033fde",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "236648007",
+        "display": "Chronic prostatitis"
+      }
+    ],
+    "text": "Chronic prostatitis"
+  },
+  "subject": {
+    "reference": "Patient/79c53c80-7350-3e2a-d87b-d7f512721249"
+  },
+  "encounter": {
+    "reference": "urn:uuid:c961ebe1-4797-4cea-a07c-a5a994ea19bd"
+  },
+  "onsetDateTime": "2025-12-22T00:00:00+00:00"
+}

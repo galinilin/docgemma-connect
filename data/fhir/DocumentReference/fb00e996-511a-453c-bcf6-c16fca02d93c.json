@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "fb00e996-511a-453c-bcf6-c16fca02d93c",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/3371e581-d99e-a9de-9ed2-4532b7a66ead"
+  },
+  "date": "2024-06-22T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCjM2LXllYXItb2xkIG1hbGUgcHJlc2VudGluZyB3aXRoIHBlcnNpc3RlbnQgZmFjaWFsIGFjbmUgdGhhdCBoYXMgbm90IGltcHJvdmVkIHdpdGggb3Zlci10aGUtY291bnRlciBiZW56b3lsIHBlcm94aWRlLgoKSElTVE9SWSBPRiBQUkVTRU5UIElMTE5FU1MKSmF5c29uIGlzIGEgMzYteWVhci1vbGQgbWFsZSBwcmVzZW50aW5nIGZvciBldmFsdWF0aW9uIG9mIHBlcnNpc3RlbnQgZmFjaWFsIGFjbmUuIEhlIHJlcG9ydHMgdGhlIGFjbmUgaGFzIGJlZW4gb25nb2luZyBmb3Igc2V2ZXJhbCBtb250aHMgYW5kIHByaW1hcmlseSBhZmZlY3RzIGhpcyBmYWNlLiBIZSBoYXMgYXR0ZW1wdGVkIHNlbGYtdHJlYXRtZW50IHdpdGggb3Zlci10aGUtY291bnRlciBiZW56b3lsIHBlcm94aWRlIHdpdGhvdXQgc2lnbmlmaWNhbnQgaW1wcm92ZW1lbnQuIEhlIGRlbmllcyBhbnkgbmV3IHN5c3RlbWljIHN5bXB0b21zIGFzc29jaWF0ZWQgd2l0aCB0aGUgYWNuZS4gSGUgaGFzIGEgaGlzdG9yeSBvZiBlY3plbWEgYW5kIHBzb3JpYXNpcywgYm90aCBvZiB3aGljaCBhcmUgY3VycmVudGx5IHN0YWJsZSB3aXRob3V0IGFjdGl2ZSBmbGFyZXMu"
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:01aa9cae-0521-4e5d-90a0-83d044b04ef9"
+      }
+    ],
+    "period": {
+      "start": "2024-06-22T00:00:00+00:00",
+      "end": "2024-06-22T00:00:00+00:00"
+    }
+  }
+}

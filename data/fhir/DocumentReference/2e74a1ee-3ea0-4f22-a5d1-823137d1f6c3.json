@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "2e74a1ee-3ea0-4f22-a5d1-823137d1f6c3",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/1caa4b4a-c7f3-76b0-fe16-e04fc5a106f9"
+  },
+  "date": "2024-09-09T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "Q0hJRUYgQ09NUExBSU5UCjM1LXllYXItb2xkIGZlbWFsZSBwcmVzZW50aW5nIHdpdGggYWN1dGUgb25zZXQgc2hvcnRuZXNzIG9mIGJyZWF0aCBhbmQgY2hlc3QgdGlnaHRuZXNzLCBjb25jZXJuaW5nIGZvciBDT1ZJRC0xOS4KCkhJU1RPUlkgT0YgUFJFU0VOVCBJTExORVNTCkZsb3NzaWUgaXMgYSAzNS15ZWFyLW9sZCBmZW1hbGUgcHJlc2VudGluZyB0b2RheSB3aXRoIGFjdXRlIG9uc2V0IHNob3J0bmVzcyBvZiBicmVhdGggd2l0aCBleGVydGlvbiBhbmQgY2hlc3QgdGlnaHRuZXNzLiBTeW1wdG9tcyBiZWdhbiB0b2RheSwgMjAyNC0wOS0wOSwgYW5kIHNoZSByZXBvcnRzIGFzc29jaWF0ZWQgbWlsZCBmYXRpZ3VlIGFuZCBkaWZmdXNlIG15YWxnaWFzLiBTaGUgZGVuaWVzIHNpZ25pZmljYW50IGNvdWdoIG9yIGZldmVyIGF0IHRoaXMgdGltZSBidXQgaXMgY29uY2VybmVkIGFib3V0IHBvc3NpYmxlIENPVklELTE5IGV4cG9zdXJlIGdpdmVuIHJlY2VudCBjb21tdW5pdHkgc3ByZWFkLiBTaGUgaGFzIG5vIGtub3duIGFjdGl2ZSBtZWRpY2FsIGNvbmRpdGlvbnMgYW5kIGlzIG5vdCBvbiBhbnkgY3VycmVudCBtZWRpY2F0aW9ucy4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:89cb2ad8-3915-4a13-919b-7791b9e7d771"
+      }
+    ],
+    "period": {
+      "start": "2024-09-09T00:00:00+00:00",
+      "end": "2024-09-09T00:00:00+00:00"
+    }
+  }
+}

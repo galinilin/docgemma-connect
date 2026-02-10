@@ -1,0 +1,31 @@
+{
+  "resourceType": "Encounter",
+  "id": "c62aa151-627f-4987-8b76-644e0d7151a6",
+  "status": "finished",
+  "class": {
+    "code": "ambulatory"
+  },
+  "type": [
+    {
+      "text": "Paediatrics Visit"
+    }
+  ],
+  "period": {
+    "start": "2025-10-18T00:00:00+00:00",
+    "end": "2025-10-18T00:00:00+00:00"
+  },
+  "subject": {
+    "reference": "Patient/60fd4193-50fd-edc8-fe7e-3133b9e138b4"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "406506008",
+          "display": "Attention deficit hyperactivity disorder"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "291bba7d-4fc5-4b81-8874-0fb59920a659",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-documentreference"
+    ]
+  },
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings Narrative"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/888277e8-768f-028f-6524-31941dc17069"
+  },
+  "date": "2024-11-21T00:00:00+00:00",
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain; charset=utf-8",
+        "data": "UEhZU0lDQUwgRVhBTUlOQVRJT04KR2VuZXJhbDogQWxlcnQgYW5kIG9yaWVudGVkIHgzLCBhcHBlYXJzIHVuY29tZm9ydGFibGUgYnV0IGluIG5vIGFjdXRlIGRpc3RyZXNzLgpTa2luOiBSaWdodCBsb3dlciBleHRyZW1pdHkgZGVtb25zdHJhdGVzIGRpZmZ1c2UgZXJ5dGhlbWEsIHdhcm10aCwgYW5kIHNpZ25pZmljYW50IHBpdHRpbmcgZWRlbWEgZXh0ZW5kaW5nIGZyb20gdGhlIGFua2xlIHRvIG1pZC10aGlnaC4gVGhlcmUgaXMgbWFya2VkIHRlbmRlcm5lc3MgdG8gcGFscGF0aW9uLiBObyBwdXJ1bGVuY2Ugb3Igb3BlbiB3b3VuZHMgbm90ZWQuIExlZnQgbG93ZXIgZXh0cmVtaXR5IHNraW4gaXMgbm9ybWFsLiBObyBvdGhlciBza2luIGxlc2lvbnMgbm90ZWQuCkNhcmRpb3Zhc2N1bGFyOiBSZWd1bGFyIHJhdGUgYW5kIHJoeXRobSwgbm8gbXVybXVycywgcnVicywgb3IgZ2FsbG9wcy4gQ2FwaWxsYXJ5IHJlZmlsbCA8MiBzZWNvbmRzIGluIGFsbCBleHRyZW1pdGllcy4gRGlzdGFsIHB1bHNlcyAoRFAsIFBUKSBwYWxwYWJsZSBiaWxhdGVyYWxseSwgMisuClJlc3BpcmF0b3J5OiBMdW5ncyBjbGVhciB0byBhdXNjdWx0YXRpb24gYmlsYXRlcmFsbHksIG5vIHdoZWV6ZXMsIHJhbGVzLCBvciByaG9uY2hpLiBOb3JtYWwgcmVzcGlyYXRvcnkgZWZmb3J0LgpNdXNjdWxvc2tlbGV0YWw6IFJpZ2h0IGxvd2VyIGV4dHJlbWl0eSByYW5nZSBvZiBtb3Rpb24gaXMgbGltaXRlZCBieSBwYWluIGFuZCBzd2VsbGluZy4gTGVmdCBsb3dlciBleHRyZW1pdHkgZnVsbCByYW5nZSBvZiBtb3Rpb24uCkx5bXBoYXRpYzogUmlnaHQgaW5ndWluYWwgbHltcGggbm9kZXMgYXJlIG1pbGRseSBlbmxhcmdlZCBhbmQgdGVuZGVyIHRvIHBhbHBhdGlvbi4gTm8gcGFscGFibGUgbHltcGhhZGVub3BhdGh5IGVsc2V3aGVyZS4="
+      },
+      "format": {
+        "system": "http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode",
+        "code": "urn:ihe:iti:xds:2017:mimeTypeSufficient",
+        "display": "mimeType Sufficient"
+      }
+    }
+  ],
+  "context": {
+    "encounter": [
+      {
+        "reference": "urn:uuid:7bd4afdb-a9a6-4040-ad6d-31bd7c2e8910"
+      }
+    ],
+    "period": {
+      "start": "2024-11-21T00:00:00+00:00",
+      "end": "2024-11-21T00:00:00+00:00"
+    }
+  }
+}

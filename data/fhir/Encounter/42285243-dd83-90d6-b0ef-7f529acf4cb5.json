@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "42285243-dd83-90d6-b0ef-7f529acf4cb5",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "42285243-dd83-90d6-b0ef-7f529acf4cb5"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "702927004",
+          "display": "Urgent care clinic (environment)"
+        }
+      ],
+      "text": "Urgent care clinic (environment)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/42285243-dd83-90d6-922d-0231364fa398",
+    "display": "Mr. Loren192 Sam879 Denesik803"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2023-07-11T15:51:56-07:00",
+        "end": "2023-07-11T16:06:56-07:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999939199",
+        "display": "Dr. Saul605 Ratke343"
+      }
+    }
+  ],
+  "period": {
+    "start": "2023-07-11T15:51:56-07:00",
+    "end": "2023-07-11T16:06:56-07:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|340fb698-66ad-37b5-a6d7-12214e8b5287",
+        "display": "MIDDLETON FAMILY MEDICINE URGENT CARE, LLC"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|9ce6072b-d039-3cde-8eaf-950211b8ae88",
+    "display": "MIDDLETON FAMILY MEDICINE URGENT CARE, LLC"
+  }
+}

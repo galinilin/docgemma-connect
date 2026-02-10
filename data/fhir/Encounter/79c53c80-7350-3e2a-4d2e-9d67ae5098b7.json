@@ -1,0 +1,77 @@
+{
+  "resourceType": "Encounter",
+  "id": "79c53c80-7350-3e2a-4d2e-9d67ae5098b7",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-encounter"
+    ]
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "system": "https://github.com/synthetichealth/synthea",
+      "value": "79c53c80-7350-3e2a-4d2e-9d67ae5098b7"
+    }
+  ],
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "162673000",
+          "display": "General examination of patient (procedure)"
+        }
+      ],
+      "text": "General examination of patient (procedure)"
+    }
+  ],
+  "subject": {
+    "reference": "Patient/79c53c80-7350-3e2a-d87b-d7f512721249",
+    "display": "Mrs. Paola523 Lowe577"
+  },
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ],
+          "text": "primary performer"
+        }
+      ],
+      "period": {
+        "start": "2017-11-14T03:51:48-08:00",
+        "end": "2017-11-14T04:06:48-08:00"
+      },
+      "individual": {
+        "reference": "Practitioner?identifier=http://hl7.org/fhir/sid/us-npi|9999951996",
+        "display": "Dr. Cuc113 Kutch271"
+      }
+    }
+  ],
+  "period": {
+    "start": "2017-11-14T03:51:48-08:00",
+    "end": "2017-11-14T04:06:48-08:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location?identifier=https://github.com/synthetichealth/synthea|047687a3-b50d-3a55-9f9e-d3fb555b4afc",
+        "display": "BOURNE FAMILY MEDICINE PC"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization?identifier=https://github.com/synthetichealth/synthea|71472d9b-aa5c-3b49-a5c3-d0eee8859015",
+    "display": "BOURNE FAMILY MEDICINE PC"
+  }
+}

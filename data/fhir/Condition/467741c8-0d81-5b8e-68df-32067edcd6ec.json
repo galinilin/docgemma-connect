@@ -1,0 +1,54 @@
+{
+  "resourceType": "Condition",
+  "id": "467741c8-0d81-5b8e-68df-32067edcd6ec",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition-encounter-diagnosis"
+    ]
+  },
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+        "code": "confirmed"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+          "code": "encounter-diagnosis",
+          "display": "Encounter Diagnosis"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "162573006",
+        "display": "Suspected lung cancer (situation)"
+      }
+    ],
+    "text": "Suspected lung cancer (situation)"
+  },
+  "subject": {
+    "reference": "Patient/467741c8-0d81-5b8e-4f7b-f966cbdd5dd4"
+  },
+  "encounter": {
+    "reference": "urn:uuid:467741c8-0d81-5b8e-a69e-c37dc4148ffe"
+  },
+  "onsetDateTime": "2021-12-09T22:59:40-08:00",
+  "recordedDate": "2021-12-09T22:59:40-08:00"
+}
