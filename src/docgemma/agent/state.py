@@ -1,81 +1,83 @@
-"""Agent state definition (v2: 4-way triage architecture)."""
+"""AgentState for DocGemma v3 agent graph.
 
-from typing import TypedDict
+7-node architecture with binary intent classification and reactive tool loop.
+Empirically grounded in 856 experiments on MedGemma 4B.
+"""
+
+from __future__ import annotations
+
+import operator
+from typing import Annotated, Any, Optional, TypedDict
 
 
-class Subtask(TypedDict):
-    """A decomposed subtask from the user query."""
+class ExtractedEntities(TypedDict):
+    """Pre-extracted entities from deterministic input assembly."""
 
-    intent: str
-    requires_tool: str | None
-    context: str
+    patient_ids: list[str]
+    drug_mentions: list[str]
+    action_verbs: list[str]
+    has_image: bool
 
 
-class ToolResult(TypedDict):
-    """Result from a tool execution."""
+class ToolResult(TypedDict, total=False):
+    """Single tool execution result."""
 
     tool_name: str
-    arguments: dict
-    result: dict
-    success: bool
+    tool_label: str  # Clinician-facing label (e.g. "Drug Safety Report")
+    args: dict[str, Any]
+    result: dict[str, Any]
+    formatted_result: str  # Clinician-friendly formatted string
+    error: Optional[str]
+    error_type: Optional[str]  # Category for routing (timeout, not_found, etc.)
+    success: bool  # Required by agent_runner.py
 
 
-class ConversationMessage(TypedDict):
-    """A message in the conversation history."""
+class AgentState(TypedDict, total=False):
+    """LangGraph state for the v3 agent graph.
 
-    role: str  # "user" | "assistant"
-    content: str
-
-
-class DocGemmaState(TypedDict, total=False):
-    """State object for the DocGemma v2 agent pipeline.
-
-    Flows through: image_detection -> clinical_context_assembler -> triage_router
-                   -> [direct|lookup|reasoning|multi_step] -> synthesize_response
+    ~20 fields (down from v2's 40+).  Flows through 7 nodes:
+    INPUT_ASSEMBLY -> INTENT_CLASSIFY -> TOOL_SELECT -> TOOL_EXECUTE ->
+    RESULT_CLASSIFY -> DETERMINISTIC_ROUTER -> SYNTHESIZE
     """
 
-    # === Turn-level inputs ===
-    user_input: str
-    image_present: bool
-    image_data: bytes | None
+    # ── Input ──
+    user_query: str
+    conversation_history: list[dict[str, str]]
+    image_data: Optional[bytes]
+    extracted_entities: ExtractedEntities
+    image_findings: Optional[dict[str, Any]]
 
-    # === Multi-turn context ===
-    conversation_history: list[ConversationMessage]
+    # ── Intent Classification (Node 2) ──
+    intent: str  # "DIRECT" | "TOOL_NEEDED"
+    task_summary: str  # Clinical framing ~50 words
+    suggested_tool: Optional[str]  # Non-binding hint for TOOL_SELECT
 
-    # === Clinical context (assembled before triage) ===
-    clinical_context: dict | None
+    # ── Tool Loop (Nodes 3-6) ──
+    current_tool: Optional[str]
+    current_args: Optional[dict[str, Any]]
+    tool_results: Annotated[list[ToolResult], operator.add]  # Accumulates
+    step_count: int  # Number of tool loop iterations completed
+    retry_count: int  # Retries for current tool
 
-    # === Routing (4-way triage) ===
-    triage_route: str | None  # "direct" | "lookup" | "reasoning" | "multi_step"
-    triage_tool: str | None  # Tool name from triage (LOOKUP only)
-    triage_query: str | None  # Query from triage (LOOKUP only)
+    # ── Result Classification (Node 5) ──
+    last_result_classification: Optional[str]  # quality enum value
+    last_result_summary: Optional[str]
 
-    # === Reasoning path ===
-    reasoning: str | None  # From thinking_mode
-    reasoning_tool_needs: dict | None  # From extract_tool_needs: {tool, query} or None
-    reasoning_continuation: str | None  # From reasoning_continuation node
+    # ── Error Handling (Node 5a) ──
+    error_messages: list[str]  # Pre-formatted clinician-safe strings
+    clarification_request: Optional[str]  # If ask_user triggered
 
-    # === Agentic loop state (max 5 subtasks) ===
-    subtasks: list[Subtask]
-    current_subtask_index: int
-    tool_results: list[ToolResult]
-    loop_iterations: int
-    tool_retries: int
-    last_result_status: str  # "success"|"error"|"needs_more_action"|"needs_user_input"|"done"|"continue"
+    # ── Internal (interrupt/approval contract with agent_runner.py) ──
+    _planned_tool: Optional[str]
+    _planned_args: Optional[dict[str, Any]]
 
-    # === Tool execution (internal) ===
-    _planned_tool: str | None
-    _planned_args: dict | None
+    # ── Output (Node 7) ──
+    final_response: Optional[str]
 
-    # === Validation ===
-    validation_error: str | None
 
-    # === Error handling ===
-    error_strategy: str | None  # "retry_same" | "retry_reformulate" | "skip_subtask"
+# Backward compatibility alias
+DocGemmaState = AgentState
 
-    # === Control flags ===
-    needs_user_input: bool
-    missing_info: str | None
-
-    # === Output ===
-    final_response: str | None
+# v2 compat stubs — not used in v3 but keeps old imports alive
+Subtask = dict
+ConversationMessage = dict

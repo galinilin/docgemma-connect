@@ -1,122 +1,154 @@
-"""Pydantic schemas for agent LLM nodes (Outlines constrained generation).
+"""Pydantic schemas for Outlines constrained generation (v3).
 
-V2: 4-way triage, 10 tools, up to 5 subtasks, validation/fix-args support.
-
-Optimized for SLMs (Small Language Models):
-- Flat structures only (no nested lists/dicts)
-- Explicit fields instead of open dicts
-- Short max_length constraints
-- Literal types for constrained choices
+CRITICAL RULE: In every schema, decision-critical fields come FIRST.
+Optional/nullable fields come LAST.  This is load-bearing — reversing
+field order drops arg accuracy from 88% to 21% (Part II, Section 20).
 """
 
-from typing import Literal
+from __future__ import annotations
+
+from typing import Literal, Optional
 
 from pydantic import BaseModel, Field
 
 
-# All 10 tools + none sentinel
-ToolName = Literal[
-    "check_drug_safety",
-    "search_medical_literature",
-    "check_drug_interactions",
-    "find_clinical_trials",
-    "search_patient",
-    "get_patient_chart",
-    "add_allergy",
-    "prescribe_medication",
-    "save_clinical_note",
-    "analyze_medical_image",
-    "none",
-]
+# ─────────────────────────────────────────────────────────────────────────────
+# Node 2 — Intent Classification
+# ─────────────────────────────────────────────────────────────────────────────
+
+class IntentClassification(BaseModel):
+    """Binary intent classification.  Decision field FIRST."""
+
+    intent: Literal["DIRECT", "TOOL_NEEDED"]
+    task_summary: str = Field(
+        description="Brief clinical summary of the user's request (~50 words max)",
+    )
+    suggested_tool: Optional[str] = Field(
+        default=None,
+        description="If TOOL_NEEDED, which tool is most likely relevant",
+    )
 
 
-class TriageDecision(BaseModel):
-    """4-way triage: direct / lookup / reasoning / multi_step."""
+# ─────────────────────────────────────────────────────────────────────────────
+# Node 3 Stage 1 — Tool Selection (single field, no nullable distractors)
+# ─────────────────────────────────────────────────────────────────────────────
 
-    route: Literal["direct", "lookup", "reasoning", "multi_step"]
-    tool: ToolName | None = None  # Only for "lookup"
-    query: str | None = Field(default=None, max_length=128)  # Only for "lookup"
+class ToolSelection(BaseModel):
+    """Select the appropriate tool.  Single field — no null cascade risk."""
 
-
-class ThinkingOutput(BaseModel):
-    """Chain-of-thought reasoning before decomposition or tool selection."""
-
-    reasoning: str = Field(max_length=512)
-
-
-class ExtractedToolNeeds(BaseModel):
-    """From reasoning chain, identify if a tool call would help."""
-
-    needs_tool: bool = False
-    tool: ToolName | None = None
-    query: str | None = Field(default=None, max_length=128)
-
-
-class DecomposedIntentV2(BaseModel):
-    """Flat decomposition into 1-5 subtasks. No nested objects."""
-
-    subtask_1: str = Field(max_length=100)
-    tool_1: ToolName
-    subtask_2: str | None = Field(default=None, max_length=100)
-    tool_2: ToolName | None = None
-    subtask_3: str | None = Field(default=None, max_length=100)
-    tool_3: ToolName | None = None
-    subtask_4: str | None = Field(default=None, max_length=100)
-    tool_4: ToolName | None = None
-    subtask_5: str | None = Field(default=None, max_length=100)
-    tool_5: ToolName | None = None
-    needs_clarification: bool = False
-    clarification_question: str | None = None
+    tool_name: Literal[
+        "check_drug_safety",
+        "check_drug_interactions",
+        "search_medical_literature",
+        "find_clinical_trials",
+        "search_patient",
+        "get_patient_chart",
+        "prescribe_medication",
+        "add_allergy",
+        "save_clinical_note",
+        "analyze_medical_image",
+    ]
 
 
-class ToolCallV2(BaseModel):
-    """Tool selection with explicit argument fields for all 10 tools.
+# ─────────────────────────────────────────────────────────────────────────────
+# Node 3 Stage 2 — Per-tool argument schemas
+#   Required fields first, optional fields last.
+# ─────────────────────────────────────────────────────────────────────────────
 
-    Field order matters for SLM generation: patient_id is early so the model
-    fills it before falling into a null pattern for irrelevant fields.
-    """
-
-    tool_name: ToolName
-    # Patient/EHR (early — REQUIRED for EHR tools, model must decide early)
-    patient_id: str | None = Field(default=None, max_length=64)
-    # Universal
-    query: str | None = Field(default=None, max_length=128)
-    # Drug-specific
-    drug_name: str | None = Field(default=None, max_length=64)
-    drug_list: str | None = Field(default=None, max_length=128)
-    # Patient identifiers
-    name: str | None = Field(default=None, max_length=64)
-    dob: str | None = Field(default=None, max_length=10)
-    # Allergy
-    substance: str | None = Field(default=None, max_length=64)
-    reaction: str | None = Field(default=None, max_length=64)
-    severity: str | None = Field(default=None, max_length=16)
-    # Prescription
-    medication_name: str | None = Field(default=None, max_length=64)
-    dosage: str | None = Field(default=None, max_length=32)
-    frequency: str | None = Field(default=None, max_length=32)
-    # Clinical note
-    note_text: str | None = Field(default=None, max_length=512)
-    note_type: str | None = Field(default=None, max_length=32)
+class DrugSafetyArgs(BaseModel):
+    drug_name: str
 
 
-class FixedArgs(BaseModel):
-    """Corrected arguments after validation failure.
+class DrugInteractionArgs(BaseModel):
+    drug_names: list[str] = Field(min_length=2, description="Two or more drug names")
 
-    Field order matches ToolCallV2 (patient_id early).
-    """
 
-    patient_id: str | None = Field(default=None, max_length=64)
-    query: str | None = Field(default=None, max_length=128)
-    drug_name: str | None = Field(default=None, max_length=64)
-    drug_list: str | None = Field(default=None, max_length=128)
-    name: str | None = Field(default=None, max_length=64)
-    dob: str | None = Field(default=None, max_length=10)
-    substance: str | None = Field(default=None, max_length=64)
-    reaction: str | None = Field(default=None, max_length=64)
-    severity: str | None = Field(default=None, max_length=16)
-    medication_name: str | None = Field(default=None, max_length=64)
-    dosage: str | None = Field(default=None, max_length=32)
-    frequency: str | None = Field(default=None, max_length=32)
-    note_text: str | None = Field(default=None, max_length=512)
-    note_type: str | None = Field(default=None, max_length=32)
+class LiteratureSearchArgs(BaseModel):
+    query: str = Field(description="Search query for medical literature")
+
+
+class ClinicalTrialsArgs(BaseModel):
+    condition: str
+    status: Optional[str] = None
+
+
+class PatientSearchArgs(BaseModel):
+    name: str
+
+
+class PatientChartArgs(BaseModel):
+    patient_id: str
+
+
+class PrescribeMedicationArgs(BaseModel):
+    patient_id: str
+    medication_name: str
+    dosage: str
+    frequency: str
+    notes: Optional[str] = None
+
+
+class AddAllergyArgs(BaseModel):
+    patient_id: str
+    substance: str
+    reaction: str
+    severity: Optional[str] = None
+
+
+class ClinicalNoteArgs(BaseModel):
+    patient_id: str
+    note_type: str
+    note_text: str
+
+
+class ImageAnalysisArgs(BaseModel):
+    query: str = Field(description="What to look for in the image")
+
+
+# Mapping: tool_name -> arg schema class
+TOOL_ARG_SCHEMAS: dict[str, type[BaseModel]] = {
+    "check_drug_safety": DrugSafetyArgs,
+    "check_drug_interactions": DrugInteractionArgs,
+    "search_medical_literature": LiteratureSearchArgs,
+    "find_clinical_trials": ClinicalTrialsArgs,
+    "search_patient": PatientSearchArgs,
+    "get_patient_chart": PatientChartArgs,
+    "prescribe_medication": PrescribeMedicationArgs,
+    "add_allergy": AddAllergyArgs,
+    "save_clinical_note": ClinicalNoteArgs,
+    "analyze_medical_image": ImageAnalysisArgs,
+}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Node 5 — Result Classification (94% accuracy — Part III, Section 29)
+# ─────────────────────────────────────────────────────────────────────────────
+
+class ResultAssessment(BaseModel):
+    """Classify tool result quality.  Classification field FIRST."""
+
+    quality: Literal[
+        "success_rich",
+        "success_partial",
+        "no_results",
+        "error_retryable",
+        "error_fatal",
+    ]
+    brief_summary: str = Field(
+        description="1-2 sentence summary of what the tool returned",
+    )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Node 5a — Retry Strategy (LLM-assisted, 92% accuracy — Part III, Section 35)
+# ─────────────────────────────────────────────────────────────────────────────
+
+class RetryStrategy(BaseModel):
+    """Choose retry approach.  Strategy field FIRST."""
+
+    strategy: Literal["retry_same", "retry_different_args"]
+    reasoning: Optional[str] = Field(
+        default=None,
+        max_length=100,
+        description="Brief explanation of retry rationale",
+    )

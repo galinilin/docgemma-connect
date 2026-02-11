@@ -1,349 +1,435 @@
-"""Prompt templates for DocGemma v2 agent nodes.
+"""Prompt templates for DocGemma v3 agent nodes.
 
-V2: 4-way triage, 10 tools, reasoning path, validation/fix-args.
+Every prompt, temperature, and configuration here is grounded in empirical
+findings from 856 experiments across 4 test suites on MedGemma 4B.
 
-Optimized for SLMs (Small Language Models):
-- Direct imperatives, no politeness
-- One-shot examples where helpful
-- Minimal context, maximum clarity
-- Structure over prose
-
-Temperature Guide:
-- 0.0-0.1: Structured output (JSON, classification)
-- 0.3-0.4: Focused reasoning
-- 0.5-0.6: Natural text generation
+Key principles (from the Prompting Guide):
+- T=0.0 for operational decisions (prevents thinking tokens, Part II §25)
+- T=0.5 for synthesis (peak fact rate 90%, Part IV §43)
+- max_tokens=256 for synthesis (quality 9.4→9.7 vs 512, Part IV §46)
+- full_desc tool descriptions (95% accuracy, Part II §16)
+- 1-shot matched examples (91% arg accuracy, Part II §19)
+- Critical-first field ordering (Part II §20)
+- No thinking prefixes for synthesis (13% empty output, Part IV §42)
+- Error pre-formatting (4.8→10/10 quality, Part IV §48)
 """
 
-from ..tools.registry import get_tools_for_prompt
 
 # =============================================================================
 # SYSTEM PROMPT (prepended to every API call via model.py)
 # =============================================================================
 
 SYSTEM_PROMPT = (
-    "You are DocGemma, a clinical decision-support assistant for healthcare professionals. "
-    "Be concise and use standard medical terminology. "
-    "For greetings or casual messages, respond naturally and briefly. "
-    "Never fabricate clinical data. State uncertainty when unsure."
+    "You are a clinical decision-support assistant integrated with an "
+    "electronic health record system and medical knowledge tools."
 )
 
+
 # =============================================================================
-# TEMPERATURE SETTINGS
+# TEMPERATURE & MAX TOKEN SETTINGS
 # =============================================================================
 
-TEMPERATURE = {
-    "triage_router": 0.0,          # Classification - deterministic
-    "thinking_mode": 0.3,          # Reasoning - focused
-    "extract_tool_needs": 0.0,     # Structured output - deterministic
-    "decompose_intent": 0.1,       # Structured output
-    "plan_tool": 0.0,              # Tool selection - deterministic
-    "fix_args": 0.1,               # Structured output - very deterministic
-    "reasoning_continuation": 0.3, # Reasoning - focused
-    "synthesize_response": 0.5,    # Free-form text
-    "clarification": 0.4,          # Free-form question
+TEMPERATURE: dict[str, float] = {
+    "intent_classify": 0.0,       # Operational — deterministic (Part II §25)
+    "tool_select_stage1": 0.0,    # Operational — deterministic
+    "tool_select_stage2": 0.0,    # Operational — deterministic
+    "result_classify": 0.0,       # Classification — deterministic
+    "error_retry": 0.0,           # Operational — deterministic
+    "synthesize": 0.5,            # Free-form — validated optimum (Part IV §43)
+    "image_analysis": 0.3,        # Vision — descriptive output
 }
 
-# =============================================================================
-# TRIAGE ROUTER (4-way classification)
-# =============================================================================
-
-TRIAGE_PROMPT = """Classify query into one route.
-
-DIRECT = greetings, casual chat, or answerable from medical knowledge alone (definitions, mechanisms, guidelines)
-LOOKUP = needs exactly ONE tool call (drug safety, drug interactions, literature, clinical trials, patient search)
-REASONING = needs clinical reasoning, may optionally need one tool
-MULTI_STEP = needs 2+ different tool calls or sequential steps
-
-Examples:
-Query: hai
-route: direct
-
-Query: hello, how are you?
-route: direct
-
-Query: thanks!
-route: direct
-
-Query: What is hypertension?
-route: direct
-
-Query: Check FDA warnings for metformin
-route: lookup
-tool: check_drug_safety
-query: metformin
-
-Query: Check drug interactions between warfarin and aspirin
-route: lookup
-tool: check_drug_interactions
-query: warfarin, aspirin
-
-Query: Search PubMed for GLP-1 agonist weight loss studies
-route: lookup
-tool: search_medical_literature
-query: GLP-1 agonist weight loss
-
-Query: Find clinical trials for lung cancer
-route: lookup
-tool: find_clinical_trials
-query: lung cancer
-
-Query: Search for patient John Smith
-route: lookup
-tool: search_patient
-query: John Smith
-
-Query: Best antihypertensive for a patient with CKD stage 3?
-route: reasoning
-
-Query: Find warfarin safety warnings and check interactions with aspirin
-route: multi_step
-
-Query: Search for patient John Smith, get his chart, and check metformin safety
-route: multi_step
-
----
-Query: {user_input}"""
+MAX_TOKENS: dict[str, int] = {
+    "intent_classify": 256,
+    "tool_select_stage1": 64,
+    "tool_select_stage2": 128,
+    "result_classify": 128,
+    "error_retry": 64,
+    "synthesize": 256,            # Validated optimum (Part IV §46)
+    "image_analysis": 512,
+}
 
 
 # =============================================================================
-# THINKING MODE (Chain-of-thought)
+# TOOL CLINICAL LABELS (tool_name → clinician-facing label)
+#   Eliminates source leakage at the root (Part IV §50, rec #5)
 # =============================================================================
 
-THINKING_PROMPT = """Analyze this clinical query step by step. Consider:
-- What clinical information is relevant?
-- What data sources or tools might help?
-- What are the key considerations?
-
-Query: {user_input}"""
-
-
-# =============================================================================
-# EXTRACT TOOL NEEDS (Reasoning path)
-# =============================================================================
-
-EXTRACT_TOOL_NEEDS_PROMPT = """Does this reasoning need a tool call to give a better answer?
-
-Rules:
-- If the reasoning mentions checking, looking up, searching, or verifying something → needs_tool=true
-- If the reasoning is complete and self-sufficient → needs_tool=false
-
-Example 1 (needs tool):
-Reasoning: Metformin has FDA warnings about lactic acidosis. I should check the current FDA boxed warnings.
-needs_tool: true
-tool: check_drug_safety
-query: metformin
-
-Example 2 (needs tool):
-Reasoning: SGLT2 inhibitors show cardiovascular benefits. I should search PubMed for the latest evidence.
-needs_tool: true
-tool: search_medical_literature
-query: SGLT2 inhibitors cardiovascular outcomes
-
-Example 3 (needs tool):
-Reasoning: Warfarin interacts with many drugs. I should verify the interaction with amiodarone.
-needs_tool: true
-tool: check_drug_interactions
-query: warfarin, amiodarone
-
-Example 4 (no tool):
-Reasoning: ACE inhibitors are first-line for CKD with proteinuria per KDIGO guidelines. The answer is clear.
-needs_tool: false
-
----
-Reasoning: {reasoning}
-Query: {user_input}
-
-Tools:
-{tools}"""
+TOOL_CLINICAL_LABELS: dict[str, str] = {
+    "check_drug_safety": "Drug Safety Report",
+    "check_drug_interactions": "Drug Interaction Check",
+    "search_medical_literature": "Medical Literature",
+    "find_clinical_trials": "Clinical Trials",
+    "search_patient": "Patient Search",
+    "get_patient_chart": "Patient Record",
+    "prescribe_medication": "Prescription",
+    "add_allergy": "Allergy Documentation",
+    "save_clinical_note": "Clinical Note",
+    "analyze_medical_image": "Image Analysis",
+}
 
 
 # =============================================================================
-# REASONING CONTINUATION (After tool result)
+# ERROR TEMPLATES (pre-format before LLM sees them — Part IV §48)
+#   Raw errors → 4.8/10 Gemini.  Pre-formatted → 10/10.
 # =============================================================================
 
-REASONING_CONTINUATION_PROMPT = """Continue clinical reasoning with tool results.
-
-Query: {user_input}
-Initial reasoning: {reasoning}
-
-Tool result:
-{tool_result}
-
-Integrate findings and complete the analysis."""
-
-
-# =============================================================================
-# INTENT DECOMPOSITION (up to 5 subtasks)
-# =============================================================================
-
-def get_decompose_prompt(user_input: str, reasoning: str) -> str:
-    """Generate decomposition prompt with dynamic tool list."""
-    tools = get_tools_for_prompt()
-    return f"""Decompose into 1-5 subtasks with tools.
-
-Tools:
-{tools}
-
-Example 1 (drug safety):
-Query: Check if metformin has any FDA warnings
-subtask_1: Look up FDA boxed warnings for metformin
-tool_1: check_drug_safety
-
-Example 2 (drug interactions):
-Query: Patient on warfarin needs azithromycin. Check interactions.
-subtask_1: Check drug interactions between warfarin and azithromycin
-tool_1: check_drug_interactions
-
-Example 3 (EHR + drug check):
-Query: Find patient John Smith and check his chart, then check safety of his metformin
-subtask_1: Search for patient John Smith
-tool_1: search_patient
-subtask_2: Get patient chart
-tool_2: get_patient_chart
-subtask_3: Check drug safety for metformin
-tool_3: check_drug_safety
-
-Example 4 (prescription workflow):
-Query: Prescribe lisinopril 10mg daily for patient abc-123 and document it
-subtask_1: Prescribe lisinopril for patient
-tool_1: prescribe_medication
-subtask_2: Save clinical note about prescription
-tool_2: save_clinical_note
-
-Example 5 (image analysis):
-Query: What does this chest X-ray show?
-subtask_1: Analyze the attached medical image
-tool_1: analyze_medical_image
-
----
-Query: {user_input}
-
-Context: {reasoning}
-
-Return subtask_1, tool_1, and optionally subtask_2-5 with tool_2-5."""
+ERROR_TEMPLATES: dict[str, str] = {
+    "timeout": "The {tool_label} was temporarily unavailable. Please try again shortly.",
+    "not_found": "No results were found for {entity} in the {tool_label}.",
+    "invalid_args": (
+        "The request to {tool_label} could not be completed "
+        "— additional information is needed."
+    ),
+    "rate_limit": "The {tool_label} is temporarily busy. The system will retry automatically.",
+    "server_error": "The {tool_label} experienced a temporary error. The system will retry automatically.",
+    "multiple_matches": (
+        "Multiple matches were found in {tool_label}. "
+        "Please clarify which one you meant."
+    ),
+    "generic": "The {tool_label} was unable to complete the request.",
+}
 
 
 # =============================================================================
-# TOOL PLANNING (all 10 tools)
+# FULL TOOL DESCRIPTIONS (full_desc — 95% accuracy, Part II §16)
+#   Used in TOOL_SELECT Stage 1.
 # =============================================================================
 
-def get_plan_prompt(intent: str, suggested_tool: str) -> str:
-    """Generate tool planning prompt with dynamic tool list."""
-    tools = get_tools_for_prompt()
-    return f"""Select tool and fill arguments. Output patient_id FIRST for EHR tools.
+TOOL_DESCRIPTIONS = """Available tools:
 
-Task: {intent}
-Suggested: {suggested_tool}
+- check_drug_safety(drug_name: str) — Look up FDA boxed warnings, contraindications,
+  and major safety alerts for a specific drug. Use when a clinician asks about drug
+  safety, warnings, or whether a drug is safe for a particular patient.
 
-Tools:
-{tools}
+- check_drug_interactions(drug_names: list[str]) — Check for known interactions between
+  two or more drugs. Returns severity, mechanism, and clinical significance. Use when a
+  clinician asks about combining medications or potential drug-drug interactions.
 
-Example 1 (drug safety):
-Task: Look up FDA warnings for dofetilide
-tool_name: check_drug_safety
-patient_id: null
-drug_name: dofetilide
+- search_medical_literature(query: str) — Search PubMed and medical literature databases
+  for published studies, systematic reviews, and clinical evidence. Use when a clinician
+  asks about research, evidence, studies, or medical literature on a topic.
 
-Example 2 (literature):
-Task: Search for PCSK9 inhibitor studies
-tool_name: search_medical_literature
-patient_id: null
-query: PCSK9 inhibitors efficacy LDL lowering
+- find_clinical_trials(condition: str, status: str = None) — Search ClinicalTrials.gov
+  for active, recruiting, or completed clinical trials for a specific condition or
+  treatment. Use when a clinician asks about experimental treatments, ongoing trials,
+  or new therapies being studied.
 
-Example 3 (interactions):
-Task: Check interactions between warfarin and azithromycin
-tool_name: check_drug_interactions
-patient_id: null
-drug_list: warfarin, azithromycin
+- search_patient(name: str) — Search the electronic health record system for a patient
+  by name. Returns matching patient IDs and basic demographics. Use when a clinician
+  mentions a patient by name and needs to look them up.
 
-Example 4 (clinical trials):
-Task: Find clinical trials for lung cancer
-tool_name: find_clinical_trials
-patient_id: null
-query: lung cancer
+- get_patient_chart(patient_id: str) — Retrieve the full clinical summary for a patient,
+  including diagnoses, medications, allergies, lab results, and vitals. Requires a
+  patient ID (not a name). Use when a clinician wants to review a patient's record.
 
-Example 5 (patient search):
-Task: Find patient John Smith
-tool_name: search_patient
-patient_id: null
-name: John Smith
+- prescribe_medication(patient_id: str, medication_name: str, dosage: str,
+  frequency: str) — Create a new medication order for a patient in the EHR. Use when
+  a clinician wants to prescribe, order, or start a medication for a specific patient.
 
-Example 6 (patient chart):
-Task: Get chart for patient abc-123
-tool_name: get_patient_chart
-patient_id: abc-123
+- add_allergy(patient_id: str, substance: str, reaction: str,
+  severity: str = None) — Document an allergy or adverse reaction in a patient's
+  record. Use when a clinician wants to record, document, or note an allergy.
 
-Example 7 (allergy):
-Task: Document penicillin allergy for patient abc-123
-tool_name: add_allergy
-patient_id: abc-123
-substance: penicillin
-reaction: rash
-severity: moderate
+- save_clinical_note(patient_id: str, note_type: str, note_text: str) — Save a
+  clinical note (progress note, consult note, procedure note, etc.) to a patient's
+  record. Use when a clinician wants to write, save, or document a clinical note.
 
-Example 8 (prescription — use medication_name NOT drug_name):
-Task: Prescribe lisinopril 10mg daily for patient abc-123
-tool_name: prescribe_medication
-patient_id: abc-123
-medication_name: lisinopril
-dosage: 10mg
-frequency: once daily
-
-Example 9 (clinical note):
-Task: Save note about hypertension diagnosis for patient abc-123
-tool_name: save_clinical_note
-patient_id: abc-123
-note_text: Patient diagnosed with hypertension. Starting lisinopril 10mg daily.
-note_type: clinical-note
-
-Example 10 (medical image):
-Task: Analyze the attached medical image
-tool_name: analyze_medical_image
-patient_id: null
-query: Describe this medical image in detail. Identify the imaging modality, anatomical region, and any notable findings.
-
----
-Return tool_name, then patient_id (extract from task or null), then remaining arguments."""
+- analyze_medical_image(query: str) — Analyze an attached medical image (X-ray, CT,
+  MRI, histopathology slide, etc.) for findings relevant to the specified query.
+  Use when a clinician shares a medical image and asks for analysis or interpretation."""
 
 
 # =============================================================================
-# FIX ARGS (Validation failure recovery)
+# 1-SHOT EXAMPLES PER TOOL (for TOOL_SELECT Stage 1 — Part II §19)
+#   1-shot matched to suggested_tool is the sweet spot at 91% arg accuracy.
 # =============================================================================
 
-FIX_ARGS_PROMPT = """Fix the tool arguments. The previous call had a validation error.
+TOOL_EXAMPLES: dict[str, tuple[str, str]] = {
+    "check_drug_safety": (
+        "Check FDA warnings for metformin",
+        "check_drug_safety",
+    ),
+    "check_drug_interactions": (
+        "Check interactions between warfarin and aspirin",
+        "check_drug_interactions",
+    ),
+    "search_medical_literature": (
+        "Search for studies on SGLT2 inhibitors and cardiovascular outcomes",
+        "search_medical_literature",
+    ),
+    "find_clinical_trials": (
+        "Find recruiting clinical trials for lung cancer",
+        "find_clinical_trials",
+    ),
+    "search_patient": (
+        "Search for patient John Smith",
+        "search_patient",
+    ),
+    "get_patient_chart": (
+        "Get the chart for patient abc-123",
+        "get_patient_chart",
+    ),
+    "prescribe_medication": (
+        "Prescribe lisinopril 10mg daily for patient abc-123",
+        "prescribe_medication",
+    ),
+    "add_allergy": (
+        "Document penicillin allergy for patient abc-123",
+        "add_allergy",
+    ),
+    "save_clinical_note": (
+        "Save a progress note for patient abc-123",
+        "save_clinical_note",
+    ),
+    "analyze_medical_image": (
+        "What does this chest X-ray show?",
+        "analyze_medical_image",
+    ),
+}
+
+# Fallback example when suggested_tool is None or unrecognised
+_DEFAULT_EXAMPLE = TOOL_EXAMPLES["check_drug_safety"]
+
+
+# =============================================================================
+# NODE PROMPTS
+# =============================================================================
+
+# ── Node 2: INTENT_CLASSIFY ──────────────────────────────────────────────────
+
+INTENT_CLASSIFY_PROMPT = """\
+You are a clinical decision-support assistant integrated with an electronic health record
+system and medical knowledge tools.
+
+Your task: classify the user's query and provide a brief clinical summary.
+
+Classification rules:
+- DIRECT: General medical questions, greetings, thanks, or questions answerable from
+  medical knowledge alone (e.g., "What is hypertension?", "Hello", "Explain metformin MOA")
+- TOOL_NEEDED: Requests requiring specific patient data, drug safety lookups, literature
+  searches, clinical trial searches, prescriptions, allergy documentation, clinical notes,
+  or medical image analysis
+
+Provide a task_summary that captures the clinical context in ~50 words or fewer.
+If TOOL_NEEDED, suggest the most relevant tool name.
+
+Query: {user_query}"""
+
+
+# ── Node 3 Stage 1: TOOL_SELECT (tool name only) ────────────────────────────
+
+TOOL_SELECT_STAGE1_PROMPT = """\
+You are a clinical tool router. Select the single most appropriate tool for the task.
+
+{tool_descriptions}
+
+Example:
+User: "{example_query}"
+Tool: {example_tool}
+
+Now select the tool for the current task.
+
+Task summary: {task_summary}
+User query: {user_query}"""
+
+
+# ── Node 3 Stage 2: TOOL_SELECT (per-tool args) ─────────────────────────────
+
+TOOL_SELECT_STAGE2_PROMPT = """\
+Extract the arguments for the {tool_name} tool from the user's request.
 
 Tool: {tool_name}
-Previous args: {previous_args}
-Error: {validation_error}
+Description: {tool_description}
 
-Fix the arguments to resolve the error."""
+User query: {user_query}
+{entity_hints}
+Fill in the required arguments."""
+
+
+# ── Node 5: RESULT_CLASSIFY ──────────────────────────────────────────────────
+
+RESULT_CLASSIFY_PROMPT = """\
+You are evaluating a tool result. Classify the quality of the data returned.
+
+User's original question: {user_query}
+Clinical context: {task_summary}
+
+Tool used: {tool_label}
+Result:
+{formatted_tool_result}
+
+Classify the result quality and provide a brief summary."""
+
+
+# ── Node 5a: ERROR_HANDLER retry decision ────────────────────────────────────
+
+ERROR_RETRY_PROMPT = """\
+The tool call failed. Decide whether to retry with the same arguments or different arguments.
+
+Tool: {tool_name}
+Arguments used: {tool_args}
+Error: {error_message}
+
+Choose retry_same if this is a transient error (timeout, temporary unavailability).
+Choose retry_different_args if the arguments were wrong or incomplete."""
+
+
+# ── Node 7: SYNTHESIZE (system prompt) ───────────────────────────────────────
+
+SYNTHESIZE_SYSTEM_PROMPT = """\
+You are a clinical decision-support assistant. Provide a clear, concise response to the
+clinician based on the information below.
+
+Guidelines:
+- Include only the most critical findings
+- If information was unavailable, state this clearly without speculating
+- Do not reference any system internals, tool names, or databases
+- Use standard medical terminology appropriate for a clinical audience"""
+
+
+# ── Node 7: SYNTHESIZE (user message assembly template) ──────────────────────
+
+SYNTHESIZE_USER_TEMPLATE = """\
+Clinician's question: {user_query}
+
+Clinical context: {task_summary}
+{image_section}\
+{tool_results_section}\
+{error_section}\
+{clarification_section}"""
+
+
+# ── Node 7: DIRECT_CHAT (lightweight, no tool context) ──────────────────────
+
+DIRECT_CHAT_PROMPT = """\
+Respond to the user. Keep it natural and concise.
+
+Query: {user_query}"""
 
 
 # =============================================================================
-# RESPONSE SYNTHESIS (all routes converge here)
+# TASK-PATTERN MATCHING (deterministic termination — V3 spec §11)
 # =============================================================================
 
-SYNTHESIS_PROMPT = """Clinical decision support response.
-
-Query: {user_input}
-{reasoning_line}
-{tool_results_line}
-
-Respond concisely. Use medical abbreviations. Present findings directly as clinical knowledge.
-Do NOT mention tool names, sources, references, internal processes, or how findings were obtained."""
-
-DIRECT_CHAT_PROMPT = """Respond to the user. Keep it natural and concise.
-
-Query: {user_input}"""
+TASK_PATTERNS: dict[str, dict] = {
+    "drug_safety": {
+        "keywords": ["safety", "warning", "boxed warning", "FDA"],
+        "requires": {"check_drug_safety"},
+    },
+    "drug_interaction": {
+        "keywords": ["interaction", "combining", "together with"],
+        "requires": {"check_drug_interactions"},
+    },
+    "patient_lookup_and_review": {
+        "keywords_all": ["patient", "chart|record|summary"],
+        "requires": {"search_patient", "get_patient_chart"},
+    },
+    "prescribe": {
+        "keywords": ["prescribe", "order", "start medication"],
+        "requires": {"prescribe_medication"},
+    },
+    "literature_search": {
+        "keywords": ["studies", "research", "evidence", "literature", "pubmed"],
+        "requires": {"search_medical_literature"},
+    },
+    "clinical_trial": {
+        "keywords": ["trial", "recruiting", "experimental"],
+        "requires": {"find_clinical_trials"},
+    },
+    "allergy_document": {
+        "keywords": ["allergy", "allergic", "document allergy"],
+        "requires": {"add_allergy"},
+    },
+    "clinical_note": {
+        "keywords": ["note", "document", "write note"],
+        "requires": {"save_clinical_note"},
+    },
+}
 
 
 # =============================================================================
-# CLARIFICATION REQUEST
+# COMMON DRUG NAMES (~200 most prescribed generics)
+#   Used by input_assembly for deterministic entity extraction.
+#   Case-insensitive matching — model still extracts in TOOL_SELECT.
 # =============================================================================
 
-CLARIFICATION_PROMPT = """Need more information.
+COMMON_DRUGS: frozenset[str] = frozenset({
+    # Cardiovascular
+    "lisinopril", "amlodipine", "metoprolol", "losartan", "atorvastatin",
+    "simvastatin", "rosuvastatin", "pravastatin", "carvedilol", "valsartan",
+    "enalapril", "ramipril", "diltiazem", "verapamil", "nifedipine",
+    "hydrochlorothiazide", "furosemide", "spironolactone", "digoxin",
+    "warfarin", "apixaban", "rivaroxaban", "dabigatran", "clopidogrel",
+    "aspirin", "ticagrelor", "prasugrel", "heparin", "enoxaparin",
+    # Diabetes
+    "metformin", "glipizide", "glyburide", "glimepiride", "insulin",
+    "sitagliptin", "linagliptin", "saxagliptin", "empagliflozin",
+    "dapagliflozin", "canagliflozin", "liraglutide", "semaglutide",
+    "dulaglutide", "pioglitazone",
+    # Respiratory
+    "albuterol", "fluticasone", "budesonide", "montelukast", "tiotropium",
+    "ipratropium", "prednisone", "prednisolone", "dexamethasone",
+    "methylprednisolone",
+    # Antibiotics
+    "amoxicillin", "azithromycin", "ciprofloxacin", "levofloxacin",
+    "doxycycline", "metronidazole", "trimethoprim", "sulfamethoxazole",
+    "cephalexin", "ceftriaxone", "clindamycin", "vancomycin", "gentamicin",
+    "nitrofurantoin", "penicillin", "ampicillin", "piperacillin",
+    # Pain / Anti-inflammatory
+    "ibuprofen", "naproxen", "acetaminophen", "celecoxib", "meloxicam",
+    "tramadol", "morphine", "oxycodone", "hydrocodone", "fentanyl",
+    "gabapentin", "pregabalin", "duloxetine",
+    # Psychiatric
+    "sertraline", "escitalopram", "fluoxetine", "citalopram", "paroxetine",
+    "venlafaxine", "bupropion", "mirtazapine", "trazodone", "amitriptyline",
+    "quetiapine", "olanzapine", "risperidone", "aripiprazole", "lithium",
+    "lamotrigine", "valproate", "carbamazepine", "clonazepam", "lorazepam",
+    "diazepam", "alprazolam", "zolpidem",
+    # GI
+    "omeprazole", "pantoprazole", "esomeprazole", "lansoprazole",
+    "famotidine", "ondansetron", "sucralfate", "lactulose",
+    # Thyroid
+    "levothyroxine", "methimazole",
+    # Antimalarials / Immunology
+    "hydroxychloroquine", "azathioprine", "mycophenolate", "tacrolimus",
+    "cyclosporine",
+    # Antivirals
+    "acyclovir", "valacyclovir", "oseltamivir",
+    # Cardiac-specific
+    "amiodarone", "sotalol", "dofetilide", "flecainide", "dronedarone",
+    "nitroglycerin", "isosorbide", "hydralazine",
+    # Other common
+    "allopurinol", "colchicine", "finasteride", "tamsulosin",
+    "sildenafil", "tadalafil", "methotrexate",
+})
 
-Query: {user_input}
-Missing: {missing_info}
 
-Ask one specific question."""
+# =============================================================================
+# ACTION VERBS for input assembly entity extraction
+# =============================================================================
+
+ACTION_VERBS: frozenset[str] = frozenset({
+    "prescribe", "order", "start", "initiate",
+    "document", "record", "note", "write",
+    "check", "search", "find", "look up", "lookup",
+    "review", "get", "retrieve", "pull up",
+    "save", "add", "create",
+    "analyze", "interpret",
+})
+
+
+# =============================================================================
+# SAFETY CONSTANTS
+# =============================================================================
+
+MAX_STEPS = 4           # Hard limit on tool loop iterations
+MAX_RETRIES = 2         # Per-tool retry limit
+MAX_TOTAL_RETRIES = 4   # Across all tools in one conversation turn
+
+# Tools that modify patient data — require explicit user approval
+WRITE_TOOLS: frozenset[str] = frozenset({
+    "add_allergy",
+    "prescribe_medication",
+    "save_clinical_note",
+})
