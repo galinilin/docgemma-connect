@@ -74,10 +74,28 @@ class DocGemma:
         self._async_client = httpx.AsyncClient(timeout=timeout, headers=headers)
 
     def _build_messages(self, messages: list[dict]) -> list[dict]:
-        """Prepend system prompt (if set) to a messages array."""
+        """Prepend system prompt (if set) and merge consecutive same-role messages."""
+        msgs = list(messages)
         if self._system_prompt:
-            return [{"role": "system", "content": self._system_prompt}] + messages
-        return messages
+            msgs = [{"role": "system", "content": self._system_prompt}] + msgs
+
+        # Merge consecutive messages with the same role (vLLM rejects them)
+        merged: list[dict] = []
+        for msg in msgs:
+            if merged and merged[-1]["role"] == msg["role"]:
+                prev = merged[-1]["content"]
+                curr = msg["content"]
+                # Both strings — join with newline
+                if isinstance(prev, str) and isinstance(curr, str):
+                    merged[-1] = {**merged[-1], "content": prev + "\n" + curr}
+                else:
+                    # Multimodal content (list of parts) — concatenate lists
+                    prev_parts = prev if isinstance(prev, list) else [{"type": "text", "text": prev}]
+                    curr_parts = curr if isinstance(curr, list) else [{"type": "text", "text": curr}]
+                    merged[-1] = {**merged[-1], "content": prev_parts + curr_parts}
+            else:
+                merged.append(msg)
+        return merged
 
     def health_check(self) -> bool:
         """Check if remote endpoint is reachable."""
@@ -190,6 +208,7 @@ class DocGemma:
             payload["temperature"] = 0.0
 
         in_thinking = False
+        full_response_parts: list[str] = []
 
         async with self._async_client.stream(
             "POST",
@@ -215,9 +234,11 @@ class DocGemma:
                         if not in_thinking:
                             idx = content.find("<unused94>")
                             if idx == -1:
+                                full_response_parts.append(content)
                                 yield content
                                 break
                             if idx > 0:
+                                full_response_parts.append(content[:idx])
                                 yield content[:idx]
                             in_thinking = True
                             content = content[idx + len("<unused94>"):]
@@ -230,6 +251,10 @@ class DocGemma:
 
                 except (_json.JSONDecodeError, IndexError, KeyError):
                     continue
+
+        full_response = "".join(full_response_parts)
+        print("[*] Stream:", _json.dumps({"input": all_messages, "response": full_response}, indent=2))
+        print("*********************")
 
     async def aclose(self) -> None:
         """Close the async HTTP client."""
