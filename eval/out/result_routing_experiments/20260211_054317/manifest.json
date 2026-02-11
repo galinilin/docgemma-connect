@@ -1,0 +1,2833 @@
+[
+  {
+    "id": "cat1-quality-S-01",
+    "category": "1_result_quality",
+    "description": "Quality assessment: Boxed warning found for dofetilide",
+    "scenario_id": "S-01",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-S-02",
+    "category": "1_result_quality",
+    "description": "Quality assessment: 3 articles found for SGLT2",
+    "scenario_id": "S-02",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-S-03",
+    "category": "1_result_quality",
+    "description": "Quality assessment: Warfarin+aspirin interaction found",
+    "scenario_id": "S-03",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-S-04",
+    "category": "1_result_quality",
+    "description": "Quality assessment: 2 breast cancer trials found",
+    "scenario_id": "S-04",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-S-05",
+    "category": "1_result_quality",
+    "description": "Quality assessment: 1 patient match for Maria Garcia",
+    "scenario_id": "S-05",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-S-06",
+    "category": "1_result_quality",
+    "description": "Quality assessment: Full chart for abc-123",
+    "scenario_id": "S-06",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-P-01",
+    "category": "1_result_quality",
+    "description": "Quality assessment: No boxed warning for metformin (but CKD question unanswered)",
+    "scenario_id": "P-01",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-P-02",
+    "category": "1_result_quality",
+    "description": "Quality assessment: Multiple matches for James Wilson",
+    "scenario_id": "P-02",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-P-03",
+    "category": "1_result_quality",
+    "description": "Quality assessment: 1 drug unresolved in interaction check",
+    "scenario_id": "P-03",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-P-04",
+    "category": "1_result_quality",
+    "description": "Quality assessment: 1 article with no abstract",
+    "scenario_id": "P-04",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-E-01",
+    "category": "1_result_quality",
+    "description": "Quality assessment: 0 articles for obscure query",
+    "scenario_id": "E-01",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-E-02",
+    "category": "1_result_quality",
+    "description": "Quality assessment: 0 trials for rare condition",
+    "scenario_id": "E-02",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-E-03",
+    "category": "1_result_quality",
+    "description": "Quality assessment: No match for Xyz Nonexist",
+    "scenario_id": "E-03",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-X-01",
+    "category": "1_result_quality",
+    "description": "Quality assessment: API timeout",
+    "scenario_id": "X-01",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-X-02",
+    "category": "1_result_quality",
+    "description": "Quality assessment: Invalid patient ID",
+    "scenario_id": "X-02",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-X-03",
+    "category": "1_result_quality",
+    "description": "Quality assessment: Need 2+ drugs error",
+    "scenario_id": "X-03",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat1-quality-X-04",
+    "category": "1_result_quality",
+    "description": "Quality assessment: HTTP 500 error",
+    "scenario_id": "X-04",
+    "scenario_type": "result_assessment",
+    "strategy": "direct",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-01",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Check FDA warnings for dofetilide",
+    "scenario_id": "R-01",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-02",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Search for SGLT2 cardiovascular studies",
+    "scenario_id": "R-02",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-03",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Check warfarin and aspirin interactions",
+    "scenario_id": "R-03",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-04",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Find clinical trials for TNBC",
+    "scenario_id": "R-04",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-05",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Is metformin safe for CKD stage 4?",
+    "scenario_id": "R-05",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-06",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Look up James Wilson's medications",
+    "scenario_id": "R-06",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-07",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Check warfarin and supplement X interact",
+    "scenario_id": "R-07",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-08",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Find studies on rare enzyme deficiency t",
+    "scenario_id": "R-08",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-09",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Search for xylotriazole studies",
+    "scenario_id": "R-09",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-10",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Find trials for hereditary angioedema ty",
+    "scenario_id": "R-10",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-11",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Find patient Xyz Nonexist",
+    "scenario_id": "R-11",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-12",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Check amiodarone safety",
+    "scenario_id": "R-12",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-13",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Get chart for the patient",
+    "scenario_id": "R-13",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-14",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Check aspirin interactions",
+    "scenario_id": "R-14",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-15",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Search diabetes management literature",
+    "scenario_id": "R-15",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-16",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Find John Smith and check his drug safet",
+    "scenario_id": "R-16",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-17",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Get chart for abc-123 and check interact",
+    "scenario_id": "R-17",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-18",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Find Maria Garcia and prescribe lisinopr",
+    "scenario_id": "R-18",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-19",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Search SGLT2 studies then find clinical ",
+    "scenario_id": "R-19",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.0-R-20",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.0: Find patient John Smith, get chart, chec",
+    "scenario_id": "R-20",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-01",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Check FDA warnings for dofetilide",
+    "scenario_id": "R-01",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-02",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Search for SGLT2 cardiovascular studies",
+    "scenario_id": "R-02",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-03",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Check warfarin and aspirin interactions",
+    "scenario_id": "R-03",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-04",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Find clinical trials for TNBC",
+    "scenario_id": "R-04",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-05",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Is metformin safe for CKD stage 4?",
+    "scenario_id": "R-05",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-06",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Look up James Wilson's medications",
+    "scenario_id": "R-06",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-07",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Check warfarin and supplement X interact",
+    "scenario_id": "R-07",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-08",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Find studies on rare enzyme deficiency t",
+    "scenario_id": "R-08",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-09",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Search for xylotriazole studies",
+    "scenario_id": "R-09",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-10",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Find trials for hereditary angioedema ty",
+    "scenario_id": "R-10",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-11",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Find patient Xyz Nonexist",
+    "scenario_id": "R-11",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-12",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Check amiodarone safety",
+    "scenario_id": "R-12",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-13",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Get chart for the patient",
+    "scenario_id": "R-13",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-14",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Check aspirin interactions",
+    "scenario_id": "R-14",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-15",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Search diabetes management literature",
+    "scenario_id": "R-15",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-16",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Find John Smith and check his drug safet",
+    "scenario_id": "R-16",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-17",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Get chart for abc-123 and check interact",
+    "scenario_id": "R-17",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-18",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Find Maria Garcia and prescribe lisinopr",
+    "scenario_id": "R-18",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-19",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Search SGLT2 studies then find clinical ",
+    "scenario_id": "R-19",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat2-routing-T0.3-R-20",
+    "category": "2_next_action_routing",
+    "description": "Routing T0.3: Find patient John Smith, get chart, chec",
+    "scenario_id": "R-20",
+    "scenario_type": "routing",
+    "strategy": "routing_T0.3",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-no_prefix-T-01",
+    "category": "3_full_plan",
+    "description": "Plan no-prefix: Find patient John Smith, get his chart, ",
+    "scenario_id": "T-01",
+    "scenario_type": "planning",
+    "strategy": "no_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-thinking-T-01",
+    "category": "3_full_plan",
+    "description": "Plan with-thinking: Find patient John Smith, get his chart, ",
+    "scenario_id": "T-01",
+    "scenario_type": "planning",
+    "strategy": "thinking_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-reason_first-T-01",
+    "category": "3_full_plan",
+    "description": "Plan reason-first: Find patient John Smith, get his chart, ",
+    "scenario_id": "T-01",
+    "scenario_type": "planning",
+    "strategy": "reason_first",
+    "run_fn": "reason_then_plan",
+    "params": {
+      "temperature_reason": 0.3,
+      "temperature_plan": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-no_prefix-T-02",
+    "category": "3_full_plan",
+    "description": "Plan no-prefix: Check interactions between warfarin, asp",
+    "scenario_id": "T-02",
+    "scenario_type": "planning",
+    "strategy": "no_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-thinking-T-02",
+    "category": "3_full_plan",
+    "description": "Plan with-thinking: Check interactions between warfarin, asp",
+    "scenario_id": "T-02",
+    "scenario_type": "planning",
+    "strategy": "thinking_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-reason_first-T-02",
+    "category": "3_full_plan",
+    "description": "Plan reason-first: Check interactions between warfarin, asp",
+    "scenario_id": "T-02",
+    "scenario_type": "planning",
+    "strategy": "reason_first",
+    "run_fn": "reason_then_plan",
+    "params": {
+      "temperature_reason": 0.3,
+      "temperature_plan": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-no_prefix-T-03",
+    "category": "3_full_plan",
+    "description": "Plan no-prefix: Get chart for patient abc-123, check med",
+    "scenario_id": "T-03",
+    "scenario_type": "planning",
+    "strategy": "no_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-thinking-T-03",
+    "category": "3_full_plan",
+    "description": "Plan with-thinking: Get chart for patient abc-123, check med",
+    "scenario_id": "T-03",
+    "scenario_type": "planning",
+    "strategy": "thinking_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-reason_first-T-03",
+    "category": "3_full_plan",
+    "description": "Plan reason-first: Get chart for patient abc-123, check med",
+    "scenario_id": "T-03",
+    "scenario_type": "planning",
+    "strategy": "reason_first",
+    "run_fn": "reason_then_plan",
+    "params": {
+      "temperature_reason": 0.3,
+      "temperature_plan": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-no_prefix-T-04",
+    "category": "3_full_plan",
+    "description": "Plan no-prefix: Search for recent SGLT2 studies and find",
+    "scenario_id": "T-04",
+    "scenario_type": "planning",
+    "strategy": "no_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-thinking-T-04",
+    "category": "3_full_plan",
+    "description": "Plan with-thinking: Search for recent SGLT2 studies and find",
+    "scenario_id": "T-04",
+    "scenario_type": "planning",
+    "strategy": "thinking_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-reason_first-T-04",
+    "category": "3_full_plan",
+    "description": "Plan reason-first: Search for recent SGLT2 studies and find",
+    "scenario_id": "T-04",
+    "scenario_type": "planning",
+    "strategy": "reason_first",
+    "run_fn": "reason_then_plan",
+    "params": {
+      "temperature_reason": 0.3,
+      "temperature_plan": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-no_prefix-T-05",
+    "category": "3_full_plan",
+    "description": "Plan no-prefix: Find patient Maria Garcia, document peni",
+    "scenario_id": "T-05",
+    "scenario_type": "planning",
+    "strategy": "no_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-thinking-T-05",
+    "category": "3_full_plan",
+    "description": "Plan with-thinking: Find patient Maria Garcia, document peni",
+    "scenario_id": "T-05",
+    "scenario_type": "planning",
+    "strategy": "thinking_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-reason_first-T-05",
+    "category": "3_full_plan",
+    "description": "Plan reason-first: Find patient Maria Garcia, document peni",
+    "scenario_id": "T-05",
+    "scenario_type": "planning",
+    "strategy": "reason_first",
+    "run_fn": "reason_then_plan",
+    "params": {
+      "temperature_reason": 0.3,
+      "temperature_plan": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-no_prefix-T-06",
+    "category": "3_full_plan",
+    "description": "Plan no-prefix: Prescribe lisinopril 10mg daily for pati",
+    "scenario_id": "T-06",
+    "scenario_type": "planning",
+    "strategy": "no_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-thinking-T-06",
+    "category": "3_full_plan",
+    "description": "Plan with-thinking: Prescribe lisinopril 10mg daily for pati",
+    "scenario_id": "T-06",
+    "scenario_type": "planning",
+    "strategy": "thinking_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-reason_first-T-06",
+    "category": "3_full_plan",
+    "description": "Plan reason-first: Prescribe lisinopril 10mg daily for pati",
+    "scenario_id": "T-06",
+    "scenario_type": "planning",
+    "strategy": "reason_first",
+    "run_fn": "reason_then_plan",
+    "params": {
+      "temperature_reason": 0.3,
+      "temperature_plan": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-no_prefix-T-07",
+    "category": "3_full_plan",
+    "description": "Plan no-prefix: Check dofetilide safety, check interacti",
+    "scenario_id": "T-07",
+    "scenario_type": "planning",
+    "strategy": "no_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-thinking-T-07",
+    "category": "3_full_plan",
+    "description": "Plan with-thinking: Check dofetilide safety, check interacti",
+    "scenario_id": "T-07",
+    "scenario_type": "planning",
+    "strategy": "thinking_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-reason_first-T-07",
+    "category": "3_full_plan",
+    "description": "Plan reason-first: Check dofetilide safety, check interacti",
+    "scenario_id": "T-07",
+    "scenario_type": "planning",
+    "strategy": "reason_first",
+    "run_fn": "reason_then_plan",
+    "params": {
+      "temperature_reason": 0.3,
+      "temperature_plan": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-no_prefix-T-08",
+    "category": "3_full_plan",
+    "description": "Plan no-prefix: Find patient James Wilson, get his chart",
+    "scenario_id": "T-08",
+    "scenario_type": "planning",
+    "strategy": "no_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-thinking-T-08",
+    "category": "3_full_plan",
+    "description": "Plan with-thinking: Find patient James Wilson, get his chart",
+    "scenario_id": "T-08",
+    "scenario_type": "planning",
+    "strategy": "thinking_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-reason_first-T-08",
+    "category": "3_full_plan",
+    "description": "Plan reason-first: Find patient James Wilson, get his chart",
+    "scenario_id": "T-08",
+    "scenario_type": "planning",
+    "strategy": "reason_first",
+    "run_fn": "reason_then_plan",
+    "params": {
+      "temperature_reason": 0.3,
+      "temperature_plan": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-no_prefix-T-09",
+    "category": "3_full_plan",
+    "description": "Plan no-prefix: Search literature on GLP-1 agonists for ",
+    "scenario_id": "T-09",
+    "scenario_type": "planning",
+    "strategy": "no_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-thinking-T-09",
+    "category": "3_full_plan",
+    "description": "Plan with-thinking: Search literature on GLP-1 agonists for ",
+    "scenario_id": "T-09",
+    "scenario_type": "planning",
+    "strategy": "thinking_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-reason_first-T-09",
+    "category": "3_full_plan",
+    "description": "Plan reason-first: Search literature on GLP-1 agonists for ",
+    "scenario_id": "T-09",
+    "scenario_type": "planning",
+    "strategy": "reason_first",
+    "run_fn": "reason_then_plan",
+    "params": {
+      "temperature_reason": 0.3,
+      "temperature_plan": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-no_prefix-T-10",
+    "category": "3_full_plan",
+    "description": "Plan no-prefix: Review patient abc-123's chart and deter",
+    "scenario_id": "T-10",
+    "scenario_type": "planning",
+    "strategy": "no_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-thinking-T-10",
+    "category": "3_full_plan",
+    "description": "Plan with-thinking: Review patient abc-123's chart and deter",
+    "scenario_id": "T-10",
+    "scenario_type": "planning",
+    "strategy": "thinking_prefix",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat3-plan-reason_first-T-10",
+    "category": "3_full_plan",
+    "description": "Plan reason-first: Review patient abc-123's chart and deter",
+    "scenario_id": "T-10",
+    "scenario_type": "planning",
+    "strategy": "reason_first",
+    "run_fn": "reason_then_plan",
+    "params": {
+      "temperature_reason": 0.3,
+      "temperature_plan": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-01-snap0",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 0: Find patient John Smith, get h",
+    "scenario_id": "T-01-snap0",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-01-snap1",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 1: Find patient John Smith, get h",
+    "scenario_id": "T-01-snap1",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_1",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-01-snap2",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 2: Find patient John Smith, get h",
+    "scenario_id": "T-01-snap2",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_2",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-02-snap0",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 0: Check interactions between war",
+    "scenario_id": "T-02-snap0",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-02-snap1",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 1: Check interactions between war",
+    "scenario_id": "T-02-snap1",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_1",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-02-snap2",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 2: Check interactions between war",
+    "scenario_id": "T-02-snap2",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_2",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-03-snap0",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 0: Get chart for patient abc-123,",
+    "scenario_id": "T-03-snap0",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-03-snap1",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 1: Get chart for patient abc-123,",
+    "scenario_id": "T-03-snap1",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_1",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-03-snap2",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 2: Get chart for patient abc-123,",
+    "scenario_id": "T-03-snap2",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_2",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-04-snap0",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 0: Search for recent SGLT2 studie",
+    "scenario_id": "T-04-snap0",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-04-snap1",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 1: Search for recent SGLT2 studie",
+    "scenario_id": "T-04-snap1",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_1",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-04-snap2",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 2: Search for recent SGLT2 studie",
+    "scenario_id": "T-04-snap2",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_2",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-05-snap0",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 0: Find patient Maria Garcia, doc",
+    "scenario_id": "T-05-snap0",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-05-snap1",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 1: Find patient Maria Garcia, doc",
+    "scenario_id": "T-05-snap1",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_1",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-05-snap2",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 2: Find patient Maria Garcia, doc",
+    "scenario_id": "T-05-snap2",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_2",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-06-snap0",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 0: Prescribe lisinopril 10mg dail",
+    "scenario_id": "T-06-snap0",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-06-snap1",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 1: Prescribe lisinopril 10mg dail",
+    "scenario_id": "T-06-snap1",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_1",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-06-snap2",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 2: Prescribe lisinopril 10mg dail",
+    "scenario_id": "T-06-snap2",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_2",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-07-snap0",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 0: Check dofetilide safety, check",
+    "scenario_id": "T-07-snap0",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-07-snap1",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 1: Check dofetilide safety, check",
+    "scenario_id": "T-07-snap1",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_1",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-07-snap2",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 2: Check dofetilide safety, check",
+    "scenario_id": "T-07-snap2",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_2",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-08-snap0",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 0: Find patient James Wilson, get",
+    "scenario_id": "T-08-snap0",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-08-snap1",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 1: Find patient James Wilson, get",
+    "scenario_id": "T-08-snap1",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_1",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-08-snap2",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 2: Find patient James Wilson, get",
+    "scenario_id": "T-08-snap2",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_2",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-09-snap0",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 0: Search literature on GLP-1 ago",
+    "scenario_id": "T-09-snap0",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-09-snap1",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 1: Search literature on GLP-1 ago",
+    "scenario_id": "T-09-snap1",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_1",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-09-snap2",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 2: Search literature on GLP-1 ago",
+    "scenario_id": "T-09-snap2",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_2",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-10-snap0",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 0: Review patient abc-123's chart",
+    "scenario_id": "T-10-snap0",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_0",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-10-snap1",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 1: Review patient abc-123's chart",
+    "scenario_id": "T-10-snap1",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_1",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat4-reactive-T-10-snap2",
+    "category": "4_reactive_planning",
+    "description": "Reactive step 2: Review patient abc-123's chart",
+    "scenario_id": "T-10-snap2",
+    "scenario_type": "reactive",
+    "strategy": "snapshot_2",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-01",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Find John Smith and review his char",
+    "scenario_id": "SUF-01",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-01",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Find John Smith and review his char",
+    "scenario_id": "SUF-01",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-02",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Check if John Smith's medications i",
+    "scenario_id": "SUF-02",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-02",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Check if John Smith's medications i",
+    "scenario_id": "SUF-02",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-03",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: What are the FDA warnings for dofet",
+    "scenario_id": "SUF-03",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-03",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: What are the FDA warnings for dofet",
+    "scenario_id": "SUF-03",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-04",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Find SGLT2 inhibitor studies",
+    "scenario_id": "SUF-04",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-04",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Find SGLT2 inhibitor studies",
+    "scenario_id": "SUF-04",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-05",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Check warfarin and aspirin interact",
+    "scenario_id": "SUF-05",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-05",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Check warfarin and aspirin interact",
+    "scenario_id": "SUF-05",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-06",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Find Maria Garcia, get her chart, a",
+    "scenario_id": "SUF-06",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-06",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Find Maria Garcia, get her chart, a",
+    "scenario_id": "SUF-06",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-07",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Find John Smith, get chart, check m",
+    "scenario_id": "SUF-07",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-07",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Find John Smith, get chart, check m",
+    "scenario_id": "SUF-07",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-08",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Check amiodarone safety",
+    "scenario_id": "SUF-08",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-08",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Check amiodarone safety",
+    "scenario_id": "SUF-08",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-09",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Find patient Xyz Nonexist and get t",
+    "scenario_id": "SUF-09",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-09",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Find patient Xyz Nonexist and get t",
+    "scenario_id": "SUF-09",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-10",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Get chart for patient and save a pr",
+    "scenario_id": "SUF-10",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-10",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Get chart for patient and save a pr",
+    "scenario_id": "SUF-10",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-11",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Is metformin safe for my CKD patien",
+    "scenario_id": "SUF-11",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-11",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Is metformin safe for my CKD patien",
+    "scenario_id": "SUF-11",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-12",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Look up James Wilson's medications",
+    "scenario_id": "SUF-12",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-12",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Look up James Wilson's medications",
+    "scenario_id": "SUF-12",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-13",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Check warfarin and supplement X int",
+    "scenario_id": "SUF-13",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-13",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Check warfarin and supplement X int",
+    "scenario_id": "SUF-13",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-14",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Find studies on rare enzyme deficie",
+    "scenario_id": "SUF-14",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-14",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Find studies on rare enzyme deficie",
+    "scenario_id": "SUF-14",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-no_think-SUF-15",
+    "category": "5_sufficiency",
+    "description": "Sufficiency no-think: Find trials for hereditary angioede",
+    "scenario_id": "SUF-15",
+    "scenario_type": "sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat5-sufficiency-think-SUF-15",
+    "category": "5_sufficiency",
+    "description": "Sufficiency think: Find trials for hereditary angioede",
+    "scenario_id": "SUF-15",
+    "scenario_type": "sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-01",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Check amiodarone safety",
+    "scenario_id": "ERR-01",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-01",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Check amiodarone safety",
+    "scenario_id": "ERR-01",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-02",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Search diabetes literature",
+    "scenario_id": "ERR-02",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-02",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Search diabetes literature",
+    "scenario_id": "ERR-02",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-03",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Get chart for the patient",
+    "scenario_id": "ERR-03",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-03",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Get chart for the patient",
+    "scenario_id": "ERR-03",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-04",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Check aspirin interactions",
+    "scenario_id": "ERR-04",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-04",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Check aspirin interactions",
+    "scenario_id": "ERR-04",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-05",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Search for xylotriazole studies",
+    "scenario_id": "ERR-05",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-05",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Search for xylotriazole studies",
+    "scenario_id": "ERR-05",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-06",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Find patient Xyz Nonexist",
+    "scenario_id": "ERR-06",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-06",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Find patient Xyz Nonexist",
+    "scenario_id": "ERR-06",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-07",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Find trials for hereditary angioede",
+    "scenario_id": "ERR-07",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-07",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Find trials for hereditary angioede",
+    "scenario_id": "ERR-07",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-08",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Look up James Wilson (3 matches)",
+    "scenario_id": "ERR-08",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-08",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Look up James Wilson (3 matches)",
+    "scenario_id": "ERR-08",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-09",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Check warfarin + supplement X (unre",
+    "scenario_id": "ERR-09",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-09",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Check warfarin + supplement X (unre",
+    "scenario_id": "ERR-09",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-10",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Search rare enzyme deficiency treat",
+    "scenario_id": "ERR-10",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-10",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Search rare enzyme deficiency treat",
+    "scenario_id": "ERR-10",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-11",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Check safety of experimental drug X",
+    "scenario_id": "ERR-11",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-11",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Check safety of experimental drug X",
+    "scenario_id": "ERR-11",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-12",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Get patient chart (server error)",
+    "scenario_id": "ERR-12",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-12",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Get patient chart (server error)",
+    "scenario_id": "ERR-12",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-13",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Search literature (rate limited)",
+    "scenario_id": "ERR-13",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-13",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Search literature (rate limited)",
+    "scenario_id": "ERR-13",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-14",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Check interactions (malformed drug ",
+    "scenario_id": "ERR-14",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-14",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Check interactions (malformed drug ",
+    "scenario_id": "ERR-14",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-no_think-ERR-15",
+    "category": "6_error_recovery",
+    "description": "Recovery no-think: Find clinical trials (network error",
+    "scenario_id": "ERR-15",
+    "scenario_type": "recovery",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat6-recovery-think-ERR-15",
+    "category": "6_error_recovery",
+    "description": "Recovery think: Find clinical trials (network error",
+    "scenario_id": "ERR-15",
+    "scenario_type": "recovery",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-fullplan-T-01",
+    "category": "7_plan_vs_reactive",
+    "description": "Full-plan: Find patient John Smith, get his chart, ",
+    "scenario_id": "T-01",
+    "scenario_type": "comparison_fullplan",
+    "strategy": "full_plan",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-reactive-T-01",
+    "category": "7_plan_vs_reactive",
+    "description": "Reactive sim: Find patient John Smith, get his chart, ",
+    "scenario_id": "T-01",
+    "scenario_type": "comparison_reactive",
+    "strategy": "reactive_sim",
+    "run_fn": "reactive_simulation",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-fullplan-T-02",
+    "category": "7_plan_vs_reactive",
+    "description": "Full-plan: Check interactions between warfarin, asp",
+    "scenario_id": "T-02",
+    "scenario_type": "comparison_fullplan",
+    "strategy": "full_plan",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-reactive-T-02",
+    "category": "7_plan_vs_reactive",
+    "description": "Reactive sim: Check interactions between warfarin, asp",
+    "scenario_id": "T-02",
+    "scenario_type": "comparison_reactive",
+    "strategy": "reactive_sim",
+    "run_fn": "reactive_simulation",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-fullplan-T-03",
+    "category": "7_plan_vs_reactive",
+    "description": "Full-plan: Get chart for patient abc-123, check med",
+    "scenario_id": "T-03",
+    "scenario_type": "comparison_fullplan",
+    "strategy": "full_plan",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-reactive-T-03",
+    "category": "7_plan_vs_reactive",
+    "description": "Reactive sim: Get chart for patient abc-123, check med",
+    "scenario_id": "T-03",
+    "scenario_type": "comparison_reactive",
+    "strategy": "reactive_sim",
+    "run_fn": "reactive_simulation",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-fullplan-T-04",
+    "category": "7_plan_vs_reactive",
+    "description": "Full-plan: Search for recent SGLT2 studies and find",
+    "scenario_id": "T-04",
+    "scenario_type": "comparison_fullplan",
+    "strategy": "full_plan",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-reactive-T-04",
+    "category": "7_plan_vs_reactive",
+    "description": "Reactive sim: Search for recent SGLT2 studies and find",
+    "scenario_id": "T-04",
+    "scenario_type": "comparison_reactive",
+    "strategy": "reactive_sim",
+    "run_fn": "reactive_simulation",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-fullplan-T-05",
+    "category": "7_plan_vs_reactive",
+    "description": "Full-plan: Find patient Maria Garcia, document peni",
+    "scenario_id": "T-05",
+    "scenario_type": "comparison_fullplan",
+    "strategy": "full_plan",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-reactive-T-05",
+    "category": "7_plan_vs_reactive",
+    "description": "Reactive sim: Find patient Maria Garcia, document peni",
+    "scenario_id": "T-05",
+    "scenario_type": "comparison_reactive",
+    "strategy": "reactive_sim",
+    "run_fn": "reactive_simulation",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-fullplan-T-06",
+    "category": "7_plan_vs_reactive",
+    "description": "Full-plan: Prescribe lisinopril 10mg daily for pati",
+    "scenario_id": "T-06",
+    "scenario_type": "comparison_fullplan",
+    "strategy": "full_plan",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-reactive-T-06",
+    "category": "7_plan_vs_reactive",
+    "description": "Reactive sim: Prescribe lisinopril 10mg daily for pati",
+    "scenario_id": "T-06",
+    "scenario_type": "comparison_reactive",
+    "strategy": "reactive_sim",
+    "run_fn": "reactive_simulation",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-fullplan-T-07",
+    "category": "7_plan_vs_reactive",
+    "description": "Full-plan: Check dofetilide safety, check interacti",
+    "scenario_id": "T-07",
+    "scenario_type": "comparison_fullplan",
+    "strategy": "full_plan",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-reactive-T-07",
+    "category": "7_plan_vs_reactive",
+    "description": "Reactive sim: Check dofetilide safety, check interacti",
+    "scenario_id": "T-07",
+    "scenario_type": "comparison_reactive",
+    "strategy": "reactive_sim",
+    "run_fn": "reactive_simulation",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-fullplan-T-08",
+    "category": "7_plan_vs_reactive",
+    "description": "Full-plan: Find patient James Wilson, get his chart",
+    "scenario_id": "T-08",
+    "scenario_type": "comparison_fullplan",
+    "strategy": "full_plan",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-reactive-T-08",
+    "category": "7_plan_vs_reactive",
+    "description": "Reactive sim: Find patient James Wilson, get his chart",
+    "scenario_id": "T-08",
+    "scenario_type": "comparison_reactive",
+    "strategy": "reactive_sim",
+    "run_fn": "reactive_simulation",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-fullplan-T-09",
+    "category": "7_plan_vs_reactive",
+    "description": "Full-plan: Search literature on GLP-1 agonists for ",
+    "scenario_id": "T-09",
+    "scenario_type": "comparison_fullplan",
+    "strategy": "full_plan",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-reactive-T-09",
+    "category": "7_plan_vs_reactive",
+    "description": "Reactive sim: Search literature on GLP-1 agonists for ",
+    "scenario_id": "T-09",
+    "scenario_type": "comparison_reactive",
+    "strategy": "reactive_sim",
+    "run_fn": "reactive_simulation",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-fullplan-T-10",
+    "category": "7_plan_vs_reactive",
+    "description": "Full-plan: Review patient abc-123's chart and deter",
+    "scenario_id": "T-10",
+    "scenario_type": "comparison_fullplan",
+    "strategy": "full_plan",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat7-comparison-reactive-T-10",
+    "category": "7_plan_vs_reactive",
+    "description": "Reactive sim: Review patient abc-123's chart and deter",
+    "scenario_id": "T-10",
+    "scenario_type": "comparison_reactive",
+    "strategy": "reactive_sim",
+    "run_fn": "reactive_simulation",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-routing-no_think-R-05",
+    "category": "8_thinking_effect",
+    "description": "Hard routing no-think: Is metformin safe for CKD stag",
+    "scenario_id": "R-05",
+    "scenario_type": "thinking_routing",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-routing-think-R-05",
+    "category": "8_thinking_effect",
+    "description": "Hard routing think: Is metformin safe for CKD stag",
+    "scenario_id": "R-05",
+    "scenario_type": "thinking_routing",
+    "strategy": "think",
+    "run_fn": "single_call_with_prefix",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-routing-no_think-R-06",
+    "category": "8_thinking_effect",
+    "description": "Hard routing no-think: Look up James Wilson's medicat",
+    "scenario_id": "R-06",
+    "scenario_type": "thinking_routing",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-routing-think-R-06",
+    "category": "8_thinking_effect",
+    "description": "Hard routing think: Look up James Wilson's medicat",
+    "scenario_id": "R-06",
+    "scenario_type": "thinking_routing",
+    "strategy": "think",
+    "run_fn": "single_call_with_prefix",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-routing-no_think-R-09",
+    "category": "8_thinking_effect",
+    "description": "Hard routing no-think: Search for xylotriazole studie",
+    "scenario_id": "R-09",
+    "scenario_type": "thinking_routing",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-routing-think-R-09",
+    "category": "8_thinking_effect",
+    "description": "Hard routing think: Search for xylotriazole studie",
+    "scenario_id": "R-09",
+    "scenario_type": "thinking_routing",
+    "strategy": "think",
+    "run_fn": "single_call_with_prefix",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-routing-no_think-R-11",
+    "category": "8_thinking_effect",
+    "description": "Hard routing no-think: Find patient Xyz Nonexist",
+    "scenario_id": "R-11",
+    "scenario_type": "thinking_routing",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-routing-think-R-11",
+    "category": "8_thinking_effect",
+    "description": "Hard routing think: Find patient Xyz Nonexist",
+    "scenario_id": "R-11",
+    "scenario_type": "thinking_routing",
+    "strategy": "think",
+    "run_fn": "single_call_with_prefix",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-routing-no_think-R-13",
+    "category": "8_thinking_effect",
+    "description": "Hard routing no-think: Get chart for the patient",
+    "scenario_id": "R-13",
+    "scenario_type": "thinking_routing",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-routing-think-R-13",
+    "category": "8_thinking_effect",
+    "description": "Hard routing think: Get chart for the patient",
+    "scenario_id": "R-13",
+    "scenario_type": "thinking_routing",
+    "strategy": "think",
+    "run_fn": "single_call_with_prefix",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-suf-no_think-SUF-07",
+    "category": "8_thinking_effect",
+    "description": "Hard suf no-think: Find John Smith, get chart, ch",
+    "scenario_id": "SUF-07",
+    "scenario_type": "thinking_sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-suf-think-SUF-07",
+    "category": "8_thinking_effect",
+    "description": "Hard suf think: Find John Smith, get chart, ch",
+    "scenario_id": "SUF-07",
+    "scenario_type": "thinking_sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-suf-no_think-SUF-11",
+    "category": "8_thinking_effect",
+    "description": "Hard suf no-think: Is metformin safe for my CKD p",
+    "scenario_id": "SUF-11",
+    "scenario_type": "thinking_sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-suf-think-SUF-11",
+    "category": "8_thinking_effect",
+    "description": "Hard suf think: Is metformin safe for my CKD p",
+    "scenario_id": "SUF-11",
+    "scenario_type": "thinking_sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-suf-no_think-SUF-12",
+    "category": "8_thinking_effect",
+    "description": "Hard suf no-think: Look up James Wilson's medicat",
+    "scenario_id": "SUF-12",
+    "scenario_type": "thinking_sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-suf-think-SUF-12",
+    "category": "8_thinking_effect",
+    "description": "Hard suf think: Look up James Wilson's medicat",
+    "scenario_id": "SUF-12",
+    "scenario_type": "thinking_sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-suf-no_think-SUF-13",
+    "category": "8_thinking_effect",
+    "description": "Hard suf no-think: Check warfarin and supplement ",
+    "scenario_id": "SUF-13",
+    "scenario_type": "thinking_sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-suf-think-SUF-13",
+    "category": "8_thinking_effect",
+    "description": "Hard suf think: Check warfarin and supplement ",
+    "scenario_id": "SUF-13",
+    "scenario_type": "thinking_sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-suf-no_think-SUF-06",
+    "category": "8_thinking_effect",
+    "description": "Hard suf no-think: Find Maria Garcia, get her cha",
+    "scenario_id": "SUF-06",
+    "scenario_type": "thinking_sufficiency",
+    "strategy": "no_think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "cat8-thinking-suf-think-SUF-06",
+    "category": "8_thinking_effect",
+    "description": "Hard suf think: Find Maria Garcia, get her cha",
+    "scenario_id": "SUF-06",
+    "scenario_type": "thinking_sufficiency",
+    "strategy": "think",
+    "run_fn": "single_call",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 512
+    }
+  }
+]
