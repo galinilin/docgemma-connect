@@ -1,0 +1,1390 @@
+[
+  {
+    "id": "baseline-t0.0-simple",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.0, query=simple",
+    "query_key": "simple",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.0-reasoning",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.0, query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.0-complex",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.0, query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.0-drug",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.0, query=drug",
+    "query_key": "drug",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.0-ambiguous",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.0, query=ambiguous",
+    "query_key": "ambiguous",
+    "params": {
+      "temperature": 0.0,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.3-simple",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.3, query=simple",
+    "query_key": "simple",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.3-reasoning",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.3, query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.3-complex",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.3, query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.3-drug",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.3, query=drug",
+    "query_key": "drug",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.3-ambiguous",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.3, query=ambiguous",
+    "query_key": "ambiguous",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.6-simple",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.6, query=simple",
+    "query_key": "simple",
+    "params": {
+      "temperature": 0.6,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.6-reasoning",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.6, query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.6,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.6-complex",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.6, query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.6,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.6-drug",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.6, query=drug",
+    "query_key": "drug",
+    "params": {
+      "temperature": 0.6,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t0.6-ambiguous",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=0.6, query=ambiguous",
+    "query_key": "ambiguous",
+    "params": {
+      "temperature": 0.6,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t1.0-simple",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=1.0, query=simple",
+    "query_key": "simple",
+    "params": {
+      "temperature": 1.0,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t1.0-reasoning",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=1.0, query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 1.0,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t1.0-complex",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=1.0, query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 1.0,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t1.0-drug",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=1.0, query=drug",
+    "query_key": "drug",
+    "params": {
+      "temperature": 1.0,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "baseline-t1.0-ambiguous",
+    "category": "1_baseline_temperature",
+    "description": "No priming, temp=1.0, query=ambiguous",
+    "query_key": "ambiguous",
+    "params": {
+      "temperature": 1.0,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "sysprompt-clinical_assistant-reasoning",
+    "category": "2_system_prompt",
+    "description": "System prompt='clinical_assistant', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "sysprompt-clinical_assistant-complex",
+    "category": "2_system_prompt",
+    "description": "System prompt='clinical_assistant', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "sysprompt-think_first-reasoning",
+    "category": "2_system_prompt",
+    "description": "System prompt='think_first', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "sysprompt-think_first-complex",
+    "category": "2_system_prompt",
+    "description": "System prompt='think_first', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "sysprompt-chain_of_thought-reasoning",
+    "category": "2_system_prompt",
+    "description": "System prompt='chain_of_thought', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "sysprompt-chain_of_thought-complex",
+    "category": "2_system_prompt",
+    "description": "System prompt='chain_of_thought', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "sysprompt-minimal-reasoning",
+    "category": "2_system_prompt",
+    "description": "System prompt='minimal', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "sysprompt-minimal-complex",
+    "category": "2_system_prompt",
+    "description": "System prompt='minimal', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "sysprompt-none-reasoning",
+    "category": "2_system_prompt",
+    "description": "System prompt='none', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "sysprompt-none-complex",
+    "category": "2_system_prompt",
+    "description": "System prompt='none', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-think_start-reasoning",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='think_start', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-think_start-complex",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='think_start', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-analysis_start-reasoning",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='analysis_start', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-analysis_start-complex",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='analysis_start', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-considering-reasoning",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='considering', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-considering-complex",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='considering', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-reasoning_header-reasoning",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='reasoning_header', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-reasoning_header-complex",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='reasoning_header', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-internal_monologue-reasoning",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='internal_monologue', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-internal_monologue-complex",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='internal_monologue', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-structured_start-reasoning",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='structured_start', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-structured_start-complex",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='structured_start', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-differential_start-reasoning",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='differential_start', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "prefix-differential_start-complex",
+    "category": "3_prefix_priming",
+    "description": "Assistant prefix='differential_start', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-think_step_by_step-reasoning",
+    "category": "4_user_triggers",
+    "description": "User trigger='think_step_by_step', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-think_step_by_step-complex",
+    "category": "4_user_triggers",
+    "description": "User trigger='think_step_by_step', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-reason_carefully-reasoning",
+    "category": "4_user_triggers",
+    "description": "User trigger='reason_carefully', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-reason_carefully-complex",
+    "category": "4_user_triggers",
+    "description": "User trigger='reason_carefully', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-analyze_then_answer-reasoning",
+    "category": "4_user_triggers",
+    "description": "User trigger='analyze_then_answer', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-analyze_then_answer-complex",
+    "category": "4_user_triggers",
+    "description": "User trigger='analyze_then_answer', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-lets_think-reasoning",
+    "category": "4_user_triggers",
+    "description": "User trigger='lets_think', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-lets_think-complex",
+    "category": "4_user_triggers",
+    "description": "User trigger='lets_think', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-explain_reasoning-reasoning",
+    "category": "4_user_triggers",
+    "description": "User trigger='explain_reasoning', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-explain_reasoning-complex",
+    "category": "4_user_triggers",
+    "description": "User trigger='explain_reasoning', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-show_work-reasoning",
+    "category": "4_user_triggers",
+    "description": "User trigger='show_work', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-show_work-complex",
+    "category": "4_user_triggers",
+    "description": "User trigger='show_work', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-before_answering-reasoning",
+    "category": "4_user_triggers",
+    "description": "User trigger='before_answering', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-before_answering-complex",
+    "category": "4_user_triggers",
+    "description": "User trigger='before_answering', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-what_factors-reasoning",
+    "category": "4_user_triggers",
+    "description": "User trigger='what_factors', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-what_factors-complex",
+    "category": "4_user_triggers",
+    "description": "User trigger='what_factors', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-clinical_reasoning-reasoning",
+    "category": "4_user_triggers",
+    "description": "User trigger='clinical_reasoning', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-clinical_reasoning-complex",
+    "category": "4_user_triggers",
+    "description": "User trigger='clinical_reasoning', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-plain-reasoning",
+    "category": "4_user_triggers",
+    "description": "User trigger='plain', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "trigger-plain-complex",
+    "category": "4_user_triggers",
+    "description": "User trigger='plain', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "combo-full_chain-reasoning",
+    "category": "5_combined_strategies",
+    "description": "Combo='full_chain', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "combo-full_chain-complex",
+    "category": "5_combined_strategies",
+    "description": "Combo='full_chain', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "combo-reactive_fill-reasoning",
+    "category": "5_combined_strategies",
+    "description": "Combo='reactive_fill', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "combo-reactive_fill-complex",
+    "category": "5_combined_strategies",
+    "description": "Combo='reactive_fill', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "combo-structured_reactive-reasoning",
+    "category": "5_combined_strategies",
+    "description": "Combo='structured_reactive', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "combo-structured_reactive-complex",
+    "category": "5_combined_strategies",
+    "description": "Combo='structured_reactive', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "combo-socratic-reasoning",
+    "category": "5_combined_strategies",
+    "description": "Combo='socratic', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "combo-socratic-complex",
+    "category": "5_combined_strategies",
+    "description": "Combo='socratic', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "combo-minimal_reactive-reasoning",
+    "category": "5_combined_strategies",
+    "description": "Combo='minimal_reactive', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "combo-minimal_reactive-complex",
+    "category": "5_combined_strategies",
+    "description": "Combo='minimal_reactive', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "guided-think_then_answer-reasoning",
+    "category": "6_guided_generation",
+    "description": "Outlines schema='think_then_answer', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "ThinkThenAnswer",
+          "schema": {
+            "properties": {
+              "thinking": {
+                "description": "Step-by-step clinical reasoning",
+                "title": "Thinking",
+                "type": "string"
+              },
+              "answer": {
+                "description": "Final clinical answer",
+                "title": "Answer",
+                "type": "string"
+              }
+            },
+            "required": [
+              "thinking",
+              "answer"
+            ],
+            "title": "ThinkThenAnswer",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "guided-think_then_answer-complex",
+    "category": "6_guided_generation",
+    "description": "Outlines schema='think_then_answer', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "ThinkThenAnswer",
+          "schema": {
+            "properties": {
+              "thinking": {
+                "description": "Step-by-step clinical reasoning",
+                "title": "Thinking",
+                "type": "string"
+              },
+              "answer": {
+                "description": "Final clinical answer",
+                "title": "Answer",
+                "type": "string"
+              }
+            },
+            "required": [
+              "thinking",
+              "answer"
+            ],
+            "title": "ThinkThenAnswer",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "guided-reasoning_confidence-reasoning",
+    "category": "6_guided_generation",
+    "description": "Outlines schema='reasoning_confidence', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "ReasoningWithConfidence",
+          "schema": {
+            "properties": {
+              "reasoning": {
+                "description": "Clinical reasoning chain",
+                "title": "Reasoning",
+                "type": "string"
+              },
+              "answer": {
+                "description": "Clinical recommendation",
+                "title": "Answer",
+                "type": "string"
+              },
+              "confidence": {
+                "description": "high, medium, or low",
+                "title": "Confidence",
+                "type": "string"
+              }
+            },
+            "required": [
+              "reasoning",
+              "answer",
+              "confidence"
+            ],
+            "title": "ReasoningWithConfidence",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "guided-reasoning_confidence-complex",
+    "category": "6_guided_generation",
+    "description": "Outlines schema='reasoning_confidence', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "ReasoningWithConfidence",
+          "schema": {
+            "properties": {
+              "reasoning": {
+                "description": "Clinical reasoning chain",
+                "title": "Reasoning",
+                "type": "string"
+              },
+              "answer": {
+                "description": "Clinical recommendation",
+                "title": "Answer",
+                "type": "string"
+              },
+              "confidence": {
+                "description": "high, medium, or low",
+                "title": "Confidence",
+                "type": "string"
+              }
+            },
+            "required": [
+              "reasoning",
+              "answer",
+              "confidence"
+            ],
+            "title": "ReasoningWithConfidence",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "guided-diagnostic_assessment-reasoning",
+    "category": "6_guided_generation",
+    "description": "Outlines schema='diagnostic_assessment', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "DiagnosticAssessment",
+          "schema": {
+            "properties": {
+              "differential": {
+                "description": "Differential diagnoses considered",
+                "title": "Differential",
+                "type": "string"
+              },
+              "key_findings": {
+                "description": "Key clinical findings",
+                "title": "Key Findings",
+                "type": "string"
+              },
+              "recommendation": {
+                "description": "Recommended next steps",
+                "title": "Recommendation",
+                "type": "string"
+              }
+            },
+            "required": [
+              "differential",
+              "key_findings",
+              "recommendation"
+            ],
+            "title": "DiagnosticAssessment",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "guided-diagnostic_assessment-complex",
+    "category": "6_guided_generation",
+    "description": "Outlines schema='diagnostic_assessment', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "DiagnosticAssessment",
+          "schema": {
+            "properties": {
+              "differential": {
+                "description": "Differential diagnoses considered",
+                "title": "Differential",
+                "type": "string"
+              },
+              "key_findings": {
+                "description": "Key clinical findings",
+                "title": "Key Findings",
+                "type": "string"
+              },
+              "recommendation": {
+                "description": "Recommended next steps",
+                "title": "Recommendation",
+                "type": "string"
+              }
+            },
+            "required": [
+              "differential",
+              "key_findings",
+              "recommendation"
+            ],
+            "title": "DiagnosticAssessment",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "guided-combo-guided_think_prefix-reasoning",
+    "category": "7_guided_plus_priming",
+    "description": "Guided combo='guided_think_prefix', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "ThinkThenAnswer",
+          "schema": {
+            "properties": {
+              "thinking": {
+                "description": "Step-by-step clinical reasoning",
+                "title": "Thinking",
+                "type": "string"
+              },
+              "answer": {
+                "description": "Final clinical answer",
+                "title": "Answer",
+                "type": "string"
+              }
+            },
+            "required": [
+              "thinking",
+              "answer"
+            ],
+            "title": "ThinkThenAnswer",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "guided-combo-guided_think_prefix-complex",
+    "category": "7_guided_plus_priming",
+    "description": "Guided combo='guided_think_prefix', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "ThinkThenAnswer",
+          "schema": {
+            "properties": {
+              "thinking": {
+                "description": "Step-by-step clinical reasoning",
+                "title": "Thinking",
+                "type": "string"
+              },
+              "answer": {
+                "description": "Final clinical answer",
+                "title": "Answer",
+                "type": "string"
+              }
+            },
+            "required": [
+              "thinking",
+              "answer"
+            ],
+            "title": "ThinkThenAnswer",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "guided-combo-guided_system_think-reasoning",
+    "category": "7_guided_plus_priming",
+    "description": "Guided combo='guided_system_think', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "ThinkThenAnswer",
+          "schema": {
+            "properties": {
+              "thinking": {
+                "description": "Step-by-step clinical reasoning",
+                "title": "Thinking",
+                "type": "string"
+              },
+              "answer": {
+                "description": "Final clinical answer",
+                "title": "Answer",
+                "type": "string"
+              }
+            },
+            "required": [
+              "thinking",
+              "answer"
+            ],
+            "title": "ThinkThenAnswer",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "guided-combo-guided_system_think-complex",
+    "category": "7_guided_plus_priming",
+    "description": "Guided combo='guided_system_think', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "ThinkThenAnswer",
+          "schema": {
+            "properties": {
+              "thinking": {
+                "description": "Step-by-step clinical reasoning",
+                "title": "Thinking",
+                "type": "string"
+              },
+              "answer": {
+                "description": "Final clinical answer",
+                "title": "Answer",
+                "type": "string"
+              }
+            },
+            "required": [
+              "thinking",
+              "answer"
+            ],
+            "title": "ThinkThenAnswer",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "guided-combo-guided_no_system-reasoning",
+    "category": "7_guided_plus_priming",
+    "description": "Guided combo='guided_no_system', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "ThinkThenAnswer",
+          "schema": {
+            "properties": {
+              "thinking": {
+                "description": "Step-by-step clinical reasoning",
+                "title": "Thinking",
+                "type": "string"
+              },
+              "answer": {
+                "description": "Final clinical answer",
+                "title": "Answer",
+                "type": "string"
+              }
+            },
+            "required": [
+              "thinking",
+              "answer"
+            ],
+            "title": "ThinkThenAnswer",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "guided-combo-guided_no_system-complex",
+    "category": "7_guided_plus_priming",
+    "description": "Guided combo='guided_no_system', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.1,
+      "max_tokens": 1024,
+      "response_format": {
+        "type": "json_schema",
+        "json_schema": {
+          "name": "ThinkThenAnswer",
+          "schema": {
+            "properties": {
+              "thinking": {
+                "description": "Step-by-step clinical reasoning",
+                "title": "Thinking",
+                "type": "string"
+              },
+              "answer": {
+                "description": "Final clinical answer",
+                "title": "Answer",
+                "type": "string"
+              }
+            },
+            "required": [
+              "thinking",
+              "answer"
+            ],
+            "title": "ThinkThenAnswer",
+            "type": "object"
+          },
+          "strict": true
+        }
+      }
+    }
+  },
+  {
+    "id": "maxtok-128-reasoning",
+    "category": "8_max_tokens",
+    "description": "max_tokens=128, query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 128
+    }
+  },
+  {
+    "id": "maxtok-128-complex",
+    "category": "8_max_tokens",
+    "description": "max_tokens=128, query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 128
+    }
+  },
+  {
+    "id": "maxtok-256-reasoning",
+    "category": "8_max_tokens",
+    "description": "max_tokens=256, query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 256
+    }
+  },
+  {
+    "id": "maxtok-256-complex",
+    "category": "8_max_tokens",
+    "description": "max_tokens=256, query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 256
+    }
+  },
+  {
+    "id": "maxtok-512-reasoning",
+    "category": "8_max_tokens",
+    "description": "max_tokens=512, query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "maxtok-512-complex",
+    "category": "8_max_tokens",
+    "description": "max_tokens=512, query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 512
+    }
+  },
+  {
+    "id": "maxtok-1024-reasoning",
+    "category": "8_max_tokens",
+    "description": "max_tokens=1024, query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "maxtok-1024-complex",
+    "category": "8_max_tokens",
+    "description": "max_tokens=1024, query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "maxtok-2048-reasoning",
+    "category": "8_max_tokens",
+    "description": "max_tokens=2048, query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 2048
+    }
+  },
+  {
+    "id": "maxtok-2048-complex",
+    "category": "8_max_tokens",
+    "description": "max_tokens=2048, query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 2048
+    }
+  },
+  {
+    "id": "multiturn-cold_start-reasoning",
+    "category": "9_multi_turn",
+    "description": "Multi-turn='cold_start', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "multiturn-cold_start-complex",
+    "category": "9_multi_turn",
+    "description": "Multi-turn='cold_start', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "multiturn-prior_simple_exchange-reasoning",
+    "category": "9_multi_turn",
+    "description": "Multi-turn='prior_simple_exchange', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "multiturn-prior_simple_exchange-complex",
+    "category": "9_multi_turn",
+    "description": "Multi-turn='prior_simple_exchange', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "multiturn-prior_reasoning_exchange-reasoning",
+    "category": "9_multi_turn",
+    "description": "Multi-turn='prior_reasoning_exchange', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "multiturn-prior_reasoning_exchange-complex",
+    "category": "9_multi_turn",
+    "description": "Multi-turn='prior_reasoning_exchange', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "multiturn-explicit_think_history-reasoning",
+    "category": "9_multi_turn",
+    "description": "Multi-turn='explicit_think_history', query=reasoning",
+    "query_key": "reasoning",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  },
+  {
+    "id": "multiturn-explicit_think_history-complex",
+    "category": "9_multi_turn",
+    "description": "Multi-turn='explicit_think_history', query=complex",
+    "query_key": "complex",
+    "params": {
+      "temperature": 0.3,
+      "max_tokens": 1024
+    }
+  }
+]
