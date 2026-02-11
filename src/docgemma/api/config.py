@@ -29,6 +29,9 @@ class APIConfig:
     load_model_on_startup: bool = True
     enable_tool_approval: bool = True
 
+    # Session persistence
+    sessions_dir: str = "data/sessions"
+
     # Rate limiting (for future)
     max_sessions: int = 100
     max_messages_per_session: int = 1000
@@ -45,6 +48,7 @@ class APIConfig:
             in ("true", "1", "yes"),
             enable_tool_approval=os.getenv("DOCGEMMA_TOOL_APPROVAL", "true").lower()
             in ("true", "1", "yes"),
+            sessions_dir=os.getenv("DOCGEMMA_SESSIONS_DIR", "data/sessions"),
         )
 
 

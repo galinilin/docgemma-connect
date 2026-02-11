@@ -173,7 +173,7 @@ async def websocket_chat(
 
                 # If completion, also store the assistant message
                 if event.event == "completion":
-                    session.add_message("assistant", event.final_response)
+                    store.add_message(session_id, "assistant", event.final_response)
         except asyncio.CancelledError:
             logger.info(f"Agent task cancelled for session {session_id}")
         except Exception as e:
@@ -268,7 +268,7 @@ async def websocket_chat(
             data = message.get("data", {})
 
             if action == "send_message":
-                event_gen = await _prepare_send_message(websocket, session, runner, data)
+                event_gen = await _prepare_send_message(websocket, session, runner, data, store=store)
                 if event_gen is not None:
                     send_queue = asyncio.Queue()
                     agent_task = asyncio.create_task(_run_agent_stream(event_gen))
@@ -324,6 +324,7 @@ async def _prepare_send_message(
     session: Session,
     runner: AgentRunner,
     data: dict[str, Any],
+    store: SessionStore | None = None,
 ):
     """Validate and prepare a send_message action.
 
@@ -365,12 +366,15 @@ async def _prepare_send_message(
             })
             return None
 
-    # Add user message to session
+    # Add user message to session (via store for disk persistence)
     metadata: dict[str, Any] = {}
     if image_base64:
         metadata["has_image"] = True
         metadata["image_url"] = f"data:image/jpeg;base64,{image_base64}"
-    session.add_message("user", content, metadata=metadata)
+    if store:
+        store.add_message(session.session_id, "user", content, metadata=metadata)
+    else:
+        session.add_message("user", content, metadata=metadata)
 
     # Build conversation history (last 2-3 turns for 4B model)
     history = _build_conversation_history(session, max_turns=3)

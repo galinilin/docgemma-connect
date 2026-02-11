@@ -52,6 +52,10 @@ async def lifespan(app: FastAPI):
 
     config = get_config()
 
+    # Initialise disk-backed session store before any requests arrive
+    from .services.session_store import init_session_store
+    init_session_store(data_dir=Path(config.sessions_dir))
+
     if config.load_model_on_startup:
         logger.info("Initializing DocGemma model...")
         try:
