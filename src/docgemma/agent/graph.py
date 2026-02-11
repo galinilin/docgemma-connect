@@ -1,11 +1,15 @@
-"""LangGraph workflow definition for DocGemma v2 agent.
+"""LangGraph workflow definition for DocGemma v3 agent.
 
-18-node 4-way triage architecture:
-  image_detection → clinical_context_assembler → triage_router
-    → direct    → synthesize_response → END
-    → lookup    → fast_tool_validate → [fast_fix_args] → fast_execute → fast_check → synthesize_response → END
-    → reasoning → thinking_mode → extract_tool_needs → [reasoning_execute → reasoning_continuation] → synthesize_response → END
-    → multi_step → decompose_intent → plan_tool → loop_validate → [loop_fix_args] → loop_execute → assess_result → ... → synthesize_response → END
+7-node architecture with binary intent classification and reactive tool loop:
+
+  INPUT_ASSEMBLY → INTENT_CLASSIFY
+    → DIRECT    → SYNTHESIZE → END
+    → TOOL_NEEDED → TOOL_SELECT → TOOL_EXECUTE → RESULT_CLASSIFY
+                     ↑              → [error] → ERROR_HANDLER → [retry → TOOL_EXECUTE | skip → SYNTHESIZE]
+                     └──────────────← [more tools needed]
+                                    → [done] → SYNTHESIZE → END
+
+Grounded in 856 experiments on MedGemma 4B (see MEDGEMMA_PROMPTING_GUIDE.md).
 """
 
 from __future__ import annotations
@@ -19,29 +23,20 @@ from langgraph.checkpoint.base import BaseCheckpointSaver
 from langgraph.graph import END, StateGraph
 
 from .nodes import (
-    MAX_FAST_RETRIES,
     StreamCallback,
-    assess_result,
-    clinical_context_assembler,
-    decompose_intent,
     error_handler,
-    extract_tool_needs,
-    fast_check,
-    fast_execute,
-    fast_fix_args,
-    fast_tool_validate,
-    image_detection,
-    loop_execute,
-    loop_fix_args,
-    loop_validate,
-    plan_tool,
-    reasoning_continuation,
-    reasoning_execute,
-    synthesize_response,
-    thinking_mode,
-    triage_router,
+    input_assembly,
+    intent_classify,
+    result_classify,
+    route_after_error_handler,
+    route_after_intent,
+    route_after_result_classify,
+    synthesize,
+    tool_execute,
+    tool_select,
 )
-from .state import DocGemmaState
+from .prompts import TOOL_CLINICAL_LABELS, WRITE_TOOLS
+from .state import AgentState
 from ..tools.registry import execute_tool as registry_execute_tool
 
 if TYPE_CHECKING:
@@ -50,177 +45,106 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-# ── Clinical-friendly labels for tool names ──────────────────────────────────
-TOOL_CLINICAL_LABELS = {
-    "check_drug_safety": "FDA Safety Database",
-    "check_drug_interactions": "Drug Interaction Check",
-    "search_medical_literature": "Medical Literature (PubMed)",
-    "find_clinical_trials": "Clinical Trials Registry",
-    "search_patient": "Patient Records Search",
-    "get_patient_chart": "Patient Chart Review",
-    "add_allergy": "Allergy Documentation",
-    "prescribe_medication": "Medication Prescription",
-    "save_clinical_note": "Clinical Note",
-    "analyze_medical_image": "Medical Image Analysis",
-}
+# =============================================================================
+# Status message pools (human-readable, randomized for natural feel)
+# =============================================================================
 
-# Human-readable status labels for tool execution (randomized pools)
 _TOOL_STATUS_POOLS: dict[str, list[str]] = {
     "check_drug_safety": [
         "Checking FDA safety database...",
         "Reviewing drug safety profile...",
         "Looking up safety information...",
-        "Consulting FDA records...",
     ],
     "check_drug_interactions": [
         "Checking drug interactions...",
         "Screening for interactions...",
         "Cross-referencing medications...",
-        "Reviewing potential interactions...",
     ],
     "search_medical_literature": [
         "Searching medical literature...",
         "Reviewing published research...",
         "Consulting PubMed...",
-        "Looking up relevant studies...",
     ],
     "find_clinical_trials": [
         "Searching clinical trials...",
         "Looking up active trials...",
         "Checking trial registries...",
-        "Reviewing ongoing studies...",
     ],
     "search_patient": [
         "Searching patient records...",
         "Looking up patient information...",
-        "Querying patient database...",
     ],
     "get_patient_chart": [
         "Retrieving patient chart...",
-        "Pulling up patient chart...",
         "Loading clinical history...",
     ],
     "add_allergy": [
         "Documenting allergy...",
         "Recording allergy information...",
-        "Updating allergy list...",
     ],
     "prescribe_medication": [
         "Processing prescription...",
         "Preparing medication order...",
-        "Writing prescription...",
     ],
     "save_clinical_note": [
         "Saving clinical note...",
         "Recording clinical note...",
-        "Writing to patient record...",
     ],
     "analyze_medical_image": [
         "Analyzing medical image...",
         "Reviewing image findings...",
-        "Processing medical image...",
     ],
 }
 
-# Pools for general (non-tool) status messages
 _STATUS_POOLS: dict[str, list[str]] = {
-    "assembling_context": [
-        "Assembling context...",
-        "Gathering context...",
-        "Preparing clinical context...",
-    ],
     "analyzing_query": [
         "Analyzing query...",
         "Understanding your question...",
-        "Evaluating your request...",
         "Processing your question...",
     ],
     "composing_response": [
         "Composing response...",
         "Preparing response...",
-        "Drafting response...",
-        "Putting it all together...",
         "Synthesizing findings...",
     ],
-    "quick_lookup": [
-        "Quick lookup...",
-        "Running a quick search...",
-        "Looking that up...",
-    ],
-    "clinical_reasoning": [
-        "Clinical reasoning...",
-        "Thinking through this...",
-        "Applying clinical reasoning...",
-        "Working through the details...",
-    ],
-    "breaking_down": [
-        "Breaking down your question...",
-        "Planning my approach...",
-        "Mapping out the steps...",
-    ],
-    "fixing_args": [
-        "Fixing arguments...",
-        "Adjusting parameters...",
-        "Refining the query...",
+    "selecting_tool": [
+        "Selecting the right tool...",
+        "Determining approach...",
     ],
     "processing_results": [
         "Processing results...",
         "Reviewing results...",
         "Interpreting findings...",
-        "Analyzing the data...",
-    ],
-    "retrying": [
-        "Retrying...",
-        "Trying again...",
-        "Giving it another shot...",
-    ],
-    "analyzing_tool_needs": [
-        "Analyzing tool needs...",
-        "Determining next steps...",
-        "Deciding what to look up...",
-    ],
-    "planning_approach": [
-        "Planning approach...",
-        "Mapping out the steps...",
-        "Organizing my approach...",
-    ],
-    "planning_next_step": [
-        "Planning next step...",
-        "Moving to next step...",
-        "Preparing next action...",
     ],
     "handling_error": [
         "Handling error...",
         "Working around an issue...",
         "Recovering from error...",
     ],
-    "trying_different": [
-        "Trying different approach...",
-        "Switching strategy...",
-        "Taking a different angle...",
-    ],
-    "moving_on": [
-        "Moving on...",
-        "Skipping ahead...",
-        "Continuing to next step...",
+    "retrying": [
+        "Retrying...",
+        "Trying again...",
     ],
 }
 
 
 def _pick(pool_key: str) -> str:
-    """Pick a random status text from a general pool."""
+    """Pick a random status text from a pool."""
     return random.choice(_STATUS_POOLS[pool_key])
 
 
 def _pick_tool(tool_name: str) -> str:
-    """Pick a random status text for a tool, with fallback."""
+    """Pick a random status text for a tool."""
     pool = _TOOL_STATUS_POOLS.get(tool_name)
     if pool:
         return random.choice(pool)
     return f"Using {tool_name.replace('_', ' ')}..."
 
 
-# ── GraphConfig ──────────────────────────────────────────────────────────────
+# =============================================================================
+# GraphConfig — interface consumed by agent_runner.py
+# =============================================================================
+
 
 @dataclass(frozen=True)
 class GraphConfig:
@@ -260,14 +184,9 @@ class GraphConfig:
     build_clinical_trace: Callable[[dict, dict[str, float]], Any] | None
 
 
-# ── Helpers for the default GRAPH_CONFIG ─────────────────────────────────────
-
-# Tools that modify patient data — require explicit user approval
-_WRITE_TOOLS = frozenset({
-    "add_allergy",
-    "prescribe_medication",
-    "save_clinical_note",
-})
+# =============================================================================
+# GraphConfig helpers (private — consumed only by GRAPH_CONFIG below)
+# =============================================================================
 
 
 def _extract_tool_proposal(state: dict) -> tuple[str | None, dict, str]:
@@ -279,19 +198,15 @@ def _extract_tool_proposal(state: dict) -> tuple[str | None, dict, str]:
     """
     planned_tool = state.get("_planned_tool")
     planned_args = state.get("_planned_args", {})
-    subtasks = state.get("subtasks", [])
-    idx = state.get("current_subtask_index", 0)
-    intent = ""
-    if subtasks and idx < len(subtasks):
-        intent = subtasks[idx].get("intent", "")
-    # For reasoning/lookup paths, use the user_input as intent fallback
-    if not intent:
-        intent = state.get("user_input", "")
+
     if not planned_tool or planned_tool == "none":
         return (None, {}, "")
-    # Read-only tools auto-approve (no user prompt)
-    if planned_tool not in _WRITE_TOOLS:
+
+    # Read-only tools auto-approve
+    if planned_tool not in WRITE_TOOLS:
         return (None, {}, "")
+
+    intent = state.get("user_query", "")
     return (planned_tool, planned_args, intent)
 
 
@@ -300,12 +215,17 @@ def _build_rejection_update(state: dict, reason: str | None) -> dict:
     return {
         "_planned_tool": None,
         "_planned_args": None,
-        "last_result_status": "done",
-        "tool_results": state.get("tool_results", []) + [
+        "tool_results": [
             {
                 "tool_name": state.get("_planned_tool", "unknown"),
-                "arguments": state.get("_planned_args", {}),
+                "tool_label": TOOL_CLINICAL_LABELS.get(
+                    state.get("_planned_tool", ""), "Unknown"
+                ),
+                "args": state.get("_planned_args", {}),
                 "result": {"rejected": True, "reason": reason or "User rejected"},
+                "formatted_result": "",
+                "error": reason or "User rejected",
+                "error_type": None,
                 "success": False,
             }
         ],
@@ -317,38 +237,35 @@ def _make_initial_state(
     image_data: bytes | None,
     conversation_history: list[dict] | None,
 ) -> dict:
-    """Create a fresh state dict for a new turn."""
+    """Create a fresh state dict for a new turn.
+
+    Resets all fields to prevent checkpoint state leakage across turns.
+    """
     state: dict[str, Any] = {
-        "user_input": user_input,
+        # Input
+        "user_query": user_input,
         "image_data": image_data,
-        "image_present": False,
-        # Clinical context
-        "clinical_context": None,
-        # Triage
-        "triage_route": None,
-        "triage_tool": None,
-        "triage_query": None,
-        # Reasoning
-        "reasoning": None,
-        "reasoning_tool_needs": None,
-        "reasoning_continuation": None,
-        # Agentic loop
-        "subtasks": [],
-        "current_subtask_index": 0,
+        "extracted_entities": None,
+        "image_findings": None,
+        # Intent Classification
+        "intent": None,
+        "task_summary": None,
+        "suggested_tool": None,
+        # Tool Loop
+        "current_tool": None,
+        "current_args": None,
         "tool_results": [],
-        "loop_iterations": 0,
-        "tool_retries": 0,
-        # Tool execution
+        "step_count": 0,
+        "retry_count": 0,
+        # Result Classification
+        "last_result_classification": None,
+        "last_result_summary": None,
+        # Error Handling
+        "error_messages": [],
+        "clarification_request": None,
+        # Internal (interrupt/approval)
         "_planned_tool": None,
         "_planned_args": None,
-        # Validation
-        "validation_error": None,
-        # Error handling
-        "error_strategy": None,
-        # Control flags
-        "last_result_status": None,
-        "needs_user_input": False,
-        "missing_info": None,
         # Output
         "final_response": None,
     }
@@ -358,138 +275,78 @@ def _make_initial_state(
 
 
 def _get_status_text(node_name: str, state_update: dict) -> str | None:
-    """Return status text describing what will run NEXT after this node."""
+    """Return context-aware status text for the 7 v3 nodes."""
     state = state_update or {}
 
-    if node_name == "image_detection":
-        return _pick("assembling_context")
-
-    if node_name == "clinical_context_assembler":
+    if node_name == "input_assembly":
         return _pick("analyzing_query")
 
-    if node_name == "triage_router":
-        route = state.get("triage_route", "direct")
-        if route == "direct":
+    if node_name == "intent_classify":
+        intent = state.get("intent", "")
+        if intent == "DIRECT":
             return _pick("composing_response")
-        if route == "lookup":
-            return _pick("quick_lookup")
-        if route == "reasoning":
-            return _pick("clinical_reasoning")
-        return _pick("breaking_down")
+        return _pick("selecting_tool")
 
-    if node_name == "fast_tool_validate":
-        if state.get("validation_error"):
-            return _pick("fixing_args")
+    if node_name == "tool_select":
         planned_tool = state.get("_planned_tool")
         if planned_tool:
             return _pick_tool(planned_tool)
-        return None
+        return _pick("selecting_tool")
 
-    if node_name == "fast_fix_args":
-        planned_tool = state.get("_planned_tool")
-        if planned_tool:
-            return _pick_tool(planned_tool)
-        return None
-
-    if node_name in ("fast_execute", "reasoning_execute", "loop_execute"):
+    if node_name == "tool_execute":
         return _pick("processing_results")
 
-    if node_name == "fast_check":
-        status = state.get("last_result_status", "done")
-        if status == "error":
-            return _pick("retrying")
-        return _pick("composing_response")
-
-    if node_name == "thinking_mode":
-        return _pick("analyzing_tool_needs")
-
-    if node_name == "extract_tool_needs":
-        if state.get("reasoning_tool_needs"):
-            tool = state["reasoning_tool_needs"].get("tool", "")
-            return _pick_tool(tool)
-        return _pick("composing_response")
-
-    if node_name == "reasoning_continuation":
-        return _pick("composing_response")
-
-    if node_name == "decompose_intent":
-        if state.get("needs_user_input"):
-            return _pick("composing_response")
-        return _pick("planning_approach")
-
-    if node_name == "plan_tool":
-        planned_tool = state.get("_planned_tool")
-        if planned_tool and planned_tool != "none":
-            return _pick_tool(planned_tool)
-        return None
-
-    if node_name == "loop_validate":
-        if state.get("validation_error"):
-            return _pick("fixing_args")
-        return None
-
-    if node_name == "loop_fix_args":
-        return None
-
-    if node_name == "assess_result":
-        status = state.get("last_result_status", "done")
-        if status == "error":
+    if node_name == "result_classify":
+        classification = state.get("last_result_classification", "")
+        if classification.startswith("error"):
             return _pick("handling_error")
-        if status == "continue":
-            return _pick("planning_next_step")
         return _pick("composing_response")
 
     if node_name == "error_handler":
-        strategy = state.get("error_strategy", "")
-        if strategy == "retry_same":
+        if state.get("_planned_tool"):
             return _pick("retrying")
-        if strategy == "retry_reformulate":
-            return _pick("trying_different")
-        if strategy == "skip_subtask":
-            return _pick("moving_on")
-        return None
+        return _pick("composing_response")
 
-    # Terminal nodes — no next status
+    # synthesize — terminal, no next status
     return None
 
 
 def _describe_tool_call(result: dict) -> str:
     """Generate a clinical-friendly description of a tool call."""
     tool = result.get("tool_name", "")
-    args = result.get("arguments", {})
+    args = result.get("args", result.get("arguments", {}))
 
     if tool == "check_drug_safety":
         drug = args.get("drug_name", "medication")
         return f"Checked safety profile for {drug}"
-    elif tool == "check_drug_interactions":
-        drugs = args.get("drug_list", "")
-        if drugs:
-            return f"Checked interactions: {drugs}"
+    if tool == "check_drug_interactions":
+        drugs = args.get("drug_names", args.get("drugs", []))
+        if isinstance(drugs, list):
+            return f"Checked interactions: {', '.join(drugs)}"
         return "Checked drug interactions"
-    elif tool == "search_medical_literature":
+    if tool == "search_medical_literature":
         query = args.get("query", "")
-        return f"Searched medical literature for: {query[:50]}..."
-    elif tool == "find_clinical_trials":
-        query = args.get("query", "")
-        return f"Searched clinical trials for {query[:50]}"
-    elif tool == "get_patient_chart":
-        patient_id = args.get("patient_id", "")
-        return f"Retrieved patient chart ({patient_id})"
-    elif tool == "search_patient":
+        return f"Searched medical literature for: {query[:50]}"
+    if tool == "find_clinical_trials":
+        cond = args.get("condition", "")
+        return f"Searched clinical trials for {cond[:50]}"
+    if tool == "get_patient_chart":
+        pid = args.get("patient_id", "")
+        return f"Retrieved patient chart ({pid})"
+    if tool == "search_patient":
         name = args.get("name", "")
         return f"Searched patient records for {name}"
-    elif tool == "add_allergy":
+    if tool == "add_allergy":
         substance = args.get("substance", "allergen")
         return f"Documented allergy to {substance}"
-    elif tool == "prescribe_medication":
+    if tool == "prescribe_medication":
         med = args.get("medication_name", "medication")
         return f"Prescribed {med}"
-    elif tool == "save_clinical_note":
+    if tool == "save_clinical_note":
         return "Saved clinical note"
-    elif tool == "analyze_medical_image":
+    if tool == "analyze_medical_image":
         return "Analyzed medical image"
-    else:
-        return f"Consulted {TOOL_CLINICAL_LABELS.get(tool, tool.replace('_', ' '))}"
+    return f"Consulted {TOOL_CLINICAL_LABELS.get(tool, tool.replace('_', ' '))}"
 
 
 def _summarize_result(result: dict) -> str:
@@ -499,33 +356,30 @@ def _summarize_result(result: dict) -> str:
 
     if tool == "check_drug_safety":
         warnings = data.get("boxed_warnings", [])
-        if warnings:
-            return f"Found {len(warnings)} boxed warning(s)"
-        return "No boxed warnings found"
-    elif tool == "check_drug_interactions":
+        return f"Found {len(warnings)} boxed warning(s)" if warnings else "No boxed warnings found"
+    if tool == "check_drug_interactions":
         interactions = data.get("interactions", [])
-        if interactions:
-            return f"Found {len(interactions)} potential interaction(s)"
-        return "No interactions found"
-    elif tool == "search_medical_literature":
+        return f"Found {len(interactions)} potential interaction(s)" if interactions else "No interactions found"
+    if tool == "search_medical_literature":
         articles = data.get("articles", [])
         return f"Found {len(articles)} relevant article(s)"
-    elif tool == "find_clinical_trials":
+    if tool == "find_clinical_trials":
         trials = data.get("trials", [])
         return f"Found {len(trials)} active trial(s)"
-    elif tool == "search_patient":
+    if tool == "search_patient":
         patients = data.get("patients", [])
         return f"Found {len(patients)} patient(s)"
-    elif tool == "get_patient_chart":
+    if tool == "get_patient_chart":
         return "Chart retrieved"
-    elif tool == "add_allergy":
+    if tool == "add_allergy":
         return "Allergy documented"
-    elif tool == "prescribe_medication":
+    if tool == "prescribe_medication":
         return "Medication prescribed"
-    elif tool == "save_clinical_note":
+    if tool == "save_clinical_note":
         return "Note saved"
-    else:
-        return "Completed successfully"
+    if tool == "analyze_medical_image":
+        return "Image analyzed"
+    return "Completed successfully"
 
 
 def _build_clinical_trace(
@@ -537,71 +391,33 @@ def _build_clinical_trace(
     steps: list[TraceStep] = []
     total_ms = 0.0
 
-    # 1. Triage step
-    route = state.get("triage_route", "direct")
-    dur = node_durations.get("triage_router", 0)
+    # 1. Intent classification step
+    intent = state.get("intent", "DIRECT")
+    dur = node_durations.get("intent_classify", 0)
     total_ms += dur
-    route_labels = {
-        "direct": "Direct Answer",
-        "lookup": "Quick Lookup",
-        "reasoning": "Clinical Reasoning",
-        "multi_step": "Multi-Step Analysis",
-    }
+    route_label = "Direct Answer" if intent == "DIRECT" else "Tool-Assisted Lookup"
     steps.append(
         TraceStep(
             type=TraceStepType.THOUGHT,
-            label="Triage",
-            description=f"Classified as: {route_labels.get(route, route)}",
+            label="Intent Classification",
+            description=f"Classified as: {route_label}",
             duration_ms=dur,
         )
     )
 
-    # 2. Reasoning step (if present)
-    if state.get("reasoning"):
-        dur = node_durations.get("thinking_mode", 0)
-        total_ms += dur
-        reasoning_text = state["reasoning"]
-        if len(reasoning_text) > 500:
-            reasoning_text = reasoning_text[:500] + "..."
-        steps.append(
-            TraceStep(
-                type=TraceStepType.THOUGHT,
-                label="Clinical Reasoning",
-                description="Analyzed query to plan approach",
-                duration_ms=dur,
-                reasoning_text=reasoning_text,
-            )
-        )
-
-    # 3. Reasoning continuation (if present)
-    if state.get("reasoning_continuation"):
-        dur = node_durations.get("reasoning_continuation", 0)
-        total_ms += dur
-        steps.append(
-            TraceStep(
-                type=TraceStepType.THOUGHT,
-                label="Reasoning (continued)",
-                description="Integrated tool findings into analysis",
-                duration_ms=dur,
-            )
-        )
-
-    # 4. Successful tool calls
+    # 2. Successful tool calls
     for result in state.get("tool_results", []):
         if not result.get("success"):
             continue
         tool = result.get("tool_name", "unknown")
-        dur = node_durations.get(
-            f"tool_{tool}",
-            node_durations.get("fast_execute",
-                node_durations.get("reasoning_execute",
-                    node_durations.get("loop_execute", 0))),
-        )
+        dur = node_durations.get(f"tool_{tool}", node_durations.get("tool_execute", 0))
         total_ms += dur
         steps.append(
             TraceStep(
                 type=TraceStepType.TOOL_CALL,
-                label=TOOL_CLINICAL_LABELS.get(tool, tool.replace("_", " ").title()),
+                label=TOOL_CLINICAL_LABELS.get(
+                    tool, tool.replace("_", " ").title()
+                ),
                 description=_describe_tool_call(result),
                 duration_ms=dur,
                 tool_name=tool,
@@ -610,8 +426,8 @@ def _build_clinical_trace(
             )
         )
 
-    # 5. Synthesis step
-    dur = node_durations.get("synthesize_response", 0)
+    # 3. Synthesis step
+    dur = node_durations.get("synthesize", 0)
     total_ms += dur
     steps.append(
         TraceStep(
@@ -625,40 +441,36 @@ def _build_clinical_trace(
     return ClinicalTrace(
         steps=steps,
         total_duration_ms=total_ms,
-        tools_consulted=len([s for s in steps if s.type == TraceStepType.TOOL_CALL]),
+        tools_consulted=len(
+            [s for s in steps if s.type == TraceStepType.TOOL_CALL]
+        ),
     )
 
 
-# ── Node labels ──────────────────────────────────────────────────────────────
+# =============================================================================
+# Node labels (human-readable, for frontend display)
+# =============================================================================
+
 _NODE_LABELS = {
-    "image_detection": "Image Detection",
-    "clinical_context_assembler": "Context Assembly",
-    "triage_router": "Triage Router",
-    "fast_tool_validate": "Validate (Lookup)",
-    "fast_fix_args": "Fix Args (Lookup)",
-    "fast_execute": "Execute (Lookup)",
-    "fast_check": "Check (Lookup)",
-    "thinking_mode": "Thinking Mode",
-    "extract_tool_needs": "Extract Tool Needs",
-    "reasoning_execute": "Execute (Reasoning)",
-    "reasoning_continuation": "Reasoning Continuation",
-    "decompose_intent": "Decompose Intent",
-    "plan_tool": "Plan Tool",
-    "loop_validate": "Validate (Loop)",
-    "loop_fix_args": "Fix Args (Loop)",
-    "loop_execute": "Execute (Loop)",
-    "assess_result": "Assess Result",
+    "input_assembly": "Input Assembly",
+    "intent_classify": "Intent Classification",
+    "tool_select": "Tool Selection",
+    "tool_execute": "Tool Execution",
+    "result_classify": "Result Classification",
     "error_handler": "Error Handler",
-    "synthesize_response": "Synthesize Response",
+    "synthesize": "Response Synthesis",
 }
 
 
-# ── Default config for the v2 graph ──────────────────────────────────────────
+# =============================================================================
+# Default GraphConfig instance (consumed by agent_runner.py)
+# =============================================================================
+
 GRAPH_CONFIG = GraphConfig(
-    interrupt_before=["fast_execute", "reasoning_execute", "loop_execute"],
+    interrupt_before=["tool_execute"],
     extract_tool_proposal=_extract_tool_proposal,
     build_rejection_update=_build_rejection_update,
-    terminal_nodes=frozenset({"synthesize_response"}),
+    terminal_nodes=frozenset({"synthesize"}),
     final_response_key="final_response",
     make_initial_state=_make_initial_state,
     get_status_text=_get_status_text,
@@ -667,7 +479,10 @@ GRAPH_CONFIG = GraphConfig(
 )
 
 
-# ── Graph builder ────────────────────────────────────────────────────────────
+# =============================================================================
+# Graph builder
+# =============================================================================
+
 
 def build_graph(
     model: DocGemma,
@@ -676,265 +491,104 @@ def build_graph(
     interrupt_before: list[str] | None = None,
     stream_callback: StreamCallback = None,
 ) -> StateGraph:
-    """Build the DocGemma v2 agent graph (18-node 4-way triage).
+    """Build the DocGemma v3 agent graph (7-node binary classification).
 
     Args:
-        model: DocGemma model instance (must be loaded)
+        model: DocGemma model instance (must be loaded).
         tool_executor: Optional custom tool executor. If None, uses the
-                       built-in tool registry. Signature: async (tool_name, args) -> dict
+                       built-in tool registry. Signature: async (tool_name, args) -> dict.
         checkpointer: Optional checkpoint saver for persistence and interrupts.
                       Required if using interrupt_before.
         interrupt_before: List of node names to interrupt before execution.
-                          Useful for human-in-the-loop approval.
         stream_callback: Callback for streaming token output.
 
     Returns:
-        Compiled LangGraph workflow
+        Compiled LangGraph workflow.
     """
     _executor = tool_executor if tool_executor is not None else registry_execute_tool
 
-    workflow = StateGraph(DocGemmaState)
+    workflow = StateGraph(AgentState)
 
     # === Add Nodes ===
 
-    # 1. Image detection (pure code)
-    workflow.add_node("image_detection", image_detection)
+    # 1. Input assembly (deterministic)
+    workflow.add_node("input_assembly", input_assembly)
 
-    # 2. Clinical context assembler (pure code)
-    workflow.add_node("clinical_context_assembler", clinical_context_assembler)
+    # 2. Intent classify (LLM + Outlines)
+    workflow.add_node(
+        "intent_classify", lambda s: intent_classify(s, model)
+    )
 
-    # 3. Triage router (LLM)
-    workflow.add_node("triage_router", lambda s: triage_router(s, model))
+    # 3. Tool select (LLM + Outlines, two-stage)
+    workflow.add_node("tool_select", lambda s: tool_select(s, model))
 
-    # --- LOOKUP path ---
-    # 4. Fast tool validate (pure code)
-    workflow.add_node("fast_tool_validate", fast_tool_validate)
+    # 4. Tool execute (async, deterministic)
+    async def _tool_execute(s):
+        return await tool_execute(s, _executor)
 
-    # 5. Fast fix args (LLM)
-    workflow.add_node("fast_fix_args", lambda s: fast_fix_args(s, model))
+    workflow.add_node("tool_execute", _tool_execute)
 
-    # 6. Fast execute (async)
-    async def _fast_execute(s):
-        return await fast_execute(s, _executor)
-    workflow.add_node("fast_execute", _fast_execute)
+    # 5. Result classify (LLM + Outlines)
+    workflow.add_node(
+        "result_classify", lambda s: result_classify(s, model)
+    )
 
-    # 7. Fast check (pure code)
-    workflow.add_node("fast_check", fast_check)
+    # 5a. Error handler (hybrid: deterministic + LLM)
+    workflow.add_node(
+        "error_handler", lambda s: error_handler(s, model)
+    )
 
-    # --- REASONING path ---
-    # 8. Thinking mode (LLM)
-    workflow.add_node("thinking_mode", lambda s: thinking_mode(s, model))
+    # 7. Synthesize (LLM streaming, terminal)
+    async def _synthesize(s):
+        return await synthesize(s, model, stream_callback)
 
-    # 9. Extract tool needs (LLM)
-    workflow.add_node("extract_tool_needs", lambda s: extract_tool_needs(s, model))
-
-    # 10. Reasoning execute (async)
-    async def _reasoning_execute(s):
-        return await reasoning_execute(s, _executor)
-    workflow.add_node("reasoning_execute", _reasoning_execute)
-
-    # 11. Reasoning continuation (LLM streaming)
-    async def _reasoning_continuation(s):
-        return await reasoning_continuation(s, model, stream_callback)
-    workflow.add_node("reasoning_continuation", _reasoning_continuation)
-
-    # --- MULTI_STEP path ---
-    # 12. Decompose intent (LLM)
-    workflow.add_node("decompose_intent", lambda s: decompose_intent(s, model))
-
-    # 13. Plan tool (LLM)
-    workflow.add_node("plan_tool", lambda s: plan_tool(s, model))
-
-    # 14. Loop validate (pure code)
-    workflow.add_node("loop_validate", loop_validate)
-
-    # 15. Loop fix args (LLM)
-    workflow.add_node("loop_fix_args", lambda s: loop_fix_args(s, model))
-
-    # 16. Loop execute (async)
-    async def _loop_execute(s):
-        return await loop_execute(s, _executor)
-    workflow.add_node("loop_execute", _loop_execute)
-
-    # 17. Assess result (pure code)
-    workflow.add_node("assess_result", assess_result)
-
-    # 18. Error handler (pure code)
-    workflow.add_node("error_handler", error_handler)
-
-    # 19. Synthesize response (LLM streaming, terminal)
-    async def _synthesize_response(s):
-        return await synthesize_response(s, model, stream_callback)
-    workflow.add_node("synthesize_response", _synthesize_response)
+    workflow.add_node("synthesize", _synthesize)
 
     # === Entry Point ===
-    workflow.set_entry_point("image_detection")
+    workflow.set_entry_point("input_assembly")
 
     # === Edges ===
 
-    # image_detection → clinical_context_assembler → triage_router
-    workflow.add_edge("image_detection", "clinical_context_assembler")
-    workflow.add_edge("clinical_context_assembler", "triage_router")
+    # input_assembly → intent_classify
+    workflow.add_edge("input_assembly", "intent_classify")
 
-    # --- Triage routing (4-way) ---
-    def route_triage(state: DocGemmaState) -> str:
-        route = state.get("triage_route", "direct")
-        mapping = {
-            "direct": "synthesize_response",
-            "lookup": "fast_tool_validate",
-            "reasoning": "thinking_mode",
-            "multi_step": "decompose_intent",
-        }
-        target = mapping.get(route, "synthesize_response")
-        logger.info(f"[ROUTE] triage_router -> {target} (route={route})")
-        return target
-
+    # intent_classify → conditional: DIRECT → synthesize, TOOL_NEEDED → tool_select
     workflow.add_conditional_edges(
-        "triage_router",
-        route_triage,
+        "intent_classify",
+        route_after_intent,
+        {"synthesize": "synthesize", "tool_select": "tool_select"},
+    )
+
+    # tool_select → tool_execute
+    workflow.add_edge("tool_select", "tool_execute")
+
+    # tool_execute → result_classify
+    workflow.add_edge("tool_execute", "result_classify")
+
+    # result_classify → conditional: synthesize / tool_select / error_handler
+    workflow.add_conditional_edges(
+        "result_classify",
+        route_after_result_classify,
         {
-            "synthesize_response": "synthesize_response",
-            "fast_tool_validate": "fast_tool_validate",
-            "thinking_mode": "thinking_mode",
-            "decompose_intent": "decompose_intent",
-        },
-    )
-
-    # --- LOOKUP path edges ---
-    def route_fast_validate(state: DocGemmaState) -> str:
-        if state.get("validation_error"):
-            logger.info("[ROUTE] fast_tool_validate -> fast_fix_args (validation error)")
-            return "fast_fix_args"
-        logger.info("[ROUTE] fast_tool_validate -> fast_execute (valid)")
-        return "fast_execute"
-
-    workflow.add_conditional_edges(
-        "fast_tool_validate",
-        route_fast_validate,
-        {"fast_fix_args": "fast_fix_args", "fast_execute": "fast_execute"},
-    )
-    workflow.add_edge("fast_fix_args", "fast_execute")
-    workflow.add_edge("fast_execute", "fast_check")
-
-    def route_fast_check(state: DocGemmaState) -> str:
-        status = state.get("last_result_status")
-        if status == "done":
-            logger.info("[ROUTE] fast_check -> synthesize_response (done)")
-            return "synthesize_response"
-        # error + retries remaining → retry
-        retries = state.get("tool_retries", 0)
-        if retries <= MAX_FAST_RETRIES:
-            logger.info(f"[ROUTE] fast_check -> fast_execute (retry {retries})")
-            return "fast_execute"
-        logger.info("[ROUTE] fast_check -> synthesize_response (max retries)")
-        return "synthesize_response"
-
-    workflow.add_conditional_edges(
-        "fast_check",
-        route_fast_check,
-        {"synthesize_response": "synthesize_response", "fast_execute": "fast_execute"},
-    )
-
-    # --- REASONING path edges ---
-    workflow.add_edge("thinking_mode", "extract_tool_needs")
-
-    def route_extract_tool_needs(state: DocGemmaState) -> str:
-        tool_needs = state.get("reasoning_tool_needs")
-        if tool_needs and tool_needs.get("tool"):
-            logger.info(f"[ROUTE] extract_tool_needs -> reasoning_execute (tool={tool_needs['tool']})")
-            return "reasoning_execute"
-        logger.info("[ROUTE] extract_tool_needs -> synthesize_response (no tools needed)")
-        return "synthesize_response"
-
-    workflow.add_conditional_edges(
-        "extract_tool_needs",
-        route_extract_tool_needs,
-        {"reasoning_execute": "reasoning_execute", "synthesize_response": "synthesize_response"},
-    )
-    workflow.add_edge("reasoning_execute", "reasoning_continuation")
-    workflow.add_edge("reasoning_continuation", "synthesize_response")
-
-    # --- MULTI_STEP path edges ---
-    def route_decompose(state: DocGemmaState) -> str:
-        if state.get("needs_user_input"):
-            logger.info("[ROUTE] decompose_intent -> synthesize_response (needs clarification)")
-            return "synthesize_response"
-        subtasks = state.get("subtasks", [])
-        logger.info(f"[ROUTE] decompose_intent -> plan_tool ({len(subtasks)} subtasks)")
-        return "plan_tool"
-
-    workflow.add_conditional_edges(
-        "decompose_intent",
-        route_decompose,
-        {"synthesize_response": "synthesize_response", "plan_tool": "plan_tool"},
-    )
-
-    workflow.add_edge("plan_tool", "loop_validate")
-
-    def route_loop_validate(state: DocGemmaState) -> str:
-        if state.get("validation_error"):
-            logger.info("[ROUTE] loop_validate -> loop_fix_args (validation error)")
-            return "loop_fix_args"
-        logger.info("[ROUTE] loop_validate -> loop_execute (valid)")
-        return "loop_execute"
-
-    workflow.add_conditional_edges(
-        "loop_validate",
-        route_loop_validate,
-        {"loop_fix_args": "loop_fix_args", "loop_execute": "loop_execute"},
-    )
-    workflow.add_edge("loop_fix_args", "loop_execute")
-    workflow.add_edge("loop_execute", "assess_result")
-
-    def route_assess_result(state: DocGemmaState) -> str:
-        status = state.get("last_result_status")
-        if status == "error":
-            logger.info("[ROUTE] assess_result -> error_handler")
-            return "error_handler"
-        if status == "continue":
-            logger.info("[ROUTE] assess_result -> plan_tool (next subtask)")
-            return "plan_tool"
-        # "done" or "needs_user_input"
-        logger.info(f"[ROUTE] assess_result -> synthesize_response (status={status})")
-        return "synthesize_response"
-
-    workflow.add_conditional_edges(
-        "assess_result",
-        route_assess_result,
-        {
+            "synthesize": "synthesize",
+            "tool_select": "tool_select",
             "error_handler": "error_handler",
-            "plan_tool": "plan_tool",
-            "synthesize_response": "synthesize_response",
         },
     )
 
-    def route_error_handler(state: DocGemmaState) -> str:
-        strategy = state.get("error_strategy", "skip_subtask")
-        if strategy == "retry_same":
-            logger.info("[ROUTE] error_handler -> loop_execute (retry same)")
-            return "loop_execute"
-        if strategy == "retry_reformulate":
-            logger.info("[ROUTE] error_handler -> plan_tool (reformulate)")
-            return "plan_tool"
-        # skip_subtask
-        if state.get("last_result_status") == "done":
-            logger.info("[ROUTE] error_handler -> synthesize_response (all subtasks exhausted)")
-            return "synthesize_response"
-        logger.info("[ROUTE] error_handler -> plan_tool (skip to next subtask)")
-        return "plan_tool"
-
+    # error_handler → conditional: tool_execute (retry) / tool_select (different) / synthesize (skip)
     workflow.add_conditional_edges(
         "error_handler",
-        route_error_handler,
+        route_after_error_handler,
         {
-            "loop_execute": "loop_execute",
-            "plan_tool": "plan_tool",
-            "synthesize_response": "synthesize_response",
+            "tool_execute": "tool_execute",
+            "tool_select": "tool_select",
+            "synthesize": "synthesize",
         },
     )
 
-    # --- Terminal ---
-    workflow.add_edge("synthesize_response", END)
+    # synthesize → END
+    workflow.add_edge("synthesize", END)
 
     # === Compile ===
     compile_kwargs: dict[str, Any] = {}
@@ -944,6 +598,11 @@ def build_graph(
         compile_kwargs["interrupt_before"] = interrupt_before
 
     return workflow.compile(**compile_kwargs)
+
+
+# =============================================================================
+# High-level agent interface
+# =============================================================================
 
 
 class DocGemmaAgent:
@@ -966,8 +625,20 @@ class DocGemmaAgent:
         user_input: str,
         image_data: bytes | None = None,
     ) -> str:
+        """Run the agent on a single user input.
+
+        Args:
+            user_input: The user's query text.
+            image_data: Optional raw image bytes for vision analysis.
+
+        Returns:
+            The agent's final response string.
+        """
         logger.info("=" * 60)
-        logger.info(f"[AGENT] Starting run: {user_input[:80]}{'...' if len(user_input) > 80 else ''}")
+        logger.info(
+            f"[AGENT] Starting run: {user_input[:80]}"
+            f"{'...' if len(user_input) > 80 else ''}"
+        )
         logger.info("=" * 60)
 
         initial_state = _make_initial_state(user_input, image_data, None)
@@ -978,19 +649,3 @@ class DocGemmaAgent:
         logger.info("=" * 60)
 
         return result.get("final_response", "I was unable to generate a response.")
-
-    def run_sync(
-        self,
-        user_input: str,
-        image_data: bytes | None = None,
-    ) -> str:
-        import asyncio
-
-        try:
-            loop = asyncio.get_running_loop()
-        except RuntimeError:
-            return asyncio.run(self.run(user_input, image_data))
-
-        import nest_asyncio
-        nest_asyncio.apply()
-        return loop.run_until_complete(self.run(user_input, image_data))
