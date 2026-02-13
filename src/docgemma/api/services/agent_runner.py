@@ -238,8 +238,11 @@ class AgentRunner:
         Yields:
             AgentEvent objects
         """
-        node_start_times: dict[str, float] = {}
         node_durations: dict[str, float] = {}
+        # Track when the last node update arrived; the delta gives us the
+        # execution time of the current node (stream_mode="updates" emits
+        # after each node completes, so the wall-clock gap ≈ node duration).
+        last_node_time: float = time.perf_counter()
         completion_emitted = False
 
         input_data = initial_state if not is_resume else None
@@ -366,18 +369,17 @@ class AgentRunner:
                             )
                         continue
 
-                    # Regular node execution
-                    node_start_times[node_name] = time.perf_counter()
+                    # Regular node execution — measure wall-clock since last update
+                    now = time.perf_counter()
+                    elapsed_ms = (now - last_node_time) * 1000
+                    last_node_time = now
+                    node_durations[node_name] = elapsed_ms
 
                     node_label = self._cfg.node_labels.get(
                         node_name, node_name.replace("_", " ").title()
                     )
 
                     yield NodeStartEvent(node_id=node_name, node_label=node_label)
-
-                    elapsed_ms = (time.perf_counter() - node_start_times[node_name]) * 1000
-                    node_durations[node_name] = elapsed_ms
-
                     yield NodeEndEvent(
                         node_id=node_name,
                         node_label=node_label,

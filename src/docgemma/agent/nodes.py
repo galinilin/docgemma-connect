@@ -567,12 +567,16 @@ async def tool_execute(state: AgentState, tool_executor: Callable) -> dict:
                 ),
             )
 
-        # Format result for synthesis
+        # Format result for synthesis — truncate string *values* inside
+        # the dict so the JSON structure stays valid.
         formatted = ""
         if success:
-            formatted = json.dumps(result, default=str)
-            if len(formatted) > 1000:
-                formatted = formatted[:1000] + "..."
+            truncated = {
+                k: (v[:800] + "..." if isinstance(v, str) and len(v) > 800 else v)
+                for k, v in result.items()
+                if v is not None
+            }
+            formatted = json.dumps(truncated, default=str)
 
         tool_result: ToolResult = {
             "tool_name": tool_name,
@@ -660,15 +664,39 @@ def result_classify(state: AgentState, model: DocGemma) -> dict:
             "last_result_summary": last.get("error", "Fatal error"),
         }
 
+    # Fast-path: image analysis with findings — skip LLM classification
+    result_data = last.get("result", {})
+    if last.get("tool_name") == "analyze_medical_image" and result_data.get("findings"):
+        return {
+            "last_result_classification": "success_rich",
+            "last_result_summary": "Image analysis completed with findings",
+        }
+
     # LLM classification for successful results
     tool_label = last.get("tool_label", last.get("tool_name", "Unknown"))
     formatted = last.get("formatted_result", str(last.get("result", {})))
+
+    # Truncate the formatted result for the LLM prompt, but keep JSON valid.
+    # If it's valid JSON, re-serialize with truncated string values;
+    # otherwise fall back to plain text truncation.
+    classify_result_text = formatted
+    try:
+        parsed = json.loads(formatted)
+        if isinstance(parsed, dict):
+            parsed = {
+                k: (v[:400] + "..." if isinstance(v, str) and len(v) > 400 else v)
+                for k, v in parsed.items()
+                if v is not None
+            }
+            classify_result_text = json.dumps(parsed, default=str)
+    except (json.JSONDecodeError, TypeError):
+        classify_result_text = _truncate(formatted, 500)
 
     prompt = RESULT_CLASSIFY_PROMPT.format(
         user_query=state.get("user_query", ""),
         task_summary=state.get("task_summary", ""),
         tool_label=tool_label,
-        formatted_tool_result=_truncate(formatted, 500),
+        formatted_tool_result=classify_result_text,
     )
 
     result = model.generate_outlines(
