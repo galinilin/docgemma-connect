@@ -17,6 +17,13 @@ if TYPE_CHECKING:
 # MedGemma wraps internal thinking in <unused94>...<unused95> tokens.
 # Strip these from all free-form output so they never reach the user.
 _THINKING_RE = re.compile(r"<unused94>.*?<unused95>", re.DOTALL)
+_THINKING_OPEN = "<unused94>"
+_THINKING_CLOSE = "<unused95>"
+# The model often prefixes thinking content with "thought\n"; strip it.
+_THINKING_PREFIX_RE = re.compile(r"^thought\s*", re.IGNORECASE)
+# Max words to keep from a runaway thinking block before truncating and
+# forcing the model to continue with actual output via assistant prefill.
+_THINKING_MAX_WORDS = 256
 
 
 class DocGemma:
@@ -73,6 +80,10 @@ class DocGemma:
         self._client = httpx.Client(timeout=timeout, headers=headers)
         self._async_client = httpx.AsyncClient(timeout=timeout, headers=headers)
 
+        # Captured thinking text from the most recent generate/generate_stream call.
+        # Read by the synthesize node to include in the clinical trace.
+        self.last_thinking_text: str | None = None
+
     def _build_messages(self, messages: list[dict]) -> list[dict]:
         """Prepend system prompt (if set) and merge consecutive same-role messages."""
         msgs = list(messages)
@@ -96,6 +107,160 @@ class DocGemma:
             else:
                 merged.append(msg)
         return merged
+
+    @staticmethod
+    def _clean_thinking(text: str) -> str | None:
+        """Strip the ``thought\\n`` prefix and whitespace from thinking text."""
+        text = _THINKING_PREFIX_RE.sub("", text.strip()).strip()
+        return text or None
+
+    @staticmethod
+    def _extract_thinking(raw_response: str) -> str | None:
+        """Extract the raw thinking content from a response (without tags)."""
+        start = raw_response.find(_THINKING_OPEN)
+        if start == -1:
+            return None
+        after_open = raw_response[start + len(_THINKING_OPEN):]
+        end = after_open.find(_THINKING_CLOSE)
+        if end != -1:
+            return DocGemma._clean_thinking(after_open[:end])
+        # Unclosed — return everything after the open tag
+        return DocGemma._clean_thinking(after_open)
+
+    @staticmethod
+    def _truncate_thinking(raw_response: str) -> str:
+        """Extract thinking content from a raw response and truncate it.
+
+        Returns a closed thinking block: ``<unused94>...truncated...<unused95>``.
+        """
+        start = raw_response.find(_THINKING_OPEN)
+        if start == -1:
+            return ""
+        thinking = raw_response[start + len(_THINKING_OPEN):]
+        # Strip any accidental close tag (e.g. closed but empty after)
+        thinking = thinking.replace(_THINKING_CLOSE, "")
+        words = thinking.split()
+        if len(words) > _THINKING_MAX_WORDS:
+            words = words[:_THINKING_MAX_WORDS]
+        return f"{_THINKING_OPEN}{' '.join(words)}{_THINKING_CLOSE}"
+
+    def _continue_after_thinking(
+        self,
+        raw_response: str,
+        all_messages: list[dict],
+        max_new_tokens: int,
+        temperature: float,
+    ) -> str:
+        """Make a continuation call after a runaway thinking block (sync).
+
+        Truncates the thinking, closes it with <unused95>, then uses vLLM's
+        ``continue_final_message`` to let the model produce the real answer.
+        """
+        import json
+
+        prefix = self._truncate_thinking(raw_response)
+        if not prefix:
+            return raw_response
+
+        continuation_messages = all_messages + [
+            {"role": "assistant", "content": prefix},
+        ]
+
+        payload = {
+            "model": self._model,
+            "messages": continuation_messages,
+            "max_tokens": max_new_tokens,
+            "temperature": temperature,
+            "continue_final_message": True,
+            "add_generation_prompt": False,
+        }
+
+        print("[*] Continuation: thinking ran away, retrying with assistant prefill")
+        resp = self._client.post(
+            f"{self._endpoint}/v1/chat/completions",
+            json=payload,
+        )
+        resp.raise_for_status()
+
+        response = resp.json()["choices"][0]["message"]["content"]
+        print("[*] Continuation result:", json.dumps({"response": response}, indent=2))
+        print("*********************")
+        return response
+
+    async def _continue_after_thinking_stream(
+        self,
+        thinking_buffer: list[str],
+        all_messages: list[dict],
+        max_new_tokens: int,
+        temperature: float,
+    ) -> AsyncGenerator[str, None]:
+        """Make a streaming continuation call after a runaway thinking block.
+
+        Yields text chunks from the continuation response.
+        """
+        # Build truncated thinking prefix
+        thinking_text = "".join(thinking_buffer)
+        words = thinking_text.split()
+        if len(words) > _THINKING_MAX_WORDS:
+            thinking_text = " ".join(words[:_THINKING_MAX_WORDS])
+        prefix = f"{_THINKING_OPEN}{thinking_text}{_THINKING_CLOSE}"
+
+        continuation_messages = all_messages + [
+            {"role": "assistant", "content": prefix},
+        ]
+
+        payload = {
+            "model": self._model,
+            "messages": continuation_messages,
+            "max_tokens": max_new_tokens,
+            "stream": True,
+            "temperature": temperature,
+            "continue_final_message": True,
+            "add_generation_prompt": False,
+        }
+
+        print("[*] Continuation (stream): thinking ran away, retrying with assistant prefill")
+
+        in_thinking = False
+        async with self._async_client.stream(
+            "POST",
+            f"{self._endpoint}/v1/chat/completions",
+            json=payload,
+        ) as response:
+            response.raise_for_status()
+            async for line in response.aiter_lines():
+                if not line.startswith("data: "):
+                    continue
+                data_str = line[len("data: "):]
+                if data_str.strip() == "[DONE]":
+                    break
+                try:
+                    chunk = _json.loads(data_str)
+                    delta = chunk.get("choices", [{}])[0].get("delta", {})
+                    content = delta.get("content")
+                    if not content:
+                        continue
+
+                    # Safety net: filter thinking in continuation too
+                    while content:
+                        if not in_thinking:
+                            idx = content.find(_THINKING_OPEN)
+                            if idx == -1:
+                                yield content
+                                break
+                            if idx > 0:
+                                yield content[:idx]
+                            in_thinking = True
+                            content = content[idx + len(_THINKING_OPEN):]
+                        else:
+                            idx = content.find(_THINKING_CLOSE)
+                            if idx == -1:
+                                break
+                            in_thinking = False
+                            content = content[idx + len(_THINKING_CLOSE):]
+
+                except (_json.JSONDecodeError, IndexError, KeyError):
+                    continue
 
     def health_check(self) -> bool:
         """Check if remote endpoint is reachable."""
@@ -161,6 +326,23 @@ class DocGemma:
         response = resp.json()["choices"][0]["message"]["content"]
         print("[*] Raw:", json.dumps({"input": all_messages, "response": response}, indent=2))
         print("*********************")
+
+        # Capture thinking text for clinical trace before stripping
+        self.last_thinking_text = self._extract_thinking(response)
+
+        # Detect runaway thinking: opened but never closed, or closed but
+        # nothing useful after it (model spent all tokens on thinking).
+        needs_continuation = False
+        if _THINKING_OPEN in response and _THINKING_CLOSE not in response:
+            needs_continuation = True
+        elif _THINKING_OPEN in response and _THINKING_RE.sub("", response).strip() == "":
+            needs_continuation = True
+
+        if needs_continuation:
+            response = self._continue_after_thinking(
+                response, all_messages, max_new_tokens, payload["temperature"],
+            )
+
         return _THINKING_RE.sub("", response).strip()
 
     async def generate_stream(
@@ -209,6 +391,9 @@ class DocGemma:
 
         in_thinking = False
         full_response_parts: list[str] = []
+        thinking_buffer: list[str] = []
+        thinking_word_count = 0
+        continuation_needed = False
 
         async with self._async_client.stream(
             "POST",
@@ -232,7 +417,7 @@ class DocGemma:
                     # Filter out <unused94>...<unused95> thinking blocks
                     while content:
                         if not in_thinking:
-                            idx = content.find("<unused94>")
+                            idx = content.find(_THINKING_OPEN)
                             if idx == -1:
                                 full_response_parts.append(content)
                                 yield content
@@ -241,16 +426,46 @@ class DocGemma:
                                 full_response_parts.append(content[:idx])
                                 yield content[:idx]
                             in_thinking = True
-                            content = content[idx + len("<unused94>"):]
+                            content = content[idx + len(_THINKING_OPEN):]
                         else:
-                            idx = content.find("<unused95>")
+                            idx = content.find(_THINKING_CLOSE)
                             if idx == -1:
-                                break  # still inside thinking, drop entire chunk
+                                # Still inside thinking — buffer and count
+                                thinking_buffer.append(content)
+                                thinking_word_count += len(content.split())
+                                if thinking_word_count > _THINKING_MAX_WORDS:
+                                    continuation_needed = True
+                                break
+                            # Capture content before close tag
+                            if idx > 0:
+                                thinking_buffer.append(content[:idx])
                             in_thinking = False
-                            content = content[idx + len("<unused95>"):]
+                            content = content[idx + len(_THINKING_CLOSE):]
 
                 except (_json.JSONDecodeError, IndexError, KeyError):
                     continue
+
+                if continuation_needed:
+                    break  # Exit the line-reading loop too
+
+        # If stream ended while still in thinking, or nothing was yielded
+        if in_thinking and not continuation_needed:
+            continuation_needed = True
+
+        if continuation_needed and not full_response_parts:
+            # No real content was yielded yet — safe to do continuation
+            temp = payload.get("temperature", 0.0)
+            async for chunk in self._continue_after_thinking_stream(
+                thinking_buffer, all_messages, max_new_tokens, temp,
+            ):
+                full_response_parts.append(chunk)
+                yield chunk
+
+        # Capture thinking text for clinical trace
+        if thinking_buffer:
+            self.last_thinking_text = self._clean_thinking("".join(thinking_buffer))
+        else:
+            self.last_thinking_text = None
 
         full_response = "".join(full_response_parts)
         print("[*] Stream:", _json.dumps({"input": all_messages, "response": full_response}, indent=2))

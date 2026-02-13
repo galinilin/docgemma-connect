@@ -275,6 +275,7 @@ def _make_initial_state(
         "patient_context": None,
         # Output
         "final_response": None,
+        "model_thinking": None,
     }
     if conversation_history:
         state["conversation_history"] = conversation_history
@@ -412,7 +413,21 @@ def _build_clinical_trace(
         )
     )
 
-    # 2. Successful tool calls
+    # 2. Model thinking (if captured from <unused94>...<unused95> block)
+    thinking_text = state.get("model_thinking")
+    if thinking_text:
+        # Truncate for display label — full text in reasoning_text
+        preview = thinking_text[:120] + "..." if len(thinking_text) > 120 else thinking_text
+        steps.append(
+            TraceStep(
+                type=TraceStepType.THOUGHT,
+                label="Model Reasoning",
+                description=preview,
+                reasoning_text=thinking_text,
+            )
+        )
+
+    # 3. Successful tool calls
     for result in state.get("tool_results", []):
         if not result.get("success"):
             continue
@@ -433,7 +448,7 @@ def _build_clinical_trace(
             )
         )
 
-    # 3. Synthesis step
+    # 4. Synthesis step
     dur = node_durations.get("synthesize", 0)
     total_ms += dur
     steps.append(

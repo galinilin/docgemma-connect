@@ -844,7 +844,10 @@ async def synthesize(
                 messages=history,
             )
 
-        return {"final_response": response}
+        return {
+            "final_response": response,
+            "model_thinking": model.last_thinking_text,
+        }
 
     # ── Tool/complex route: full synthesis ──
 
@@ -917,7 +920,10 @@ async def synthesize(
             messages=history,
         )
 
-    return {"final_response": response}
+    return {
+        "final_response": response,
+        "model_thinking": model.last_thinking_text,
+    }
 
 
 # =============================================================================

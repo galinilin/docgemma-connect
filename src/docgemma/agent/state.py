@@ -78,6 +78,7 @@ class AgentState(TypedDict, total=False):
 
     # ── Output (Node 7) ──
     final_response: Optional[str]
+    model_thinking: Optional[str]  # Raw thinking text captured from <unused94>...<unused95>
 
 
 # Backward compatibility alias
