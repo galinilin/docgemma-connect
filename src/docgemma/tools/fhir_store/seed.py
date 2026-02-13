@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import uuid
 from collections import Counter
@@ -251,6 +252,7 @@ def _process_bundle(
 
     # Write Patient first (always kept)
     if patient_resource:
+        _clean_patient_name(patient_resource)
         _rewrite_references(patient_resource, patient_id)
         if specialty_tag and specialty_tag.get("code"):
             meta = patient_resource.setdefault("meta", {})
@@ -281,6 +283,32 @@ def _process_bundle(
             dest = dest_dir / f"{resource['id']}.json"
             dest.write_text(json.dumps(resource, indent=2), encoding="utf-8")
             stats[resource_type] += 1
+
+
+_TRAILING_DIGITS_RE = re.compile(r"\d+$")
+
+
+def _clean_patient_name(patient: dict) -> None:
+    """Strip Synthea-appended numbers from patient name parts.
+
+    E.g. ``"Ladawn167"`` → ``"Ladawn"``, ``"Spinka232"`` → ``"Spinka"``.
+    """
+    for name_entry in patient.get("name", []):
+        if "family" in name_entry:
+            name_entry["family"] = _TRAILING_DIGITS_RE.sub("", name_entry["family"])
+        if "given" in name_entry:
+            name_entry["given"] = [
+                _TRAILING_DIGITS_RE.sub("", g) for g in name_entry["given"]
+            ]
+        if "text" in name_entry:
+            name_entry["text"] = " ".join(
+                _TRAILING_DIGITS_RE.sub("", part)
+                for part in name_entry["text"].split()
+            )
+        if "prefix" in name_entry:
+            name_entry["prefix"] = [
+                _TRAILING_DIGITS_RE.sub("", p) for p in name_entry["prefix"]
+            ]
 
 
 def _rewrite_references(resource: dict, patient_id: str) -> None:
