@@ -46,7 +46,6 @@ class ToolSelection(BaseModel):
         "prescribe_medication",
         "add_allergy",
         "save_clinical_note",
-        "analyze_medical_image",
     ]
 
 
@@ -101,10 +100,6 @@ class ClinicalNoteArgs(BaseModel):
     note_text: str
 
 
-class ImageAnalysisArgs(BaseModel):
-    query: str = Field(description="What to look for in the image")
-
-
 # Mapping: tool_name -> arg schema class
 TOOL_ARG_SCHEMAS: dict[str, type[BaseModel]] = {
     "check_drug_safety": DrugSafetyArgs,
@@ -116,7 +111,6 @@ TOOL_ARG_SCHEMAS: dict[str, type[BaseModel]] = {
     "prescribe_medication": PrescribeMedicationArgs,
     "add_allergy": AddAllergyArgs,
     "save_clinical_note": ClinicalNoteArgs,
-    "analyze_medical_image": ImageAnalysisArgs,
 }
 
 

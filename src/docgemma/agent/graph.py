@@ -90,10 +90,6 @@ _TOOL_STATUS_POOLS: dict[str, list[str]] = {
         "Saving clinical note...",
         "Recording clinical note...",
     ],
-    "analyze_medical_image": [
-        "Analyzing medical image...",
-        "Reviewing image findings...",
-    ],
 }
 
 _STATUS_POOLS: dict[str, list[str]] = {
@@ -352,9 +348,6 @@ def _describe_tool_call(result: dict) -> str:
         return f"Prescribed {med}"
     if tool == "save_clinical_note":
         return "Saved clinical note"
-    if tool == "analyze_medical_image":
-        query = args.get("query", "")
-        return f"Analyzed image: {query[:80]}" if query else "Analyzed attached image"
     return f"Consulted {TOOL_CLINICAL_LABELS.get(tool, tool.replace('_', ' '))}"
 
 
@@ -427,17 +420,6 @@ def _summarize_result(result: dict) -> str:
     if tool == "save_clinical_note":
         note_type = args.get("note_type", "")
         return f"Saved {note_type} note" if note_type else "Note saved"
-
-    if tool == "analyze_medical_image":
-        findings = data.get("findings", "")
-        if findings:
-            clean = findings.replace("**", "").strip()
-            lines = [l.strip() for l in clean.split("\n") if l.strip()]
-            if lines and lines[0].lower().startswith("findings"):
-                lines = lines[1:]
-            preview = " ".join(lines[:2])
-            return preview[:150] + "..." if len(preview) > 150 else preview
-        return "No findings extracted"
 
     return "Done"
 
@@ -523,10 +505,6 @@ def _format_result_detail(result: dict) -> str | None:
                 lines.append(f"- {p}")
         return "\n".join(lines)
 
-    if tool == "analyze_medical_image":
-        findings = data.get("findings", "")
-        return findings if findings else "Image analysis completed."
-
     if tool in ("add_allergy", "prescribe_medication", "save_clinical_note"):
         formatted = result.get("formatted_result", "")
         return formatted if formatted else None
@@ -559,7 +537,27 @@ def _build_clinical_trace(
         )
     )
 
-    # 2. Model thinking (if captured from <unused94>...<unused95> block)
+    # 2. Image analysis (pre-processing step, if image was attached)
+    image_findings = state.get("image_findings")
+    if image_findings:
+        dur = node_durations.get("input_assembly", 0)
+        total_ms += dur
+        # Preview for label — full text in detail
+        preview = image_findings[:120] + "..." if len(image_findings) > 120 else image_findings
+        steps.append(
+            TraceStep(
+                type=TraceStepType.TOOL_CALL,
+                label="Image Analysis",
+                description="Analyzed attached medical image",
+                duration_ms=dur,
+                tool_name="analyze_medical_image",
+                tool_result_summary=preview,
+                tool_result_detail=image_findings,
+                success=True,
+            )
+        )
+
+    # 3. Model thinking (if captured from <unused94>...<unused95> block)
     thinking_text = state.get("model_thinking")
     if thinking_text:
         # Truncate for display label — full text in reasoning_text
@@ -573,7 +571,7 @@ def _build_clinical_trace(
             )
         )
 
-    # 3. Successful tool calls
+    # 4. Successful tool calls
     for result in state.get("tool_results", []):
         if not result.get("success"):
             continue
@@ -595,7 +593,7 @@ def _build_clinical_trace(
             )
         )
 
-    # 4. Synthesis step
+    # 5. Synthesis step
     dur = node_durations.get("synthesize", 0)
     total_ms += dur
     steps.append(

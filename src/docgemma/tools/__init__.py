@@ -36,7 +36,6 @@ Usage:
 from .clinical_trials import find_clinical_trials
 from .drug_interactions import check_drug_interactions
 from .drug_safety import check_drug_safety
-from .image_analysis import analyze_medical_image
 from .medical_literature import search_medical_literature
 from .registry import (
     TOOL_REGISTRY,
@@ -95,7 +94,6 @@ __all__ = [
     "search_medical_literature",
     "check_drug_interactions",
     "find_clinical_trials",
-    "analyze_medical_image",
     # Input schemas
     "DrugSafetyInput",
     "MedicalLiteratureInput",

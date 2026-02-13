@@ -36,7 +36,6 @@ TEMPERATURE: dict[str, float] = {
     "result_classify": 0.0,       # Classification — deterministic
     "error_retry": 0.0,           # Operational — deterministic
     "synthesize": 0.5,            # Free-form — validated optimum (Part IV §43)
-    "image_analysis": 0.3,        # Vision — descriptive output
 }
 
 MAX_TOKENS: dict[str, int] = {
@@ -46,7 +45,6 @@ MAX_TOKENS: dict[str, int] = {
     "result_classify": 128,
     "error_retry": 64,
     "synthesize": 256,            # Validated optimum (Part IV §46)
-    "image_analysis": 512,
 }
 
 
@@ -65,7 +63,6 @@ TOOL_CLINICAL_LABELS: dict[str, str] = {
     "prescribe_medication": "Prescription",
     "add_allergy": "Allergy Documentation",
     "save_clinical_note": "Clinical Note",
-    "analyze_medical_image": "Image Analysis",
 }
 
 
@@ -135,9 +132,7 @@ TOOL_DESCRIPTIONS = """Available tools:
   clinical note (progress note, consult note, procedure note, etc.) to a patient's
   record. Use when a clinician wants to write, save, or document a clinical note.
 
-- analyze_medical_image(query: str) — Analyze an attached medical image (X-ray, CT,
-  MRI, histopathology slide, etc.) for findings relevant to the specified query.
-  Use when a clinician shares a medical image and asks for analysis or interpretation."""
+"""
 
 
 # =============================================================================
@@ -182,10 +177,6 @@ TOOL_EXAMPLES: dict[str, tuple[str, str]] = {
         "Save a progress note for patient abc-123",
         "save_clinical_note",
     ),
-    "analyze_medical_image": (
-        "What does this chest X-ray show?",
-        "analyze_medical_image",
-    ),
 }
 
 # Fallback example when suggested_tool is None or unrecognised
@@ -208,8 +199,7 @@ Classification rules:
 - DIRECT: General medical questions, greetings, thanks, or questions answerable from
   medical knowledge alone (e.g., "What is hypertension?", "Hello", "Explain metformin MOA")
 - TOOL_NEEDED: Requests requiring specific patient data, drug safety lookups, literature
-  searches, clinical trial searches, prescriptions, allergy documentation, clinical notes,
-  or medical image analysis
+  searches, clinical trial searches, prescriptions, allergy documentation, or clinical notes
 
 Provide a task_summary that captures the clinical context in ~50 words or fewer.
 If TOOL_NEEDED, suggest the most relevant tool name.

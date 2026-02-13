@@ -109,9 +109,6 @@ _TOOL_STAGE2_DESC: dict[str, str] = {
         "Save clinical note. "
         "Args: patient_id (str), note_type (str), note_text (str)"
     ),
-    "analyze_medical_image": (
-        "Analyze medical image. Args: query (str)"
-    ),
 }
 
 
@@ -169,17 +166,12 @@ def _collect_args_for_registry(
 
     Most fields pass through directly. Special cases:
     - check_drug_interactions: drug_names (list) → drugs (list)
-    - analyze_medical_image: inject image_data from state
     """
     args = {k: v for k, v in schema_args.items() if v is not None}
 
     # Schema has drug_names (list), executor expects drugs (list)
     if tool_name == "check_drug_interactions" and "drug_names" in args:
         args["drugs"] = args.pop("drug_names")
-
-    # Inject image data for vision tool
-    if tool_name == "analyze_medical_image" and state.get("image_data"):
-        args["image_data"] = state["image_data"]
 
     return args
 
@@ -347,6 +339,24 @@ async def input_assembly(state: AgentState) -> dict:
 
     result: dict[str, Any] = {"extracted_entities": entities}
 
+    # Pre-process image: run analysis before routing so findings are
+    # available to all downstream nodes (including DIRECT route).
+    if entities["has_image"]:
+        try:
+            from ..tools.image_analysis import analyze_medical_image
+            from ..tools.schemas import ImageAnalysisInput
+
+            img_result = await analyze_medical_image(
+                ImageAnalysisInput(image_data=state["image_data"], query=query)
+            )
+            if img_result.findings and not img_result.error:
+                result["image_findings"] = img_result.findings
+                logger.info("[INPUT_ASSEMBLY] Image analysis completed")
+            else:
+                logger.warning(f"[INPUT_ASSEMBLY] Image analysis failed: {img_result.error}")
+        except Exception as e:
+            logger.warning(f"[INPUT_ASSEMBLY] Image analysis error: {e}")
+
     # Pre-fetch patient chart when a session patient is selected
     if session_pid:
         try:
@@ -374,7 +384,8 @@ def intent_classify(state: AgentState, model: DocGemma) -> dict:
     """Classify query as DIRECT or TOOL_NEEDED.
 
     Single constrained generation call at T=0.0 (deterministic).
-    Image attached → always TOOL_NEEDED (short-circuit).
+    Image findings (if any) are injected into the context so the model
+    routes based on the actual query, not the presence of an image.
     """
     # Tools disabled from frontend → force DIRECT route
     if not state.get("tool_calling_enabled", True):
@@ -385,19 +396,13 @@ def intent_classify(state: AgentState, model: DocGemma) -> dict:
             "suggested_tool": None,
         }
 
-    entities = state.get("extracted_entities", {})
-
-    # Image present → always route to tool (analyze_medical_image)
-    if entities.get("has_image"):
-        return {
-            "intent": "TOOL_NEEDED",
-            "task_summary": "Medical image analysis requested",
-            "suggested_tool": "analyze_medical_image",
-        }
+    context = _patient_context_section(state)
+    if state.get("image_findings"):
+        context += f"\nAttached image findings:\n{state['image_findings']}\n"
 
     prompt = INTENT_CLASSIFY_PROMPT.format(
         user_query=state.get("user_query", ""),
-        patient_context_section=_patient_context_section(state),
+        patient_context_section=context,
     )
     history = state.get("conversation_history", [])
 
@@ -664,14 +669,6 @@ def result_classify(state: AgentState, model: DocGemma) -> dict:
             "last_result_summary": last.get("error", "Fatal error"),
         }
 
-    # Fast-path: image analysis with findings — skip LLM classification
-    result_data = last.get("result", {})
-    if last.get("tool_name") == "analyze_medical_image" and result_data.get("findings"):
-        return {
-            "last_result_classification": "success_rich",
-            "last_result_summary": "Image analysis completed with findings",
-        }
-
     # LLM classification for successful results
     tool_label = last.get("tool_label", last.get("tool_name", "Unknown"))
     formatted = last.get("formatted_result", str(last.get("result", {})))
@@ -844,11 +841,19 @@ async def synthesize(
     intent = state.get("intent", "DIRECT")
     tool_results = state.get("tool_results", [])
 
+    tools_enabled = state.get("tool_calling_enabled", True)
+
     # ── Direct route: lightweight conversational prompt ──
     if intent == "DIRECT" and not tool_results:
+        context = _patient_context_section(state)
+        if state.get("image_findings"):
+            context += f"\nAttached image findings:\n{state['image_findings']}\n"
+        if not tools_enabled:
+            context += "\nNote: Tool calling is disabled. Answer using only the information above.\n"
+
         prompt = DIRECT_CHAT_PROMPT.format(
             user_query=query,
-            patient_context_section=_patient_context_section(state),
+            patient_context_section=context,
         )
 
         if stream_callback:
@@ -904,15 +909,18 @@ async def synthesize(
     image_section = ""
     image_findings = state.get("image_findings")
     if image_findings:
-        image_section = (
-            f"\n\nImage analysis:\n{json.dumps(image_findings, default=str)}"
-        )
+        image_section = f"\n\nImage analysis:\n{image_findings}"
 
     # Build clarification section
     clarification_section = ""
     clarification = state.get("clarification_request")
     if clarification:
         clarification_section = f"\n\nClarification needed:\n{clarification}"
+
+    # Build tool-calling status note
+    tools_note = ""
+    if not tools_enabled:
+        tools_note = "\n\nNote: Tool calling is disabled. Answer using only the information above."
 
     user_prompt = SYNTHESIZE_USER_TEMPLATE.format(
         user_query=query,
@@ -922,7 +930,7 @@ async def synthesize(
         tool_results_section=tool_results_section,
         error_section=error_section,
         clarification_section=clarification_section,
-    )
+    ) + tools_note
 
     # Prepend synthesis guidelines to user prompt
     full_prompt = SYNTHESIZE_SYSTEM_PROMPT + "\n\n" + user_prompt

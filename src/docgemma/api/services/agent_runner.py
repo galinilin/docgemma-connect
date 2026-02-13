@@ -247,6 +247,17 @@ class AgentRunner:
 
         input_data = initial_state if not is_resume else None
 
+        # Emit an initial status event immediately so the user sees feedback
+        # before the first node completes (input_assembly may be slow when
+        # it runs image analysis).
+        if input_data and not is_resume:
+            has_image = input_data.get("image_data") is not None
+            initial_status = "Analyzing medical image..." if has_image else "Processing your question..."
+            yield AgentStatusEvent(
+                status_text=initial_status,
+                node_id="input_assembly",
+            )
+
         # Queue bridge: streaming tokens and graph updates flow through here
         event_queue: asyncio.Queue[AgentEvent | dict | None] = asyncio.Queue()
 

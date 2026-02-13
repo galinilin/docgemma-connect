@@ -45,7 +45,7 @@ class AgentState(TypedDict, total=False):
     conversation_history: list[dict[str, str]]
     image_data: Optional[bytes]
     extracted_entities: ExtractedEntities
-    image_findings: Optional[dict[str, Any]]
+    image_findings: Optional[str]
 
     # ── Intent Classification (Node 2) ──
     intent: str  # "DIRECT" | "TOOL_NEEDED"
