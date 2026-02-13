@@ -213,7 +213,7 @@ Classification rules:
 
 Provide a task_summary that captures the clinical context in ~50 words or fewer.
 If TOOL_NEEDED, suggest the most relevant tool name.
-
+{patient_context_section}
 Query: {user_query}"""
 
 
@@ -294,6 +294,7 @@ SYNTHESIZE_USER_TEMPLATE = """\
 Clinician's question: {user_query}
 
 Clinical context: {task_summary}
+{patient_context_section}\
 {image_section}\
 {tool_results_section}\
 {error_section}\
@@ -303,8 +304,8 @@ Clinical context: {task_summary}
 # ── Node 7: DIRECT_CHAT (lightweight, no tool context) ──────────────────────
 
 DIRECT_CHAT_PROMPT = """\
-Respond to the user. Keep it natural and concise.
-
+You are responding to a clinician (not the patient). Be concise.
+{patient_context_section}
 Query: {user_query}"""
 
 

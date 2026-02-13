@@ -106,6 +106,8 @@ class AgentRunner:
         user_input: str,
         image_data: bytes | None = None,
         conversation_history: list[dict[str, str]] | None = None,
+        patient_id: str | None = None,
+        tool_calling_enabled: bool = True,
     ) -> AsyncGenerator[AgentEvent, None]:
         """Start a new turn in the conversation.
 
@@ -116,6 +118,8 @@ class AgentRunner:
             user_input: User's message
             image_data: Optional image bytes
             conversation_history: Previous messages for context
+            patient_id: Optional patient ID from frontend selector
+            tool_calling_enabled: Whether the agent should use tools
 
         Yields:
             AgentEvent objects representing execution progress
@@ -124,7 +128,9 @@ class AgentRunner:
         session.reset_for_new_turn()
 
         initial_state = self._cfg.make_initial_state(
-            user_input, image_data, conversation_history
+            user_input, image_data, conversation_history,
+            patient_id=patient_id,
+            tool_calling_enabled=tool_calling_enabled,
         )
 
         config = self._make_thread_id(session.session_id)

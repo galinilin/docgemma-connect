@@ -57,6 +57,7 @@ def _session_to_response(session: Session) -> SessionResponse:
             for msg in session.messages
         ],
         pending_approval=session.pending_approval.model_dump() if session.pending_approval else None,
+        selected_patient_id=session.selected_patient_id,
         created_at=session.created_at,
         updated_at=session.updated_at,
     )
@@ -376,6 +377,15 @@ async def _prepare_send_message(
     else:
         session.add_message("user", content, metadata=metadata)
 
+    # Extract frontend controls
+    patient_id = data.get("patient_id")
+    tool_calling_enabled = data.get("tool_calling_enabled", True)
+
+    # Persist selected patient on the session (survives reload)
+    session.selected_patient_id = patient_id or None
+    if store:
+        store._save(session)
+
     # Build conversation history (last 2-3 turns for 4B model)
     history = _build_conversation_history(session, max_turns=3)
 
@@ -385,6 +395,8 @@ async def _prepare_send_message(
         user_input=content,
         image_data=image_data,
         conversation_history=history,
+        patient_id=patient_id,
+        tool_calling_enabled=tool_calling_enabled,
     )
 
 

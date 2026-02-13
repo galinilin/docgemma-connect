@@ -197,6 +197,18 @@ def _format_tool_result(result: ToolResult) -> str:
     return f"{label}: {error}"
 
 
+def _patient_context_section(state: dict) -> str:
+    """Build patient context section for prompt injection.
+
+    Returns empty string if no patient is selected, so the prompt
+    template collapses cleanly.
+    """
+    ctx = state.get("patient_context")
+    if not ctx:
+        return ""
+    return f"\nActive patient record:\n{ctx}\n"
+
+
 def _format_error_for_synthesis(error_messages: list[str]) -> str:
     """Format error messages for synthesis prompt (pre-formatted, clinician-safe)."""
     if not error_messages:
@@ -302,16 +314,24 @@ def _needs_user_clarification(tool_results: list[ToolResult]) -> str | None:
 # =============================================================================
 
 
-def input_assembly(state: AgentState) -> dict:
+async def input_assembly(state: AgentState) -> dict:
     """Assemble input with deterministic entity extraction.
 
     Extracts patient IDs, drug mentions, and action verbs from the query.
-    No LLM call — all extraction is regex and dictionary-based.
+    When a session patient is selected, pre-fetches the patient chart summary
+    so all downstream nodes (including DIRECT route) have clinical context.
     """
     query = state.get("user_query", "")
 
+    patient_ids = _extract_patient_ids(query)
+
+    # Inject session patient ID from frontend selector
+    session_pid = state.get("session_patient_id")
+    if session_pid and session_pid not in patient_ids:
+        patient_ids.append(session_pid)
+
     entities: ExtractedEntities = {
-        "patient_ids": _extract_patient_ids(query),
+        "patient_ids": patient_ids,
         "drug_mentions": _extract_drug_mentions(query),
         "action_verbs": _extract_action_verbs(query),
         "has_image": state.get("image_data") is not None,
@@ -325,7 +345,24 @@ def input_assembly(state: AgentState) -> dict:
         f"image={entities['has_image']}"
     )
 
-    return {"extracted_entities": entities}
+    result: dict[str, Any] = {"extracted_entities": entities}
+
+    # Pre-fetch patient chart when a session patient is selected
+    if session_pid:
+        try:
+            from ..tools.fhir_store import get_patient_chart
+            from ..tools.fhir_store.schemas import GetPatientChartInput
+
+            chart = await get_patient_chart(GetPatientChartInput(patient_id=session_pid))
+            if chart.result and not chart.error:
+                result["patient_context"] = chart.result
+                logger.info(f"[INPUT_ASSEMBLY] Pre-fetched chart for patient {session_pid}")
+            else:
+                logger.warning(f"[INPUT_ASSEMBLY] Chart fetch failed for {session_pid}: {chart.error}")
+        except Exception as e:
+            logger.warning(f"[INPUT_ASSEMBLY] Chart fetch error for {session_pid}: {e}")
+
+    return result
 
 
 # =============================================================================
@@ -339,6 +376,15 @@ def intent_classify(state: AgentState, model: DocGemma) -> dict:
     Single constrained generation call at T=0.0 (deterministic).
     Image attached → always TOOL_NEEDED (short-circuit).
     """
+    # Tools disabled from frontend → force DIRECT route
+    if not state.get("tool_calling_enabled", True):
+        logger.info("[INTENT_CLASSIFY] Tools disabled by user, forcing DIRECT")
+        return {
+            "intent": "DIRECT",
+            "task_summary": "Direct response (tools disabled)",
+            "suggested_tool": None,
+        }
+
     entities = state.get("extracted_entities", {})
 
     # Image present → always route to tool (analyze_medical_image)
@@ -350,7 +396,8 @@ def intent_classify(state: AgentState, model: DocGemma) -> dict:
         }
 
     prompt = INTENT_CLASSIFY_PROMPT.format(
-        user_query=state.get("user_query", "")
+        user_query=state.get("user_query", ""),
+        patient_context_section=_patient_context_section(state),
     )
     history = state.get("conversation_history", [])
 
@@ -771,7 +818,10 @@ async def synthesize(
 
     # ── Direct route: lightweight conversational prompt ──
     if intent == "DIRECT" and not tool_results:
-        prompt = DIRECT_CHAT_PROMPT.format(user_query=query)
+        prompt = DIRECT_CHAT_PROMPT.format(
+            user_query=query,
+            patient_context_section=_patient_context_section(state),
+        )
 
         if stream_callback:
             chunks: list[str] = []
@@ -836,6 +886,7 @@ async def synthesize(
     user_prompt = SYNTHESIZE_USER_TEMPLATE.format(
         user_query=query,
         task_summary=state.get("task_summary", ""),
+        patient_context_section=_patient_context_section(state),
         image_section=image_section,
         tool_results_section=tool_results_section,
         error_section=error_section,

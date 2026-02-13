@@ -49,6 +49,10 @@ class Session(BaseModel):
         default=None,
         description="Tool awaiting approval, if any",
     )
+    selected_patient_id: str | None = Field(
+        default=None,
+        description="Last patient selected by the user (persisted across reloads)",
+    )
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 

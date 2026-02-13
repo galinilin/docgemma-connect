@@ -26,6 +26,7 @@ class SessionResponse(BaseModel):
     status: SessionStatus
     messages: list[MessageResponse]
     pending_approval: dict[str, Any] | None = None
+    selected_patient_id: str | None = None
     created_at: datetime
     updated_at: datetime
 

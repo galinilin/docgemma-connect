@@ -71,6 +71,11 @@ class AgentState(TypedDict, total=False):
     _planned_tool: Optional[str]
     _planned_args: Optional[dict[str, Any]]
 
+    # ── Session context (from frontend) ──
+    session_patient_id: Optional[str]       # From frontend patient selector
+    tool_calling_enabled: Optional[bool]    # False = force DIRECT route
+    patient_context: Optional[str]          # Pre-fetched chart summary for selected patient
+
     # ── Output (Node 7) ──
     final_response: Optional[str]
 

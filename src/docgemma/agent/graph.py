@@ -171,8 +171,8 @@ class GraphConfig:
     # State key that carries the final response text.
     final_response_key: str  # e.g. "final_response"
 
-    # Factory: (user_input, image_data, conversation_history) -> initial state dict.
-    make_initial_state: Callable[[str, bytes | None, list[dict] | None], dict]
+    # Factory: (user_input, image_data, conversation_history, **kwargs) -> initial state dict.
+    make_initial_state: Callable[..., dict]
 
     # (node_name, state_update) -> status text or None.
     get_status_text: Callable[[str, dict], str | None] | None
@@ -236,6 +236,9 @@ def _make_initial_state(
     user_input: str,
     image_data: bytes | None,
     conversation_history: list[dict] | None,
+    *,
+    patient_id: str | None = None,
+    tool_calling_enabled: bool = True,
 ) -> dict:
     """Create a fresh state dict for a new turn.
 
@@ -266,6 +269,10 @@ def _make_initial_state(
         # Internal (interrupt/approval)
         "_planned_tool": None,
         "_planned_args": None,
+        # Session context (from frontend)
+        "session_patient_id": patient_id,
+        "tool_calling_enabled": tool_calling_enabled,
+        "patient_context": None,
         # Output
         "final_response": None,
     }
