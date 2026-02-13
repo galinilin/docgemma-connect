@@ -353,41 +353,93 @@ def _describe_tool_call(result: dict) -> str:
     if tool == "save_clinical_note":
         return "Saved clinical note"
     if tool == "analyze_medical_image":
-        return "Analyzed image"
+        query = args.get("query", "")
+        return f"Analyzed image: {query[:80]}" if query else "Analyzed attached image"
     return f"Consulted {TOOL_CLINICAL_LABELS.get(tool, tool.replace('_', ' '))}"
 
 
 def _summarize_result(result: dict) -> str:
-    """Generate a brief summary of a tool result."""
+    """Generate a brief, content-rich summary of a tool result."""
     tool = result.get("tool_name", "")
     data = result.get("result", {})
+    args = result.get("args", {})
 
     if tool == "check_drug_safety":
         warnings = data.get("boxed_warnings", [])
-        return f"Found {len(warnings)} boxed warning(s)" if warnings else "No boxed warnings found"
+        if not warnings:
+            return "No boxed warnings"
+        first = warnings[0] if isinstance(warnings[0], str) else str(warnings[0])
+        return f"{len(warnings)} warning(s): {first[:100]}..."
+
     if tool == "check_drug_interactions":
         interactions = data.get("interactions", [])
-        return f"Found {len(interactions)} potential interaction(s)" if interactions else "No interactions found"
+        if not interactions:
+            return "No interactions found"
+        ix = interactions[0]
+        desc = ix.get("description", str(ix)) if isinstance(ix, dict) else str(ix)
+        return f"{len(interactions)} interaction(s): {desc[:100]}..."
+
     if tool == "search_medical_literature":
         articles = data.get("articles", [])
-        return f"Found {len(articles)} relevant article(s)"
+        if not articles:
+            return "No articles found"
+        first = articles[0]
+        title = first.get("title", str(first)) if isinstance(first, dict) else str(first)
+        return f"{len(articles)} article(s) — {title[:100]}"
+
     if tool == "find_clinical_trials":
         trials = data.get("trials", [])
-        return f"Found {len(trials)} active trial(s)"
+        if not trials:
+            return "No trials found"
+        first = trials[0]
+        title = first.get("title", first.get("brief_title", str(first))) if isinstance(first, dict) else str(first)
+        return f"{len(trials)} trial(s) — {title[:100]}"
+
     if tool == "search_patient":
         patients = data.get("patients", [])
-        return f"Found {len(patients)} patient(s)"
+        if not patients:
+            return "No patients found"
+        names = []
+        for p in patients[:3]:
+            names.append(p.get("name", p.get("full_name", "Unknown")) if isinstance(p, dict) else str(p))
+        return ", ".join(names)
+
     if tool == "get_patient_chart":
-        return "Chart retrieved"
+        # Try to extract patient name from formatted result
+        formatted = result.get("formatted_result", "")
+        if formatted:
+            first_line = formatted.split("\n")[0].strip()
+            return first_line[:120] if first_line else "Chart loaded"
+        return "Chart loaded"
+
     if tool == "add_allergy":
-        return "Allergy documented"
+        substance = args.get("substance", "")
+        reaction = args.get("reaction", "")
+        parts = [p for p in [substance, reaction] if p]
+        return f"Recorded: {', '.join(parts)}" if parts else "Allergy recorded"
+
     if tool == "prescribe_medication":
-        return "Medication prescribed"
+        med = args.get("medication_name", "")
+        dosage = args.get("dosage", "")
+        parts = [p for p in [med, dosage] if p]
+        return f"Ordered: {' '.join(parts)}" if parts else "Prescription created"
+
     if tool == "save_clinical_note":
-        return "Note saved"
+        note_type = args.get("note_type", "")
+        return f"Saved {note_type} note" if note_type else "Note saved"
+
     if tool == "analyze_medical_image":
-        return "Image analyzed"
-    return "Completed successfully"
+        findings = data.get("findings", "")
+        if findings:
+            clean = findings.replace("**", "").strip()
+            lines = [l.strip() for l in clean.split("\n") if l.strip()]
+            if lines and lines[0].lower().startswith("findings"):
+                lines = lines[1:]
+            preview = " ".join(lines[:2])
+            return preview[:150] + "..." if len(preview) > 150 else preview
+        return "No findings extracted"
+
+    return "Done"
 
 
 def _format_result_detail(result: dict) -> str | None:
@@ -497,12 +549,12 @@ def _build_clinical_trace(
     intent = state.get("intent", "DIRECT")
     dur = node_durations.get("intent_classify", 0)
     total_ms += dur
-    route_label = "Direct Answer" if intent == "DIRECT" else "Tool-Assisted Lookup"
+    route_desc = "Direct answer" if intent == "DIRECT" else "Tool lookup"
     steps.append(
         TraceStep(
             type=TraceStepType.THOUGHT,
-            label="Intent Classification",
-            description=f"Classified as: {route_label}",
+            label="Query Analysis",
+            description=route_desc,
             duration_ms=dur,
         )
     )
@@ -549,8 +601,8 @@ def _build_clinical_trace(
     steps.append(
         TraceStep(
             type=TraceStepType.SYNTHESIS,
-            label="Response Synthesis",
-            description="Combined findings into clinical response",
+            label="Composing Response",
+            description="",
             duration_ms=dur,
         )
     )

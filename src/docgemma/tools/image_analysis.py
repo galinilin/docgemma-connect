@@ -2,6 +2,10 @@
 
 Sends the image to the vLLM endpoint via OpenAI-compatible vision API
 and returns the model's clinical analysis.
+
+Uses assistant prefill to bypass the model's safety refusal pattern
+(MedGemma sometimes refuses with "I am unable to provide a medical
+analysis of the image" instead of extracting findings).
 """
 
 from __future__ import annotations
@@ -27,6 +31,10 @@ DEFAULT_QUERY = (
     "Identify the imaging modality, anatomical region, and any notable findings."
 )
 
+# Assistant prefill forces the model past its refusal pattern and into
+# structured clinical output.
+ASSISTANT_PREFILL = "**Findings:**\n\n"
+
 
 async def analyze_medical_image(input_data: ImageAnalysisInput) -> ImageAnalysisOutput:
     """Analyze a medical image using MedGemma vision.
@@ -49,13 +57,16 @@ async def analyze_medical_image(input_data: ImageAnalysisInput) -> ImageAnalysis
     # Encode image to base64
     image_b64 = base64.b64encode(input_data.image_data).decode("utf-8")
 
-    # Build OpenAI vision API messages with system priming
+    # Build OpenAI vision API messages with system priming + assistant prefill.
+    # The prefill forces the model to continue generating findings instead of
+    # emitting a safety refusal ("I am unable to provide a medical analysis…").
     messages = [
         {"role": "system", "content": VISION_SYSTEM_PROMPT},
         {"role": "user", "content": [
             {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}},
             {"type": "text", "text": query},
         ]},
+        {"role": "assistant", "content": ASSISTANT_PREFILL},
     ]
 
     headers = {"Content-Type": "application/json"}
@@ -67,6 +78,8 @@ async def analyze_medical_image(input_data: ImageAnalysisInput) -> ImageAnalysis
         "messages": messages,
         "max_tokens": 512,
         "temperature": 0.3,
+        "continue_final_message": True,
+        "add_generation_prompt": False,
     }
 
     try:
@@ -77,7 +90,10 @@ async def analyze_medical_image(input_data: ImageAnalysisInput) -> ImageAnalysis
                 headers=headers,
             )
             resp.raise_for_status()
-            findings = resp.json()["choices"][0]["message"]["content"]
+            raw = resp.json()["choices"][0]["message"]["content"]
+
+            # Prepend the prefill so the final output is complete
+            findings = ASSISTANT_PREFILL + raw if raw else ""
             return ImageAnalysisOutput(findings=findings, query=query, error=None)
 
     except httpx.TimeoutException:
