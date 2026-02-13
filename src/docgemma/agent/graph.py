@@ -390,6 +390,100 @@ def _summarize_result(result: dict) -> str:
     return "Completed successfully"
 
 
+def _format_result_detail(result: dict) -> str | None:
+    """Build a human-readable markdown string from a tool result."""
+    tool = result.get("tool_name", "")
+    data = result.get("result", {})
+
+    if tool == "check_drug_safety":
+        warnings = data.get("boxed_warnings", [])
+        if not warnings:
+            return "No boxed warnings found for this medication."
+        lines = [f"**Boxed warnings ({len(warnings)}):**"]
+        for w in warnings:
+            text = w if isinstance(w, str) else str(w)
+            lines.append(f"- {text}")
+        return "\n".join(lines)
+
+    if tool == "check_drug_interactions":
+        interactions = data.get("interactions", [])
+        if not interactions:
+            return "No drug interactions detected."
+        lines = [f"**Interactions ({len(interactions)}):**"]
+        for ix in interactions:
+            if isinstance(ix, dict):
+                desc = ix.get("description", ix.get("name", str(ix)))
+                severity = ix.get("severity", "")
+                sev_tag = f" *({severity})*" if severity else ""
+                lines.append(f"- {desc}{sev_tag}")
+            else:
+                lines.append(f"- {ix}")
+        return "\n".join(lines)
+
+    if tool == "search_medical_literature":
+        articles = data.get("articles", [])
+        if not articles:
+            return "No relevant articles found."
+        lines = [f"**Articles ({len(articles)}):**"]
+        for a in articles[:5]:
+            if isinstance(a, dict):
+                title = a.get("title", "Untitled")
+                year = a.get("year", a.get("pub_date", ""))
+                lines.append(f"- {title}" + (f" ({year})" if year else ""))
+            else:
+                lines.append(f"- {a}")
+        if len(articles) > 5:
+            lines.append(f"- *...and {len(articles) - 5} more*")
+        return "\n".join(lines)
+
+    if tool == "find_clinical_trials":
+        trials = data.get("trials", [])
+        if not trials:
+            return "No active clinical trials found."
+        lines = [f"**Trials ({len(trials)}):**"]
+        for t in trials[:5]:
+            if isinstance(t, dict):
+                title = t.get("title", t.get("brief_title", "Untitled"))
+                status = t.get("status", t.get("overall_status", ""))
+                lines.append(f"- {title}" + (f" — *{status}*" if status else ""))
+            else:
+                lines.append(f"- {t}")
+        if len(trials) > 5:
+            lines.append(f"- *...and {len(trials) - 5} more*")
+        return "\n".join(lines)
+
+    if tool == "get_patient_chart":
+        # formatted_result has the chart summary
+        formatted = result.get("formatted_result", "")
+        return formatted if formatted else "Patient chart retrieved."
+
+    if tool == "search_patient":
+        patients = data.get("patients", [])
+        if not patients:
+            return "No patients found."
+        lines = [f"**Patients ({len(patients)}):**"]
+        for p in patients:
+            if isinstance(p, dict):
+                name = p.get("name", p.get("full_name", "Unknown"))
+                pid = p.get("id", "")
+                lines.append(f"- {name}" + (f" (`{pid}`)" if pid else ""))
+            else:
+                lines.append(f"- {p}")
+        return "\n".join(lines)
+
+    if tool == "analyze_medical_image":
+        findings = data.get("findings", "")
+        return findings if findings else "Image analysis completed."
+
+    if tool in ("add_allergy", "prescribe_medication", "save_clinical_note"):
+        formatted = result.get("formatted_result", "")
+        return formatted if formatted else None
+
+    # Generic fallback: use formatted_result
+    formatted = result.get("formatted_result", "")
+    return formatted if formatted else None
+
+
 def _build_clinical_trace(
     state: dict, node_durations: dict[str, float]
 ) -> Any:
@@ -444,6 +538,7 @@ def _build_clinical_trace(
                 duration_ms=dur,
                 tool_name=tool,
                 tool_result_summary=_summarize_result(result),
+                tool_result_detail=_format_result_detail(result),
                 success=True,
             )
         )

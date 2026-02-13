@@ -94,6 +94,7 @@ class TraceStep(BaseModel):
     duration_ms: float | None = None
     tool_name: str | None = None
     tool_result_summary: str | None = None
+    tool_result_detail: str | None = None
     success: bool | None = None
     reasoning_text: str | None = None
 
