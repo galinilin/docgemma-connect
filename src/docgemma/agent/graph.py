@@ -353,7 +353,7 @@ def _describe_tool_call(result: dict) -> str:
     if tool == "save_clinical_note":
         return "Saved clinical note"
     if tool == "analyze_medical_image":
-        return "Analyzed medical image"
+        return "Analyzed image"
     return f"Consulted {TOOL_CLINICAL_LABELS.get(tool, tool.replace('_', ' '))}"
 
 
