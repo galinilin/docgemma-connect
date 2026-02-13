@@ -172,9 +172,14 @@ async def websocket_chat(
                 event_dict = event.model_dump(mode="json")
                 await send_queue.put(event_dict)
 
-                # If completion, also store the assistant message
+                # If completion, also store the assistant message with trace metadata
                 if event.event == "completion":
-                    store.add_message(session_id, "assistant", event.final_response)
+                    metadata: dict = {"tool_calls_made": event.tool_calls_made}
+                    if event.clinical_trace is not None:
+                        metadata["clinical_trace"] = event.clinical_trace.model_dump(mode="json")
+                    store.add_message(
+                        session_id, "assistant", event.final_response, metadata=metadata,
+                    )
         except asyncio.CancelledError:
             logger.info(f"Agent task cancelled for session {session_id}")
         except Exception as e:

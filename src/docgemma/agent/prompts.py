@@ -424,9 +424,9 @@ ACTION_VERBS: frozenset[str] = frozenset({
 # SAFETY CONSTANTS
 # =============================================================================
 
-MAX_STEPS = 4           # Hard limit on tool loop iterations
-MAX_RETRIES = 2         # Per-tool retry limit
-MAX_TOTAL_RETRIES = 4   # Across all tools in one conversation turn
+MAX_STEPS = 2           # Hard limit on tool loop iterations
+MAX_RETRIES = 1         # Per-tool retry limit
+MAX_TOTAL_RETRIES = 2   # Across all tools in one conversation turn
 
 # Tools that modify patient data — require explicit user approval
 WRITE_TOOLS: frozenset[str] = frozenset({
