@@ -724,9 +724,18 @@ async def _fetch_imaging_studies(client, patient_id: str) -> list[ImagingStudyIn
             image_url = content.get("url", "")
             content_type = content.get("contentType", "image/jpeg")
 
-            # Extract description from note
+            # Extract description (first note) and report (second note)
             notes = resource.get("note", [])
-            description = notes[0].get("text") if notes else None
+            description = None
+            report = None
+            report_author = None
+            for note in notes:
+                author = note.get("authorString")
+                if author and author.startswith("Report:"):
+                    report = note.get("text")
+                    report_author = author.removeprefix("Report:").strip() or None
+                elif description is None:
+                    description = note.get("text")
 
             studies.append(
                 ImagingStudyInfo(
@@ -738,6 +747,8 @@ async def _fetch_imaging_studies(client, patient_id: str) -> list[ImagingStudyIn
                     if resource.get("createdDateTime")
                     else None,
                     description=description,
+                    report=report,
+                    report_author=report_author,
                     content_type=content_type,
                     image_url=image_url,
                 )

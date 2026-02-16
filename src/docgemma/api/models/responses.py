@@ -153,7 +153,9 @@ class ImagingStudyInfo(BaseModel):
     modality_display: str | None = Field(None, description="Modality display name")
     body_site: str | None = Field(None, description="Body site imaged")
     study_date: str | None = Field(None, description="Study date")
-    description: str | None = Field(None, description="Study description/notes")
+    description: str | None = Field(None, description="Clinical indication / study description")
+    report: str | None = Field(None, description="Specialist report / interpretation")
+    report_author: str | None = Field(None, description="Reporting specialist name")
     content_type: str = Field(default="image/jpeg", description="Image MIME type")
     image_url: str = Field(..., description="URL to retrieve the image")
 

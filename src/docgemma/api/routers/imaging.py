@@ -43,6 +43,8 @@ async def upload_imaging(
     body_site: str = Form(""),
     study_date: str = Form(""),
     description: str = Form(""),
+    report: str = Form(""),
+    report_author: str = Form(""),
 ) -> ImagingResponse:
     """Upload a medical image and create a FHIR Media resource."""
     # Validate content type
@@ -100,8 +102,16 @@ async def upload_imaging(
     if body_site.strip():
         media_resource["bodySite"] = {"text": body_site.strip()}
 
+    notes = []
     if description.strip():
-        media_resource["note"] = [{"text": description.strip()}]
+        notes.append({"text": description.strip()})
+    if report.strip():
+        notes.append({
+            "authorString": f"Report:{report_author.strip() or 'Unknown'}",
+            "text": report.strip(),
+        })
+    if notes:
+        media_resource["note"] = notes
 
     try:
         result = await client.post("/Media", media_resource)
