@@ -1,0 +1,31 @@
+{
+  "resourceType": "Media",
+  "status": "completed",
+  "type": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/media-type",
+        "code": "image"
+      }
+    ]
+  },
+  "modality": {
+    "coding": [
+      {
+        "system": "http://dicom.nema.org/resources/ontology/DCM",
+        "code": "DX",
+        "display": "Digital Radiography"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/8703e9b1-34f3-748d-0291-6e070e332243"
+  },
+  "createdDateTime": "",
+  "content": {
+    "contentType": "image/jpeg",
+    "url": "/api/imaging/cd11d610-3212-4356-9dc8-edfe9e33871f",
+    "title": "Digital Radiography study"
+  },
+  "id": "cd11d610-3212-4356-9dc8-edfe9e33871f"
+}
