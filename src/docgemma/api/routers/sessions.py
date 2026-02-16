@@ -280,7 +280,10 @@ async def websocket_chat(
                     agent_task = asyncio.create_task(_run_agent_stream(event_gen))
 
             elif action == "approve_tool":
-                event_gen = await _prepare_tool_approval(websocket, session, runner, approved=True)
+                edited_args = data.get("edited_args")
+                event_gen = await _prepare_tool_approval(
+                    websocket, session, runner, approved=True, edited_args=edited_args
+                )
                 if event_gen is not None:
                     send_queue = asyncio.Queue()
                     agent_task = asyncio.create_task(_run_agent_stream(event_gen))
@@ -411,6 +414,7 @@ async def _prepare_tool_approval(
     runner: AgentRunner,
     approved: bool,
     reason: str | None = None,
+    edited_args: dict | None = None,
 ):
     """Validate and prepare a tool approval/rejection.
 
@@ -429,6 +433,7 @@ async def _prepare_tool_approval(
         session=session,
         approved=approved,
         rejection_reason=reason,
+        edited_args=edited_args,
     )
 
 

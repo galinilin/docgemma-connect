@@ -154,6 +154,7 @@ class AgentRunner:
         session: Session,
         approved: bool,
         rejection_reason: str | None = None,
+        edited_args: dict | None = None,
     ) -> AsyncGenerator[AgentEvent, None]:
         """Resume execution after tool approval/rejection.
 
@@ -161,6 +162,7 @@ class AgentRunner:
             session: The session object (must have pending_approval)
             approved: Whether the tool was approved
             rejection_reason: Optional reason if rejected
+            edited_args: Optional user-edited tool arguments to replace _planned_args
 
         Yields:
             AgentEvent objects for remaining execution
@@ -178,6 +180,10 @@ class AgentRunner:
         config = self._make_thread_id(session.session_id)
 
         if approved:
+            # Apply user's edited args to graph state before resuming
+            if edited_args:
+                self._graph.update_state(config, {"_planned_args": edited_args})
+
             # Continue execution - tool will be executed
             try:
                 async for event in self._stream_execution(
