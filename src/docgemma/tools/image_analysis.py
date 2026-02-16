@@ -44,7 +44,7 @@ async def analyze_medical_image(input_data: ImageAnalysisInput) -> ImageAnalysis
     """
     endpoint = os.environ.get("DOCGEMMA_ENDPOINT", "").rstrip("/")
     api_key = os.environ.get("DOCGEMMA_API_KEY", "")
-    model_id = os.environ.get("DOCGEMMA_MODEL", "google/medgemma-1.5-4b-it")
+    model_id = os.environ.get("DOCGEMMA_MODEL", "google/medgemma-27b-it")
     query = input_data.query or DEFAULT_QUERY
 
     if not endpoint:

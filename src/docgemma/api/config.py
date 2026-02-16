@@ -25,7 +25,7 @@ class APIConfig:
     # Model configuration is handled via environment variables:
     # - DOCGEMMA_ENDPOINT: vLLM or OpenAI-compatible API endpoint
     # - DOCGEMMA_API_KEY: API key for authentication
-    # - DOCGEMMA_MODEL: Model name (default: google/medgemma-1.5-4b-it)
+    # - DOCGEMMA_MODEL: Model name (default: google/medgemma-27b-it)
     load_model_on_startup: bool = True
     enable_tool_approval: bool = True
 

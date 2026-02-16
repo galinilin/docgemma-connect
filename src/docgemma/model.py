@@ -34,7 +34,7 @@ class DocGemma:
     Usage:
         export DOCGEMMA_ENDPOINT="https://your-vllm-endpoint.com"
         export DOCGEMMA_API_KEY="your-api-key"
-        export DOCGEMMA_MODEL="google/medgemma-1.5-4b-it"
+        export DOCGEMMA_MODEL="google/medgemma-27b-it"
 
         from docgemma import DocGemma
         model = DocGemma()
@@ -69,7 +69,7 @@ class DocGemma:
         self._endpoint = self._endpoint.rstrip("/")
 
         self._api_key = api_key or os.environ.get("DOCGEMMA_API_KEY", "")
-        self._model = model or os.environ.get("DOCGEMMA_MODEL", "google/medgemma-1.5-4b-it")
+        self._model = model or os.environ.get("DOCGEMMA_MODEL", "google/medgemma-27b-it")
         self._timeout = timeout
         self._system_prompt = system_prompt
 
