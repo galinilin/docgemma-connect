@@ -63,6 +63,22 @@ class FhirJsonStore:
         # Search: /ResourceType?params
         return self._search(resource_type, params or {})
 
+    async def delete(self, path: str) -> bool:
+        """Delete a FHIR resource from disk.
+
+        Accepts ``/ResourceType/id``.
+        Returns True if deleted, raises ResourceNotFoundError if missing.
+        """
+        parts = path.strip("/").split("/")
+        if len(parts) != 2:
+            raise ValueError(f"Delete requires /ResourceType/id, got: {path}")
+        resource_type, resource_id = parts
+        file_path = self._data_dir / resource_type / f"{resource_id}.json"
+        if not file_path.exists():
+            raise ResourceNotFoundError(f"{resource_type}/{resource_id} not found")
+        file_path.unlink()
+        return True
+
     async def post(self, path: str, data: dict) -> dict:
         """Write a new FHIR resource to disk.
 
@@ -122,7 +138,7 @@ class FhirJsonStore:
             if sort_field == "date":
                 # Try multiple date fields: effectiveDateTime (Observation), date (DocumentReference)
                 resources.sort(
-                    key=lambda r: self._get_nested(r, "effectiveDateTime") or self._get_nested(r, "date") or "",
+                    key=lambda r: self._get_nested(r, "effectiveDateTime") or self._get_nested(r, "date") or self._get_nested(r, "createdDateTime") or "",
                     reverse=descending,
                 )
                 sort_field = None  # already sorted

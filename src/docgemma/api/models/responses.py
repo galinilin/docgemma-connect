@@ -145,6 +145,28 @@ class VisitNote(BaseModel):
     content: str = Field(..., description="Decoded note text")
 
 
+class ImagingStudyInfo(BaseModel):
+    """Information about a medical imaging study."""
+
+    id: str | None = Field(None, description="Imaging study ID")
+    modality: str | None = Field(None, description="Modality code (CT, DX, MR, SM)")
+    modality_display: str | None = Field(None, description="Modality display name")
+    body_site: str | None = Field(None, description="Body site imaged")
+    study_date: str | None = Field(None, description="Study date")
+    description: str | None = Field(None, description="Study description/notes")
+    content_type: str = Field(default="image/jpeg", description="Image MIME type")
+    image_url: str = Field(..., description="URL to retrieve the image")
+
+
+class ImagingResponse(BaseModel):
+    """Response after uploading an imaging study."""
+
+    success: bool = Field(..., description="Whether the operation succeeded")
+    media_id: str | None = Field(None, description="Created media resource ID")
+    message: str = Field(..., description="Status message")
+    error: str | None = Field(None, description="Error message if failed")
+
+
 class PatientChartResponse(BaseModel):
     """Full patient chart response."""
 
@@ -161,6 +183,7 @@ class PatientChartResponse(BaseModel):
     vitals: list[VitalSign] = Field(default_factory=list)
     screenings: list[ScreeningResult] = Field(default_factory=list)
     visit_notes: list[VisitNote] = Field(default_factory=list)
+    imaging_studies: list[ImagingStudyInfo] = Field(default_factory=list)
     error: str | None = Field(None, description="Error message if retrieval failed")
 
 

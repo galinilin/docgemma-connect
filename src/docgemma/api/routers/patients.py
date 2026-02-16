@@ -20,6 +20,7 @@ from ..models.responses import (
     AllergyInfo,
     AllergyResponse,
     ConditionInfo,
+    ImagingStudyInfo,
     LabResult,
     MedicationInfo,
     MedicationResponse,
@@ -148,6 +149,7 @@ async def get_patient(patient_id: str) -> PatientChartResponse:
         vitals = await _fetch_vitals(client, patient_id)
         screenings = await _fetch_screenings(client, patient_id)
         visit_notes = await _fetch_visit_notes(client, patient_id)
+        imaging_studies = await _fetch_imaging_studies(client, patient_id)
 
         return PatientChartResponse(
             patient_id=patient_id,
@@ -163,6 +165,7 @@ async def get_patient(patient_id: str) -> PatientChartResponse:
             vitals=vitals,
             screenings=screenings,
             visit_notes=visit_notes,
+            imaging_studies=imaging_studies,
         )
 
     except Exception as e:
@@ -669,6 +672,58 @@ async def _fetch_visit_notes(client, patient_id: str) -> list[VisitNote]:
         # Sort all notes by date descending
         all_notes.sort(key=lambda n: n.date or "", reverse=True)
         return all_notes
+    except Exception:
+        return []
+
+
+async def _fetch_imaging_studies(client, patient_id: str) -> list[ImagingStudyInfo]:
+    """Fetch medical imaging studies (FHIR Media resources)."""
+    try:
+        data = await client.get(
+            "/Media",
+            params={
+                "subject": patient_id,
+                "_count": "50",
+                "_sort": "-date",
+            },
+        )
+        studies: list[ImagingStudyInfo] = []
+        for entry in data.get("entry", []):
+            resource = entry.get("resource", {})
+
+            # Extract modality coding
+            modality_obj = resource.get("modality", {})
+            modality_codings = modality_obj.get("coding", [])
+            modality_code = modality_codings[0].get("code") if modality_codings else None
+            modality_display = modality_codings[0].get("display") if modality_codings else None
+
+            # Extract body site
+            body_site = resource.get("bodySite", {}).get("text")
+
+            # Extract content info
+            content = resource.get("content", {})
+            image_url = content.get("url", "")
+            content_type = content.get("contentType", "image/jpeg")
+
+            # Extract description from note
+            notes = resource.get("note", [])
+            description = notes[0].get("text") if notes else None
+
+            studies.append(
+                ImagingStudyInfo(
+                    id=resource.get("id"),
+                    modality=modality_code,
+                    modality_display=modality_display,
+                    body_site=body_site,
+                    study_date=resource.get("createdDateTime", "")[:10]
+                    if resource.get("createdDateTime")
+                    else None,
+                    description=description,
+                    content_type=content_type,
+                    image_url=image_url,
+                )
+            )
+        return studies
     except Exception:
         return []
 
