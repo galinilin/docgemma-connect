@@ -133,16 +133,3 @@ class ResultAssessment(BaseModel):
     )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Node 5a — Retry Strategy (LLM-assisted, 92% accuracy — Part III, Section 35)
-# ─────────────────────────────────────────────────────────────────────────────
-
-class RetryStrategy(BaseModel):
-    """Choose retry approach.  Strategy field FIRST."""
-
-    strategy: Literal["retry_same", "retry_different_args"]
-    reasoning: Optional[str] = Field(
-        default=None,
-        max_length=100,
-        description="Brief explanation of retry rationale",
-    )

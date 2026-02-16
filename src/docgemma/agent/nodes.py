@@ -1,6 +1,6 @@
 """Agent node implementations for DocGemma v3.
 
-7-node architecture with binary intent classification and reactive tool loop.
+6-node architecture with binary intent classification and reactive tool loop.
 Every design decision is grounded in 856 experiments on MedGemma 4B.
 
 Nodes:
@@ -9,8 +9,7 @@ Nodes:
   3. tool_select        — LLM + Outlines, two-stage, T=0.0
   4. tool_execute       — deterministic tool dispatch (async)
   5. result_classify    — LLM + Outlines, T=0.0
-  5a. error_handler     — hybrid (deterministic rules + LLM for retry)
-  7. synthesize         — LLM free-form streaming, T=0.5
+  6. synthesize         — LLM free-form streaming, T=0.5
 """
 
 from __future__ import annotations
@@ -26,10 +25,8 @@ from .prompts import (
     ACTION_VERBS,
     COMMON_DRUGS,
     DIRECT_CHAT_PROMPT,
-    ERROR_RETRY_PROMPT,
     ERROR_TEMPLATES,
     INTENT_CLASSIFY_PROMPT,
-    MAX_RETRIES,
     MAX_STEPS,
     MAX_TOKENS,
     RESULT_CLASSIFY_PROMPT,
@@ -47,7 +44,6 @@ from .prompts import (
 from .schemas import (
     IntentClassification,
     ResultAssessment,
-    RetryStrategy,
     ToolSelection,
     TOOL_ARG_SCHEMAS,
 )
@@ -600,7 +596,6 @@ async def tool_execute(state: AgentState, tool_executor: Callable) -> dict:
         return {
             "tool_results": [tool_result],
             "step_count": step_count + 1,
-            "retry_count": 0,  # Reset on each execution attempt
             "_planned_tool": None,
             "_planned_args": None,
         }
@@ -630,7 +625,6 @@ async def tool_execute(state: AgentState, tool_executor: Callable) -> dict:
         return {
             "tool_results": [tool_result],
             "step_count": step_count + 1,
-            "retry_count": 0,
             "_planned_tool": None,
             "_planned_args": None,
         }
@@ -712,110 +706,6 @@ def result_classify(state: AgentState, model: DocGemma) -> dict:
         "last_result_classification": result.quality,
         "last_result_summary": result.brief_summary,
     }
-
-
-# =============================================================================
-# Node 5a: ERROR_HANDLER (hybrid: deterministic rules + LLM)
-# =============================================================================
-
-
-def error_handler(state: AgentState, model: DocGemma) -> dict:
-    """Handle errors with deterministic rules and LLM-assisted retry decisions.
-
-    Priority order:
-    1. Deterministic: user clarification needed → ask user
-    2. Deterministic: retry_count >= MAX_RETRIES → skip
-    3. Deterministic: not_found → skip (no point retrying)
-    4. LLM-assisted: retry_same vs retry_different_args (92% accuracy)
-    """
-    tool_results = state.get("tool_results", [])
-    retry_count = state.get("retry_count", 0)
-    error_messages = list(state.get("error_messages", []))
-
-    if not tool_results:
-        return {"error_messages": error_messages + ["No tool results to evaluate"]}
-
-    last = tool_results[-1]
-    tool_name = last.get("tool_name", "unknown")
-    tool_label = last.get("tool_label", tool_name)
-    error_str = last.get("error", "")
-    error_type = last.get("error_type", "generic")
-
-    # ── Deterministic: user clarification needed ──
-    clarification = _needs_user_clarification(tool_results)
-    if clarification:
-        return {"clarification_request": clarification}
-
-    # ── Deterministic: max retries exceeded → skip ──
-    if retry_count >= MAX_RETRIES:
-        logger.info(
-            f"[ERROR_HANDLER] Max retries ({MAX_RETRIES}) for {tool_name}, skipping"
-        )
-        error_messages.append(
-            ERROR_TEMPLATES["generic"].format(tool_label=tool_label, entity="")
-        )
-        return {"error_messages": error_messages, "retry_count": 0}
-
-    # ── Deterministic: not_found → skip (no point retrying) ──
-    if error_type == "not_found":
-        error_messages.append(
-            error_str
-            or ERROR_TEMPLATES["not_found"].format(tool_label=tool_label, entity="")
-        )
-        return {"error_messages": error_messages, "retry_count": 0}
-
-    # ── LLM-assisted: retry strategy decision ──
-    prompt = ERROR_RETRY_PROMPT.format(
-        tool_name=tool_name,
-        tool_args=json.dumps(last.get("args", {}), default=str),
-        error_message=error_str,
-    )
-
-    result = model.generate_outlines(
-        prompt,
-        RetryStrategy,
-        temperature=TEMPERATURE["error_retry"],
-        max_new_tokens=MAX_TOKENS["error_retry"],
-    )
-
-    logger.info(f"[ERROR_HANDLER] strategy={result.strategy} for {tool_name}")
-
-    if result.strategy == "retry_same":
-        # Re-plan same tool/args → routes to tool_execute
-        return {
-            "retry_count": retry_count + 1,
-            "_planned_tool": tool_name,
-            "_planned_args": last.get("args", {}),
-        }
-
-    # retry_different_args — re-extract args with error context
-    arg_schema = TOOL_ARG_SCHEMAS.get(tool_name)
-    if arg_schema:
-        error_hint = f"\nPrevious attempt failed: {error_str}. Adjust the arguments."
-        stage2_prompt = TOOL_SELECT_STAGE2_PROMPT.format(
-            tool_name=tool_name,
-            tool_description=_TOOL_STAGE2_DESC.get(tool_name, ""),
-            user_query=state.get("user_query", "") + error_hint,
-            entity_hints="",
-        )
-        arg_result = model.generate_outlines(
-            stage2_prompt,
-            arg_schema,
-            temperature=0.0,
-            max_new_tokens=128,
-        )
-        new_args = arg_result.model_dump()
-        return {
-            "retry_count": retry_count + 1,
-            "_planned_tool": tool_name,
-            "_planned_args": new_args,
-        }
-
-    # Fallback: skip
-    error_messages.append(
-        ERROR_TEMPLATES["generic"].format(tool_label=tool_label, entity="")
-    )
-    return {"error_messages": error_messages, "retry_count": 0}
 
 
 # =============================================================================
@@ -990,12 +880,22 @@ def route_after_result_classify(state: dict) -> str:
     """
     classification = state.get("last_result_classification", "")
 
-    # Error → error_handler
+    # Error → synthesize directly (no retry loop)
     if classification.startswith("error"):
+        # Append pre-formatted error from the last tool result so synthesis has context
+        tool_results = state.get("tool_results", [])
+        if tool_results:
+            last = tool_results[-1]
+            error_msg = last.get("error") or ERROR_TEMPLATES["generic"].format(
+                tool_label=last.get("tool_label", "Unknown"), entity=""
+            )
+            error_messages = list(state.get("error_messages", []))
+            error_messages.append(error_msg)
+            state["error_messages"] = error_messages
         logger.info(
-            f"[ROUTE] result_classify → error_handler ({classification})"
+            f"[ROUTE] result_classify → synthesize ({classification})"
         )
-        return "error_handler"
+        return "synthesize"
 
     query = state.get("user_query", "")
     tool_results = state.get("tool_results", [])
@@ -1042,22 +942,3 @@ def route_after_result_classify(state: dict) -> str:
     return "synthesize"
 
 
-def route_after_error_handler(state: dict) -> str:
-    """Route after error handler.
-
-    clarification_request set → synthesize (ask user).
-    _planned_tool set → tool_execute (retry same or retry with new args).
-    retry_count > 0 (no planned tool) → tool_select (should not happen normally).
-    retry_count = 0 → synthesize (skip, error logged).
-    """
-    if state.get("clarification_request"):
-        logger.info("[ROUTE] error_handler → synthesize (ask user)")
-        return "synthesize"
-    if state.get("_planned_tool"):
-        logger.info("[ROUTE] error_handler → tool_execute (retry)")
-        return "tool_execute"
-    if state.get("retry_count", 0) > 0:
-        logger.info("[ROUTE] error_handler → tool_select (retry different)")
-        return "tool_select"
-    logger.info("[ROUTE] error_handler → synthesize (skip)")
-    return "synthesize"

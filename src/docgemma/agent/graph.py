@@ -1,13 +1,12 @@
 """LangGraph workflow definition for DocGemma v3 agent.
 
-7-node architecture with binary intent classification and reactive tool loop:
+6-node architecture with binary intent classification and reactive tool loop:
 
   INPUT_ASSEMBLY → INTENT_CLASSIFY
     → DIRECT    → SYNTHESIZE → END
     → TOOL_NEEDED → TOOL_SELECT → TOOL_EXECUTE → RESULT_CLASSIFY
-                     ↑              → [error] → ERROR_HANDLER → [retry → TOOL_EXECUTE | skip → SYNTHESIZE]
-                     └──────────────← [more tools needed]
-                                    → [done] → SYNTHESIZE → END
+                     ↑──────────────← [more tools needed]
+                                    → [done/error] → SYNTHESIZE → END
 
 Grounded in 856 experiments on MedGemma 4B (see MEDGEMMA_PROMPTING_GUIDE.md).
 """
@@ -24,11 +23,9 @@ from langgraph.graph import END, StateGraph
 
 from .nodes import (
     StreamCallback,
-    error_handler,
     input_assembly,
     intent_classify,
     result_classify,
-    route_after_error_handler,
     route_after_intent,
     route_after_result_classify,
     synthesize,
@@ -111,15 +108,6 @@ _STATUS_POOLS: dict[str, list[str]] = {
         "Processing results...",
         "Reviewing results...",
         "Interpreting findings...",
-    ],
-    "handling_error": [
-        "Handling error...",
-        "Working around an issue...",
-        "Recovering from error...",
-    ],
-    "retrying": [
-        "Retrying...",
-        "Trying again...",
     ],
 }
 
@@ -255,7 +243,6 @@ def _make_initial_state(
         "current_args": None,
         "tool_results": [],
         "step_count": 0,
-        "retry_count": 0,
         # Result Classification
         "last_result_classification": None,
         "last_result_summary": None,
@@ -301,14 +288,6 @@ def _get_status_text(node_name: str, state_update: dict) -> str | None:
         return _pick("processing_results")
 
     if node_name == "result_classify":
-        classification = state.get("last_result_classification", "")
-        if classification.startswith("error"):
-            return _pick("handling_error")
-        return _pick("composing_response")
-
-    if node_name == "error_handler":
-        if state.get("_planned_tool"):
-            return _pick("retrying")
         return _pick("composing_response")
 
     # synthesize — terminal, no next status
@@ -624,7 +603,6 @@ _NODE_LABELS = {
     "tool_select": "Tool Selection",
     "tool_execute": "Tool Execution",
     "result_classify": "Result Classification",
-    "error_handler": "Error Handler",
     "synthesize": "Response Synthesis",
 }
 
@@ -658,7 +636,7 @@ def build_graph(
     interrupt_before: list[str] | None = None,
     stream_callback: StreamCallback = None,
 ) -> StateGraph:
-    """Build the DocGemma v3 agent graph (7-node binary classification).
+    """Build the DocGemma v3 agent graph (6-node binary classification).
 
     Args:
         model: DocGemma model instance (must be loaded).
@@ -700,12 +678,7 @@ def build_graph(
         "result_classify", lambda s: result_classify(s, model)
     )
 
-    # 5a. Error handler (hybrid: deterministic + LLM)
-    workflow.add_node(
-        "error_handler", lambda s: error_handler(s, model)
-    )
-
-    # 7. Synthesize (LLM streaming, terminal)
+    # 6. Synthesize (LLM streaming, terminal)
     async def _synthesize(s):
         return await synthesize(s, model, stream_callback)
 
@@ -732,25 +705,13 @@ def build_graph(
     # tool_execute → result_classify
     workflow.add_edge("tool_execute", "result_classify")
 
-    # result_classify → conditional: synthesize / tool_select / error_handler
+    # result_classify → conditional: synthesize / tool_select
     workflow.add_conditional_edges(
         "result_classify",
         route_after_result_classify,
         {
             "synthesize": "synthesize",
             "tool_select": "tool_select",
-            "error_handler": "error_handler",
-        },
-    )
-
-    # error_handler → conditional: tool_execute (retry) / tool_select (different) / synthesize (skip)
-    workflow.add_conditional_edges(
-        "error_handler",
-        route_after_error_handler,
-        {
-            "tool_execute": "tool_execute",
-            "tool_select": "tool_select",
-            "synthesize": "synthesize",
         },
     )
 

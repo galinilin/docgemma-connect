@@ -34,7 +34,6 @@ TEMPERATURE: dict[str, float] = {
     "tool_select_stage1": 0.0,    # Operational — deterministic
     "tool_select_stage2": 0.0,    # Operational — deterministic
     "result_classify": 0.0,       # Classification — deterministic
-    "error_retry": 0.0,           # Operational — deterministic
     "synthesize": 0.5,            # Free-form — validated optimum (Part IV §43)
 }
 
@@ -43,7 +42,6 @@ MAX_TOKENS: dict[str, int] = {
     "tool_select_stage1": 64,
     "tool_select_stage2": 128,
     "result_classify": 128,
-    "error_retry": 64,
     "synthesize": 256,            # Validated optimum (Part IV §46)
 }
 
@@ -252,19 +250,6 @@ Result:
 Classify the result quality and provide a brief summary."""
 
 
-# ── Node 5a: ERROR_HANDLER retry decision ────────────────────────────────────
-
-ERROR_RETRY_PROMPT = """\
-The tool call failed. Decide whether to retry with the same arguments or different arguments.
-
-Tool: {tool_name}
-Arguments used: {tool_args}
-Error: {error_message}
-
-Choose retry_same if this is a transient error (timeout, temporary unavailability).
-Choose retry_different_args if the arguments were wrong or incomplete."""
-
-
 # ── Node 7: SYNTHESIZE (system prompt) ───────────────────────────────────────
 
 SYNTHESIZE_SYSTEM_PROMPT = """\
@@ -415,8 +400,6 @@ ACTION_VERBS: frozenset[str] = frozenset({
 # =============================================================================
 
 MAX_STEPS = 2           # Hard limit on tool loop iterations
-MAX_RETRIES = 1         # Per-tool retry limit
-MAX_TOTAL_RETRIES = 2   # Across all tools in one conversation turn
 
 # Tools that modify patient data — require explicit user approval
 WRITE_TOOLS: frozenset[str] = frozenset({

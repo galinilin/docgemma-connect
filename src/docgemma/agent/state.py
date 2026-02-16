@@ -57,7 +57,6 @@ class AgentState(TypedDict, total=False):
     current_args: Optional[dict[str, Any]]
     tool_results: Annotated[list[ToolResult], operator.add]  # Accumulates
     step_count: int  # Number of tool loop iterations completed
-    retry_count: int  # Retries for current tool
 
     # ── Result Classification (Node 5) ──
     last_result_classification: Optional[str]  # quality enum value
