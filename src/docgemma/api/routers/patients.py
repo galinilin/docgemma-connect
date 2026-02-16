@@ -6,6 +6,7 @@ via the local FHIR JSON store.
 
 from __future__ import annotations
 
+import base64
 import re
 
 from fastapi import APIRouter, HTTPException, Query
@@ -493,8 +494,11 @@ async def _fetch_labs(client, patient_id: str) -> list[LabResult]:
 
 
 async def _fetch_notes(client, patient_id: str) -> list:
-    """Fetch patient clinical notes."""
+    """Fetch patient clinical notes (excludes visit documentation like HPI/ROS/PE)."""
     from ..models.responses import ClinicalNote
+
+    # LOINC codes already shown in Visit Documentation section
+    _VISIT_DOC_LOINC = {"10164-2", "10187-3", "29545-1"}
 
     try:
         data = await client.get(
@@ -505,14 +509,31 @@ async def _fetch_notes(client, patient_id: str) -> list:
         for entry in data.get("entry", []):
             resource = entry.get("resource", {})
             doc_type = resource.get("type", {})
+
+            # Skip notes that belong to the Visit Documentation section
+            codings = doc_type.get("coding", [])
+            loinc_codes = {c.get("code") for c in codings if c.get("code")}
+            if loinc_codes & _VISIT_DOC_LOINC:
+                continue
+
             note_type = doc_type.get("text") or _get_coding_display(doc_type) or "Note"
+
+            # Decode base64 content from attachment if available
+            preview = None
+            try:
+                attachment = resource.get("content", [{}])[0].get("attachment", {})
+                b64_data = attachment.get("data")
+                if b64_data:
+                    preview = base64.b64decode(b64_data).decode("utf-8")
+            except Exception:
+                pass
 
             notes.append(
                 ClinicalNote(
                     id=resource.get("id"),
                     note_type=note_type,
                     date=resource.get("date", "")[:10] if resource.get("date") else None,
-                    preview=None,  # Could decode content if needed
+                    preview=preview,
                 )
             )
         return notes
@@ -618,8 +639,6 @@ async def _fetch_screenings(client, patient_id: str) -> list[ScreeningResult]:
 
 async def _fetch_visit_notes(client, patient_id: str) -> list[VisitNote]:
     """Fetch visit documentation (HPI, Review of Systems, Physical Exam)."""
-    import base64
-
     loinc_map = {
         "10164-2": "HPI",
         "10187-3": "Review of Systems",
