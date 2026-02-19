@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-thomas-reeves-ros",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-thomas-reeves"
+  },
+  "date": "2026-02-10T15:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Amanda Torres, MD - Allergy/Immunology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Q29uc3RpdHV0aW9uYWw6IE5vIGZldmVyLCB3ZWlnaHQgbG9zcywgb3IgbmlnaHQgc3dlYXRzLiBSZXBvcnRzIGluY3JlYXNlZCBhbnhpZXR5IHJlbGF0ZWQgdG8gb3V0ZG9vciBhY3Rpdml0aWVzIHNpbmNlIHRoZSBhbmFwaHlsYWN0aWMgZXZlbnQuCkhFRU5UOiBObyBuYXNhbCBjb25nZXN0aW9uLCByaGlub3JyaGVhLCBvciBzaW51cyBwcmVzc3VyZS4gTm8gdGhyb2F0IHRpZ2h0bmVzcyBvciBkeXNwaGFnaWEgY3VycmVudGx5LgpDYXJkaW92YXNjdWxhcjogTm8gY2hlc3QgcGFpbiwgcGFscGl0YXRpb25zLCBvciBzaG9ydG5lc3Mgb2YgYnJlYXRoIGF0IHJlc3QuIE5vIGxpZ2h0aGVhZGVkbmVzcyBvciBzeW5jb3BlLiBSZXBvcnRzIGdvb2QgZXhlcmNpc2UgdG9sZXJhbmNlLgpSZXNwaXJhdG9yeTogTm8gY291Z2gsIHdoZWV6aW5nLCBvciBkeXNwbmVhLiBObyBoaXN0b3J5IG9mIGFzdGhtYS4KR2FzdHJvaW50ZXN0aW5hbDogTm8gbmF1c2VhLCB2b21pdGluZywgYWJkb21pbmFsIHBhaW4sIG9yIGRpYXJyaGVhLgpTa2luOiBObyBjdXJyZW50IHVydGljYXJpYSwgYW5naW9lZGVtYSwgb3IgcHJ1cml0dXMuIE5vIGVjemVtYSBvciBjaHJvbmljIHNraW4gY29uZGl0aW9ucy4KTmV1cm9sb2dpY2FsOiBObyBoZWFkYWNoZSwgZGl6emluZXNzLCBvciBudW1ibmVzcy4gTm8gdGluZ2xpbmcuClBzeWNoaWF0cmljOiBSZXBvcnRzIGhlaWdodGVuZWQgYW54aWV0eSB3aGVuIG91dGRvb3JzLCBlc3BlY2lhbGx5IG5lYXIgZmxvd2VyaW5nIHBsYW50cy4gTm8gcGFuaWMgYXR0YWNrcy4gU2xlZXAgaXMgb2NjYXNpb25hbGx5IGRpc3J1cHRlZCBieSB3b3JyeSBhYm91dCBmdXR1cmUgc3RpbmdzLg=="
+      }
+    }
+  ]
+}

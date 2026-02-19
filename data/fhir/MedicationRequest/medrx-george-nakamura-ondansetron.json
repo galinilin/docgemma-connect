@@ -1,0 +1,50 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-george-nakamura-ondansetron",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "312087",
+        "display": "Ondansetron 8 MG Oral Tablet"
+      }
+    ],
+    "text": "Ondansetron 8mg"
+  },
+  "subject": {
+    "reference": "Patient/patient-george-nakamura",
+    "display": "George Nakamura"
+  },
+  "authoredOn": "2025-11-15",
+  "dosageInstruction": [
+    {
+      "text": "Take 1 tablet by mouth every 8 hours as needed for nausea",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 8,
+          "periodUnit": "h"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 8,
+            "unit": "mg"
+          }
+        }
+      ]
+    }
+  ]
+}

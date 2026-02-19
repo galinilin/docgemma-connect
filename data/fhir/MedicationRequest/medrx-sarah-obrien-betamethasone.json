@@ -1,0 +1,50 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-sarah-obrien-betamethasone",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "1514",
+        "display": "Betamethasone"
+      }
+    ],
+    "text": "Betamethasone 12mg IM x2 doses"
+  },
+  "subject": {
+    "reference": "Patient/patient-sarah-obrien",
+    "display": "Sarah O'Brien"
+  },
+  "authoredOn": "2026-02-15",
+  "dosageInstruction": [
+    {
+      "text": "12 mg intramuscular injection, two doses 24 hours apart for fetal lung maturity",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 24,
+          "periodUnit": "h"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "78421000",
+            "display": "Intramuscular route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 12,
+            "unit": "mg"
+          }
+        }
+      ]
+    }
+  ]
+}

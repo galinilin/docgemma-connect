@@ -1,0 +1,51 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-baby-torres-weight-2026-02-17",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "vital-signs",
+          "display": "Vital Signs"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29463-7",
+        "display": "Body weight"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-baby-torres"
+  },
+  "effectiveDateTime": "2026-02-17T08:00:00Z",
+  "valueQuantity": {
+    "value": 4.8,
+    "unit": "kg",
+    "system": "http://unitsofmeasure.org",
+    "code": "kg"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "L",
+          "display": "Low"
+        }
+      ]
+    }
+  ],
+  "note": [
+    {
+      "text": "5th percentile for age. Expected weight for 3-month-old male is approximately 6.0-6.4 kg (50th percentile)."
+    }
+  ]
+}

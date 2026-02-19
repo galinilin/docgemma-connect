@@ -1,0 +1,46 @@
+{
+  "resourceType": "Media",
+  "id": "media-david-kim-ct-chest",
+  "status": "completed",
+  "type": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/media-type",
+        "code": "image",
+        "display": "Image"
+      }
+    ]
+  },
+  "modality": {
+    "coding": [
+      {
+        "system": "http://dicom.nema.org/resources/ontology/DCM",
+        "code": "CT",
+        "display": "Computed Tomography"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-david-kim"
+  },
+  "createdDateTime": "2026-02-03T09:00:00Z",
+  "bodySite": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "51185008",
+        "display": "Thoracic structure"
+      }
+    ]
+  },
+  "content": {
+    "contentType": "image/dicom",
+    "url": "file://data/images/david-kim-ct-chest.dcm",
+    "title": "CT Chest with contrast"
+  },
+  "note": [
+    {
+      "text": "CT chest with IV contrast demonstrates a 4.2 cm spiculated mass in the right upper lobe with broad pleural contact but no chest wall invasion. Ipsilateral mediastinal lymphadenopathy is present with enlarged lymph nodes at station 4R (2.8 cm short axis) and station 7 (2.1 cm short axis). No contralateral mediastinal or hilar lymphadenopathy. No pleural effusion. No pericardial effusion. No suspicious osseous lesions. Liver and adrenal glands are unremarkable on this examination. Findings consistent with stage IIIA non-small cell lung cancer (T2aN2M0)."
+    }
+  ]
+}

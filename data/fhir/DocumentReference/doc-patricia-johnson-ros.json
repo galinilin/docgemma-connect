@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-patricia-johnson-ros",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-patricia-johnson"
+  },
+  "date": "2026-02-16T06:30:00Z",
+  "author": [
+    {
+      "display": "Dr. Rachel Kim, MD - Pulmonary/Critical Care"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Q29uc3RpdHV0aW9uYWw6IEFjdXRlIG9uc2V0IGRpYXBob3Jlc2lzLCBubyBmZXZlciwgbm8gcmlnb3JzLiBGZWVscyB3ZWFrIGFuZCBsaWdodGhlYWRlZC4KSEVFTlQ6IE5vIHZpc2lvbiBjaGFuZ2VzLCBubyBoZWFyaW5nIGxvc3MuCkNhcmRpb3Zhc2N1bGFyOiBBY3V0ZSBwbGV1cml0aWMgcmlnaHQtc2lkZWQgY2hlc3QgcGFpbi4gUGFscGl0YXRpb25zIHByZXNlbnQuIE5vIHByaW9yIGhpc3Rvcnkgb2YgRFZUIG9yIFBFLiBObyBsb3dlciBleHRyZW1pdHkgc3dlbGxpbmcgbm90ZWQuIE5vIHByaW9yIGNhcmRpYWMgaGlzdG9yeS4KUmVzcGlyYXRvcnk6IFNldmVyZSBhY3V0ZSBkeXNwbmVhIGF0IHJlc3QuIE5vIGNvdWdoLiBObyBoZW1vcHR5c2lzLiBObyB3aGVlemluZy4gVW5hYmxlIHRvIHNwZWFrIGluIGZ1bGwgc2VudGVuY2VzLgpHSTogTWlsZCBuYXVzZWEsIG5vIHZvbWl0aW5nLiBUb2xlcmF0aW5nIHNpcHMgb2YgY2xlYXIgbGlxdWlkcy4gU3VyZ2ljYWwgZHJhaW4gb3V0cHV0IHNlcm9zYW5ndWluZW91cyAxMjBtTCBvdmVyIGxhc3QgMTIgaG91cnMuIE5vIGFiZG9taW5hbCBkaXN0ZW5zaW9uLgpHVTogRm9sZXkgY2F0aGV0ZXIgaW4gcGxhY2UsIHVyaW5lIG91dHB1dCAxNW1ML2hyIGZvciBsYXN0IDIgaG91cnMgKGRlY3JlYXNlZCBmcm9tIDQwbUwvaHIpLgpNdXNjdWxvc2tlbGV0YWw6IE5vIGNhbGYgcGFpbiBvciBzd2VsbGluZy4gTGltaXRlZCBtb2JpbGl0eSBzaW5jZSBzdXJnZXJ5LgpOZXVyb2xvZ2ljYWw6IEFsZXJ0IGJ1dCBhbnhpb3VzLiBObyBmb2NhbCBkZWZpY2l0cy4gTm8gY29uZnVzaW9uIChiYXNlbGluZSBvcmllbnRhdGlvbiBpbnRhY3QpLgpTa2luOiBEaWFwaG9yZXRpYy4gU3VyZ2ljYWwgaW5jaXNpb24gY2xlYW4sIGRyeSwgaW50YWN0LiBObyBzaWducyBvZiB3b3VuZCBpbmZlY3Rpb24u"
+      }
+    }
+  ]
+}

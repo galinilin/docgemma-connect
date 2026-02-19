@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-margaret-chen-clinical-note",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "11506-3",
+        "display": "Progress note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-margaret-chen"
+  },
+  "date": "2026-02-01T09:30:00Z",
+  "author": [
+    {
+      "display": "Dr. Sarah Johnson, MD"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "QXNzZXNzbWVudCBhbmQgUGxhbjoKCjY4LXllYXItb2xkIHdvbWFuIHdpdGggdHlwZSAyIGRpYWJldGVzIG1lbGxpdHVzLCBDS0Qgc3RhZ2UgM2IsIGh5cGVydGVuc2lvbiwgYW5kIGh5cGVybGlwaWRlbWlhIHByZXNlbnRzIGZvciByb3V0aW5lIGZvbGxvdy11cC4gSGJBMWMgaGFzIHJpc2VuIHRvIDcuOCUgZnJvbSA3LjIlIHNpeCBtb250aHMgYWdvIGRlc3BpdGUgcmVwb3J0ZWQgY29tcGxpYW5jZSB3aXRoIG1ldGZvcm1pbiAxMDAwbWcgQklELiBHRlIgaGFzIGRlY2xpbmVkIGZyb20gNTIgdG8gMzggbUwvbWluLzEuNzNtMiwgbm93IG1lZXRpbmcgY3JpdGVyaWEgZm9yIENLRCBzdGFnZSAzYi4gUG90YXNzaXVtIGlzIDQuOSBtRXEvTCBvbiBjb25jdXJyZW50IHNwaXJvbm9sYWN0b25lIGFuZCBsaXNpbm9wcmlsLgoKMS4gVHlwZSAyIERpYWJldGVzOiBIYkExYyB0cmVuZGluZyB1cC4gV2l0aCBHRlIgb2YgMzgsIG1ldGZvcm1pbiBzaG91bGQgYmUgZG9zZS1yZWR1Y2VkIHRvIDUwMG1nIEJJRCBwZXIgRkRBIGxhYmVsaW5nLiBDb25zaWRlciBhZGRpbmcgYSBHTFAtMSByZWNlcHRvciBhZ29uaXN0IChzZW1hZ2x1dGlkZSkgd2hpY2ggb2ZmZXJzIHJlbmFsIHByb3RlY3Rpb24uIFJlZmVyIHRvIGVuZG9jcmlub2xvZ3kgZm9yIGNvLW1hbmFnZW1lbnQuCgoyLiBDS0QgU3RhZ2UgM2I6IFByb2dyZXNzaXZlIGRlY2xpbmUgaW4gcmVuYWwgZnVuY3Rpb24uIENvbnRpbnVlIEFDRSBpbmhpYml0b3IgZm9yIG5lcGhyb3Byb3RlY3Rpb24uIFJlcGVhdCBCTVAgaW4gNCB3ZWVrcyB0byBtb25pdG9yIHBvdGFzc2l1bSBhbmQgY3JlYXRpbmluZS4gTmVwaHJvbG9neSByZWZlcnJhbCBwbGFjZWQuCgozLiBIeXBlcnRlbnNpb246IEJQIDE0Mi84OCwgYWJvdmUgdGFyZ2V0IG9mIDEzMC84MCBmb3IgZGlhYmV0aWMgbmVwaHJvcGF0aHkuIENvbnRpbnVlIGN1cnJlbnQgcmVnaW1lbiBidXQgbWF5IG5lZWQgYWRqdXN0bWVudCBhdCBmb2xsb3ctdXAgYmFzZWQgb24gcmVuYWwgZnVuY3Rpb24gdHJlbmRzLgoKNC4gSHlwZXJsaXBpZGVtaWE6IENvbnRpbnVlIGF0b3J2YXN0YXRpbiA0MG1nLiBMaXBpZCBwYW5lbCBkdWUgYXQgbmV4dCB2aXNpdC4KCkZvbGxvdy11cCBpbiA0IHdlZWtzIHdpdGggcmVwZWF0IEJNUCBhbmQgdXJpbmFseXNpcy4gUGF0aWVudCBlZHVjYXRlZCBvbiBzaWducyBvZiBoeXBlcmthbGVtaWEgYW5kIHdoZW4gdG8gc2VlayBlbWVyZ2VudCBjYXJlLg=="
+      }
+    }
+  ]
+}

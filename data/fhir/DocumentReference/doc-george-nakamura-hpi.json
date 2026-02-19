@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-george-nakamura-hpi",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-george-nakamura"
+  },
+  "date": "2026-02-17T10:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Lisa Yamamoto, MD - Palliative Medicine"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "NzgteWVhci1vbGQgSmFwYW5lc2UgQW1lcmljYW4gbWFuIHdpdGggbWV0YXN0YXRpYyBwYW5jcmVhdGljIGFkZW5vY2FyY2lub21hLCBkaWFnbm9zZWQgaW4gQXVndXN0IDIwMjUsIHdpdGgga25vd24gbGl2ZXIgYW5kIHBlcml0b25lYWwgbWV0YXN0YXNlcywgcHJlc2VudHMgdG8gdGhlIHBhbGxpYXRpdmUgY2FyZSBpbnBhdGllbnQgdW5pdCBmb3IgbWFuYWdlbWVudCBvZiBhIHBhaW4gY3Jpc2lzIGFuZCBpbnRyYWN0YWJsZSBuYXVzZWEuIEhlIHdhcyBlbnJvbGxlZCBpbiBob3NwaWNlIGNhcmUgaW4gSmFudWFyeSAyMDI2IGFmdGVyIGRlY2xpbmluZyBmdXJ0aGVyIGNoZW1vdGhlcmFweSBmb2xsb3dpbmcgcHJvZ3Jlc3Npb24gb24gZ2VtY2l0YWJpbmUvbmFiLXBhY2xpdGF4ZWwuCgpPdmVyIHRoZSBwYXN0IDUgZGF5cywgaGlzIHBhaW4gaGFzIGVzY2FsYXRlZCBzaWduaWZpY2FudGx5IGRlc3BpdGUgaGlzIGN1cnJlbnQgcmVnaW1lbiBvZiBtb3JwaGluZSBzdWxmYXRlIEVSIDYwIG1nIGV2ZXJ5IDEyIGhvdXJzLiBIZSBoYXMgYmVlbiByZXF1aXJpbmcgYW4gYXZlcmFnZSBvZiA0IGJyZWFrdGhyb3VnaCBkb3NlcyBvZiBtb3JwaGluZSBJUiAxNSBtZyBkYWlseSBvdmVyIHRoZSBwYXN0IDcyIGhvdXJzLCBjb21wYXJlZCB0byBoaXMgdXN1YWwgMS0yIGRvc2VzIHBlciBkYXkuIFRoZSBwYWluIGlzIGRlc2NyaWJlZCBhcyBhIGRlZXAsIGNvbnN0YW50LCBib3JpbmcgZXBpZ2FzdHJpYyBwYWluIHJhZGlhdGluZyB0byB0aGUgYmFjaywgcmF0ZWQgOC8xMCBhdCBpdHMgd29yc3QuIEhlIGFsc28gcmVwb3J0cyB3b3JzZW5pbmcgbmF1c2VhIHdpdGggZXBpc29kZXMgb2Ygdm9taXRpbmcgMi0zIHRpbWVzIGRhaWx5IGRlc3BpdGUgb25kYW5zZXRyb24gOCBtZyBQTyBQUk4sIHdoaWNoIGhhcyBiZWVuIG9ubHkgcGFydGlhbGx5IGVmZmVjdGl2ZS4KCkhlIGhhcyBleHBlcmllbmNlZCBwcm9ncmVzc2l2ZSB3ZWlnaHQgbG9zcywgbm93IGRvd24gdG8gNTIga2cgZnJvbSBhIGJhc2VsaW5lIHdlaWdodCBvZiA2OCBrZyAoMjQlIHdlaWdodCBsb3NzIG92ZXIgNiBtb250aHMpLiBIaXMgYXBwZXRpdGUgaGFzIGJlZW4gbWluaW1hbCwgdG9sZXJhdGluZyBvbmx5IHNtYWxsIHNpcHMgb2YgbGlxdWlkcyBhbmQgb2NjYXNpb25hbCBzcG9vbmZ1bHMgb2YgY29uZ2VlIHByZXBhcmVkIGJ5IGhpcyB3aWZlLiBIZSBpcyBpbmNyZWFzaW5nbHkgZmF0aWd1ZWQgYW5kIHNwZW5kaW5nIG1vc3Qgb2YgdGhlIGRheSBpbiBiZWQuIEhlIGRlbmllcyBmZXZlciwgbmV3IG5ldXJvbG9naWNhbCBzeW1wdG9tcywgb3IgdXJpbmFyeSBjaGFuZ2VzLiBIaXMgd2lmZSBhbmQgYWR1bHQgZGF1Z2h0ZXIgYXJlIGF0IGJlZHNpZGUgYW5kIGFyZSBhd2FyZSBvZiBoaXMgcHJvZ25vc2lzLiBUaGUgZmFtaWx5IGhhcyBleHByZXNzZWQgYSBwcmVmZXJlbmNlIGZvciBjb21mb3J0LWZvY3VzZWQgY2FyZSBhbmQgd2lzaGVzIHRvIGF2b2lkIGhvc3BpdGFsaXphdGlvbiBpZiBzeW1wdG9tcyBjYW4gYmUgbWFuYWdlZCBhdCBob21lLiBIb3dldmVyLCB0aGUgY3VycmVudCBwYWluIGNyaXNpcyBleGNlZWRlZCBob21lIG1hbmFnZW1lbnQgY2FwYWJpbGl0aWVzLg=="
+      }
+    }
+  ]
+}

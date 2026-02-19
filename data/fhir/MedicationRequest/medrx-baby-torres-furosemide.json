@@ -1,0 +1,60 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-baby-torres-furosemide",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "310429",
+        "display": "Furosemide 10 MG/ML Oral Solution"
+      }
+    ],
+    "text": "Furosemide oral solution"
+  },
+  "subject": {
+    "reference": "Patient/patient-baby-torres",
+    "display": "Baby Boy Torres"
+  },
+  "authoredOn": "2026-01-15",
+  "dosageInstruction": [
+    {
+      "text": "Give 1 mg/kg (4.8 mg) by mouth twice daily",
+      "timing": {
+        "repeat": {
+          "frequency": 2,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 4.8,
+            "unit": "mg"
+          },
+          "rateRatio": {
+            "numerator": {
+              "value": 1,
+              "unit": "mg"
+            },
+            "denominator": {
+              "value": 1,
+              "unit": "kg"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

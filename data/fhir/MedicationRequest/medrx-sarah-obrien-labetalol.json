@@ -1,0 +1,50 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-sarah-obrien-labetalol",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "197361",
+        "display": "Labetalol 200 MG Oral Tablet"
+      }
+    ],
+    "text": "Labetalol 200mg"
+  },
+  "subject": {
+    "reference": "Patient/patient-sarah-obrien",
+    "display": "Sarah O'Brien"
+  },
+  "authoredOn": "2026-02-15",
+  "dosageInstruction": [
+    {
+      "text": "Take 1 tablet by mouth three times daily",
+      "timing": {
+        "repeat": {
+          "frequency": 3,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 200,
+            "unit": "mg"
+          }
+        }
+      ]
+    }
+  ]
+}

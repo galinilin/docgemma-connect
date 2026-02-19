@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-linda-martinez-ros",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-linda-martinez"
+  },
+  "date": "2026-02-05T10:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Rebecca Liu, MD"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Q29uc3RpdHV0aW9uYWw6IFVuaW50ZW50aW9uYWwgd2VpZ2h0IGxvc3Mgb2YgOCBrZyBvdmVyIDQgbW9udGhzLCBmYXRpZ3VlLCBkZWNyZWFzZWQgYXBwZXRpdGUsIG5vIGZldmVycyBvciBuaWdodCBzd2VhdHMKSEVFTlQ6IFNjbGVyYWwgaWN0ZXJ1cyBub3RlZCBieSBmYW1pbHksIG5vIHZpc2lvbiBjaGFuZ2VzLCBubyBoZWFyaW5nIGxvc3MsIG5vIG9yYWwgbGVzaW9ucwpDYXJkaW92YXNjdWxhcjogTm8gY2hlc3QgcGFpbiwgbm8gcGFscGl0YXRpb25zLCBubyBkeXNwbmVhIG9uIGV4ZXJ0aW9uLCBubyBsb3dlciBleHRyZW1pdHkgZWRlbWEKUmVzcGlyYXRvcnk6IE5vIGNvdWdoLCBubyBzaG9ydG5lc3Mgb2YgYnJlYXRoLCBubyBoZW1vcHR5c2lzCkdJOiBFcGlnYXN0cmljIHBhaW4gKGR1bGwsIGNvbnN0YW50LCA0LzEwLCByYWRpYXRpbmcgdG8gYmFjayksIGRlY3JlYXNlZCBhcHBldGl0ZSwgbWlsZCBuYXVzZWEgd2l0aG91dCB2b21pdGluZywgY2xheS1jb2xvcmVkIHN0b29scyBmb3IgcGFzdCAyIHdlZWtzLCBkYXJrIHVyaW5lLCBubyBoZW1hdGVtZXNpcywgbm8gbWVsZW5hCkdVOiBEYXJrIHVyaW5lIGFzIG5vdGVkIGFib3ZlLCBubyBkeXN1cmlhLCBubyBoZW1hdHVyaWEsIG5vIGZyZXF1ZW5jeQpNdXNjdWxvc2tlbGV0YWw6IE5vIGJhY2sgcGFpbiBhcGFydCBmcm9tIGVwaWdhc3RyaWMgcmFkaWF0aW9uLCBubyBqb2ludCBwYWluLCBubyBtdXNjbGUgd2Vha25lc3MKTmV1cm9sb2dpY2FsOiBObyBoZWFkYWNoZSwgbm8gY29uZnVzaW9uLCBubyBwZXJpcGhlcmFsIG5ldXJvcGF0aHkgc3ltcHRvbXMKU2tpbjogR2VuZXJhbGl6ZWQgcHJ1cml0dXMgZm9yIHBhc3QgMiB3ZWVrcywgamF1bmRpY2Ugbm90ZWQsIG5vIG5ldyByYXNoZXMgb3IgbGVzaW9ucwpQc3ljaGlhdHJpYzogQXBwcm9wcmlhdGUgYW54aWV0eSByZWdhcmRpbmcgbmV3IGRpYWdub3Npcywgc2xlZXBpbmcgYWRlcXVhdGVseSwgZ29vZCBmYW1pbHkgc3VwcG9ydA=="
+      }
+    }
+  ]
+}

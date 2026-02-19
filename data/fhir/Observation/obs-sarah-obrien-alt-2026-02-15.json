@@ -1,0 +1,59 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-sarah-obrien-alt-2026-02-15",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "1742-6",
+        "display": "Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma"
+      }
+    ],
+    "text": "ALT"
+  },
+  "subject": {
+    "reference": "Patient/patient-sarah-obrien"
+  },
+  "effectiveDateTime": "2026-02-15T08:00:00Z",
+  "valueQuantity": {
+    "value": 82,
+    "unit": "U/L",
+    "system": "http://unitsofmeasure.org",
+    "code": "U/L"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "H",
+          "display": "High"
+        }
+      ]
+    }
+  ],
+  "referenceRange": [
+    {
+      "low": {
+        "value": 7,
+        "unit": "U/L"
+      },
+      "high": {
+        "value": 56,
+        "unit": "U/L"
+      }
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "id": "allergy-thomas-reeves-hymenoptera-venom",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+        "code": "confirmed"
+      }
+    ]
+  },
+  "type": "allergy",
+  "category": [
+    "environment"
+  ],
+  "criticality": "high",
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "288328004",
+        "display": "Hymenoptera venom"
+      }
+    ],
+    "text": "Hymenoptera venom (bee sting)"
+  },
+  "patient": {
+    "reference": "Patient/patient-thomas-reeves",
+    "display": "Thomas Reeves"
+  },
+  "recordedDate": "2025-07-20",
+  "reaction": [
+    {
+      "manifestation": [
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "39579001",
+              "display": "Anaphylaxis"
+            }
+          ],
+          "text": "Anaphylaxis"
+        },
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "423341008",
+              "display": "Laryngeal edema"
+            }
+          ],
+          "text": "Laryngeal edema"
+        },
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "45007003",
+              "display": "Hypotension"
+            }
+          ],
+          "text": "Hypotension"
+        }
+      ],
+      "severity": "severe",
+      "description": "Bee sting anaphylaxis Summer 2025 requiring 3 doses of epinephrine, presented with laryngeal edema and hypotension"
+    }
+  ]
+}

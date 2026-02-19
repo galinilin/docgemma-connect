@@ -1,0 +1,62 @@
+{
+  "resourceType": "Patient",
+  "id": "patient-robert-thompson",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    ]
+  },
+  "identifier": [
+    {
+      "system": "http://hospital.example.org/patients",
+      "value": "RT-2024-004"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Thompson",
+      "given": [
+        "Robert",
+        "James"
+      ]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1981-06-22",
+  "address": [
+    {
+      "use": "home",
+      "line": [
+        "456 Maple Avenue"
+      ],
+      "city": "Oakland",
+      "state": "CA",
+      "postalCode": "94612"
+    }
+  ],
+  "maritalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+        "code": "M",
+        "display": "Married"
+      }
+    ]
+  },
+  "communication": [
+    {
+      "language": {
+        "coding": [
+          {
+            "system": "urn:ietf:bcp:47",
+            "code": "en",
+            "display": "English"
+          }
+        ]
+      },
+      "preferred": true
+    }
+  ]
+}

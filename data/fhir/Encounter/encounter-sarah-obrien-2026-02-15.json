@@ -1,0 +1,39 @@
+{
+  "resourceType": "Encounter",
+  "id": "encounter-sarah-obrien-2026-02-15",
+  "status": "in-progress",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "IMP",
+    "display": "inpatient encounter"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "183460006",
+          "display": "Obstetric admission"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-sarah-obrien"
+  },
+  "period": {
+    "start": "2026-02-15T08:30:00Z"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "398254007",
+          "display": "Severe preeclampsia"
+        }
+      ],
+      "text": "Severe preeclampsia at 34+2 weeks gestation with headache and visual changes"
+    }
+  ]
+}

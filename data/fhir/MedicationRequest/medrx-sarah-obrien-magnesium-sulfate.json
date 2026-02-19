@@ -1,0 +1,50 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-sarah-obrien-magnesium-sulfate",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "235742",
+        "display": "Magnesium Sulfate Injectable Solution"
+      }
+    ],
+    "text": "Magnesium sulfate 2g/hr IV"
+  },
+  "subject": {
+    "reference": "Patient/patient-sarah-obrien",
+    "display": "Sarah O'Brien"
+  },
+  "authoredOn": "2026-02-15",
+  "dosageInstruction": [
+    {
+      "text": "2 grams per hour continuous intravenous infusion",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "h"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "47625008",
+            "display": "Intravenous route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 2,
+            "unit": "g"
+          }
+        }
+      ]
+    }
+  ]
+}

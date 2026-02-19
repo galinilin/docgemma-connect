@@ -1,0 +1,64 @@
+{
+  "resourceType": "Patient",
+  "id": "patient-baby-torres",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    ]
+  },
+  "identifier": [
+    {
+      "system": "http://hospital.example.org/patients",
+      "value": "BT-2025-006"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Torres",
+      "given": [
+        "Baby Boy"
+      ]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "2025-11-19",
+  "address": [
+    {
+      "use": "home",
+      "line": [
+        "321 Sunset Boulevard"
+      ],
+      "city": "San Francisco",
+      "state": "CA",
+      "postalCode": "94110"
+    }
+  ],
+  "communication": [
+    {
+      "language": {
+        "coding": [
+          {
+            "system": "urn:ietf:bcp:47",
+            "code": "es",
+            "display": "Spanish"
+          }
+        ]
+      },
+      "preferred": true
+    },
+    {
+      "language": {
+        "coding": [
+          {
+            "system": "urn:ietf:bcp:47",
+            "code": "en",
+            "display": "English"
+          }
+        ]
+      },
+      "preferred": false
+    }
+  ]
+}

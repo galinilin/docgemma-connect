@@ -1,0 +1,59 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-james-wilson-wbc-2026-02-10",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "6690-2",
+        "display": "Leukocytes [#/volume] in Blood by Automated count"
+      }
+    ],
+    "text": "WBC"
+  },
+  "subject": {
+    "reference": "Patient/patient-james-wilson"
+  },
+  "effectiveDateTime": "2026-02-10T14:00:00Z",
+  "valueQuantity": {
+    "value": 14.2,
+    "unit": "10*3/uL",
+    "system": "http://unitsofmeasure.org",
+    "code": "10*3/uL"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "H",
+          "display": "High"
+        }
+      ]
+    }
+  ],
+  "referenceRange": [
+    {
+      "low": {
+        "value": 4.5,
+        "unit": "10*3/uL"
+      },
+      "high": {
+        "value": 11.0,
+        "unit": "10*3/uL"
+      }
+    }
+  ]
+}

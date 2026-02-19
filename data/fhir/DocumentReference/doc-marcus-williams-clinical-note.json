@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-marcus-williams-clinical-note",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "11506-3",
+        "display": "Progress note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-marcus-williams"
+  },
+  "date": "2026-02-14T10:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Michael Torres, MD - Sports Cardiology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "QVNTRVNTTUVOVCBBTkQgUExBTjoKCjE5LXllYXItb2xkIG1hbGUgRGl2aXNpb24gSSBiYXNrZXRiYWxsIHBsYXllciB3aXRoIG5ld2x5IGRpYWdub3NlZCBoeXBlcnRyb3BoaWMgb2JzdHJ1Y3RpdmUgY2FyZGlvbXlvcGF0aHkgaWRlbnRpZmllZCBvbiBwcmUtcGFydGljaXBhdGlvbiBzY3JlZW5pbmcuIENhcmRpYWMgTVJJIGRlbW9uc3RyYXRlcyAyNW1tIGFzeW1tZXRyaWMgc2VwdGFsIGh5cGVydHJvcGh5IHdpdGggU0FNIG9mIHRoZSBtaXRyYWwgdmFsdmUgYW5kIG5vIGxhdGUgZ2Fkb2xpbml1bSBlbmhhbmNlbWVudCwgd2hpY2ggaXMgYSBmYXZvcmFibGUgcHJvZ25vc3RpYyBpbmRpY2F0b3IuIEZhbWlseSBoaXN0b3J5IGlzIGNvbmNlcm5pbmcgd2l0aCB1bmNsZSdzIHN1ZGRlbiBkZWF0aCBhdCBhZ2UgMzUgZHVyaW5nIHBoeXNpY2FsIGFjdGl2aXR5LiBDdXJyZW50IFNDRCByaXNrIGFzc2Vzc21lbnQgdXNpbmcgdGhlIEhDTSBSaXNrLVNDRCBjYWxjdWxhdG9yIGlzIHBlbmRpbmcgY29tcGxldGlvbiB3aXRoIGV4ZXJjaXNlIHN0cmVzcyB0ZXN0aW5nIHJlc3VsdHMuIE1ldG9wcm9sb2wgNTBtZyBCSUQgaW5pdGlhdGVkIHR3byB3ZWVrcyBhZ28gd2l0aCBnb29kIHRvbGVyYW5jZSBhbmQgcmVzdGluZyBoZWFydCByYXRlIG9mIDU4IGJwbS4KClBsYW46CjEuIENvbnRpbnVlIG1ldG9wcm9sb2wgNTBtZyBCSUQuIE1vbml0b3IgZm9yIHN5bXB0b21hdGljIGJyYWR5Y2FyZGlhLgoyLiBFeGVyY2lzZSByZXN0cmljdGlvbiBmcm9tIGNvbXBldGl0aXZlIGF0aGxldGljcyBwZXIgQUNDL0FIQSBndWlkZWxpbmVzIHBlbmRpbmcgZnVydGhlciByaXNrIHN0cmF0aWZpY2F0aW9uLiBNYXkgZW5nYWdlIGluIGxvdy1pbnRlbnNpdHkgcmVjcmVhdGlvbmFsIGFjdGl2aXRpZXMgd2l0aCBoZWFydCByYXRlIG1vbml0b3JpbmcuCjMuIE9yZGVyIGdlbmV0aWMgdGVzdGluZyBmb3Igc2FyY29tZXJpYyBnZW5lIHBhbmVsLiBSZWNvbW1lbmQgZmlyc3QtZGVncmVlIHJlbGF0aXZlcyB1bmRlcmdvIHNjcmVlbmluZyBlY2hvY2FyZGlvZ3JhcGh5Lgo0LiBDYXJkaW9wdWxtb25hcnkgZXhlcmNpc2UgdGVzdGluZyB0byBhc3Nlc3MgZnVuY3Rpb25hbCBjYXBhY2l0eSBhbmQgYXJyaHl0aG1pYSByaXNrLgo1LiA0OC1ob3VyIEhvbHRlciBtb25pdG9yIHRvIGV2YWx1YXRlIGZvciBOU1ZULgo2LiBSZWZlcnJhbCB0byBnZW5ldGljIGNvdW5zZWxvciBmb3IgZmFtaWx5IGNvdW5zZWxpbmcuCjcuIFNwb3J0cyBwc3ljaG9sb2d5IHJlZmVycmFsIGZvciBhZGp1c3RtZW50IHRvIGRpYWdub3NpcyBhbmQgY2FyZWVyIGltcGxpY2F0aW9ucy4KOC4gRm9sbG93LXVwIGluIDQgd2Vla3Mgd2l0aCB0ZXN0IHJlc3VsdHMu"
+      }
+    }
+  ]
+}

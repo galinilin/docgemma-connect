@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-james-wilson-ros",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-james-wilson"
+  },
+  "date": "2026-02-10T14:30:00Z",
+  "author": [
+    {
+      "display": "Dr. Michael Torres, MD"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Q29uc3RpdHV0aW9uYWw6IEZldmVyIHRvIDEwMi42wrBGLCBjaGlsbHMsIG5pZ2h0IHN3ZWF0cywgZmF0aWd1ZSwgZGVjcmVhc2VkIGFwcGV0aXRlIGZvciAyIGRheXMKSEVFTlQ6IE5vIHNvcmUgdGhyb2F0LCBubyByaGlub3JyaGVhLCBubyBlYXIgcGFpbiwgbm8gc2ludXMgcHJlc3N1cmUKQ2FyZGlvdmFzY3VsYXI6IE5vIGNoZXN0IHRpZ2h0bmVzcyBhdCByZXN0LCBubyBwYWxwaXRhdGlvbnMgYmV5b25kIGJhc2VsaW5lIGF0cmlhbCBmaWJyaWxsYXRpb24sIG5vIGxvd2VyIGV4dHJlbWl0eSBlZGVtYSBvciBzd2VsbGluZwpSZXNwaXJhdG9yeTogUHJvZHVjdGl2ZSBjb3VnaCB3aXRoIHllbGxvdy1ncmVlbiBzcHV0dW0sIGR5c3BuZWEgYXQgcmVzdCwgcGxldXJpdGljIHJpZ2h0LXNpZGVkIGNoZXN0IHBhaW4sIG5vIGhlbW9wdHlzaXMsIG5vIHdoZWV6aW5nCkdJOiBEZWNyZWFzZWQgYXBwZXRpdGUsIG5vIG5hdXNlYSwgbm8gdm9taXRpbmcsIG5vIGRpYXJyaGVhLCBubyBhYmRvbWluYWwgcGFpbgpHVTogTm8gZHlzdXJpYSwgbm8gdXJnZW5jeSwgbm8gaGVtYXR1cmlhCk11c2N1bG9za2VsZXRhbDogR2VuZXJhbGl6ZWQgbXlhbGdpYXMsIG5vIGpvaW50IHN3ZWxsaW5nCk5ldXJvbG9naWNhbDogTm8gaGVhZGFjaGUsIG5vIGNvbmZ1c2lvbiwgbm8gZm9jYWwgd2Vha25lc3MsIG5vIGRpenppbmVzcwpTa2luOiBObyByYXNoZXMsIG5vIGJydWlzaW5n"
+      }
+    }
+  ]
+}

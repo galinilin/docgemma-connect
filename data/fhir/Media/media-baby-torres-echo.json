@@ -1,0 +1,46 @@
+{
+  "resourceType": "Media",
+  "id": "media-baby-torres-echo",
+  "status": "completed",
+  "type": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/media-type",
+        "code": "image",
+        "display": "Image"
+      }
+    ]
+  },
+  "modality": {
+    "coding": [
+      {
+        "system": "http://dicom.nema.org/resources/ontology/DCM",
+        "code": "US",
+        "display": "Ultrasound"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-baby-torres"
+  },
+  "createdDateTime": "2026-02-17T08:30:00Z",
+  "bodySite": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "80891009",
+        "display": "Heart structure"
+      }
+    ]
+  },
+  "content": {
+    "contentType": "image/png",
+    "url": "file://data/images/baby-torres-echo.png",
+    "title": "Transthoracic echocardiogram - parasternal long axis"
+  },
+  "note": [
+    {
+      "text": "Transthoracic echocardiogram: Large perimembranous ventricular septal defect measuring approximately 8mm in diameter with predominantly left-to-right shunting on color Doppler. Left ventricular internal dimension in diastole is moderately dilated at 28mm (z-score +3.2). Left ventricular systolic function is preserved with shortening fraction 35%. Left atrium mildly dilated. Mitral valve inflow velocity increased suggesting high flow state. No aortic valve prolapse. No evidence of pulmonary hypertension; estimated PA systolic pressure 30 mmHg by tricuspid regurgitation jet. Normal aortic arch anatomy, no coarctation."
+    }
+  ]
+}

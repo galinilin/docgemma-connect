@@ -1,0 +1,60 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-james-wilson-inr-2026-02-10",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "5902-2",
+        "display": "Prothrombin time (PT) in Platelet poor plasma by Coagulation assay"
+      }
+    ],
+    "text": "INR"
+  },
+  "subject": {
+    "reference": "Patient/patient-james-wilson"
+  },
+  "effectiveDateTime": "2026-02-10T14:00:00Z",
+  "valueQuantity": {
+    "value": 2.4,
+    "unit": "INR",
+    "system": "http://unitsofmeasure.org",
+    "code": "{INR}"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "N",
+          "display": "Normal"
+        }
+      ]
+    }
+  ],
+  "referenceRange": [
+    {
+      "low": {
+        "value": 2.5,
+        "unit": "INR"
+      },
+      "high": {
+        "value": 3.5,
+        "unit": "INR"
+      },
+      "text": "Therapeutic range for mechanical mitral valve: 2.5-3.5"
+    }
+  ]
+}

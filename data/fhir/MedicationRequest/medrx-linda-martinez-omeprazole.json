@@ -1,0 +1,50 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-linda-martinez-omeprazole",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "198053",
+        "display": "Omeprazole 20 MG Delayed Release Oral Capsule"
+      }
+    ],
+    "text": "Omeprazole 20mg"
+  },
+  "subject": {
+    "reference": "Patient/patient-linda-martinez",
+    "display": "Linda Martinez"
+  },
+  "authoredOn": "2023-03-15",
+  "dosageInstruction": [
+    {
+      "text": "Take 1 capsule by mouth once daily before breakfast",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 20,
+            "unit": "mg"
+          }
+        }
+      ]
+    }
+  ]
+}

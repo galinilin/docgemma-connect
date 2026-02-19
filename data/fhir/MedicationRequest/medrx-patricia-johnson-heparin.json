@@ -1,0 +1,35 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-patricia-johnson-heparin",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "235473",
+        "display": "Heparin"
+      }
+    ],
+    "text": "Heparin Drip (Unfractionated)"
+  },
+  "subject": {
+    "reference": "Patient/patient-patricia-johnson",
+    "display": "Patricia Johnson"
+  },
+  "authoredOn": "2026-02-16",
+  "dosageInstruction": [
+    {
+      "text": "Continuous IV infusion per PE protocol, titrate to aPTT 60-80 seconds",
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "47625008",
+            "display": "Intravenous route"
+          }
+        ]
+      }
+    }
+  ]
+}

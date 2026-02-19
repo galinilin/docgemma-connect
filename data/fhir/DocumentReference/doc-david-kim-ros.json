@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-david-kim-ros",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-david-kim"
+  },
+  "date": "2026-02-17T14:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Angela Martinez, MD - Medical Oncology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Q29uc3RpdHV0aW9uYWw6IE1pbGQgZmF0aWd1ZS4gVW5pbnRlbnRpb25hbCB3ZWlnaHQgbG9zcyBvZiA0IGtnIG92ZXIgcGFzdCAyIG1vbnRocy4gTm8gZmV2ZXIsIG5vIG5pZ2h0IHN3ZWF0cywgbm8gY2hpbGxzLgpIRUVOVDogTm8gdmlzaW9uIGNoYW5nZXMsIG5vIGhlYXJpbmcgbG9zcywgbm8gc29yZSB0aHJvYXQsIG5vIGR5c3BoYWdpYS4KQ2FyZGlvdmFzY3VsYXI6IE5vIGNoZXN0IHBhaW4sIG5vIHBhbHBpdGF0aW9ucywgbm8gb3J0aG9wbmVhLCBubyBQTkQsIG5vIGxvd2VyIGV4dHJlbWl0eSBlZGVtYS4gTm8gcHJpb3IgaGlzdG9yeSBvZiBjb3JvbmFyeSBhcnRlcnkgZGlzZWFzZS4KUmVzcGlyYXRvcnk6IFBlcnNpc3RlbnQgZHJ5IGNvdWdoIGZvciAzIG1vbnRocywgbm9uLXByb2R1Y3RpdmUuIE5vIGhlbW9wdHlzaXMuIE1pbGQgZXhlcnRpb25hbCBkeXNwbmVhIHdpdGggdHdvIGZsaWdodHMgb2Ygc3RhaXJzLCBzdGFibGUuIE5vIHdoZWV6aW5nLiBObyBwbGV1cml0aWMgcGFpbi4KR0k6IE1pbGRseSBkZWNyZWFzZWQgYXBwZXRpdGUuIE5vIG5hdXNlYSwgbm8gdm9taXRpbmcsIG5vIGFiZG9taW5hbCBwYWluLCBubyBjaGFuZ2UgaW4gYm93ZWwgaGFiaXRzLiBObyBtZWxlbmEgb3IgaGVtYXRvY2hlemlhLgpHVTogTm8gZHlzdXJpYSwgbm8gaGVtYXR1cmlhLCBubyBmcmVxdWVuY3kgY2hhbmdlcy4KTXVzY3Vsb3NrZWxldGFsOiBObyBib25lIHBhaW4sIG5vIGpvaW50IHN3ZWxsaW5nLCBubyBuZXcgYmFjayBwYWluLgpOZXVyb2xvZ2ljYWw6IE5vIGhlYWRhY2hlcywgbm8gc2VpenVyZXMsIG5vIGZvY2FsIHdlYWtuZXNzLCBubyBudW1ibmVzcyBvciB0aW5nbGluZy4gTm8gY29nbml0aXZlIGNoYW5nZXMuClNraW46IE5vIG5ldyBza2luIGxlc2lvbnMsIG5vIHJhc2hlcywgbm8gYnJ1aXNpbmcuCkVuZG9jcmluZTogV2VsbC1jb250cm9sbGVkIGRpYWJldGVzIG9uIGN1cnJlbnQgcmVnaW1lbi4gTm8gcG9seXVyaWEgb3IgcG9seWRpcHNpYS4KSGVtYXRvbG9naWM6IE5vIHByaW9yIERWVCBzeW1wdG9tcyBzaW5jZSBjb21wbGV0aW9uIG9mIGFudGljb2FndWxhdGlvbi4gTm8gYnJ1aXNpbmcgb3IgYmxlZWRpbmcu"
+      }
+    }
+  ]
+}

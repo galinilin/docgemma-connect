@@ -1,0 +1,35 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-doris-yamamoto-anti-xa-2026-02-18",
+  "status": "registered",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "3173-2",
+        "display": "Anti-Xa activity in Platelet poor plasma"
+      }
+    ],
+    "text": "Anti-Xa level"
+  },
+  "subject": {
+    "reference": "Patient/patient-doris-yamamoto"
+  },
+  "effectiveDateTime": "2026-02-18T06:00:00Z",
+  "note": [
+    {
+      "text": "Result pending"
+    }
+  ]
+}

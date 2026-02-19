@@ -1,0 +1,50 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-robert-thompson-hydrochlorothiazide",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "310798",
+        "display": "Hydrochlorothiazide 25 MG Oral Tablet"
+      }
+    ],
+    "text": "Hydrochlorothiazide 25mg"
+  },
+  "subject": {
+    "reference": "Patient/patient-robert-thompson",
+    "display": "Robert Thompson"
+  },
+  "authoredOn": "2022-03-15",
+  "dosageInstruction": [
+    {
+      "text": "Take 1 tablet by mouth once daily in the morning",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 25,
+            "unit": "mg"
+          }
+        }
+      ]
+    }
+  ]
+}

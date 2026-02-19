@@ -1,0 +1,59 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-margaret-chen-potassium-2026-02-01",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2823-3",
+        "display": "Potassium [Moles/volume] in Serum or Plasma"
+      }
+    ],
+    "text": "Potassium"
+  },
+  "subject": {
+    "reference": "Patient/patient-margaret-chen"
+  },
+  "effectiveDateTime": "2026-02-01T08:00:00Z",
+  "valueQuantity": {
+    "value": 4.9,
+    "unit": "mEq/L",
+    "system": "http://unitsofmeasure.org",
+    "code": "meq/L"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "H",
+          "display": "High"
+        }
+      ]
+    }
+  ],
+  "referenceRange": [
+    {
+      "low": {
+        "value": 3.5,
+        "unit": "mEq/L"
+      },
+      "high": {
+        "value": 5.0,
+        "unit": "mEq/L"
+      }
+    }
+  ]
+}

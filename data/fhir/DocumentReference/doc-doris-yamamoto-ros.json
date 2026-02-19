@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-doris-yamamoto-ros",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-doris-yamamoto"
+  },
+  "date": "2026-02-18T07:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Kevin Liu, MD - Neurology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Q29uc3RpdHV0aW9uYWw6IFVuYWJsZSB0byBmdWxseSBhc3Nlc3MgZHVlIHRvIGFwaGFzaWE7IG5vIGFwcGFyZW50IGZldmVyIG9yIGRpYXBob3Jlc2lzCkhFRU5UOiBMZWZ0IGdhemUgcHJlZmVyZW5jZSBub3RlZDsgdW5hYmxlIHRvIGFzc2VzcyB2aXN1YWwgZmllbGRzIHJlbGlhYmx5OyBubyBhcHBhcmVudCBmYWNpYWwgcGFpbgpDYXJkaW92YXNjdWxhcjogSXJyZWd1bGFyIGhlYXJ0IHJhdGUgbm90ZWQ7IG5vIGNoZXN0IHBhaW4gcGVyIGRhdWdodGVyOyBubyBsb3dlciBleHRyZW1pdHkgZWRlbWEKUmVzcGlyYXRvcnk6IE5vIHJlc3BpcmF0b3J5IGRpc3RyZXNzIG9ic2VydmVkLCBubyBjb3VnaCwgYnJlYXRoaW5nIGFwcGVhcnMgbm9uLWxhYm9yZWQKR0k6IERhdWdodGVyIHJlcG9ydHMgbm8gcmVjZW50IG5hdXNlYSwgdm9taXRpbmcsIGFiZG9taW5hbCBwYWluLCBvciBjaGFuZ2UgaW4gYm93ZWwgaGFiaXRzCkdVOiBObyByZXBvcnRlZCB1cmluYXJ5IGNvbXBsYWludHMgcHJpb3IgdG8gZXZlbnQ7IEZvbGV5IGNhdGhldGVyIHBsYWNlZCBvbiBhcnJpdmFsCk11c2N1bG9za2VsZXRhbDogUmlnaHQtc2lkZWQgaGVtaXBhcmVzaXMgbm90ZWQ7IG5vIHByaW9yIGpvaW50IGNvbXBsYWludHMgcGVyIGRhdWdodGVyCk5ldXJvbG9naWNhbDogQWN1dGUgZXhwcmVzc2l2ZSBhcGhhc2lhLCByaWdodCBoZW1pcGFyZXNpcyAoYXJtIGdyZWF0ZXIgdGhhbiBsZWcpLCByaWdodCBmYWNpYWwgZHJvb3AsIGxlZnQgZ2F6ZSBwcmVmZXJlbmNlLCByaWdodC1zaWRlZCBzZW5zb3J5IGxvc3MuIE5vIHNlaXp1cmUgYWN0aXZpdHkgd2l0bmVzc2VkLgpTa2luOiBObyByYXNoZXMsIG5vIHByZXNzdXJlIGluanVyaWVzLCBza2luIHdhcm0gYW5kIGRyeQpQc3ljaGlhdHJpYzogUGF0aWVudCBhcHBlYXJzIGZydXN0cmF0ZWQgd2l0aCBpbmFiaWxpdHkgdG8gY29tbXVuaWNhdGU7IG5vIHByaW9yIHBzeWNoaWF0cmljIGhpc3RvcnkgcGVyIGRhdWdodGVy"
+      }
+    }
+  ]
+}

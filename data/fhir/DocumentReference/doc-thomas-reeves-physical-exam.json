@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-thomas-reeves-physical-exam",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-thomas-reeves"
+  },
+  "date": "2026-02-10T15:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Amanda Torres, MD - Allergy/Immunology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Vml0YWxzOiBCUCAxMjgvNzggbW1IZywgSFIgNjggYnBtIHJlZ3VsYXIsIFJSIDE0LCBUZW1wIDk4LjQgRiBvcmFsLCBTcE8yIDk5JSBvbiByb29tIGFpcgoKR2VuZXJhbDogQWxlcnQsIG9yaWVudGVkLCB3ZWxsLWFwcGVhcmluZyBtYW4gaW4gbm8gYWN1dGUgZGlzdHJlc3MuIEFwcGVhcnMgYW54aW91cyBidXQgY29vcGVyYXRpdmUuCgpIRUVOVDogTm9ybW9jZXBoYWxpYywgYXRyYXVtYXRpYy4gTmFzYWwgbXVjb3NhIHBpbmsgd2l0aG91dCBlZGVtYSBvciBwb2x5cHMuIE9yb3BoYXJ5bnggY2xlYXIsIG5vIHBvc3RlcmlvciBwaGFyeW5nZWFsIGVyeXRoZW1hIG9yIGNvYmJsZXN0b25pbmcuIE5vIHV2dWxhciBlZGVtYS4gVHltcGFuaWMgbWVtYnJhbmVzIGNsZWFyIGJpbGF0ZXJhbGx5LgoKTmVjazogU3VwcGxlLCBubyBseW1waGFkZW5vcGF0aHksIG5vIHRoeXJvbWVnYWx5LiBObyBKVkQuCgpDYXJkaW92YXNjdWxhcjogUmVndWxhciByYXRlIGFuZCByaHl0aG0sIG5vcm1hbCBTMS9TMi4gTm8gbXVybXVycywgcnVicywgb3IgZ2FsbG9wcy4gTm8gcGVyaXBoZXJhbCBlZGVtYS4gUmFkaWFsIHB1bHNlcyAyKyBiaWxhdGVyYWxseS4KClJlc3BpcmF0b3J5OiBDbGVhciB0byBhdXNjdWx0YXRpb24gYmlsYXRlcmFsbHkuIE5vIHdoZWV6ZXMsIHJob25jaGksIG9yIHN0cmlkb3IuIFN5bW1ldHJpYyBjaGVzdCBleHBhbnNpb24uIE5vIGFjY2Vzc29yeSBtdXNjbGUgdXNlLgoKQWJkb21lbjogU29mdCwgbm9uLXRlbmRlciwgbm9uLWRpc3RlbmRlZC4gTm9ybWFsIGJvd2VsIHNvdW5kcyBpbiBhbGwgZm91ciBxdWFkcmFudHMuIE5vIGhlcGF0b3NwbGVub21lZ2FseS4gTm8gbWFzc2VzLgoKU2tpbjogTm8gdXJ0aWNhcmlhLCBhbmdpb2VkZW1hLCBvciBhY3RpdmUgcmFzaC4gV2VsbC1oZWFsZWQgY2lyY3VsYXIgc2NhciBvbiByaWdodCB2b2xhciBmb3JlYXJtIGF0IHNpdGUgb2YgcHJpb3IgYmVlIHN0aW5nLCBhcHByb3hpbWF0ZWx5IDggbW0uIE5vIGVjemVtYXRvdXMgY2hhbmdlcy4gTm8gZGVybWF0b2dyYXBoaXNtIGVsaWNpdGVkLgoKRXh0cmVtaXRpZXM6IFdhcm0sIHdlbGwtcGVyZnVzZWQuIE5vIGN5YW5vc2lzLCBjbHViYmluZywgb3IgZWRlbWEuCgpOZXVyb2xvZ2ljYWw6IEFsZXJ0IGFuZCBvcmllbnRlZCB4NC4gQ3JhbmlhbCBuZXJ2ZXMgSUktWElJIGdyb3NzbHkgaW50YWN0LiBOb3JtYWwgZ2FpdCBhbmQgc3RhdGlvbi4="
+      }
+    }
+  ]
+}

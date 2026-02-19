@@ -1,0 +1,55 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-patricia-johnson-bnp-2026-02-16",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "30934-4",
+        "display": "B-type natriuretic peptide [Mass/volume] in Serum or Plasma"
+      }
+    ],
+    "text": "BNP"
+  },
+  "subject": {
+    "reference": "Patient/patient-patricia-johnson"
+  },
+  "effectiveDateTime": "2026-02-16T06:00:00Z",
+  "valueQuantity": {
+    "value": 1240,
+    "unit": "pg/mL",
+    "system": "http://unitsofmeasure.org",
+    "code": "pg/mL"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "HH",
+          "display": "Critical high"
+        }
+      ]
+    }
+  ],
+  "referenceRange": [
+    {
+      "high": {
+        "value": 100,
+        "unit": "pg/mL"
+      }
+    }
+  ]
+}
