@@ -109,6 +109,7 @@ class AgentRunner:
         patient_id: str | None = None,
         tool_calling_enabled: bool = True,
         thinking_enabled: bool = False,
+        previous_image_findings: str | None = None,
     ) -> AsyncGenerator[AgentEvent, None]:
         """Start a new turn in the conversation.
 
@@ -122,6 +123,7 @@ class AgentRunner:
             patient_id: Optional patient ID from frontend selector
             tool_calling_enabled: Whether the agent should use tools
             thinking_enabled: Whether to run preliminary thinking step
+            previous_image_findings: Image findings from a prior turn
 
         Yields:
             AgentEvent objects representing execution progress
@@ -134,6 +136,7 @@ class AgentRunner:
             patient_id=patient_id,
             tool_calling_enabled=tool_calling_enabled,
             thinking_enabled=thinking_enabled,
+            previous_image_findings=previous_image_findings,
         )
 
         config = self._make_thread_id(session.session_id)

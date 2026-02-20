@@ -402,6 +402,9 @@ async def _prepare_send_message(
     # Build conversation history (last 2-3 turns for 4B model)
     history = _build_conversation_history(session, max_turns=3)
 
+    # Carry forward image findings from the most recent prior turn
+    previous_image_findings = _extract_previous_image_findings(session)
+
     # Return the event generator
     return runner.start_turn(
         session=session,
@@ -411,6 +414,7 @@ async def _prepare_send_message(
         patient_id=patient_id,
         tool_calling_enabled=tool_calling_enabled,
         thinking_enabled=thinking_enabled,
+        previous_image_findings=previous_image_findings,
     )
 
 
@@ -441,6 +445,21 @@ async def _prepare_tool_approval(
         rejection_reason=reason,
         edited_args=edited_args,
     )
+
+
+def _extract_previous_image_findings(session: Session) -> str | None:
+    """Extract the most recent image findings from prior assistant messages.
+
+    Walks session messages in reverse to find the last assistant message
+    that produced image_findings.  Returns None if no prior image analysis
+    exists so the caller can skip injection cleanly.
+    """
+    for msg in reversed(session.messages):
+        if msg.role == "assistant" and msg.metadata:
+            findings = msg.metadata.get("image_findings")
+            if findings:
+                return findings
+    return None
 
 
 def _build_conversation_history(

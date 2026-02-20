@@ -46,6 +46,7 @@ class AgentState(TypedDict, total=False):
     image_data: Optional[bytes]
     extracted_entities: ExtractedEntities
     image_findings: Optional[str]
+    previous_image_findings: Optional[str]  # Carried from prior turn for continuity
 
     # ── Intent Classification (Node 2) ──
     intent: str  # "DIRECT" | "TOOL_NEEDED"

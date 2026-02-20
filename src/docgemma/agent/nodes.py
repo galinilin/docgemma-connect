@@ -207,6 +207,24 @@ def _thinking_context_section(state: dict) -> str:
     return f"\nPreliminary reasoning:\n{text}\n"
 
 
+def _image_findings_section(state: dict) -> str:
+    """Build image findings section from current and/or previous turn.
+
+    Prefers current-turn findings (from input_assembly image analysis).
+    Falls back to previous-turn findings when the user sends a follow-up
+    without re-attaching the image.  Returns empty string when neither
+    exists so the prompt template collapses cleanly.
+    """
+    current = state.get("image_findings")
+    previous = state.get("previous_image_findings")
+
+    if current:
+        return f"\nImage findings:\n{current}\n"
+    if previous:
+        return f"\nImage findings (from prior message):\n{previous}\n"
+    return ""
+
+
 def _format_error_for_synthesis(error_messages: list[str]) -> str:
     """Format error messages for synthesis prompt (pre-formatted, clinician-safe)."""
     if not error_messages:
@@ -327,8 +345,7 @@ async def preliminary_thinking(
     context = _patient_context_section(state)
     history = state.get("conversation_history", [])
 
-    image_findings = state.get("image_findings")
-    image_section = f"\nImage findings:\n{image_findings}\n" if image_findings else ""
+    image_section = _image_findings_section(state)
 
     tool_calling_enabled = state.get("tool_calling_enabled", True)
     tools_section = f"\nAvailable tools:\n{TOOL_DESCRIPTIONS}\n" if tool_calling_enabled else ""
@@ -467,8 +484,7 @@ def intent_classify(state: AgentState, model: DocGemma) -> dict:
         }
 
     context = _patient_context_section(state)
-    if state.get("image_findings"):
-        context += f"\nAttached image findings:\n{state['image_findings']}\n"
+    context += _image_findings_section(state)
 
     prompt = INTENT_CLASSIFY_PROMPT.format(
         user_query=state.get("user_query", ""),
@@ -849,8 +865,7 @@ async def synthesize(
     # ── Direct route: lightweight conversational prompt ──
     if intent == "DIRECT" and not tool_results:
         context = _patient_context_section(state)
-        if state.get("image_findings"):
-            context += f"\nAttached image findings:\n{state['image_findings']}\n"
+        context += _image_findings_section(state)
         if not tools_enabled:
             context += "\nNote: Tool calling is disabled. Answer using only the information above.\n"
 
@@ -909,11 +924,8 @@ async def synthesize(
             + _format_error_for_synthesis(error_messages)
         )
 
-    # Build image section
-    image_section = ""
-    image_findings = state.get("image_findings")
-    if image_findings:
-        image_section = f"\n\nImage analysis:\n{image_findings}"
+    # Build image section (current turn or carried from previous turn)
+    image_section = _image_findings_section(state)
 
     # Build clarification section
     clarification_section = ""

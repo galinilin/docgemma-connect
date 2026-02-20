@@ -253,6 +253,7 @@ def _make_initial_state(
     patient_id: str | None = None,
     tool_calling_enabled: bool = True,
     thinking_enabled: bool = False,
+    previous_image_findings: str | None = None,
 ) -> dict:
     """Create a fresh state dict for a new turn.
 
@@ -264,6 +265,7 @@ def _make_initial_state(
         "image_data": image_data,
         "extracted_entities": None,
         "image_findings": None,
+        "previous_image_findings": previous_image_findings,
         # Intent Classification
         "intent": None,
         "task_summary": None,
