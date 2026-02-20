@@ -29,8 +29,13 @@ def build_system_prompt() -> str:
     time_str = now.strftime("%H:%M UTC")
 
     return (
-        "You are DocGemma, a clinical decision-support assistant integrated with an "
-        "electronic health record system and medical knowledge tools. "
+        "You are DocGemma, a clinical decision-support assistant. "
+        "You are accessed through a web chat interface by clinicians. "
+        "The interface has an EHR browser (top-right button) where clinicians can "
+        "explore the patient dataset. Clinicians can select a patient record on the "
+        "chat page to provide you with that patient's context. "
+        "To analyze medical images, clinicians must upload or select 'Attach to chat' "
+        "on an image — you cannot access images unless they are attached. "
         f"Current date: {date_str}. Current time: {time_str}."
     )
 
@@ -50,7 +55,7 @@ TEMPERATURE: dict[str, float] = {
 }
 
 MAX_TOKENS: dict[str, int] = {
-    "preliminary_thinking": 1024,
+    "preliminary_thinking": 512,
     "intent_classify": 256,
     "tool_select_stage1": 64,
     "tool_arg_thinking": 256,     # Reasoning about how to fill tool arguments
