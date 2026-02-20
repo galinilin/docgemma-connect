@@ -89,12 +89,6 @@ _TOOL_STAGE2_DESC: dict[str, str] = {
         "Search ClinicalTrials.gov. "
         "Args: condition (str), status (str, optional)"
     ),
-    "search_patient": (
-        "Search EHR for a patient by name. Args: name (str)"
-    ),
-    "get_patient_chart": (
-        "Get full clinical summary. Args: patient_id (str)"
-    ),
     "prescribe_medication": (
         "Create medication order. "
         "Args: patient_id (str), medication_name (str), dosage (str), frequency (str)"

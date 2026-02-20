@@ -70,8 +70,6 @@ TOOL_CLINICAL_LABELS: dict[str, str] = {
     "check_drug_interactions": "Drug Interaction Check",
     "search_medical_literature": "Medical Literature",
     "find_clinical_trials": "Clinical Trials",
-    "search_patient": "Patient Search",
-    "get_patient_chart": "Patient Record",
     "prescribe_medication": "Prescription",
     "add_allergy": "Allergy Documentation",
     "save_clinical_note": "Clinical Note",
@@ -127,14 +125,6 @@ TOOL_DESCRIPTIONS = """Available tools:
   treatment. Use when a clinician asks about experimental treatments, ongoing trials,
   or new therapies being studied.
 
-- search_patient(name: str) — Search the electronic health record system for a patient
-  by name. Returns matching patient IDs and basic demographics. Use when a clinician
-  mentions a patient by name and needs to look them up.
-
-- get_patient_chart(patient_id: str) — Retrieve the full clinical summary for a patient,
-  including diagnoses, medications, allergies, lab results, and vitals. Requires a
-  patient ID (not a name). Use when a clinician wants to review a patient's record.
-
 - prescribe_medication(patient_id: str, medication_name: str, dosage: str,
   frequency: str) — Create a new medication order for a patient in the EHR. Use when
   a clinician wants to prescribe, order, or start a medication for a specific patient.
@@ -175,14 +165,6 @@ TOOL_EXAMPLES: dict[str, tuple[str, str]] = {
     "find_clinical_trials": (
         "Find recruiting clinical trials for lung cancer",
         "find_clinical_trials",
-    ),
-    "search_patient": (
-        "Search for patient John Smith",
-        "search_patient",
-    ),
-    "get_patient_chart": (
-        "Get the chart for patient abc-123",
-        "get_patient_chart",
     ),
     "prescribe_medication": (
         "Prescribe lisinopril 10mg daily for patient abc-123",
@@ -350,10 +332,6 @@ TASK_PATTERNS: dict[str, dict] = {
     "drug_interaction": {
         "keywords": ["interaction", "combining", "together with"],
         "requires": {"check_drug_interactions"},
-    },
-    "patient_lookup_and_review": {
-        "keywords_all": ["patient", "chart|record|summary"],
-        "requires": {"search_patient", "get_patient_chart"},
     },
     "prescribe": {
         "keywords": ["prescribe", "order", "start medication"],

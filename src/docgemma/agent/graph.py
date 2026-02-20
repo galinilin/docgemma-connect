@@ -70,14 +70,6 @@ _TOOL_STATUS_POOLS: dict[str, list[str]] = {
         "Looking up active trials...",
         "Checking trial registries...",
     ],
-    "search_patient": [
-        "Searching patient records...",
-        "Looking up patient information...",
-    ],
-    "get_patient_chart": [
-        "Retrieving patient chart...",
-        "Loading clinical history...",
-    ],
     "add_allergy": [
         "Documenting allergy...",
         "Recording allergy information...",
