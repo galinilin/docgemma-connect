@@ -177,6 +177,8 @@ async def websocket_chat(
                     metadata: dict = {"tool_calls_made": event.tool_calls_made}
                     if event.clinical_trace is not None:
                         metadata["clinical_trace"] = event.clinical_trace.model_dump(mode="json")
+                    if event.preliminary_thinking is not None:
+                        metadata["preliminary_thinking"] = event.preliminary_thinking
                     store.add_message(
                         session_id, "assistant", event.final_response, metadata=metadata,
                     )
@@ -388,6 +390,7 @@ async def _prepare_send_message(
     # Extract frontend controls
     patient_id = data.get("patient_id")
     tool_calling_enabled = data.get("tool_calling_enabled", True)
+    thinking_enabled = data.get("thinking_enabled", False)
 
     # Persist selected patient on the session (survives reload)
     session.selected_patient_id = patient_id or None
@@ -405,6 +408,7 @@ async def _prepare_send_message(
         conversation_history=history,
         patient_id=patient_id,
         tool_calling_enabled=tool_calling_enabled,
+        thinking_enabled=thinking_enabled,
     )
 
 

@@ -29,11 +29,13 @@ from .prompts import (
     INTENT_CLASSIFY_PROMPT,
     MAX_STEPS,
     MAX_TOKENS,
+    PRELIMINARY_THINKING_PROMPT,
     RESULT_CLASSIFY_PROMPT,
     SYNTHESIZE_SYSTEM_PROMPT,
     SYNTHESIZE_USER_TEMPLATE,
     TASK_PATTERNS,
     TEMPERATURE,
+    TOOL_ARG_THINKING_PROMPT,
     TOOL_CLINICAL_LABELS,
     TOOL_DESCRIPTIONS,
     TOOL_EXAMPLES,
@@ -199,6 +201,18 @@ def _patient_context_section(state: dict) -> str:
     return f"{header}{ctx}\n"
 
 
+def _thinking_context_section(state: dict) -> str:
+    """Build thinking context section for prompt injection.
+
+    Returns empty string if no preliminary thinking was produced, so
+    the prompt template collapses cleanly.
+    """
+    text = state.get("preliminary_thinking_text")
+    if not text:
+        return ""
+    return f"\nPreliminary reasoning:\n{text}\n"
+
+
 def _format_error_for_synthesis(error_messages: list[str]) -> str:
     """Format error messages for synthesis prompt (pre-formatted, clinician-safe)."""
     if not error_messages:
@@ -297,6 +311,70 @@ def _needs_user_clarification(tool_results: list[ToolResult]) -> str | None:
             )
 
     return None
+
+
+# =============================================================================
+# Preliminary Thinking (optional pre-reasoning step, gated by thinking_enabled)
+# =============================================================================
+
+
+async def preliminary_thinking(
+    state: AgentState,
+    model: DocGemma,
+    stream_callback: StreamCallback = None,
+) -> dict:
+    """Generate preliminary reasoning about the query.
+
+    Async streaming LLM generation at T=0.5 with thinking tokens preserved.
+    Streams tokens to the frontend via stream_callback, then stores the
+    full text in state for downstream prompt injection.
+    """
+    query = state.get("user_query", "")
+    context = _patient_context_section(state)
+    history = state.get("conversation_history", [])
+
+    image_findings = state.get("image_findings")
+    image_section = f"\nImage findings:\n{image_findings}\n" if image_findings else ""
+
+    tool_calling_enabled = state.get("tool_calling_enabled", True)
+    tools_section = f"\nAvailable tools:\n{TOOL_DESCRIPTIONS}\n" if tool_calling_enabled else ""
+
+    prompt = PRELIMINARY_THINKING_PROMPT.format(
+        user_query=query,
+        patient_context_section=context,
+        image_section=image_section,
+        tools_section=tools_section,
+    )
+
+    chunks: list[str] = []
+    async for chunk in model.generate_stream(
+        prompt,
+        max_new_tokens=MAX_TOKENS["preliminary_thinking"],
+        do_sample=True,
+        temperature=TEMPERATURE["preliminary_thinking"],
+        messages=history,
+        filter_thinking=False,
+    ):
+        if stream_callback:
+            await stream_callback(chunk)
+        chunks.append(chunk)
+
+    response = "".join(chunks)
+
+    logger.info(
+        f"[PRELIMINARY_THINKING] Generated {len(response)} chars of reasoning"
+    )
+
+    return {"preliminary_thinking_text": response}
+
+
+def route_after_input_assembly(state: dict) -> str:
+    """Route after input assembly: thinking node if enabled, else intent classify."""
+    if state.get("thinking_enabled"):
+        logger.info("[ROUTE] input_assembly → preliminary_thinking (thinking enabled)")
+        return "preliminary_thinking"
+    logger.info("[ROUTE] input_assembly → intent_classify")
+    return "intent_classify"
 
 
 # =============================================================================
@@ -400,6 +478,7 @@ def intent_classify(state: AgentState, model: DocGemma) -> dict:
 
     prompt = INTENT_CLASSIFY_PROMPT.format(
         user_query=state.get("user_query", ""),
+        thinking_section=_thinking_context_section(state),
         patient_context_section=context,
     )
     history = state.get("conversation_history", [])
@@ -452,6 +531,7 @@ def tool_select(state: AgentState, model: DocGemma) -> dict:
         example_tool=example[1],
         task_summary=task_summary,
         user_query=query,
+        thinking_section=_thinking_context_section(state),
     )
 
     tool_result = model.generate_outlines(
@@ -495,10 +575,36 @@ def tool_select(state: AgentState, model: DocGemma) -> dict:
         hints.append(f"Detected drugs: {', '.join(entities['drug_mentions'])}")
     entity_hints = "\n".join(hints) if hints else ""
 
+    # ── Stage 1.5: Arg Thinking (always runs before argument extraction) ──
+    arg_thinking_section = ""
+    arg_thinking_prompt = TOOL_ARG_THINKING_PROMPT.format(
+        tool_name=tool_name,
+        tool_description=tool_desc,
+        user_query=query,
+        task_summary=task_summary,
+        thinking_section=_thinking_context_section(state),
+        patient_context_section=_patient_context_section(state),
+        entity_hints=f"\nExtracted entities:\n{entity_hints}\n" if entity_hints else "",
+    )
+    arg_thinking_text = model.generate(
+        arg_thinking_prompt,
+        max_new_tokens=MAX_TOKENS["tool_arg_thinking"],
+        do_sample=True,
+        temperature=TEMPERATURE["tool_arg_thinking"],
+        messages=history,
+    )
+    if arg_thinking_text:
+        logger.info(
+            f"[TOOL_SELECT] Arg thinking: {_truncate(arg_thinking_text)}"
+        )
+        arg_thinking_section = f"\nArgument reasoning:\n{arg_thinking_text}\n"
+
     stage2_prompt = TOOL_SELECT_STAGE2_PROMPT.format(
         tool_name=tool_name,
         tool_description=tool_desc,
         user_query=query,
+        thinking_section=_thinking_context_section(state),
+        arg_thinking_section=arg_thinking_section,
         entity_hints=entity_hints,
     )
 
@@ -698,6 +804,7 @@ def result_classify(state: AgentState, model: DocGemma) -> dict:
     prompt = RESULT_CLASSIFY_PROMPT.format(
         user_query=state.get("user_query", ""),
         task_summary=state.get("task_summary", ""),
+        thinking_section=_thinking_context_section(state),
         tool_label=tool_label,
         formatted_tool_result=classify_result_text,
     )
@@ -755,6 +862,7 @@ async def synthesize(
 
         prompt = DIRECT_CHAT_PROMPT.format(
             user_query=query,
+            thinking_section=_thinking_context_section(state),
             patient_context_section=context,
         )
 
@@ -827,6 +935,7 @@ async def synthesize(
     user_prompt = SYNTHESIZE_USER_TEMPLATE.format(
         user_query=query,
         task_summary=state.get("task_summary", ""),
+        thinking_section=_thinking_context_section(state),
         patient_context_section=_patient_context_section(state),
         image_section=image_section,
         tool_results_section=tool_results_section,

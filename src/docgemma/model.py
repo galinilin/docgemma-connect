@@ -356,6 +356,7 @@ class DocGemma:
         temperature: float = 0.6,
         image_base64: str | None = None,
         messages: list[dict] | None = None,
+        filter_thinking: bool = True,
     ) -> AsyncGenerator[str, None]:
         """Stream free-form response token-by-token via SSE.
 
@@ -366,6 +367,9 @@ class DocGemma:
             temperature: Sampling temperature (used if do_sample=True).
             image_base64: Optional base64-encoded image for vision queries.
             messages: Optional prior conversation turns to prepend.
+            filter_thinking: If True (default), strip <unused94>...<unused95>
+                thinking blocks. If False, yield all content as-is (used by
+                preliminary_thinking node to expose reasoning).
 
         Yields:
             Text chunks as they arrive.
@@ -392,8 +396,51 @@ class DocGemma:
         else:
             payload["temperature"] = 0.0
 
-        in_thinking = False
         full_response_parts: list[str] = []
+
+        if not filter_thinking:
+            # ── Raw mode: yield all tokens including thinking content ──
+            # Strip only the <unused94>/<unused95> tag markers and the
+            # "thought\n" prefix that typically follows <unused94>.
+            _started = False
+            async with self._async_client.stream(
+                "POST",
+                f"{self._endpoint}/v1/chat/completions",
+                json=payload,
+            ) as response:
+                response.raise_for_status()
+                async for line in response.aiter_lines():
+                    if not line.startswith("data: "):
+                        continue
+                    data_str = line[len("data: "):]
+                    if data_str.strip() == "[DONE]":
+                        break
+                    try:
+                        chunk = _json.loads(data_str)
+                        delta = chunk.get("choices", [{}])[0].get("delta", {})
+                        content = delta.get("content")
+                        if not content:
+                            continue
+                        # Strip tag markers but keep content between them
+                        content = content.replace(_THINKING_OPEN, "").replace(_THINKING_CLOSE, "")
+                        # Strip "thought\n" prefix from the first real content
+                        if content and not _started:
+                            content = _THINKING_PREFIX_RE.sub("", content).lstrip()
+                        if content:
+                            _started = True
+                            full_response_parts.append(content)
+                            yield content
+                    except (_json.JSONDecodeError, IndexError, KeyError):
+                        continue
+
+            self.last_thinking_text = None
+            full_response = "".join(full_response_parts)
+            print("[*] Stream (raw):", _json.dumps({"input": all_messages, "response": full_response}, indent=2))
+            print("*********************")
+            return
+
+        # ── Filtered mode (default): strip thinking blocks entirely ──
+        in_thinking = False
         thinking_buffer: list[str] = []
         thinking_word_count = 0
         continuation_needed = False

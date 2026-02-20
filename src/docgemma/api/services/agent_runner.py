@@ -108,6 +108,7 @@ class AgentRunner:
         conversation_history: list[dict[str, str]] | None = None,
         patient_id: str | None = None,
         tool_calling_enabled: bool = True,
+        thinking_enabled: bool = False,
     ) -> AsyncGenerator[AgentEvent, None]:
         """Start a new turn in the conversation.
 
@@ -120,6 +121,7 @@ class AgentRunner:
             conversation_history: Previous messages for context
             patient_id: Optional patient ID from frontend selector
             tool_calling_enabled: Whether the agent should use tools
+            thinking_enabled: Whether to run preliminary thinking step
 
         Yields:
             AgentEvent objects representing execution progress
@@ -131,6 +133,7 @@ class AgentRunner:
             user_input, image_data, conversation_history,
             patient_id=patient_id,
             tool_calling_enabled=tool_calling_enabled,
+            thinking_enabled=thinking_enabled,
         )
 
         config = self._make_thread_id(session.session_id)
@@ -267,10 +270,18 @@ class AgentRunner:
         # Queue bridge: streaming tokens and graph updates flow through here
         event_queue: asyncio.Queue[AgentEvent | dict | None] = asyncio.Queue()
 
+        # Track which node is currently streaming so the frontend can route
+        # tokens to the correct UI component (thinking section vs response).
+        streaming_ctx = {
+            "node_id": "preliminary_thinking"
+            if (input_data and input_data.get("thinking_enabled"))
+            else "terminal"
+        }
+
         async def _stream_callback(text: str) -> None:
             """Push streaming text tokens into the queue."""
             await event_queue.put(
-                StreamingTextEvent(text=text, node_id="terminal")
+                StreamingTextEvent(text=text, node_id=streaming_ctx["node_id"])
             )
 
         # Build graph with streaming callback for this execution
@@ -386,6 +397,11 @@ class AgentRunner:
                             )
                         continue
 
+                    # Reset streaming context after thinking node completes
+                    # so subsequent streaming (synthesis) uses "terminal".
+                    if node_name == "preliminary_thinking":
+                        streaming_ctx["node_id"] = "terminal"
+
                     # Regular node execution — measure wall-clock since last update
                     now = time.perf_counter()
                     elapsed_ms = (now - last_node_time) * 1000
@@ -445,11 +461,16 @@ class AgentRunner:
                                     full_state.values, node_durations
                                 )
 
+                        preliminary_thinking_text = None
+                        if full_state and full_state.values:
+                            preliminary_thinking_text = full_state.values.get("preliminary_thinking_text")
+
                         session.status = SessionStatus.ACTIVE
                         yield CompletionEvent(
                             final_response=final_response,
                             tool_calls_made=tool_count,
                             clinical_trace=clinical_trace,
+                            preliminary_thinking=preliminary_thinking_text,
                         )
         finally:
             if not graph_task.done():

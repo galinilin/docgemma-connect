@@ -116,6 +116,9 @@ class CompletionEvent(BaseEvent):
     clinical_trace: ClinicalTrace | None = Field(
         default=None, description="Clinical reasoning trace for UI display"
     )
+    preliminary_thinking: str | None = Field(
+        default=None, description="Preliminary reasoning text (if thinking mode was enabled)"
+    )
 
 
 class ErrorEvent(BaseEvent):

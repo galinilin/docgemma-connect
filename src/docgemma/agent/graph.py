@@ -25,7 +25,9 @@ from .nodes import (
     StreamCallback,
     input_assembly,
     intent_classify,
+    preliminary_thinking,
     result_classify,
+    route_after_input_assembly,
     route_after_intent,
     route_after_result_classify,
     route_after_tool_select,
@@ -91,6 +93,11 @@ _TOOL_STATUS_POOLS: dict[str, list[str]] = {
 }
 
 _STATUS_POOLS: dict[str, list[str]] = {
+    "thinking": [
+        "Thinking...",
+        "Reasoning through the query...",
+        "Considering the clinical context...",
+    ],
     "analyzing_query": [
         "Analyzing query...",
         "Understanding your question...",
@@ -224,6 +231,7 @@ def _make_initial_state(
     *,
     patient_id: str | None = None,
     tool_calling_enabled: bool = True,
+    thinking_enabled: bool = False,
 ) -> dict:
     """Create a fresh state dict for a new turn.
 
@@ -257,6 +265,9 @@ def _make_initial_state(
         "session_patient_id": patient_id,
         "tool_calling_enabled": tool_calling_enabled,
         "patient_context": None,
+        # Preliminary Thinking
+        "thinking_enabled": thinking_enabled,
+        "preliminary_thinking_text": None,
         # Output
         "final_response": None,
         "model_thinking": None,
@@ -271,6 +282,11 @@ def _get_status_text(node_name: str, state_update: dict) -> str | None:
     state = state_update or {}
 
     if node_name == "input_assembly":
+        if state.get("thinking_enabled"):
+            return _pick("thinking")
+        return _pick("analyzing_query")
+
+    if node_name == "preliminary_thinking":
         return _pick("analyzing_query")
 
     if node_name == "intent_classify":
@@ -503,26 +519,11 @@ def _build_clinical_trace(
     steps: list[TraceStep] = []
     total_ms = 0.0
 
-    # 1. Intent classification step
-    intent = state.get("intent", "DIRECT")
-    dur = node_durations.get("intent_classify", 0)
-    total_ms += dur
-    route_desc = "Direct answer" if intent == "DIRECT" else "Tool lookup"
-    steps.append(
-        TraceStep(
-            type=TraceStepType.THOUGHT,
-            label="Query Analysis",
-            description=route_desc,
-            duration_ms=dur,
-        )
-    )
-
-    # 2. Image analysis (pre-processing step, if image was attached)
+    # 1. Image analysis (input_assembly — first in pipeline)
     image_findings = state.get("image_findings")
     if image_findings:
         dur = node_durations.get("input_assembly", 0)
         total_ms += dur
-        # Preview for label — full text in detail
         preview = image_findings[:120] + "..." if len(image_findings) > 120 else image_findings
         steps.append(
             TraceStep(
@@ -537,21 +538,49 @@ def _build_clinical_trace(
             )
         )
 
-    # 3. Model thinking (if captured from <unused94>...<unused95> block)
-    thinking_text = state.get("model_thinking")
+    # 2. Preliminary thinking (brief entry — full text shown in Agent Thinking section)
+    thinking_text = state.get("preliminary_thinking_text")
     if thinking_text:
+        dur = node_durations.get("preliminary_thinking", 0)
+        total_ms += dur
+        steps.append(
+            TraceStep(
+                type=TraceStepType.THOUGHT,
+                label="Preliminary Thinking",
+                description=f"Reasoned through the query ({len(thinking_text.split())} words)",
+                duration_ms=dur,
+            )
+        )
+
+    # 3. Intent classification step
+    intent = state.get("intent", "DIRECT")
+    dur = node_durations.get("intent_classify", 0)
+    total_ms += dur
+    route_desc = "Direct answer" if intent == "DIRECT" else "Tool lookup"
+    steps.append(
+        TraceStep(
+            type=TraceStepType.THOUGHT,
+            label="Query Analysis",
+            description=route_desc,
+            duration_ms=dur,
+        )
+    )
+
+    # 4. Model thinking (if captured from <unused94>...<unused95> block)
+    model_thinking_text = state.get("model_thinking")
+    if model_thinking_text:
         # Truncate for display label — full text in reasoning_text
-        preview = thinking_text[:120] + "..." if len(thinking_text) > 120 else thinking_text
+        preview = model_thinking_text[:120] + "..." if len(model_thinking_text) > 120 else model_thinking_text
         steps.append(
             TraceStep(
                 type=TraceStepType.THOUGHT,
                 label="Model Reasoning",
                 description=preview,
-                reasoning_text=thinking_text,
+                reasoning_text=model_thinking_text,
             )
         )
 
-    # 4. Successful tool calls
+    # 5. Successful tool calls
     for result in state.get("tool_results", []):
         if not result.get("success"):
             continue
@@ -573,7 +602,7 @@ def _build_clinical_trace(
             )
         )
 
-    # 5. Synthesis step
+    # 6. Synthesis step
     dur = node_durations.get("synthesize", 0)
     total_ms += dur
     steps.append(
@@ -600,6 +629,7 @@ def _build_clinical_trace(
 
 _NODE_LABELS = {
     "input_assembly": "Input Assembly",
+    "preliminary_thinking": "Preliminary Thinking",
     "intent_classify": "Intent Classification",
     "tool_select": "Tool Selection",
     "tool_execute": "Tool Execution",
@@ -660,6 +690,12 @@ def build_graph(
     # 1. Input assembly (deterministic)
     workflow.add_node("input_assembly", input_assembly)
 
+    # 1b. Preliminary thinking (optional, LLM free-form, streaming)
+    async def _preliminary_thinking(s):
+        return await preliminary_thinking(s, model, stream_callback)
+
+    workflow.add_node("preliminary_thinking", _preliminary_thinking)
+
     # 2. Intent classify (LLM + Outlines)
     workflow.add_node(
         "intent_classify", lambda s: intent_classify(s, model)
@@ -690,8 +726,18 @@ def build_graph(
 
     # === Edges ===
 
-    # input_assembly → intent_classify
-    workflow.add_edge("input_assembly", "intent_classify")
+    # input_assembly → conditional: thinking or intent_classify
+    workflow.add_conditional_edges(
+        "input_assembly",
+        route_after_input_assembly,
+        {
+            "preliminary_thinking": "preliminary_thinking",
+            "intent_classify": "intent_classify",
+        },
+    )
+
+    # preliminary_thinking → intent_classify
+    workflow.add_edge("preliminary_thinking", "intent_classify")
 
     # intent_classify → conditional: DIRECT → synthesize, TOOL_NEEDED → tool_select
     workflow.add_conditional_edges(

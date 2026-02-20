@@ -75,6 +75,10 @@ class AgentState(TypedDict, total=False):
     tool_calling_enabled: Optional[bool]    # False = force DIRECT route
     patient_context: Optional[str]          # Pre-fetched chart summary for selected patient
 
+    # ── Preliminary Thinking (optional pre-reasoning step) ──
+    thinking_enabled: Optional[bool]        # From frontend toggle
+    preliminary_thinking_text: Optional[str]  # Free-form reasoning output
+
     # ── Output (Node 7) ──
     final_response: Optional[str]
     model_thinking: Optional[str]  # Raw thinking text captured from <unused94>...<unused95>

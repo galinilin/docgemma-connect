@@ -40,16 +40,20 @@ def build_system_prompt() -> str:
 # =============================================================================
 
 TEMPERATURE: dict[str, float] = {
+    "preliminary_thinking": 0.5,  # Free-form reasoning — same as synthesis
     "intent_classify": 0.0,       # Operational — deterministic (Part II §25)
     "tool_select_stage1": 0.0,    # Operational — deterministic
+    "tool_arg_thinking": 0.5,     # Free-form reasoning for argument construction
     "tool_select_stage2": 0.0,    # Operational — deterministic
     "result_classify": 0.0,       # Classification — deterministic
     "synthesize": 0.5,            # Free-form — validated optimum (Part IV §43)
 }
 
 MAX_TOKENS: dict[str, int] = {
+    "preliminary_thinking": 1024,
     "intent_classify": 256,
     "tool_select_stage1": 64,
+    "tool_arg_thinking": 256,     # Reasoning about how to fill tool arguments
     "tool_select_stage2": 128,
     "result_classify": 128,
     "synthesize": 256,            # Validated optimum (Part IV §46)
@@ -202,6 +206,18 @@ _DEFAULT_EXAMPLE = TOOL_EXAMPLES["check_drug_safety"]
 # NODE PROMPTS
 # =============================================================================
 
+# ── Preliminary Thinking (optional pre-reasoning step) ────────────────────────
+
+PRELIMINARY_THINKING_PROMPT = """\
+You are a clinical decision-support assistant. Think through the following query
+step by step. Consider: what clinical information is needed, what tools might help,
+and what the key medical considerations are.
+{tools_section}{patient_context_section}{image_section}
+Query: {user_query}
+
+Think step by step:"""
+
+
 # ── Node 2: INTENT_CLASSIFY ──────────────────────────────────────────────────
 
 INTENT_CLASSIFY_PROMPT = """\
@@ -218,7 +234,7 @@ Classification rules:
 
 Provide a task_summary that captures the clinical context in ~50 words or fewer.
 If TOOL_NEEDED, suggest the most relevant tool name.
-{patient_context_section}
+{thinking_section}{patient_context_section}
 Query: {user_query}"""
 
 
@@ -234,9 +250,30 @@ User: "{example_query}"
 Tool: {example_tool}
 
 Now select the tool for the current task.
-
+{thinking_section}
 Task summary: {task_summary}
 User query: {user_query}"""
+
+
+# ── Node 3 Stage 1.5: TOOL_ARG_THINKING (free-form reasoning for args) ──────
+
+TOOL_ARG_THINKING_PROMPT = """\
+You are constructing a call to the {tool_name} tool. Think step by step about
+how to fill in the arguments correctly.
+
+Tool: {tool_name}
+Description: {tool_description}
+
+User query: {user_query}
+Clinical context: {task_summary}
+{thinking_section}{patient_context_section}{entity_hints}
+Consider:
+- What specific values should each argument have?
+- Are there patient IDs, drug names, or other entities already identified?
+- Does the patient context provide relevant information?
+- Are there any implicit details in the query that should be extracted?
+
+Think step by step about the correct arguments:"""
 
 
 # ── Node 3 Stage 2: TOOL_SELECT (per-tool args) ─────────────────────────────
@@ -248,7 +285,7 @@ Tool: {tool_name}
 Description: {tool_description}
 
 User query: {user_query}
-{entity_hints}
+{thinking_section}{arg_thinking_section}{entity_hints}
 Fill in the required arguments."""
 
 
@@ -259,7 +296,7 @@ You are evaluating a tool result. Classify the quality of the data returned.
 
 User's original question: {user_query}
 Clinical context: {task_summary}
-
+{thinking_section}
 Tool used: {tool_label}
 Result:
 {formatted_tool_result}
@@ -286,7 +323,7 @@ SYNTHESIZE_USER_TEMPLATE = """\
 Clinician's question: {user_query}
 
 Clinical context: {task_summary}
-{patient_context_section}\
+{thinking_section}{patient_context_section}\
 {image_section}\
 {tool_results_section}\
 {error_section}\
@@ -297,7 +334,7 @@ Clinical context: {task_summary}
 
 DIRECT_CHAT_PROMPT = """\
 You are responding to a clinician (not the patient). Be concise.
-{patient_context_section}
+{thinking_section}{patient_context_section}
 Query: {user_query}"""
 
 
