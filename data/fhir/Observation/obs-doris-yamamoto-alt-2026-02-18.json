@@ -1,0 +1,59 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-doris-yamamoto-alt-2026-02-18",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "1742-6",
+        "display": "Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma"
+      }
+    ],
+    "text": "ALT"
+  },
+  "subject": {
+    "reference": "Patient/patient-doris-yamamoto"
+  },
+  "effectiveDateTime": "2026-02-18T06:00:00Z",
+  "valueQuantity": {
+    "value": 28,
+    "unit": "U/L",
+    "system": "http://unitsofmeasure.org",
+    "code": "U/L"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "N",
+          "display": "Normal"
+        }
+      ]
+    }
+  ],
+  "referenceRange": [
+    {
+      "low": {
+        "value": 7,
+        "unit": "U/L"
+      },
+      "high": {
+        "value": 56,
+        "unit": "U/L"
+      }
+    }
+  ]
+}

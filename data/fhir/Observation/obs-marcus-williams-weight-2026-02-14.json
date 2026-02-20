@@ -1,0 +1,35 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-marcus-williams-weight-2026-02-14",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "vital-signs",
+          "display": "Vital Signs"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29463-7",
+        "display": "Body weight"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-marcus-williams"
+  },
+  "effectiveDateTime": "2026-02-14T09:00:00Z",
+  "valueQuantity": {
+    "value": 90,
+    "unit": "kg",
+    "system": "http://unitsofmeasure.org",
+    "code": "kg"
+  }
+}

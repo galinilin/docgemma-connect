@@ -1,0 +1,44 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "dr-baby-torres-tte-2026-02-17",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+          "code": "CUS",
+          "display": "Cardiac Ultrasound"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "79351-4",
+        "display": "Echocardiography study"
+      }
+    ],
+    "text": "Transthoracic Echocardiogram (TTE)"
+  },
+  "subject": {
+    "reference": "Patient/patient-baby-torres"
+  },
+  "encounter": {
+    "reference": "Encounter/encounter-baby-torres-2026-02-17"
+  },
+  "effectiveDateTime": "2026-02-17T08:30:00Z",
+  "issued": "2026-02-17T10:00:00Z",
+  "media": [
+    {
+      "comment": "Parasternal long axis view demonstrating VSD",
+      "link": {
+        "reference": "Media/media-baby-torres-echo",
+        "display": "TTE - parasternal long axis"
+      }
+    }
+  ],
+  "conclusion": "Large perimembranous ventricular septal defect (8mm) with predominantly left-to-right shunting. Left ventricular dilation (LVIDd z-score +3.2) consistent with volume overload. Preserved left ventricular systolic function (shortening fraction 35%). Mild left atrial dilation secondary to increased pulmonary venous return. No evidence of pulmonary hypertension (estimated PA systolic pressure 30 mmHg). No aortic valve prolapse. Normal aortic arch anatomy without coarctation."
+}

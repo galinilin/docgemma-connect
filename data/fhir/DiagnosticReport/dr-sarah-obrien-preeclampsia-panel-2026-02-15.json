@@ -1,0 +1,61 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "dr-sarah-obrien-preeclampsia-panel-2026-02-15",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v2-0074",
+          "code": "LAB",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "89044-0",
+        "display": "Preeclampsia evaluation panel"
+      }
+    ],
+    "text": "Preeclampsia evaluation panel"
+  },
+  "subject": {
+    "reference": "Patient/patient-sarah-obrien"
+  },
+  "encounter": {
+    "reference": "Encounter/encounter-sarah-obrien-2026-02-15"
+  },
+  "effectiveDateTime": "2026-02-15T08:00:00Z",
+  "issued": "2026-02-15T10:30:00Z",
+  "result": [
+    {
+      "reference": "Observation/obs-sarah-obrien-platelets-2026-02-15",
+      "display": "Platelets 98 x10^3/uL [L]"
+    },
+    {
+      "reference": "Observation/obs-sarah-obrien-creatinine-2026-02-15",
+      "display": "Creatinine 1.1 mg/dL [H]"
+    },
+    {
+      "reference": "Observation/obs-sarah-obrien-uric-acid-2026-02-15",
+      "display": "Uric Acid 7.8 mg/dL [H]"
+    },
+    {
+      "reference": "Observation/obs-sarah-obrien-alt-2026-02-15",
+      "display": "ALT 52 U/L [H]"
+    },
+    {
+      "reference": "Observation/obs-sarah-obrien-ast-2026-02-15",
+      "display": "AST 48 U/L [H]"
+    },
+    {
+      "reference": "Observation/obs-sarah-obrien-protein-cr-ratio-2026-02-15",
+      "display": "Protein/Creatinine Ratio 0.45 mg/mg [H]"
+    }
+  ],
+  "conclusion": "Laboratory findings consistent with severe preeclampsia in the setting of elevated blood pressure (168/108 mmHg at 34 weeks gestation). Thrombocytopenia (platelets 98K) suggests evolving HELLP spectrum. Elevated creatinine (1.1 mg/dL) and uric acid (7.8 mg/dL) indicate renal involvement. Transaminitis (ALT 52, AST 48 U/L) confirms hepatic involvement. Significant proteinuria (protein/creatinine ratio 0.45) confirms renal protein wasting. Findings warrant close monitoring for HELLP syndrome progression and consideration of delivery timing."
+}
