@@ -194,7 +194,9 @@ def _patient_context_section(state: dict) -> str:
     ctx = state.get("patient_context")
     if not ctx:
         return ""
-    return f"\nActive patient record:\n{ctx}\n"
+    pid = state.get("session_patient_id", "")
+    header = f"\nActive patient record (ID: {pid}):\n" if pid else "\nActive patient record:\n"
+    return f"{header}{ctx}\n"
 
 
 def _format_error_for_synthesis(error_messages: list[str]) -> str:
