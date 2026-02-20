@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-george-nakamura-ros",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-george-nakamura"
+  },
+  "date": "2026-02-17T10:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Lisa Yamamoto, MD - Palliative Medicine"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Q29uc3RpdHV0aW9uYWw6IFByb2ZvdW5kIGZhdGlndWUsIHByb2dyZXNzaXZlIHdlaWdodCBsb3NzICg1MiBrZywgZG93biBmcm9tIDY4IGtnIGJhc2VsaW5lKS4gTm8gZmV2ZXIgb3IgY2hpbGxzLiBQb29yIGFwcGV0aXRlLCB0b2xlcmF0aW5nIG1pbmltYWwgb3JhbCBpbnRha2UuCkhFRU5UOiBEcnkgbW91dGguIE1pbGQgc2NsZXJhbCBpY3RlcnVzIG5vdGVkIGJ5IGZhbWlseS4gTm8gdmlzaW9uIGNoYW5nZXMsIGhlYXJpbmcgbG9zcywgb3IgZXBpc3RheGlzLgpDYXJkaW92YXNjdWxhcjogTm8gY2hlc3QgcGFpbiBvciBwYWxwaXRhdGlvbnMuIE5vdGVzIG9jY2FzaW9uYWwgbGlnaHRoZWFkZWRuZXNzIHdpdGggcG9zaXRpb24gY2hhbmdlcy4KUmVzcGlyYXRvcnk6IE1pbGQgZHlzcG5lYSBvbiBleGVydGlvbiAod2Fsa2luZyB0byBiYXRocm9vbSkuIE5vIGNvdWdoIG9yIGhlbW9wdHlzaXMuCkdhc3Ryb2ludGVzdGluYWw6IFNldmVyZSBuYXVzZWEgd2l0aCB2b21pdGluZyAyLTMgdGltZXMgZGFpbHkuIERlZXAgZXBpZ2FzdHJpYyBwYWluIHJhZGlhdGluZyB0byBiYWNrLCByYXRlZCA4LzEwLiBObyBoZW1hdGVtZXNpcyBvciBtZWxlbmEuIFJlcG9ydHMgaW50ZXJtaXR0ZW50IGNvbnN0aXBhdGlvbiAobGFzdCBib3dlbCBtb3ZlbWVudCAyIGRheXMgYWdvKS4KR2VuaXRvdXJpbmFyeTogRGVjcmVhc2VkIHVyaW5lIG91dHB1dCBub3RlZCBieSBmYW1pbHkuIE5vIGR5c3VyaWEgb3IgaGVtYXR1cmlhLgpNdXNjdWxvc2tlbGV0YWw6IEdlbmVyYWxpemVkIHdlYWtuZXNzIGFuZCBtdXNjbGUgd2FzdGluZy4gVW5hYmxlIHRvIHdhbGsgbW9yZSB0aGFuIDEwIGZlZXQgd2l0aG91dCBhc3Npc3RhbmNlLgpOZXVyb2xvZ2ljYWw6IE5vIG5ldyBoZWFkYWNoZSwgY29uZnVzaW9uLCBvciBmb2NhbCBkZWZpY2l0cy4gUmVwb3J0cyBpbnRlcm1pdHRlbnQgZHJvd3NpbmVzcyBhdHRyaWJ1dGVkIHRvIG1vcnBoaW5lLgpQc3ljaGlhdHJpYzogUmVwb3J0cyBmZWVsaW5ncyBvZiBwZWFjZSB3aXRoIGhpcyBzaXR1YXRpb24uIERlbmllcyBkZXByZXNzaW9uIG9yIGFjdGl2ZSBkaXN0cmVzcy4gU3Bpcml0dWFsIHN1cHBvcnQgZnJvbSBmYW1pbHkgYW5kIHRlbXBsZSBjb21tdW5pdHku"
+      }
+    }
+  ]
+}

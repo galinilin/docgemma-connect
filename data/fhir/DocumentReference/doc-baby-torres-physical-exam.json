@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-baby-torres-physical-exam",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-baby-torres"
+  },
+  "date": "2026-02-17T09:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Ana Gutierrez, MD - Pediatric Cardiology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Vml0YWxzOiBCUCA3NS81MCBtbUhnIChyaWdodCBhcm0sIGFwcHJvcHJpYXRlIGN1ZmYpLCBIUiAxNDggYnBtLCBSUiA1Mi9taW4sIFRlbXAgOTguMCBGIChheGlsbGFyeSksIFNwTzIgOTYlIFJBLCBXZWlnaHQgNC44IGtnICg1dGggcGVyY2VudGlsZSksIExlbmd0aCA1OCBjbSAoMTV0aCBwZXJjZW50aWxlKSwgSGVhZCBjaXJjdW1mZXJlbmNlIDM5IGNtICgyNXRoIHBlcmNlbnRpbGUpCgpHZW5lcmFsOiBTbWFsbC1mb3ItYWdlIGluZmFudCwgYWxlcnQgYnV0IGFwcGVhcnMgdGhpbiBhbmQgbWlsZGx5IGZhdGlndWVkLiBNaWxkIHN1YmNvc3RhbCByZXRyYWN0aW9ucyB2aXNpYmxlIGF0IHJlc3QuIE5vIGN5YW5vc2lzLiBBY3RpdmUgYW5kIHJlc3BvbnNpdmUgdG8gc3RpbXVsYXRpb24uCgpIRUVOVDogQW50ZXJpb3IgZm9udGFuZWxsZSBvcGVuLCBmbGF0LCBzb2Z0LCBhcHByb3hpbWF0ZWx5IDIgeCAyIGNtLiBObyBidWxnaW5nLiBOb3Jtb2NlcGhhbGljLiBSZWQgcmVmbGV4IHByZXNlbnQgYmlsYXRlcmFsbHkuIFR5bXBhbmljIG1lbWJyYW5lcyBjbGVhciBiaWxhdGVyYWxseS4gTmFyZXMgcGF0ZW50LiBPcm9waGFyeW54IGNsZWFyLCBwYWxhdGUgaW50YWN0LCBtb2lzdCBtdWNvdXMgbWVtYnJhbmVzLgoKTmVjazogU3VwcGxlLCBubyBtYXNzZXMsIG5vIGx5bXBoYWRlbm9wYXRoeS4KCkNhcmRpb3Zhc2N1bGFyOiBQcmVjb3JkaXVtIGh5cGVyYWN0aXZlIHdpdGggdmlzaWJsZSBhbmQgcGFscGFibGUgbGVmdCBwYXJhc3Rlcm5hbCBoZWF2ZS4gSGVhcnQgcmF0ZSAxNDggYnBtLCByZWd1bGFyIHJoeXRobS4gR3JhZGUgSVYvVkkgaGFyc2ggaG9sb3N5c3RvbGljIG11cm11ciBoZWFyZCBiZXN0IGF0IHRoZSBsZWZ0IGxvd2VyIHN0ZXJuYWwgYm9yZGVyLCByYWRpYXRpbmcgYWNyb3NzIHRoZSBwcmVjb3JkaXVtLiBTMSBub3JtYWwsIFMyIHdpdGggbmFycm93bHkgc3BsaXQgY29tcG9uZW50cy4gRGlhc3RvbGljIHJ1bWJsZSBhdCB0aGUgYXBleCBzdWdnZXN0cyBzaWduaWZpY2FudCBsZWZ0LXRvLXJpZ2h0IHNodW50IHdpdGggaW5jcmVhc2VkIG1pdHJhbCB2YWx2ZSBmbG93LiBDYXBpbGxhcnkgcmVmaWxsIDMgc2Vjb25kcyBpbiBhbGwgZXh0cmVtaXRpZXMuIEZlbW9yYWwgcHVsc2VzIDIrIGJpbGF0ZXJhbGx5LiBObyBoZXBhdG9tZWdhbHkgc3VnZ2VzdGluZyByaWdodCBoZWFydCBmYWlsdXJlIGlzIG5vdCBwcmVkb21pbmFudC4KClJlc3BpcmF0b3J5OiBUYWNoeXBuZWljIGF0IHJlc3Qgd2l0aCByZXNwaXJhdG9yeSByYXRlIDUyL21pbi4gTWlsZCBzdWJjb3N0YWwgYW5kIGludGVyY29zdGFsIHJldHJhY3Rpb25zLiBMdW5ncyBjbGVhciB0byBhdXNjdWx0YXRpb24gYmlsYXRlcmFsbHkgd2l0aCBnb29kIGFpciBlbnRyeS4gTm8gd2hlZXplcywgY3JhY2tsZXMsIG9yIHJob25jaGkuIE5vIGdydW50aW5nIG9yIG5hc2FsIGZsYXJpbmcuCgpBYmRvbWVuOiBTb2Z0LCBub24tZGlzdGVuZGVkLiBMaXZlciBlZGdlIHBhbHBhYmxlIDIgY20gYmVsb3cgdGhlIHJpZ2h0IGNvc3RhbCBtYXJnaW4sIGNvbnNpc3RlbnQgd2l0aCBoZXBhdG9tZWdhbHkgZnJvbSB2b2x1bWUgb3ZlcmxvYWQuIFNwbGVlbiBub3QgcGFscGFibGUuIE5vIG1hc3Nlcy4gQWN0aXZlIGJvd2VsIHNvdW5kcy4KCkV4dHJlbWl0aWVzOiBXYXJtIGJ1dCBzbGlnaHRseSBtb3R0bGVkIGluIHRoZSBsb3dlciBleHRyZW1pdGllcy4gTm8gY2x1YmJpbmcuIE5vIHBlcmlwaGVyYWwgZWRlbWEuIENhcGlsbGFyeSByZWZpbGwgMyBzZWNvbmRzLgoKU2tpbjogTWlsZGx5IHBhbGUuIE5vIHJhc2hlcywgYmlydGhtYXJrcywgb3IgaGVtYW5naW9tYXMuIFNraW4gdHVyZ29yIG5vcm1hbC4gRGlhcGhvcmVzaXMgbm90ZWQgZHVyaW5nIGV4YW1pbmF0aW9uIHdoZW4gaW5mYW50IGJlY2FtZSBhZ2l0YXRlZC4KCk5ldXJvbG9naWNhbDogQWxlcnQgYW5kIGludGVyYWN0aXZlLiBTb2NpYWwgc21pbGUgcHJlc2VudC4gVHJhY2tzIGZhY2VzIGFjcm9zcyBtaWRsaW5lLiBIZWFkIGNvbnRyb2wgZGV2ZWxvcGluZyBidXQgc2xpZ2h0bHkgYmVoaW5kIGV4cGVjdGVkIGZvciBhZ2UuIE1vcm8gcmVmbGV4IHByZXNlbnQgYW5kIHN5bW1ldHJpYy4gR3Jhc3AgcmVmbGV4ZXMgaW50YWN0LiBUb25lIGlzIG1pbGRseSByZWR1Y2VkIGJ1dCBzeW1tZXRyaWMu"
+      }
+    }
+  ]
+}

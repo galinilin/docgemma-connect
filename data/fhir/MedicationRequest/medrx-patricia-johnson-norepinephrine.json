@@ -1,0 +1,43 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-patricia-johnson-norepinephrine",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "7512",
+        "display": "Norepinephrine"
+      }
+    ],
+    "text": "Norepinephrine 8 mcg/min"
+  },
+  "subject": {
+    "reference": "Patient/patient-patricia-johnson",
+    "display": "Patricia Johnson"
+  },
+  "authoredOn": "2026-02-16",
+  "dosageInstruction": [
+    {
+      "text": "8 mcg/min continuous IV infusion, titrate to MAP > 65 mmHg",
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "47625008",
+            "display": "Intravenous route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 8,
+            "unit": "mcg/min"
+          }
+        }
+      ]
+    }
+  ]
+}

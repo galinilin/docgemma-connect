@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-robert-thompson-physical-exam",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-robert-thompson"
+  },
+  "date": "2026-02-15T10:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Michelle Park, MD - Dermatology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Vml0YWxzOiBCUCAxMzIvODQgbW1IZywgSFIgNzIgYnBtIHJlZ3VsYXIsIFJSIDE0LCBUZW1wIDk4LjIgRiwgU3BPMiA5OSUgUkEKCkdlbmVyYWw6IFdlbGwtZGV2ZWxvcGVkLCB3ZWxsLW5vdXJpc2hlZCBtYWxlIGluIG5vIGFjdXRlIGRpc3RyZXNzLiBBbGVydCBhbmQgb3JpZW50ZWQsIGFwcGVhcnMgbWlsZGx5IGFueGlvdXMuCgpIRUVOVDogTm9ybW9jZXBoYWxpYywgYXRyYXVtYXRpYy4gUHVwaWxzIGVxdWFsLCByb3VuZCwgcmVhY3RpdmUgdG8gbGlnaHQgYW5kIGFjY29tbW9kYXRpb24uIE9yb3BoYXJ5bnggY2xlYXIsIG1vaXN0IG11Y291cyBtZW1icmFuZXMuIE5vIG9yYWwgbGVzaW9ucy4KCk5lY2s6IFN1cHBsZS4gTm8gY2VydmljYWwsIHN1cHJhY2xhdmljdWxhciwgb3IgYXhpbGxhcnkgbHltcGhhZGVub3BhdGh5LiBObyB0aHlyb21lZ2FseS4KCkNhcmRpb3Zhc2N1bGFyOiBSZWd1bGFyIHJhdGUgYW5kIHJoeXRobS4gTm9ybWFsIFMxIGFuZCBTMi4gTm8gbXVybXVycywgcnVicywgb3IgZ2FsbG9wcy4gTm8gcGVyaXBoZXJhbCBlZGVtYS4gQ2FwaWxsYXJ5IHJlZmlsbCBsZXNzIHRoYW4gMiBzZWNvbmRzLgoKUmVzcGlyYXRvcnk6IENsZWFyIHRvIGF1c2N1bHRhdGlvbiBiaWxhdGVyYWxseS4gTm8gd2hlZXplcywgcmFsZXMsIG9yIHJob25jaGkuIFN5bW1ldHJpYyBjaGVzdCBleHBhbnNpb24uCgpBYmRvbWVuOiBTb2Z0LCBub24tdGVuZGVyLCBub24tZGlzdGVuZGVkLiBOb3JtYWwgYm93ZWwgc291bmRzIGluIGFsbCBmb3VyIHF1YWRyYW50cy4gTm8gaGVwYXRvc3BsZW5vbWVnYWx5LiBObyBtYXNzZXMgcGFscGFibGUuCgpFeHRyZW1pdGllczogTGVmdCBmb3JlYXJtIGRlbW9uc3RyYXRlcyBhIDdtbSBhc3ltbWV0cmljLCBpcnJlZ3VsYXJseSBib3JkZXJlZCBwaWdtZW50ZWQgbGVzaW9uIHdpdGggdmFyaWVnYXRlZCBjb2xvcmF0aW9uIGluY2x1ZGluZyBzaGFkZXMgb2YgdGFuLCBkYXJrIGJyb3duLCBhbmQgYmx1ZS1ibGFjay4gVGhlIGJpb3BzeSBzaXRlIHNob3dzIGEgd2VsbC1oZWFsaW5nIHB1bmNoIGJpb3BzeSB3b3VuZCB3aXRoIGludGFjdCBzdXR1cmVzLCBubyBzaWducyBvZiBpbmZlY3Rpb24sIG1pbmltYWwgc3Vycm91bmRpbmcgZXJ5dGhlbWEuIE5vIHNhdGVsbGl0ZSBsZXNpb25zLiBSaWdodCBmb3JlYXJtIGFuZCBiaWxhdGVyYWwgbG93ZXIgZXh0cmVtaXRpZXMgd2l0aG91dCBjb25jZXJuaW5nIGxlc2lvbnMuCgpMeW1waCBOb2RlczogTm8gcGFscGFibGUgZXBpdHJvY2hsZWFyLCBheGlsbGFyeSwgY2VydmljYWwsIHN1cHJhY2xhdmljdWxhciwgb3IgaW5ndWluYWwgbHltcGhhZGVub3BhdGh5LgoKRnVsbCBza2luIGV4YW1pbmF0aW9uOiBNdWx0aXBsZSBzY2F0dGVyZWQgYmVuaWduLWFwcGVhcmluZyBuZXZpIG9uIHRydW5rIGFuZCB1cHBlciBleHRyZW1pdGllcywgbm9uZSB3aXRoIGZlYXR1cmVzIGNvbmNlcm5pbmcgZm9yIGR5c3BsYXNpYS4gTm8gb3RoZXIgc3VzcGljaW91cyBwaWdtZW50ZWQgbGVzaW9ucyBpZGVudGlmaWVkLiBObyB1bGNlcmF0aW9ucyBvciBub24taGVhbGluZyB3b3VuZHMuCgpOZXVyb2xvZ2ljYWw6IEFsZXJ0IGFuZCBvcmllbnRlZCB4My4gQ3JhbmlhbCBuZXJ2ZXMgSUktWElJIGdyb3NzbHkgaW50YWN0LiBTdHJlbmd0aCA1LzUgaW4gYWxsIGV4dHJlbWl0aWVzLiBTZW5zYXRpb24gaW50YWN0IHRvIGxpZ2h0IHRvdWNoLg=="
+      }
+    }
+  ]
+}

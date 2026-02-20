@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-doris-yamamoto-clinical-note",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "11506-3",
+        "display": "Progress note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-doris-yamamoto"
+  },
+  "date": "2026-02-18T07:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Kevin Liu, MD - Neurology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "QXNzZXNzbWVudCBhbmQgUGxhbjoKCjcyLXllYXItb2xkIHdvbWFuIHdpdGggYXRyaWFsIGZpYnJpbGxhdGlvbiBvbiBhcGl4YWJhbiBwcmVzZW50aW5nIHdpdGggYWN1dGUgbGVmdCBNQ0Egc3luZHJvbWUgd2l0aCBOSUhTUyAxNCBhcHByb3hpbWF0ZWx5IDMgaG91cnMgZnJvbSBsYXN0IGtub3duIHdlbGwuIFN5bXB0b21zIGluY2x1ZGUgZXhwcmVzc2l2ZSBhcGhhc2lhLCByaWdodCBoZW1pcGFyZXNpcywgcmlnaHQgZmFjaWFsIGRyb29wLCBhbmQgZ2F6ZSBkZXZpYXRpb24uCgoxLiBBY3V0ZSBpc2NoZW1pYyBzdHJva2UsIGxlZnQgTUNBIHRlcnJpdG9yeTogQnJhaW4gTVJJIHdpdGggRFdJIG9idGFpbmVkIHVyZ2VudGx5IChub24tY29udHJhc3QsIGdpdmVuIGRvY3VtZW50ZWQgaW9kaW5hdGVkIGNvbnRyYXN0IGFsbGVyZ3kgd2l0aCBwcmlvciBhbmFwaHlsYWN0b2lkIHJlYWN0aW9uKSBjb25maXJtcyByZXN0cmljdGVkIGRpZmZ1c2lvbiBpbiB0aGUgbGVmdCBNQ0EgdGVycml0b3J5LiBHaXZlbiB0aGUgcGF0aWVudCBpcyBvbiB0aGVyYXBldXRpYyBhcGl4YWJhbiB3aXRoIGxhc3QgZG9zZSBhcHByb3hpbWF0ZWx5IDggaG91cnMgYWdvLCBJViB0UEEgaXMgY29udHJhaW5kaWNhdGVkLiBBbnRpLVhhIGxldmVsIGhhcyBiZWVuIHNlbnQgdG8gcXVhbnRpZnkgYW50aWNvYWd1bGF0aW9uIGxldmVsLiBOZXVyb2xvZ3kgYW5kIG5ldXJvaW50ZXJ2ZW50aW9uYWwgcmFkaW9sb2d5IGNvbnN1bHRlZCBmb3IgcG90ZW50aWFsIG1lY2hhbmljYWwgdGhyb21iZWN0b215IGdpdmVuIGxhcmdlIHZlc3NlbCBvY2NsdXNpb24gb24gTVJBLiBDb250aW51b3VzIHRlbGVtZXRyeSBtb25pdG9yaW5nLiBQZXJtaXNzaXZlIGh5cGVydGVuc2lvbiB3aXRoIHRhcmdldCBCUCBsZXNzIHRoYW4gMjIwLzEyMCBwZXIgYWN1dGUgc3Ryb2tlIHByb3RvY29sLiBBc3BpcmluIGhlbGQgcGVuZGluZyBpbnRlcnZlbnRpb24gZGVjaXNpb24uCgoyLiBBdHJpYWwgZmlicmlsbGF0aW9uOiBIb2xkIGFwaXhhYmFuIGluIGFjdXRlIHNldHRpbmcgcGVuZGluZyBwcm9jZWR1cmFsIGRlY2lzaW9ucy4gUmVzdW1lIGFudGljb2FndWxhdGlvbiBwZXIgbmV1cm9sb2d5IHJlY29tbWVuZGF0aW9uLCB0eXBpY2FsbHkgMjQtNDggaG91cnMgcG9zdC1ldmVudCBpZiBubyBoZW1vcnJoYWdpYyBjb252ZXJzaW9uLgoKMy4gSHlwZXJ0ZW5zaW9uOiBIb2xkIGFtbG9kaXBpbmUgcGVyIHN0cm9rZSBwcm90b2NvbC4gSVYgbGFiZXRhbG9sIGF2YWlsYWJsZSBpZiBCUCBleGNlZWRzIDIyMC8xMjAuCgo0LiBJb2RpbmF0ZWQgY29udHJhc3QgYWxsZXJneTogQ1JJVElDQUwgLSBpZiBDVCBhbmdpb2dyYXBoeSBvciBjYXRoZXRlciBhbmdpb2dyYXBoeSByZXF1aXJlZCwgbXVzdCBwcmVtZWRpY2F0ZSB3aXRoIGNvcnRpY29zdGVyb2lkcyBhbmQgZGlwaGVuaHlkcmFtaW5lIHBlciBwcm90b2NvbC4gTVJJL01SQSBwcmVmZXJyZWQgd2hlbiBmZWFzaWJsZS4KCjUuIEFkbWl0IHRvIE5ldXJvIElDVSBmb3IgY2xvc2UgbW9uaXRvcmluZy4gU3dhbGxvdyBldmFsdWF0aW9uIGJlZm9yZSBhbnkgUE8gaW50YWtlLiBEVlQgcHJvcGh5bGF4aXMgd2l0aCBwbmV1bWF0aWMgY29tcHJlc3Npb24gZGV2aWNlcy4="
+      }
+    }
+  ]
+}

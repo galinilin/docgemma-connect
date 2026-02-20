@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json as _json
 import os
-from collections.abc import AsyncGenerator
+from collections.abc import AsyncGenerator, Callable
 from typing import TYPE_CHECKING
 
 import re
@@ -47,7 +47,7 @@ class DocGemma:
         api_key: str | None = None,
         model: str | None = None,
         timeout: float = 120.0,
-        system_prompt: str | None = None,
+        system_prompt: str | Callable[[], str] | None = None,
     ) -> None:
         """Initialize remote client.
 
@@ -59,6 +59,8 @@ class DocGemma:
             model: Model ID to use. If None, uses DOCGEMMA_MODEL env var.
             timeout: HTTP request timeout in seconds.
             system_prompt: Optional system prompt prepended to every API call.
+                           Can be a string or a callable that returns a string
+                           (called per request for dynamic content like timestamps).
         """
         self._endpoint = endpoint or os.environ.get("DOCGEMMA_ENDPOINT")
         if not self._endpoint:
@@ -88,7 +90,8 @@ class DocGemma:
         """Prepend system prompt (if set) and merge consecutive same-role messages."""
         msgs = list(messages)
         if self._system_prompt:
-            msgs = [{"role": "system", "content": self._system_prompt}] + msgs
+            prompt = self._system_prompt() if callable(self._system_prompt) else self._system_prompt
+            msgs = [{"role": "system", "content": prompt}] + msgs
 
         # Merge consecutive messages with the same role (vLLM rejects them)
         merged: list[dict] = []

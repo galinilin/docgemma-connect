@@ -1,0 +1,50 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-david-kim-metformin",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "861007",
+        "display": "Metformin 1000 MG Oral Tablet"
+      }
+    ],
+    "text": "Metformin 1000mg"
+  },
+  "subject": {
+    "reference": "Patient/patient-david-kim",
+    "display": "David Kim"
+  },
+  "authoredOn": "2024-06-01",
+  "dosageInstruction": [
+    {
+      "text": "Take 1 tablet by mouth twice daily with meals",
+      "timing": {
+        "repeat": {
+          "frequency": 2,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 1000,
+            "unit": "mg"
+          }
+        }
+      ]
+    }
+  ]
+}

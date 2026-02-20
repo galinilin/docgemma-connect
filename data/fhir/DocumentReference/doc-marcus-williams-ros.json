@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-marcus-williams-ros",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-marcus-williams"
+  },
+  "date": "2026-02-14T10:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Michael Torres, MD - Sports Cardiology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Q29uc3RpdHV0aW9uYWw6IE5vIGZldmVyLCBubyB1bmludGVudGlvbmFsIHdlaWdodCBsb3NzLCBtaWxkIGZhdGlndWUgcmVzb2x2aW5nIHNpbmNlIHN0YXJ0aW5nIG1ldG9wcm9sb2wuIFJlcG9ydHMgYWRlcXVhdGUgZW5lcmd5IGZvciBkYWlseSBhY3Rpdml0aWVzIGJ1dCBoYXMgbm90IHJldHVybmVkIHRvIGNvbXBldGl0aXZlIHBsYXkuCkhFRU5UOiBObyB2aXNpb24gY2hhbmdlcywgbm8gaGVhcmluZyBsb3NzLCBubyBzb3JlIHRocm9hdC4KQ2FyZGlvdmFzY3VsYXI6IE5vIGNoZXN0IHBhaW4gYXQgcmVzdCBvciB3aXRoIGV4ZXJ0aW9uLCBubyBwYWxwaXRhdGlvbnMsIG5vIHN5bmNvcGUgb3IgcHJlc3luY29wZSwgbm8gb3J0aG9wbmVhLCBubyBQTkQsIG5vIGxvd2VyIGV4dHJlbWl0eSBlZGVtYS4gRGVuaWVzIHJhY2luZyBoZWFydGJlYXQgb3Igc2tpcHBlZCBiZWF0cy4KUmVzcGlyYXRvcnk6IE5vIGNvdWdoLCBubyBkeXNwbmVhIGF0IHJlc3QsIG5vIHdoZWV6aW5nLiBObyBleGVydGlvbmFsIGR5c3BuZWEgYmV5b25kIGV4cGVjdGVkIGxldmVsIGZvciBjb25kaXRpb25pbmcuCkdJOiBObyBuYXVzZWEsIG5vIHZvbWl0aW5nLCBubyBhYmRvbWluYWwgcGFpbi4gTm9ybWFsIGFwcGV0aXRlLgpHVTogTm8gZHlzdXJpYSwgbm8gZnJlcXVlbmN5LCBubyBoZW1hdHVyaWEuCk11c2N1bG9za2VsZXRhbDogTm8gam9pbnQgcGFpbiwgbm8gbXVzY2xlIHdlYWtuZXNzLiBGdWxsIHJhbmdlIG9mIG1vdGlvbiBhbGwgam9pbnRzLgpOZXVyb2xvZ2ljYWw6IE5vIGhlYWRhY2hlLCBubyBkaXp6aW5lc3MsIG5vIG51bWJuZXNzIG9yIHRpbmdsaW5nLgpQc3ljaGlhdHJpYzogUmVwb3J0cyBhbnhpZXR5IHJlZ2FyZGluZyBkaWFnbm9zaXMgYW5kIGF0aGxldGljIGNhcmVlciBpbXBsaWNhdGlvbnMuIFNsZWVwaW5nIDYtNyBob3VycyBuaWdodGx5LCBkZWNyZWFzZWQgZnJvbSBiYXNlbGluZSBvZiA4IGhvdXJzLg=="
+      }
+    }
+  ]
+}

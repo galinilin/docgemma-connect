@@ -1,0 +1,40 @@
+{
+  "resourceType": "Encounter",
+  "id": "encounter-robert-thompson-2026-02-15",
+  "status": "finished",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "AMB",
+    "display": "ambulatory"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "185349003",
+          "display": "Encounter for check up"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-robert-thompson"
+  },
+  "period": {
+    "start": "2026-02-15T09:30:00Z",
+    "end": "2026-02-15T10:15:00Z"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "307602007",
+          "display": "Atypical melanocytic proliferation"
+        }
+      ],
+      "text": "Evaluation of pigmented lesion with biopsy results"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "resourceType": "Patient",
+  "id": "patient-margaret-chen",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    ]
+  },
+  "identifier": [
+    {
+      "system": "http://hospital.example.org/patients",
+      "value": "MC-2024-001"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Chen",
+      "given": [
+        "Margaret",
+        "Li"
+      ]
+    }
+  ],
+  "gender": "female",
+  "birthDate": "1958-03-14",
+  "address": [
+    {
+      "use": "home",
+      "line": [
+        "123 Oak Street"
+      ],
+      "city": "San Francisco",
+      "state": "CA",
+      "postalCode": "94102"
+    }
+  ],
+  "maritalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+        "code": "M",
+        "display": "Married"
+      }
+    ]
+  },
+  "communication": [
+    {
+      "language": {
+        "coding": [
+          {
+            "system": "urn:ietf:bcp:47",
+            "code": "en",
+            "display": "English"
+          }
+        ]
+      },
+      "preferred": true
+    }
+  ]
+}

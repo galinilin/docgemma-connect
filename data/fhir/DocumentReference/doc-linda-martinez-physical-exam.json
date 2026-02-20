@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-linda-martinez-physical-exam",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-linda-martinez"
+  },
+  "date": "2026-02-05T10:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Rebecca Liu, MD"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Vml0YWxzOiBCUCAxMzgvNzggbW1IZywgSFIgODggYnBtIHJlZ3VsYXIsIFJSIDE2LCBUZW1wIDk4LjbCsEYsIFNwTzIgOTclIFJBLCBXZWlnaHQgNTgga2cgKGJhc2VsaW5lIDY2IGtnKQoKR2VuZXJhbDogQWxlcnQsIG9yaWVudGVkLCBhcHBlYXJzIHRoaW4gYnV0IG5vdCBjYWNoZWN0aWMuIEphdW5kaWNlZC4gTm8gYWN1dGUgZGlzdHJlc3MuIEFwcHJvcHJpYXRlIGFmZmVjdCB3aXRoIHVuZGVyc3RhbmRhYmxlIGNvbmNlcm4gcmVnYXJkaW5nIGRpYWdub3Npcy4KCkhFRU5UOiBOb3Jtb2NlcGhhbGljLCBhdHJhdW1hdGljLiBTY2xlcmFsIGljdGVydXMgcHJlc2VudCBiaWxhdGVyYWxseS4gUEVSUkxBLiBPcm9waGFyeW54IGNsZWFyLiBNdWNvdXMgbWVtYnJhbmVzIG1vaXN0LCBpY3RlcmljIHN1Ymxpbmd1YWwgbXVjb3NhLgoKTmVjazogU3VwcGxlLCBubyBseW1waGFkZW5vcGF0aHksIG5vIHRoeXJvbWVnYWx5LCBubyBKVkQuIE5vIHN1cHJhY2xhdmljdWxhciBseW1waGFkZW5vcGF0aHkgKFZpcmNob3cgbm9kZSBhYnNlbnQpLgoKQ2FyZGlvdmFzY3VsYXI6IFJlZ3VsYXIgcmF0ZSBhbmQgcmh5dGhtLCBub3JtYWwgUzEvUzIsIG5vIG11cm11cnMsIHJ1YnMsIG9yIGdhbGxvcHMuIE5vIHBlcmlwaGVyYWwgZWRlbWEuCgpSZXNwaXJhdG9yeTogQ2xlYXIgdG8gYXVzY3VsdGF0aW9uIGJpbGF0ZXJhbGx5LiBObyB3aGVlemVzLCByYWxlcywgb3IgcmhvbmNoaS4gR29vZCBhaXIgbW92ZW1lbnQgdGhyb3VnaG91dC4KCkFiZG9tZW46IFNvZnQsIG1pbGQgdGVuZGVybmVzcyB0byBkZWVwIHBhbHBhdGlvbiBpbiBlcGlnYXN0cml1bS4gTm8gcmVib3VuZCBvciBndWFyZGluZy4gTGl2ZXIgcGFscGFibGUgMiBjbSBiZWxvdyByaWdodCBjb3N0YWwgbWFyZ2luLCBzbW9vdGgsIG1pbGRseSB0ZW5kZXIuIFNwbGVlbiBub3QgcGFscGFibGUuIE5vIGFzY2l0ZXMgYnkgZXhhbWluYXRpb24uIFBvc2l0aXZlIENvdXJ2b2lzaWVyIHNpZ24gLSBwYWxwYWJsZSwgbm9uLXRlbmRlciBnYWxsYmxhZGRlciBpbiByaWdodCB1cHBlciBxdWFkcmFudC4gTm9ybWFsIGJvd2VsIHNvdW5kcy4KCkV4dHJlbWl0aWVzOiBXYXJtLCB3ZWxsLXBlcmZ1c2VkLiBObyBjeWFub3NpcyBvciBjbHViYmluZy4gTm8gZWRlbWEuIE5vIGV2aWRlbmNlIG9mIERWVC4KCk5ldXJvbG9naWNhbDogQWxlcnQgYW5kIG9yaWVudGVkIHgzLiBDTiBJSS1YSUkgaW50YWN0LiBObyBhc3Rlcml4aXMuIE5vIGZvY2FsIGRlZmljaXRzLgoKU2tpbjogR2VuZXJhbGl6ZWQgamF1bmRpY2UuIEV4Y29yaWF0aW9ucyBvbiBhcm1zIGFuZCB0cnVuayBjb25zaXN0ZW50IHdpdGggcHJ1cml0dXMuIE5vIHNwaWRlciBhbmdpb21hdGEuIE5vIHBhbG1hciBlcnl0aGVtYS4gTm8gZWNjaHltb3Nlcy4="
+      }
+    }
+  ]
+}

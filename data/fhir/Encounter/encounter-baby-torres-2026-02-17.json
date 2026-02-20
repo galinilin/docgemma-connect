@@ -1,0 +1,39 @@
+{
+  "resourceType": "Encounter",
+  "id": "encounter-baby-torres-2026-02-17",
+  "status": "in-progress",
+  "class": {
+    "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+    "code": "IMP",
+    "display": "inpatient encounter"
+  },
+  "type": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "183452005",
+          "display": "Emergency hospital admission"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-baby-torres"
+  },
+  "period": {
+    "start": "2026-02-17T07:30:00Z"
+  },
+  "reasonCode": [
+    {
+      "coding": [
+        {
+          "system": "http://snomed.info/sct",
+          "code": "42343007",
+          "display": "Congestive heart failure"
+        }
+      ],
+      "text": "Poor feeding, diaphoresis with feeds, poor weight gain in infant with known large VSD"
+    }
+  ]
+}

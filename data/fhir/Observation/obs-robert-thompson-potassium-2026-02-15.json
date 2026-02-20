@@ -1,0 +1,59 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-robert-thompson-potassium-2026-02-15",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2823-3",
+        "display": "Potassium [Moles/volume] in Serum or Plasma"
+      }
+    ],
+    "text": "Potassium"
+  },
+  "subject": {
+    "reference": "Patient/patient-robert-thompson"
+  },
+  "effectiveDateTime": "2026-02-15T08:00:00Z",
+  "valueQuantity": {
+    "value": 4.1,
+    "unit": "mmol/L",
+    "system": "http://unitsofmeasure.org",
+    "code": "mmol/L"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "N",
+          "display": "Normal"
+        }
+      ]
+    }
+  ],
+  "referenceRange": [
+    {
+      "low": {
+        "value": 3.5,
+        "unit": "mmol/L"
+      },
+      "high": {
+        "value": 5.0,
+        "unit": "mmol/L"
+      }
+    }
+  ]
+}

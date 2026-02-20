@@ -1,0 +1,60 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-baby-torres-captopril",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "317571",
+        "display": "Captopril 12.5 MG Oral Tablet"
+      }
+    ],
+    "text": "Captopril oral solution (compounded)"
+  },
+  "subject": {
+    "reference": "Patient/patient-baby-torres",
+    "display": "Baby Boy Torres"
+  },
+  "authoredOn": "2026-01-15",
+  "dosageInstruction": [
+    {
+      "text": "Give 0.3 mg/kg (1.4 mg) by mouth three times daily",
+      "timing": {
+        "repeat": {
+          "frequency": 3,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 1.4,
+            "unit": "mg"
+          },
+          "rateRatio": {
+            "numerator": {
+              "value": 0.3,
+              "unit": "mg"
+            },
+            "denominator": {
+              "value": 1,
+              "unit": "kg"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

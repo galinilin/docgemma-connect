@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-margaret-chen-hpi",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-margaret-chen"
+  },
+  "date": "2026-02-01T09:30:00Z",
+  "author": [
+    {
+      "display": "Dr. Sarah Johnson, MD"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "NjgteWVhci1vbGQgd29tYW4gd2l0aCBhIDEwLXllYXIgaGlzdG9yeSBvZiB0eXBlIDIgZGlhYmV0ZXMgbWVsbGl0dXMgcHJlc2VudHMgZm9yIHJvdXRpbmUgZm9sbG93LXVwLiBTaGUgcmVwb3J0cyBnb29kIGNvbXBsaWFuY2Ugd2l0aCBoZXIgY3VycmVudCByZWdpbWVuIG9mIG1ldGZvcm1pbiAxMDAwbWcgdHdpY2UgZGFpbHkuIFNoZSBkZW5pZXMgcG9seXVyaWEsIHBvbHlkaXBzaWEsIG9yIHJlY2VudCBpbmZlY3Rpb25zLiBTaGUgaGFzIG5vdGVkIHNvbWUgbWlsZCBmYXRpZ3VlIG92ZXIgdGhlIHBhc3QgbW9udGguIE5vIGNoZXN0IHBhaW4sIHNob3J0bmVzcyBvZiBicmVhdGgsIG9yIGxvd2VyIGV4dHJlbWl0eSBlZGVtYS4gTGFzdCBvcGh0aGFsbW9sb2d5IGV4YW0gOCBtb250aHMgYWdvIHdhcyBub3JtYWwuIExhc3QgcG9kaWF0cnkgdmlzaXQgNiBtb250aHMgYWdvIHNob3dlZCBubyBjb25jZXJuaW5nIGZpbmRpbmdzLgoKSGVyIG1vc3QgcmVjZW50IEhiQTFjIHdhcyA3LjglLCB1cCBmcm9tIDcuMiUgc2l4IG1vbnRocyBhZ28uIE9mIG5vdGUsIGhlciByZW5hbCBmdW5jdGlvbiBoYXMgZGVjbGluZWQgd2l0aCBjdXJyZW50IEdGUiBvZiAzOCBtTC9taW4vMS43M20yIChwcmV2aW91c2x5IDUyKS4gU2hlIGlzIGFsc28gb24gbGlzaW5vcHJpbCBhbmQgc3Bpcm9ub2xhY3RvbmUgZm9yIGh5cGVydGVuc2lvbiBhbmQgQ0hGIHByZXZlbnRpb24uCgpTaGUgYXNrcyBhYm91dCBoZXIgZGlhYmV0ZXMgbWVkaWNhdGlvbnMgZ2l2ZW4gaGVyIGRlY2xpbmluZyBraWRuZXkgZnVuY3Rpb24u"
+      }
+    }
+  ]
+}

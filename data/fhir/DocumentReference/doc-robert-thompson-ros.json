@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-robert-thompson-ros",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-robert-thompson"
+  },
+  "date": "2026-02-15T10:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Michelle Park, MD - Dermatology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Q29uc3RpdHV0aW9uYWw6IE5vIGZldmVyLCBubyBjaGlsbHMsIG5vIHVuaW50ZW50aW9uYWwgd2VpZ2h0IGxvc3MsIG5vIG5pZ2h0IHN3ZWF0cywgbm8gZmF0aWd1ZQpIRUVOVDogTm8gdmlzaW9uIGNoYW5nZXMsIG5vIGhlYXJpbmcgbG9zcywgbm8gb3JhbCBsZXNpb25zCkNhcmRpb3Zhc2N1bGFyOiBObyBjaGVzdCBwYWluLCBubyBwYWxwaXRhdGlvbnMsIG5vIGR5c3BuZWEgb24gZXhlcnRpb24sIG5vIGxvd2VyIGV4dHJlbWl0eSBlZGVtYQpSZXNwaXJhdG9yeTogTm8gY291Z2gsIG5vIHNob3J0bmVzcyBvZiBicmVhdGgsIG5vIHdoZWV6aW5nLCBubyBoZW1vcHR5c2lzCkdJOiBObyBuYXVzZWEsIG5vIHZvbWl0aW5nLCBubyBhYmRvbWluYWwgcGFpbiwgbm8gY2hhbmdlIGluIGJvd2VsIGhhYml0cywgbm8gbWVsZW5hCkdVOiBObyBkeXN1cmlhLCBubyBoZW1hdHVyaWEsIG5vIGZyZXF1ZW5jeQpNdXNjdWxvc2tlbGV0YWw6IE5vIGpvaW50IHBhaW4sIG5vIG11c2NsZSB3ZWFrbmVzcywgbm8gYmFjayBwYWluCk5ldXJvbG9naWNhbDogTm8gaGVhZGFjaGUsIG5vIG51bWJuZXNzLCBubyB0aW5nbGluZywgbm8gZm9jYWwgd2Vha25lc3MKU2tpbjogUGlnbWVudGVkIGxlc2lvbiBvbiBsZWZ0IGZvcmVhcm0gd2l0aCByZWNlbnQgY29sb3IgY2hhbmdlIGFuZCBpcnJlZ3VsYXIgYm9yZGVycy4gTm8gb3RoZXIgbmV3IG9yIGNoYW5naW5nIG1vbGVzIG5vdGVkLiBObyBwcnVyaXR1cyBlbHNld2hlcmUuIFNpbmdsZSBlcGlzb2RlIG9mIGJsZWVkaW5nIGZyb20gdGhlIGxlc2lvbi4KUHN5Y2hpYXRyaWM6IFJlcG9ydHMgYW54aWV0eSByZWdhcmRpbmcgYmlvcHN5IHJlc3VsdHMgYnV0IGRlbmllcyBkZXByZXNzZWQgbW9vZCwgaW5zb21uaWEsIG9yIHN1aWNpZGFsIGlkZWF0aW9uCkhlbWF0b2xvZ2ljL0x5bXBoYXRpYzogTm8gZWFzeSBicnVpc2luZywgbm8gcGFscGFibGUgbHltcGhhZGVub3BhdGh5IG5vdGVkIGJ5IHBhdGllbnQ="
+      }
+    }
+  ]
+}

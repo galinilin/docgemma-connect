@@ -1,0 +1,46 @@
+{
+  "resourceType": "Media",
+  "id": "media-linda-martinez-ct-abdomen",
+  "status": "completed",
+  "type": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/media-type",
+        "code": "image",
+        "display": "Image"
+      }
+    ]
+  },
+  "modality": {
+    "coding": [
+      {
+        "system": "http://dicom.nema.org/resources/ontology/DCM",
+        "code": "CT",
+        "display": "Computed Tomography"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-linda-martinez"
+  },
+  "createdDateTime": "2026-02-05T08:30:00Z",
+  "bodySite": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "818983003",
+        "display": "Abdomen"
+      }
+    ]
+  },
+  "content": {
+    "contentType": "image/png",
+    "url": "file://data/images/linda-martinez-ct-abdomen.png",
+    "title": "CT Abdomen with contrast"
+  },
+  "note": [
+    {
+      "text": "3.2 cm mass in the head of the pancreas with upstream bile duct dilation to 12mm. Possible abutment of the superior mesenteric artery. No liver metastases identified. No ascites. No peritoneal implants seen."
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "resourceType": "Patient",
+  "id": "patient-doris-yamamoto",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    ]
+  },
+  "identifier": [
+    {
+      "system": "http://hospital.example.org/patients",
+      "value": "DY-2024-005"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Yamamoto",
+      "given": [
+        "Doris",
+        "Keiko"
+      ]
+    }
+  ],
+  "gender": "female",
+  "birthDate": "1953-09-08",
+  "address": [
+    {
+      "use": "home",
+      "line": [
+        "789 Cherry Blossom Lane"
+      ],
+      "city": "San Jose",
+      "state": "CA",
+      "postalCode": "95112"
+    }
+  ],
+  "maritalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+        "code": "W",
+        "display": "Widowed"
+      }
+    ]
+  },
+  "communication": [
+    {
+      "language": {
+        "coding": [
+          {
+            "system": "urn:ietf:bcp:47",
+            "code": "en",
+            "display": "English"
+          }
+        ]
+      },
+      "preferred": true
+    }
+  ]
+}

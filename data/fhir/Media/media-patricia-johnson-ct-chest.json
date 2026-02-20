@@ -1,0 +1,46 @@
+{
+  "resourceType": "Media",
+  "id": "media-patricia-johnson-ct-chest",
+  "status": "completed",
+  "type": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/media-type",
+        "code": "image",
+        "display": "Image"
+      }
+    ]
+  },
+  "modality": {
+    "coding": [
+      {
+        "system": "http://dicom.nema.org/resources/ontology/DCM",
+        "code": "CT",
+        "display": "Computed Tomography"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-patricia-johnson"
+  },
+  "createdDateTime": "2026-02-16T06:10:00Z",
+  "bodySite": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "51185008",
+        "display": "Thoracic structure"
+      }
+    ]
+  },
+  "content": {
+    "contentType": "image/dicom",
+    "url": "file://data/images/patricia-johnson-ct-chest.dcm",
+    "title": "CT Chest with contrast - PE protocol"
+  },
+  "note": [
+    {
+      "text": "CT pulmonary angiography demonstrates a large saddle embolus at the main pulmonary artery bifurcation with extension into bilateral main, lobar, and segmental pulmonary arteries. Significant right ventricular dilation with RV/LV ratio of 1.6 (normal <1.0). Interventricular septum bows toward the left ventricle consistent with right heart strain. Bilateral reflux of contrast into hepatic veins indicating elevated right atrial pressure. No pneumothorax. No pleural effusion. No parenchymal consolidation. Post-surgical changes in the right abdomen with surgical drain in place."
+    }
+  ]
+}

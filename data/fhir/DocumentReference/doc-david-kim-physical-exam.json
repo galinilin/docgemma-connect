@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-david-kim-physical-exam",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-david-kim"
+  },
+  "date": "2026-02-17T14:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Angela Martinez, MD - Medical Oncology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Vml0YWxzOiBCUCAxMzQvODIgbW1IZywgSFIgNzggYnBtIHJlZ3VsYXIsIFJSIDE2LCBUZW1wIDk4LjRGLCBTcE8yIDk3JSBvbiBSQSwgV2VpZ2h0IDc4IGtnLCBIZWlnaHQgMTc1IGNtLCBCTUkgMjUuNQoKR2VuZXJhbDogV2VsbC1hcHBlYXJpbmcgNTYteWVhci1vbGQgbWFsZSBpbiBubyBhY3V0ZSBkaXN0cmVzcy4gQWxlcnQsIGNvb3BlcmF0aXZlLCBhbmQgYXBwcm9wcmlhdGUuIEFwcGVhcnMgbWlsZGx5IHRoaW4gY29tcGFyZWQgdG8gcmVwb3J0ZWQgYmFzZWxpbmUgd2VpZ2h0LgoKSEVFTlQ6IE5vcm1vY2VwaGFsaWMsIGF0cmF1bWF0aWMuIFBFUlJMQS4gT3JvcGhhcnlueCBjbGVhciB3aXRob3V0IGxlc2lvbnMuIE1vaXN0IG11Y291cyBtZW1icmFuZXMuIE5vIGNlcnZpY2FsIG9yIHN1cHJhY2xhdmljdWxhciBseW1waGFkZW5vcGF0aHkuCgpOZWNrOiBTdXBwbGUuIE5vIHRoeXJvbWVnYWx5LiBObyBqdWd1bGFyIHZlbm91cyBkaXN0ZW5zaW9uLiBObyBseW1waGFkZW5vcGF0aHkgaW4gYW50ZXJpb3Igb3IgcG9zdGVyaW9yIGNlcnZpY2FsIGNoYWlucywgc3VwcmFjbGF2aWN1bGFyIGZvc3NhZSwgb3IgYXhpbGxhZSBiaWxhdGVyYWxseS4KCkNhcmRpb3Zhc2N1bGFyOiBSZWd1bGFyIHJhdGUgYW5kIHJoeXRobS4gTm9ybWFsIFMxLCBTMi4gTm8gbXVybXVycywgcnVicywgb3IgZ2FsbG9wcy4gTm8gcGVyaXBoZXJhbCBlZGVtYS4gRG9yc2FsaXMgcGVkaXMgcHVsc2VzIDIrIGJpbGF0ZXJhbGx5LgoKUmVzcGlyYXRvcnk6IE1pbGQgZGVjcmVhc2VkIGJyZWF0aCBzb3VuZHMgb3ZlciB0aGUgcmlnaHQgdXBwZXIgbG9iZSBwb3N0ZXJpb3JseS4gTm8gd2hlZXplcy4gTm8gcmFsZXMgb3IgcmhvbmNoaSBpbiByZW1haW5pbmcgbHVuZyBmaWVsZHMuIE5vIGR1bGxuZXNzIHRvIHBlcmN1c3Npb24uIE5vIGFjY2Vzc29yeSBtdXNjbGUgdXNlLgoKQWJkb21lbjogU29mdCwgbm9uLXRlbmRlciwgbm9uLWRpc3RlbmRlZC4gTm9ybWFsIGJvd2VsIHNvdW5kcyBpbiBhbGwgZm91ciBxdWFkcmFudHMuIE5vIGhlcGF0b21lZ2FseS4gTm8gc3BsZW5vbWVnYWx5LiBObyBwYWxwYWJsZSBtYXNzZXMuCgpFeHRyZW1pdGllczogV2FybSwgd2VsbC1wZXJmdXNlZC4gTm8gY3lhbm9zaXMsIGNsdWJiaW5nLCBvciBlZGVtYS4gTm8gY2FsZiB0ZW5kZXJuZXNzIG9yIHN3ZWxsaW5nIGJpbGF0ZXJhbGx5LiBObyBzaWducyBvZiBwb3N0LXRocm9tYm90aWMgc3luZHJvbWUgaW4gbGVmdCBsb3dlciBleHRyZW1pdHkuCgpOZXVyb2xvZ2ljYWw6IEFsZXJ0IGFuZCBvcmllbnRlZCB4NC4gQ3JhbmlhbCBuZXJ2ZXMgSUktWElJIGludGFjdC4gTW90b3Igc3RyZW5ndGggNS81IGluIGFsbCBleHRyZW1pdGllcy4gU2Vuc2F0aW9uIGludGFjdCB0byBsaWdodCB0b3VjaC4gR2FpdCBub3JtYWwuIE5vIGNlcmViZWxsYXIgc2lnbnMuCgpTa2luOiBObyBzdXNwaWNpb3VzIHNraW4gbGVzaW9ucy4gTmljb3RpbmUgc3RhaW5pbmcgYWJzZW50IGZyb20gZmluZ2Vycy4gTm8gamF1bmRpY2Ugb3IgcGFsbG9yLg=="
+      }
+    }
+  ]
+}

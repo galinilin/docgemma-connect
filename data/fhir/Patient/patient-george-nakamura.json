@@ -1,0 +1,62 @@
+{
+  "resourceType": "Patient",
+  "id": "patient-george-nakamura",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    ]
+  },
+  "identifier": [
+    {
+      "system": "http://hospital.example.org/patients",
+      "value": "GN-2026-009"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Nakamura",
+      "given": [
+        "George",
+        "Takeshi"
+      ]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1947-08-12",
+  "address": [
+    {
+      "use": "home",
+      "line": [
+        "1891 Cherry Blossom Drive"
+      ],
+      "city": "Seattle",
+      "state": "WA",
+      "postalCode": "98101"
+    }
+  ],
+  "maritalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+        "code": "M",
+        "display": "Married"
+      }
+    ]
+  },
+  "communication": [
+    {
+      "language": {
+        "coding": [
+          {
+            "system": "urn:ietf:bcp:47",
+            "code": "en",
+            "display": "English"
+          }
+        ]
+      },
+      "preferred": true
+    }
+  ]
+}

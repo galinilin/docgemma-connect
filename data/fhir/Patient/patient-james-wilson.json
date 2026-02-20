@@ -1,0 +1,62 @@
+{
+  "resourceType": "Patient",
+  "id": "patient-james-wilson",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    ]
+  },
+  "identifier": [
+    {
+      "system": "http://hospital.example.org/patients",
+      "value": "JW-2024-002"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Wilson",
+      "given": [
+        "James",
+        "Robert"
+      ]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "1968-07-22",
+  "address": [
+    {
+      "use": "home",
+      "line": [
+        "456 Maple Avenue"
+      ],
+      "city": "San Francisco",
+      "state": "CA",
+      "postalCode": "94110"
+    }
+  ],
+  "maritalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+        "code": "M",
+        "display": "Married"
+      }
+    ]
+  },
+  "communication": [
+    {
+      "language": {
+        "coding": [
+          {
+            "system": "urn:ietf:bcp:47",
+            "code": "en",
+            "display": "English"
+          }
+        ]
+      },
+      "preferred": true
+    }
+  ]
+}

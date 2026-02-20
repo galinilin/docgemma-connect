@@ -1,0 +1,50 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-thomas-reeves-lisinopril",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "314077",
+        "display": "Lisinopril 10 MG Oral Tablet"
+      }
+    ],
+    "text": "Lisinopril 10mg"
+  },
+  "subject": {
+    "reference": "Patient/patient-thomas-reeves",
+    "display": "Thomas Reeves"
+  },
+  "authoredOn": "2019-03-15",
+  "dosageInstruction": [
+    {
+      "text": "Take 1 tablet by mouth once daily",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 10,
+            "unit": "mg"
+          }
+        }
+      ]
+    }
+  ]
+}

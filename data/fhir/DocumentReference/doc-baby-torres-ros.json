@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-baby-torres-ros",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-baby-torres"
+  },
+  "date": "2026-02-17T09:00:00Z",
+  "author": [
+    {
+      "display": "Dr. Ana Gutierrez, MD - Pediatric Cardiology"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Q29uc3RpdHV0aW9uYWw6IFBvb3Igd2VpZ2h0IGdhaW4sIGluY3JlYXNlZCBzb21ub2xlbmNlLCBpbnRlcm1pdHRlbnQgaXJyaXRhYmlsaXR5LCBubyBmZXZlciBwZXIgcGFyZW50cwpIRUVOVDogTm8gYXBwYXJlbnQgZXllIGRpc2NoYXJnZSwgbm8gbmFzYWwgY29uZ2VzdGlvbiwgbm8gb3JhbCB0aHJ1c2ggbm90ZWQgYnkgcGFyZW50cwpDYXJkaW92YXNjdWxhcjogS25vd24gVlNEIHdpdGggbG91ZCBtdXJtdXI7IG5vIHJlcG9ydGVkIGN5YW5vdGljIGVwaXNvZGVzOyBubyByZXBvcnRlZCBlZGVtYSBvZiBmYWNlIG9yIGV4dHJlbWl0aWVzOyBkaWFwaG9yZXNpcyB3aXRoIGZlZWRzIGlzIHByb21pbmVudApSZXNwaXJhdG9yeTogVGFjaHlwbmVhIG9ic2VydmVkIGJ5IHBhcmVudHMgZXNwZWNpYWxseSBkdXJpbmcgYW5kIGFmdGVyIGZlZWRzOyBvY2Nhc2lvbmFsIHN1YmNvc3RhbCByZXRyYWN0aW9ucyBub3RlZDsgbm8gd2hlZXppbmcgcmVwb3J0ZWQ7IG5vIGNvdWdoOyBubyBhcG5laWMgZXBpc29kZXMKR0k6IFBvb3IgZmVlZGluZyB3aXRoIHByb2xvbmdlZCBmZWVkaW5nIHRpbWVzICgzMC00NSBtaW51dGVzIHBlciAzIG96KSwgZnJlcXVlbnQgcGF1c2VzIGR1cmluZyBmZWVkcywgb2NjYXNpb25hbCBzcGl0LXVwIGJ1dCBubyBwcm9qZWN0aWxlIHZvbWl0aW5nLCBzdG9vbCBwYXR0ZXJuIG5vcm1hbCAoMy00IHNvZnQgc3Rvb2xzIHBlciBkYXkpCkdVOiBBZGVxdWF0ZSB3ZXQgZGlhcGVycyAoNS02IHBlciBkYXksIHNsaWdodGx5IGRlY3JlYXNlZCBmcm9tIHByaW9yKSwgbm8gYmxvb2QgaW4gdXJpbmUKU2tpbjogUGFyZW50cyByZXBvcnQgb2NjYXNpb25hbCBwYWxsb3I7IG5vIHJhc2hlczsgbm8gamF1bmRpY2U7IGRpYXBob3Jlc2lzIHByb21pbmVudCBkdXJpbmcgZmVlZHMKTmV1cm9sb2dpY2FsOiBBZ2UtYXBwcm9wcmlhdGUgc29jaWFsIHNtaWxlIHByZXNlbnQsIHRyYWNrcyBmYWNlcywgaGVhZCBjb250cm9sIGltcHJvdmluZyBidXQgYmVoaW5kIGV4cGVjdGVkIG1pbGVzdG9uZXM7IG5vIHNlaXp1cmUgYWN0aXZpdHkgb2JzZXJ2ZWQ="
+      }
+    }
+  ]
+}

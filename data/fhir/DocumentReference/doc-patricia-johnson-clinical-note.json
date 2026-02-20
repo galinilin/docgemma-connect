@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-patricia-johnson-clinical-note",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "11506-3",
+        "display": "Progress note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-patricia-johnson"
+  },
+  "date": "2026-02-16T06:30:00Z",
+  "author": [
+    {
+      "display": "Dr. Rachel Kim, MD - Pulmonary/Critical Care"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "QVNTRVNTTUVOVCBBTkQgUExBTjoKCjY3LXllYXItb2xkIHdvbWFuIFBPRDIgZnJvbSByaWdodCBoZW1pY29sZWN0b215IGZvciBzdGFnZSBJSSBjb2xvbiBhZGVub2NhcmNpbm9tYSBub3cgcHJlc2VudGluZyB3aXRoIG1hc3NpdmUgc2FkZGxlIHB1bG1vbmFyeSBlbWJvbGlzbSB3aXRoIGhlbW9keW5hbWljIGNvbXByb21pc2UgYW5kIHJpZ2h0IHZlbnRyaWN1bGFyIHN0cmFpbi4gVGhpcyBpcyBhIGxpZmUtdGhyZWF0ZW5pbmcgZW1lcmdlbmN5IHJlcXVpcmluZyBhZ2dyZXNzaXZlIHJlc3VzY2l0YXRpb24uCgoxLiBNQVNTSVZFIFBVTE1PTkFSWSBFTUJPTElTTSBXSVRIIE9CU1RSVUNUSVZFIFNIT0NLOgogICAtIEluaXRpYXRlZCBzeXN0ZW1pYyBhbnRpY29hZ3VsYXRpb24gd2l0aCB1bmZyYWN0aW9uYXRlZCBoZXBhcmluIGRyaXAgcGVyIFBFIHByb3RvY29sCiAgIC0gSGVtb2R5bmFtaWMgc3VwcG9ydCB3aXRoIG5vcmVwaW5lcGhyaW5lLCBjdXJyZW50bHkgYXQgOCBtY2cvbWluIHRhcmdldGluZyBNQVAgPiA2NQogICAtIFN0cm9uZ2x5IGNvbnNpZGVyaW5nIHN5c3RlbWljIHRocm9tYm9seXNpcyB2cyBjYXRoZXRlci1kaXJlY3RlZCB0aGVyYXB5IGdpdmVuIGhlbW9keW5hbWljIGluc3RhYmlsaXR5OyBob3dldmVyLCBQT0QyIHN0YXR1cyBzaWduaWZpY2FudGx5IGluY3JlYXNlcyBzdXJnaWNhbCBibGVlZGluZyByaXNrCiAgIC0gRW1lcmdlbnQgY29uc3VsdGF0aW9uIHRvIGludGVydmVudGlvbmFsIHJhZGlvbG9neSBmb3IgY2F0aGV0ZXItZGlyZWN0ZWQgdGhlcmFweSBhcyBwcmVmZXJyZWQgYXBwcm9hY2ggZ2l2ZW4gcmVjZW50IHN1cmdlcnkKICAgLSBDYXJkaW90aG9yYWNpYyBzdXJnZXJ5IGF3YXJlIGZvciBwb3RlbnRpYWwgc3VyZ2ljYWwgZW1ib2xlY3RvbXkgaWYgY2F0aGV0ZXIgYXBwcm9hY2ggZmFpbHMKICAgLSBTZXJpYWwgdHJvcG9uaW4gYW5kIEJOUCBtb25pdG9yaW5nIHE2aAogICAtIEJlZHNpZGUgZWNob2NhcmRpb2dyYXBoeSB0byBhc3Nlc3MgUlYgZnVuY3Rpb24gdHJlbmRpbmcKCjIuIFJFU1BJUkFUT1JZIEZBSUxVUkU6CiAgIC0gQ3VycmVudGx5IG9uIDE1TCBOUkIgd2l0aCBTcE8yIDg4JQogICAtIFByZXBhcmUgZm9yIGludHViYXRpb24gaWYgY29udGludWVkIGRldGVyaW9yYXRpb24KICAgLSBBdm9pZCBleGNlc3NpdmUgUEVFUCBnaXZlbiBSViBmYWlsdXJlCgozLiBQT1NULU9QRVJBVElWRSBTVEFUVVM6CiAgIC0gU3VyZ2ljYWwgdGVhbSBhd2FyZS4gQWxsIGhvbWUgbWVkaWNhdGlvbnMgaGVsZC4KICAgLSBNb25pdG9yIHN1cmdpY2FsIHNpdGUgZm9yIGJsZWVkaW5nIGdpdmVuIGFudGljb2FndWxhdGlvbgogICAtIE1vcnBoaW5lIGFsbGVyZ3kgZG9jdW1lbnRlZCAtIHVzZSBoeWRyb21vcnBob25lIGZvciBwYWluIG1hbmFnZW1lbnQKICAgLSBOUE8gZ2l2ZW4gaGVtb2R5bmFtaWMgaW5zdGFiaWxpdHkgYW5kIHBvdGVudGlhbCBmb3IgcHJvY2VkdXJhbCBpbnRlcnZlbnRpb24KCjQuIENPREUgU1RBVFVTOiBGdWxsIGNvZGUsIGNvbmZpcm1lZCB3aXRoIHBhdGllbnQu"
+      }
+    }
+  ]
+}

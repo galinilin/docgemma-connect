@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-margaret-chen-ros",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10187-3",
+        "display": "Review of systems"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-margaret-chen"
+  },
+  "date": "2026-02-01T09:30:00Z",
+  "author": [
+    {
+      "display": "Dr. Sarah Johnson, MD"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Q29uc3RpdHV0aW9uYWw6IE1pbGQgZmF0aWd1ZSwgbm8gZmV2ZXIsIG5vIHdlaWdodCBjaGFuZ2UKSEVFTlQ6IE5vIHZpc2lvbiBjaGFuZ2VzLCBubyBoZWFyaW5nIGxvc3MKQ2FyZGlvdmFzY3VsYXI6IE5vIGNoZXN0IHBhaW4sIG5vIHBhbHBpdGF0aW9ucywgbm8gb3J0aG9wbmVhLCBubyBQTkQsIG5vIGxvd2VyIGV4dHJlbWl0eSBlZGVtYQpSZXNwaXJhdG9yeTogTm8gY291Z2gsIG5vIGR5c3BuZWEsIG5vIHdoZWV6aW5nCkdJOiBObyBuYXVzZWEsIG5vIHZvbWl0aW5nLCBubyBhYmRvbWluYWwgcGFpbiwgbm8gZGlhcnJoZWEsIG5vIGNvbnN0aXBhdGlvbgpHVTogTm8gZHlzdXJpYSwgbm8gZnJlcXVlbmN5LCBubyBoZW1hdHVyaWEKTmV1cm9sb2dpY2FsOiBObyBoZWFkYWNoZSwgbm8gbnVtYm5lc3MsIG5vIHRpbmdsaW5nIGluIGV4dHJlbWl0aWVzCkVuZG9jcmluZTogTm8gaGVhdC9jb2xkIGludG9sZXJhbmNlLCBubyBleGNlc3NpdmUgdGhpcnN0ClNraW46IE5vIHJhc2hlcywgbm8gd291bmRz"
+      }
+    }
+  ]
+}

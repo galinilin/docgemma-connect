@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-sarah-obrien-clinical-note",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "11506-3",
+        "display": "Progress note"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-sarah-obrien"
+  },
+  "date": "2026-02-15T10:30:00Z",
+  "author": [
+    {
+      "display": "Dr. Emily Rodriguez, MD - MFM"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "MjkteWVhci1vbGQgRzFQMCBhdCAzNCsyIHdlZWtzIHdpdGggc2V2ZXJlIHByZWVjbGFtcHNpYSBwcmVzZW50aW5nIHdpdGggaGVhZGFjaGUsIHZpc3VhbCBjaGFuZ2VzLCBhbmQgc2V2ZXJlbHkgZWxldmF0ZWQgYmxvb2QgcHJlc3N1cmVzLiBMYWIgd29yayBpcyBub3RhYmxlIGZvciB0aHJvbWJvY3l0b3BlbmlhIChwbGF0ZWxldHMgOThLKSwgZWxldmF0ZWQgaGVwYXRpYyB0cmFuc2FtaW5hc2VzIChBU1QgNzgsIEFMVCA4MiksIGVsZXZhdGVkIGNyZWF0aW5pbmUgYXQgMS4xLCBhbmQgc2lnbmlmaWNhbnQgcHJvdGVpbnVyaWEgd2l0aCBwcm90ZWluL2NyZWF0aW5pbmUgcmF0aW8gb2YgNC4yIG1nL21nLiBVcmljIGFjaWQgaXMgZWxldmF0ZWQgYXQgNy44IG1nL2RMLiBUaGVzZSBmaW5kaW5ncyBhcmUgY29uc2lzdGVudCB3aXRoIHNldmVyZSBmZWF0dXJlcyBvZiBwcmVlY2xhbXBzaWEgd2l0aCBlYXJseSBsYWJvcmF0b3J5IGV2aWRlbmNlIG9mIEhFTExQIHN5bmRyb21lLgoKUGF0aWVudCBoYXMgYmVlbiBzdGFydGVkIG9uIG1hZ25lc2l1bSBzdWxmYXRlIGZvciBzZWl6dXJlIHByb3BoeWxheGlzIHdpdGggbG9hZGluZyBkb3NlIGNvbXBsZXRlZCBhbmQgbWFpbnRlbmFuY2UgaW5mdXNpb24gcnVubmluZyBhdCAyIGcvaHIuIExhYmV0YWxvbCAyMDAgbWcgUE8gVElEIGluaXRpYXRlZCBmb3IgYmxvb2QgcHJlc3N1cmUgY29udHJvbC4gRmlyc3QgZG9zZSBvZiBiZXRhbWV0aGFzb25lIGFkbWluaXN0ZXJlZCBmb3IgZmV0YWwgbHVuZyBtYXR1cml0eSBhdCAzNCB3ZWVrcy4gQ29udGludW91cyBmZXRhbCBtb25pdG9yaW5nIGluIHBsYWNlIHNob3dpbmcgcmVhc3N1cmluZyBjYXRlZ29yeSBJIHRyYWNpbmcuCgpQbGFuIGlzIHRvIGFkbWluaXN0ZXIgdGhlIHNlY29uZCBkb3NlIG9mIGJldGFtZXRoYXNvbmUgaW4gMjQgaG91cnMgYW5kIHJlYXNzZXNzIG1hdGVybmFsLWZldGFsIHN0YXR1cy4gSWYgYmxvb2QgcHJlc3N1cmVzIHJlbWFpbiB1bmNvbnRyb2xsZWQsIGNsaW5pY2FsIGRldGVyaW9yYXRpb24gb2NjdXJzLCBvciBsYWJzIHdvcnNlbiBzaWduaWZpY2FudGx5LCBkZWxpdmVyeSB3aWxsIGJlIGV4cGVkaXRlZC4gTUZNIGNvbnN1bHRhdGlvbiBoYXMgYmVlbiBwbGFjZWQuIEJsb29kIGJhbmsgaGFzIGJlZW4gbm90aWZpZWQgYW5kIHR5cGUgYW5kIHNjcmVlbiBpcyBvbiBmaWxlLiBOZW9uYXRvbG9neSBoYXMgYmVlbiBhbGVydGVkIGZvciBwb3NzaWJsZSBwcmV0ZXJtIGRlbGl2ZXJ5LiBTdHJpY3QgSSZPcywgaG91cmx5IG5ldXJvIGNoZWNrcywgYW5kIHNlcmlhbCBsYWJzIGV2ZXJ5IDYgaG91cnMgaGF2ZSBiZWVuIG9yZGVyZWQu"
+      }
+    }
+  ]
+}

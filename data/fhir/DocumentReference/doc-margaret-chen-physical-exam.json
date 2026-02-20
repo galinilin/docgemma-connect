@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-margaret-chen-physical-exam",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "29545-1",
+        "display": "Physical findings"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-margaret-chen"
+  },
+  "date": "2026-02-01T09:30:00Z",
+  "author": [
+    {
+      "display": "Dr. Sarah Johnson, MD"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "Vml0YWxzOiBCUCAxNDIvODggbW1IZywgSFIgNzYgYnBtIHJlZ3VsYXIsIFJSIDE2LCBUZW1wIDk4LjTCsEYsIFNwTzIgOTglIFJBLCBXZWlnaHQgNzIga2cKCkdlbmVyYWw6IEFsZXJ0LCBvcmllbnRlZCwgbm8gYWN1dGUgZGlzdHJlc3MsIHdlbGwtbm91cmlzaGVkCgpIRUVOVDogTm9ybW9jZXBoYWxpYywgYXRyYXVtYXRpYy4gUEVSUkxBLiBPcm9waGFyeW54IGNsZWFyLiBNb2lzdCBtdWNvdXMgbWVtYnJhbmVzLgoKTmVjazogU3VwcGxlLCBubyBseW1waGFkZW5vcGF0aHksIG5vIHRoeXJvbWVnYWx5LCBubyBKVkQKCkNhcmRpb3Zhc2N1bGFyOiBSZWd1bGFyIHJhdGUgYW5kIHJoeXRobSwgbm9ybWFsIFMxL1MyLCBubyBtdXJtdXJzLCBydWJzLCBvciBnYWxsb3BzLiBObyBwZXJpcGhlcmFsIGVkZW1hLgoKUmVzcGlyYXRvcnk6IENsZWFyIHRvIGF1c2N1bHRhdGlvbiBiaWxhdGVyYWxseS4gTm8gd2hlZXplcywgcmFsZXMsIG9yIHJob25jaGkuCgpBYmRvbWVuOiBTb2Z0LCBub24tdGVuZGVyLCBub24tZGlzdGVuZGVkLiBOb3JtYWwgYm93ZWwgc291bmRzLiBObyBoZXBhdG9zcGxlbm9tZWdhbHkuCgpFeHRyZW1pdGllczogV2FybSwgd2VsbC1wZXJmdXNlZC4gTm8gY3lhbm9zaXMsIGNsdWJiaW5nLCBvciBlZGVtYS4gRG9yc2FsaXMgcGVkaXMgcHVsc2VzIDIrIGJpbGF0ZXJhbGx5LgoKTmV1cm9sb2dpY2FsOiBDTiBJSS1YSUkgaW50YWN0LiBTZW5zYXRpb24gaW50YWN0IHRvIG1vbm9maWxhbWVudCBiaWxhdGVyYWwgZmVldC4gUmVmbGV4ZXMgMisgdGhyb3VnaG91dC4KClNraW46IE5vIHJhc2hlcywgbm8gdWxjZXJzLCBubyBjb25jZXJuaW5nIGxlc2lvbnMu"
+      }
+    }
+  ]
+}

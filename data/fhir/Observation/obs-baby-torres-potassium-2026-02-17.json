@@ -1,0 +1,59 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-baby-torres-potassium-2026-02-17",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "2823-3",
+        "display": "Potassium [Moles/volume] in Serum or Plasma"
+      }
+    ],
+    "text": "Potassium"
+  },
+  "subject": {
+    "reference": "Patient/patient-baby-torres"
+  },
+  "effectiveDateTime": "2026-02-17T07:00:00Z",
+  "valueQuantity": {
+    "value": 4.2,
+    "unit": "mmol/L",
+    "system": "http://unitsofmeasure.org",
+    "code": "mmol/L"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "N",
+          "display": "Normal"
+        }
+      ]
+    }
+  ],
+  "referenceRange": [
+    {
+      "low": {
+        "value": 3.5,
+        "unit": "mmol/L"
+      },
+      "high": {
+        "value": 5.5,
+        "unit": "mmol/L"
+      }
+    }
+  ]
+}

@@ -194,7 +194,9 @@ def _patient_context_section(state: dict) -> str:
     ctx = state.get("patient_context")
     if not ctx:
         return ""
-    return f"\nActive patient record:\n{ctx}\n"
+    pid = state.get("session_patient_id", "")
+    header = f"\nActive patient record (ID: {pid}):\n" if pid else "\nActive patient record:\n"
+    return f"{header}{ctx}\n"
 
 
 def _format_error_for_synthesis(error_messages: list[str]) -> str:
@@ -461,6 +463,16 @@ def tool_select(state: AgentState, model: DocGemma) -> dict:
     )
     tool_name = tool_result.tool_name
     logger.info(f"[TOOL_SELECT] Stage 1: selected {tool_name}")
+
+    # ── "none" escape hatch: no applicable tool ──
+    if tool_name == "none":
+        logger.info("[TOOL_SELECT] No applicable tool — routing to synthesize")
+        return {
+            "current_tool": "none",
+            "current_args": {},
+            "_planned_tool": None,
+            "_planned_args": None,
+        }
 
     # ── Stage 2: Per-tool Arguments ──
     tool_desc = _TOOL_STAGE2_DESC.get(tool_name, "")
@@ -855,6 +867,19 @@ async def synthesize(
 # =============================================================================
 # Routing Functions (used as conditional edges in graph.py)
 # =============================================================================
+
+
+def route_after_tool_select(state: dict) -> str:
+    """Route after tool selection.
+
+    If the model selected "none" (no applicable tool), skip tool execution
+    and go straight to synthesize.  Otherwise proceed to tool_execute.
+    """
+    if state.get("current_tool") == "none":
+        logger.info("[ROUTE] tool_select → synthesize (no applicable tool)")
+        return "synthesize"
+    logger.info("[ROUTE] tool_select → tool_execute")
+    return "tool_execute"
 
 
 def route_after_intent(state: dict) -> str:

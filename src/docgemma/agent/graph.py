@@ -28,6 +28,7 @@ from .nodes import (
     result_classify,
     route_after_intent,
     route_after_result_classify,
+    route_after_tool_select,
     synthesize,
     tool_execute,
     tool_select,
@@ -699,8 +700,15 @@ def build_graph(
         {"synthesize": "synthesize", "tool_select": "tool_select"},
     )
 
-    # tool_select → tool_execute
-    workflow.add_edge("tool_select", "tool_execute")
+    # tool_select → conditional: tool_execute or synthesize (if "none")
+    workflow.add_conditional_edges(
+        "tool_select",
+        route_after_tool_select,
+        {
+            "tool_execute": "tool_execute",
+            "synthesize": "synthesize",
+        },
+    )
 
     # tool_execute → result_classify
     workflow.add_edge("tool_execute", "result_classify")

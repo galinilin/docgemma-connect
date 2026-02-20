@@ -1,0 +1,57 @@
+{
+  "resourceType": "AllergyIntolerance",
+  "id": "allergy-george-nakamura-codeine",
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-verification",
+        "code": "confirmed"
+      }
+    ]
+  },
+  "type": "allergy",
+  "category": [
+    "medication"
+  ],
+  "criticality": "low",
+  "code": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "2670",
+        "display": "Codeine"
+      }
+    ],
+    "text": "Codeine"
+  },
+  "patient": {
+    "reference": "Patient/patient-george-nakamura",
+    "display": "George Nakamura"
+  },
+  "recordedDate": "2010-03-20",
+  "reaction": [
+    {
+      "manifestation": [
+        {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "422400008",
+              "display": "Nausea and vomiting"
+            }
+          ],
+          "text": "Nausea and vomiting"
+        }
+      ],
+      "severity": "moderate"
+    }
+  ]
+}

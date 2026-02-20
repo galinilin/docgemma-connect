@@ -1,0 +1,46 @@
+{
+  "resourceType": "Media",
+  "id": "media-robert-thompson-histopathology",
+  "status": "completed",
+  "type": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/media-type",
+        "code": "image",
+        "display": "Image"
+      }
+    ]
+  },
+  "modality": {
+    "coding": [
+      {
+        "system": "http://dicom.nema.org/resources/ontology/DCM",
+        "code": "SM",
+        "display": "Slide Microscopy"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-robert-thompson"
+  },
+  "createdDateTime": "2026-02-15T11:00:00Z",
+  "bodySite": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "66480008",
+        "display": "Structure of left forearm"
+      }
+    ]
+  },
+  "content": {
+    "contentType": "image/png",
+    "url": "file://data/images/robert-thompson-histopath.png",
+    "title": "H&E skin punch biopsy - left forearm pigmented lesion"
+  },
+  "note": [
+    {
+      "text": "Skin punch biopsy, left forearm: Atypical melanocytic proliferation with spitzoid features. 7mm lesion showing irregular nests of melanocytes with pagetoid spread. Cytologic atypia present. Immunohistochemistry pending for definitive classification. Final pathology report to follow."
+    }
+  ]
+}

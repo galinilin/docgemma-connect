@@ -1,0 +1,35 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-robert-thompson-hr-2026-02-15",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "vital-signs",
+          "display": "Vital Signs"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "8867-4",
+        "display": "Heart rate"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/patient-robert-thompson"
+  },
+  "effectiveDateTime": "2026-02-15T10:00:00Z",
+  "valueQuantity": {
+    "value": 72,
+    "unit": "/min",
+    "system": "http://unitsofmeasure.org",
+    "code": "/min"
+  }
+}

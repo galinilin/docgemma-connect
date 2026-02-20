@@ -1,0 +1,62 @@
+{
+  "resourceType": "Patient",
+  "id": "patient-marcus-williams",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-patient"
+    ]
+  },
+  "identifier": [
+    {
+      "system": "http://hospital.example.org/patients",
+      "value": "MW-2026-010"
+    }
+  ],
+  "active": true,
+  "name": [
+    {
+      "use": "official",
+      "family": "Williams",
+      "given": [
+        "Marcus",
+        "Dwayne"
+      ]
+    }
+  ],
+  "gender": "male",
+  "birthDate": "2007-05-22",
+  "address": [
+    {
+      "use": "home",
+      "line": [
+        "456 Campus Drive, Apt 12B"
+      ],
+      "city": "Durham",
+      "state": "NC",
+      "postalCode": "27708"
+    }
+  ],
+  "maritalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-MaritalStatus",
+        "code": "S",
+        "display": "Never Married"
+      }
+    ]
+  },
+  "communication": [
+    {
+      "language": {
+        "coding": [
+          {
+            "system": "urn:ietf:bcp:47",
+            "code": "en",
+            "display": "English"
+          }
+        ]
+      },
+      "preferred": true
+    }
+  ]
+}

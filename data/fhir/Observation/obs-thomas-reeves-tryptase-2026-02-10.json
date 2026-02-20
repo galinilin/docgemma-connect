@@ -1,0 +1,59 @@
+{
+  "resourceType": "Observation",
+  "id": "obs-thomas-reeves-tryptase-2026-02-10",
+  "status": "final",
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+          "code": "laboratory",
+          "display": "Laboratory"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "54448-2",
+        "display": "Tryptase [Mass/volume] in Serum or Plasma"
+      }
+    ],
+    "text": "Tryptase"
+  },
+  "subject": {
+    "reference": "Patient/patient-thomas-reeves"
+  },
+  "effectiveDateTime": "2026-02-10T13:00:00Z",
+  "valueQuantity": {
+    "value": 18,
+    "unit": "ng/mL",
+    "system": "http://unitsofmeasure.org",
+    "code": "ng/mL"
+  },
+  "interpretation": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/v3-ObservationInterpretation",
+          "code": "H",
+          "display": "High"
+        }
+      ]
+    }
+  ],
+  "referenceRange": [
+    {
+      "low": {
+        "value": 0,
+        "unit": "ng/mL"
+      },
+      "high": {
+        "value": 11.5,
+        "unit": "ng/mL"
+      }
+    }
+  ]
+}

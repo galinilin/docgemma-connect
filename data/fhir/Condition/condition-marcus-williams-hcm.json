@@ -1,0 +1,50 @@
+{
+  "resourceType": "Condition",
+  "id": "condition-marcus-williams-hcm",
+  "meta": {
+    "profile": [
+      "http://hl7.org/fhir/us/core/StructureDefinition/us-core-condition"
+    ]
+  },
+  "clinicalStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+        "code": "active"
+      }
+    ]
+  },
+  "verificationStatus": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+        "code": "confirmed"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+          "code": "problem-list-item"
+        }
+      ]
+    }
+  ],
+  "code": {
+    "coding": [
+      {
+        "system": "http://snomed.info/sct",
+        "code": "45227007",
+        "display": "Hypertrophic cardiomyopathy"
+      }
+    ],
+    "text": "Hypertrophic Cardiomyopathy (Obstructive)"
+  },
+  "subject": {
+    "reference": "Patient/patient-marcus-williams",
+    "display": "Marcus Williams"
+  },
+  "onsetDateTime": "2026-01-28"
+}

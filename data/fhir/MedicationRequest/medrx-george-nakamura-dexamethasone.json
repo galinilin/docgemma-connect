@@ -1,0 +1,50 @@
+{
+  "resourceType": "MedicationRequest",
+  "id": "medrx-george-nakamura-dexamethasone",
+  "status": "active",
+  "intent": "order",
+  "medicationCodeableConcept": {
+    "coding": [
+      {
+        "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+        "code": "197579",
+        "display": "Dexamethasone 4 MG Oral Tablet"
+      }
+    ],
+    "text": "Dexamethasone 4mg"
+  },
+  "subject": {
+    "reference": "Patient/patient-george-nakamura",
+    "display": "George Nakamura"
+  },
+  "authoredOn": "2025-12-15",
+  "dosageInstruction": [
+    {
+      "text": "Take 1 tablet by mouth once daily in the morning",
+      "timing": {
+        "repeat": {
+          "frequency": 1,
+          "period": 1,
+          "periodUnit": "d"
+        }
+      },
+      "route": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "26643006",
+            "display": "Oral route"
+          }
+        ]
+      },
+      "doseAndRate": [
+        {
+          "doseQuantity": {
+            "value": 4,
+            "unit": "mg"
+          }
+        }
+      ]
+    }
+  ]
+}

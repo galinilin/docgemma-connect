@@ -1,0 +1,42 @@
+{
+  "resourceType": "DocumentReference",
+  "id": "doc-james-wilson-hpi",
+  "status": "current",
+  "type": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "10164-2",
+        "display": "History of Present illness"
+      }
+    ]
+  },
+  "category": [
+    {
+      "coding": [
+        {
+          "system": "http://hl7.org/fhir/us/core/CodeSystem/us-core-documentreference-category",
+          "code": "clinical-note",
+          "display": "Clinical Note"
+        }
+      ]
+    }
+  ],
+  "subject": {
+    "reference": "Patient/patient-james-wilson"
+  },
+  "date": "2026-02-10T14:30:00Z",
+  "author": [
+    {
+      "display": "Dr. Michael Torres, MD"
+    }
+  ],
+  "content": [
+    {
+      "attachment": {
+        "contentType": "text/plain",
+        "data": "NTgteWVhci1vbGQgbWFuIHByZXNlbnRzIHRvIHRoZSBlbWVyZ2VuY3kgZGVwYXJ0bWVudCB3aXRoIGEgdGhyZWUtZGF5IGhpc3Rvcnkgb2YgcHJvZHVjdGl2ZSBjb3VnaCwgZmV2ZXIsIGFuZCBwcm9ncmVzc2l2ZSBkeXNwbmVhLiBIZSByZXBvcnRzIGluaXRpYWxseSBkZXZlbG9waW5nIGEgbWlsZCBkcnkgY291Z2ggd2hpY2ggcmFwaWRseSBiZWNhbWUgcHJvZHVjdGl2ZSBvZiB5ZWxsb3ctZ3JlZW4gc3B1dHVtLiBGZXZlcnMgYmVnYW4gdGhlIGZvbGxvd2luZyBkYXksIG1lYXN1cmVkIGF0IGhvbWUgdXAgdG8gMTAyLjTCsEYuIEhlIGVuZG9yc2VzIGNoaWxscywgbmlnaHQgc3dlYXRzLCBhbmQgcGxldXJpdGljIHJpZ2h0LXNpZGVkIGNoZXN0IHBhaW4gdGhhdCB3b3JzZW5zIHdpdGggZGVlcCBpbnNwaXJhdGlvbi4gT3ZlciB0aGUgcGFzdCAyNCBob3VycywgaGUgaGFzIG5vdGVkIGluY3JlYXNpbmcgc2hvcnRuZXNzIG9mIGJyZWF0aCBhdCByZXN0IGFuZCBkZWNyZWFzZWQgZXhlcmNpc2UgdG9sZXJhbmNlLCB1bmFibGUgdG8gd2FsayB0byB0aGUgYmF0aHJvb20gd2l0aG91dCBzdG9wcGluZyB0byBjYXRjaCBoaXMgYnJlYXRoLgoKSGlzIHBhc3QgbWVkaWNhbCBoaXN0b3J5IGlzIHNpZ25pZmljYW50IGZvciBtZWNoYW5pY2FsIG1pdHJhbCB2YWx2ZSByZXBsYWNlbWVudCBpbiAyMDE5IGZvciBzZXZlcmUgbWl0cmFsIHJlZ3VyZ2l0YXRpb24gc2Vjb25kYXJ5IHRvIG15eG9tYXRvdXMgZGVnZW5lcmF0aW9uLCBhdHJpYWwgZmlicmlsbGF0aW9uLCBhbmQgaHlwZXJ0ZW5zaW9uLiBIZSBpcyBvbiBjaHJvbmljIGFudGljb2FndWxhdGlvbiB3aXRoIHdhcmZhcmluIDVtZyBkYWlseSB3aXRoIGEgdGFyZ2V0IElOUiBvZiAyLjUtMy41LiBIZSBhbHNvIHRha2VzIG1ldG9wcm9sb2wgNTBtZyBCSUQgYW5kIGxpc2lub3ByaWwgMTBtZyBkYWlseS4gSGUgaGFzIGEgZG9jdW1lbnRlZCBzZXZlcmUgcGVuaWNpbGxpbiBhbGxlcmd5IHdpdGggcHJpb3IgYW5hcGh5bGF4aXMgaW4gMTk5NSwgcHJlY2x1ZGluZyB1c2Ugb2YgYmV0YS1sYWN0YW0gYW50aWJpb3RpY3MuCgpIZSBkZW5pZXMgcmVjZW50IHRyYXZlbCwgc2ljayBjb250YWN0cywgb3IgcHJpb3IgaG9zcGl0YWxpemF0aW9ucyBmb3IgcG5ldW1vbmlhLiBIZSBpcyBhIG5vbi1zbW9rZXIgYW5kIGRlbmllcyBhbGNvaG9sIG9yIGlsbGljaXQgZHJ1ZyB1c2UuIEhlIHdvcmtzIGFzIGFuIGFjY291bnRhbnQgYW5kIGhhcyBubyBvY2N1cGF0aW9uYWwgZXhwb3N1cmVzLg=="
+      }
+    }
+  ]
+}
