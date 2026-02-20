@@ -179,6 +179,8 @@ async def websocket_chat(
                         metadata["clinical_trace"] = event.clinical_trace.model_dump(mode="json")
                     if event.preliminary_thinking is not None:
                         metadata["preliminary_thinking"] = event.preliminary_thinking
+                    if event.image_findings is not None:
+                        metadata["image_findings"] = event.image_findings
                     store.add_message(
                         session_id, "assistant", event.final_response, metadata=metadata,
                     )
@@ -447,7 +449,9 @@ def _build_conversation_history(
 ) -> list[dict[str, str]]:
     """Build conversation history for context.
 
-    Only includes user and assistant messages, limited to recent turns.
+    Includes user and assistant messages, limited to recent turns.
+    Assistant messages are enriched with metadata context (thinking,
+    image findings, tool calls) so the model has continuity across turns.
     """
     history = []
     turn_count = 0
@@ -455,14 +459,73 @@ def _build_conversation_history(
     # Go through messages in reverse to get most recent
     for msg in reversed(session.messages):
         if msg.role in ("user", "assistant"):
-            history.insert(0, {"role": msg.role, "content": msg.content})
+            history.insert(0, msg)
             if msg.role == "user":
                 turn_count += 1
                 if turn_count >= max_turns:
                     break
 
     # Remove the current (last) user message if present - it's passed separately
-    if history and history[-1]["role"] == "user":
+    if history and history[-1].role == "user":
         history = history[:-1]
 
-    return history
+    # Build final list: attach previous assistant metadata to the following user message
+    result: list[dict[str, str]] = []
+    pending_context: str | None = None
+    for msg in history:
+        if msg.role == "assistant":
+            # Collect context from this assistant message for the next user message
+            if msg.metadata:
+                pending_context = _build_turn_context(msg.metadata)
+            result.append({"role": "assistant", "content": msg.content})
+        elif msg.role == "user":
+            content = msg.content
+            if pending_context:
+                content = f"{pending_context}\n\n{content}"
+                pending_context = None
+            result.append({"role": "user", "content": content})
+
+    return result
+
+
+def _build_turn_context(metadata: dict) -> str | None:
+    """Build a context summary from assistant message metadata.
+
+    Extracts previous turn's reasoning, image analysis, and tool call
+    summaries so the model has continuity across the conversation.
+    Returns None if no meaningful context is available.
+    """
+    parts: list[str] = []
+
+    # Image analysis from previous turn
+    image_findings = metadata.get("image_findings")
+    if image_findings:
+        parts.append(f"[Image analysis: {image_findings}]")
+
+    # Preliminary thinking from previous turn
+    thinking = metadata.get("preliminary_thinking")
+    if thinking:
+        parts.append(f"[Prior reasoning: {thinking}]")
+
+    # Clinical trace — extract tool call summaries
+    trace = metadata.get("clinical_trace")
+    if trace and isinstance(trace, dict):
+        steps = trace.get("steps", [])
+        for step in steps:
+            if not isinstance(step, dict):
+                continue
+            step_type = step.get("type", "")
+            label = step.get("label", "")
+            desc = step.get("description", "")
+            summary = step.get("tool_result_summary", "")
+
+            if step_type == "tool_call" and label:
+                # Skip image analysis here — handled separately above
+                if step.get("tool_name") == "analyze_medical_image":
+                    continue
+                entry = f"{label}: {desc}"
+                if summary:
+                    entry += f" — {summary}"
+                parts.append(f"[{entry}]")
+
+    return "\n".join(parts) if parts else None

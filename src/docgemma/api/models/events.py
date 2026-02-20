@@ -119,6 +119,9 @@ class CompletionEvent(BaseEvent):
     preliminary_thinking: str | None = Field(
         default=None, description="Preliminary reasoning text (if thinking mode was enabled)"
     )
+    image_findings: str | None = Field(
+        default=None, description="Image analysis findings (if an image was attached)"
+    )
 
 
 class ErrorEvent(BaseEvent):

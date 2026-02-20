@@ -462,8 +462,10 @@ class AgentRunner:
                                 )
 
                         preliminary_thinking_text = None
+                        image_findings_text = None
                         if full_state and full_state.values:
                             preliminary_thinking_text = full_state.values.get("preliminary_thinking_text")
+                            image_findings_text = full_state.values.get("image_findings")
 
                         session.status = SessionStatus.ACTIVE
                         yield CompletionEvent(
@@ -471,6 +473,7 @@ class AgentRunner:
                             tool_calls_made=tool_count,
                             clinical_trace=clinical_trace,
                             preliminary_thinking=preliminary_thinking_text,
+                            image_findings=image_findings_text,
                         )
         finally:
             if not graph_task.done():
