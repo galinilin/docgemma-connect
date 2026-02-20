@@ -37,6 +37,7 @@ class ToolSelection(BaseModel):
     """Select the appropriate tool.  Single field — no null cascade risk."""
 
     tool_name: Literal[
+        "none",
         "check_drug_safety",
         "check_drug_interactions",
         "search_medical_literature",

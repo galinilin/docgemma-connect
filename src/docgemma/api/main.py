@@ -61,10 +61,10 @@ async def lifespan(app: FastAPI):
         try:
             # Import here to avoid loading torch at module level
             from ..model import DocGemma
-            from ..agent.prompts import SYSTEM_PROMPT
+            from ..agent.prompts import build_system_prompt
             from .services.agent_runner import AgentRunner
 
-            _model = DocGemma(system_prompt=SYSTEM_PROMPT)
+            _model = DocGemma(system_prompt=build_system_prompt)
 
             # Create and set the agent runner
             runner = AgentRunner(

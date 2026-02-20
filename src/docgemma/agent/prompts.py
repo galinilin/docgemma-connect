@@ -19,10 +19,20 @@ Key principles (from the Prompting Guide):
 # SYSTEM PROMPT (prepended to every API call via model.py)
 # =============================================================================
 
-SYSTEM_PROMPT = (
-    "You are a clinical decision-support assistant integrated with an "
-    "electronic health record system and medical knowledge tools."
-)
+
+def build_system_prompt() -> str:
+    """Build system prompt with current date and time."""
+    from datetime import datetime, timezone
+
+    now = datetime.now(timezone.utc)
+    date_str = now.strftime("%A, %B %d, %Y")
+    time_str = now.strftime("%H:%M UTC")
+
+    return (
+        "You are a clinical decision-support assistant integrated with an "
+        "electronic health record system and medical knowledge tools. "
+        f"Current date: {date_str}. Current time: {time_str}."
+    )
 
 
 # =============================================================================
@@ -93,6 +103,9 @@ ERROR_TEMPLATES: dict[str, str] = {
 
 TOOL_DESCRIPTIONS = """Available tools:
 
+- none — No tool is applicable. Select this when the user's request cannot be fulfilled
+  by any of the tools below (e.g., non-medical tasks, scheduling, general conversation).
+
 - check_drug_safety(drug_name: str) — Look up FDA boxed warnings, contraindications,
   and major safety alerts for a specific drug. Use when a clinician asks about drug
   safety, warnings, or whether a drug is safe for a particular patient.
@@ -139,6 +152,10 @@ TOOL_DESCRIPTIONS = """Available tools:
 # =============================================================================
 
 TOOL_EXAMPLES: dict[str, tuple[str, str]] = {
+    "none": (
+        "Edit my calendar for next Tuesday",
+        "none",
+    ),
     "check_drug_safety": (
         "Check FDA warnings for metformin",
         "check_drug_safety",
