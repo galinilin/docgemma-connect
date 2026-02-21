@@ -199,7 +199,7 @@ PRELIMINARY_THINKING_PROMPT = """\
 You are a clinical decision-support assistant. Think through the following query
 step by step. Consider: what clinical information is needed, what tools might help,
 and what the key medical considerations are.
-{tools_section}{patient_context_section}{image_section}
+{patient_context_section}{image_section}
 Query: {user_query}
 
 Think step by step:"""
