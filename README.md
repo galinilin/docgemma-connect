@@ -1,5 +1,7 @@
 # DocGemma Connect
 
+> **Part of the DocGemma project:** [docgemma-app](https://github.com/galinilin/docgemma-app) (Docker deployment) | [docgemma-frontend](https://github.com/galinilin/docgemma-frontend) (Vue 3 UI)
+
 Agentic medical AI backend with autonomous tool calling, powered by MedGemma via remote vLLM endpoint. Designed for resource-limited healthcare environments.
 
 ## Overview
@@ -85,7 +87,7 @@ data/
 
 ```bash
 # Clone the repository
-git clone <repo-url>
+git clone https://github.com/galinilin/docgemma-connect.git
 cd docgemma-connect
 
 # Install dependencies
@@ -232,3 +234,10 @@ input_assembly → preliminary_thinking → intent_classify
 | `prescribe_medication` | Local FHIR | Write (requires approval) |
 | `save_clinical_note` | Local FHIR | Write (requires approval) |
 | `analyze_medical_image` | vLLM Vision API | Read |
+
+## Related Repositories
+
+| Repository | Description |
+|---|---|
+| [docgemma-app](https://github.com/galinilin/docgemma-app) | One-command Docker deployment — clone, configure, `docker compose up` |
+| [docgemma-frontend](https://github.com/galinilin/docgemma-frontend) | Vue 3 web interface with real-time chat, EHR management, and tool approval UI |
