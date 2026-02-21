@@ -35,7 +35,7 @@
   },
   "content": {
     "contentType": "image/png",
-    "url": "file://data/images/james-wilson-cxr.png",
+    "url": "/api/imaging/media-james-wilson-cxr",
     "title": "Chest X-ray PA view"
   },
   "note": [

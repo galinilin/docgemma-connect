@@ -35,7 +35,7 @@
   },
   "content": {
     "contentType": "image/png",
-    "url": "file://data/images/linda-martinez-ct-abdomen.png",
+    "url": "/api/imaging/media-linda-martinez-ct-abdomen",
     "title": "CT Abdomen with contrast"
   },
   "note": [

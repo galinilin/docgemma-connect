@@ -34,8 +34,8 @@
     ]
   },
   "content": {
-    "contentType": "image/dicom",
-    "url": "file://data/images/david-kim-ct-chest.dcm",
+    "contentType": "image/png",
+    "url": "/api/imaging/media-david-kim-ct-chest",
     "title": "CT Chest with contrast"
   },
   "note": [

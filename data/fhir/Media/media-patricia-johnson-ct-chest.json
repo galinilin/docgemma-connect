@@ -34,8 +34,8 @@
     ]
   },
   "content": {
-    "contentType": "image/dicom",
-    "url": "file://data/images/patricia-johnson-ct-chest.dcm",
+    "contentType": "image/png",
+    "url": "/api/imaging/media-patricia-johnson-ct-chest",
     "title": "CT Chest with contrast - PE protocol"
   },
   "note": [

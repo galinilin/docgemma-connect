@@ -35,7 +35,7 @@
   },
   "content": {
     "contentType": "image/png",
-    "url": "file://data/images/baby-torres-echo.png",
+    "url": "/api/imaging/media-baby-torres-echo",
     "title": "Transthoracic echocardiogram - parasternal long axis"
   },
   "note": [
