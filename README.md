@@ -4,7 +4,7 @@
 >
 > **Competition:** [The MedGemma Impact Challenge](https://www.kaggle.com/competitions/med-gemma-impact-challenge) on Kaggle
 
-Agentic medical AI backend with autonomous tool calling, powered by MedGemma via remote vLLM endpoint. Designed for resource-limited healthcare environments.
+Agentic medical AI backend with autonomous tool calling, powered by MedGemma via remote vLLM endpoint. Designed for resource-limited healthcare environments. Compatible with [MedGemma 27B](https://huggingface.co/google/medgemma-27b-it) and [MedGemma 1.5 4B](https://huggingface.co/google/medgemma-1.5-4b-it).
 
 ## Overview
 
