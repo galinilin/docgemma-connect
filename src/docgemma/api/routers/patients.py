@@ -71,6 +71,7 @@ async def list_patients(
         try:
             data = await client.get("/Patient", params={"_count": "50", "_sort": "-_lastUpdated"})
             patients = _parse_patient_bundle(data)
+            patients = await _sort_by_imaging(patients)
             return PatientListResponse(patients=patients, total=len(patients))
         except Exception as e:
             return PatientListResponse(patients=[], total=0, error=str(e))
@@ -83,6 +84,7 @@ async def list_patients(
 
     # Parse the result text into structured data
     patients = _parse_search_result(result.result)
+    patients = await _sort_by_imaging(patients)
     return PatientListResponse(patients=patients, total=len(patients))
 
 
@@ -349,6 +351,30 @@ def _extract_specialty_tag(patient: dict) -> str | None:
         if tag.get("system") == "http://docgemma.dev/specialty":
             return tag.get("display") or tag.get("code")
     return None
+
+
+async def _sort_by_imaging(patients: list[PatientSummary]) -> list[PatientSummary]:
+    """Flag patients that have imaging studies and sort them first."""
+    if not patients:
+        return patients
+
+    client = get_client()
+    try:
+        media_bundle = await client.get("/Media", params={"_count": "200"})
+    except Exception:
+        return patients
+
+    patient_ids_with_imaging: set[str] = set()
+    for entry in media_bundle.get("entry", []):
+        ref = entry.get("resource", {}).get("subject", {}).get("reference", "")
+        if ref.startswith("Patient/"):
+            patient_ids_with_imaging.add(ref.removeprefix("Patient/"))
+
+    for p in patients:
+        p.has_imaging = p.patient_id in patient_ids_with_imaging
+
+    patients.sort(key=lambda p: (not p.has_imaging, p.name))
+    return patients
 
 
 def _extract_id_from_message(message: str, id_label: str) -> str | None:

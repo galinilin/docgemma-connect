@@ -59,6 +59,7 @@ class PatientSummary(BaseModel):
     dob: str = Field(..., description="Date of birth (YYYY-MM-DD)")
     gender: str | None = Field(None, description="Patient gender")
     specialty: str | None = Field(None, description="Medical specialty category")
+    has_imaging: bool = Field(False, description="Whether patient has imaging studies")
 
 
 class PatientListResponse(BaseModel):
