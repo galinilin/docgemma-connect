@@ -399,7 +399,7 @@ async def _prepare_send_message(
     if store:
         store._save(session)
 
-    # Build conversation history (last 2-3 turns for 4B model)
+    # Build conversation history (last 2-3 turns for 27B model)
     history = _build_conversation_history(session, max_turns=3)
 
     # Carry forward image findings from the most recent prior turn

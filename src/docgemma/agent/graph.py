@@ -8,7 +8,7 @@
                      ↑──────────────← [more tools needed]
                                     → [done/error] → SYNTHESIZE → END
 
-Grounded in 856 experiments on MedGemma 4B (see MEDGEMMA_PROMPTING_GUIDE.md).
+Grounded in 856 experiments on MedGemma 27B
 """
 
 from __future__ import annotations

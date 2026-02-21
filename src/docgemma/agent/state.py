@@ -1,7 +1,7 @@
 """AgentState for DocGemma v3 agent graph.
 
 7-node architecture with binary intent classification and reactive tool loop.
-Empirically grounded in 856 experiments on MedGemma 4B.
+Empirically grounded in 856 experiments on MedGemma 27B.
 """
 
 from __future__ import annotations

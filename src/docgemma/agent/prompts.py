@@ -1,7 +1,7 @@
 """Prompt templates for DocGemma v3 agent nodes.
 
 Every prompt, temperature, and configuration here is grounded in empirical
-findings from 856 experiments across 4 test suites on MedGemma 4B.
+findings from 856 experiments across 4 test suites on MedGemma 27B.
 
 Key principles (from the Prompting Guide):
 - T=0.0 for operational decisions (prevents thinking tokens, Part II §25)

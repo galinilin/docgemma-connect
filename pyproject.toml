@@ -8,7 +8,7 @@ packages = ["src/docgemma"]
 [project]
 name = "docgemma-connect"
 version = "0.1.0"
-description = "Agentic medical AI with autonomous tool calling, powered by MedGemma 4B for resource-limited healthcare environments"
+description = "Agentic medical AI with autonomous tool calling, powered by MedGemma 27B for resource-limited healthcare environments"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

@@ -1,7 +1,7 @@
 """Agent node implementations for DocGemma v3.
 
 6-node architecture with binary intent classification and reactive tool loop.
-Every design decision is grounded in 856 experiments on MedGemma 4B.
+Every design decision is grounded in 856 experiments on MedGemma 27B.
 
 Nodes:
   1. input_assembly     — deterministic entity extraction (no LLM)
