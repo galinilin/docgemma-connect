@@ -1,6 +1,8 @@
 # DocGemma Connect
 
 > **Part of the DocGemma project:** [docgemma-app](https://github.com/galinilin/docgemma-app) (Docker deployment) | [docgemma-frontend](https://github.com/galinilin/docgemma-frontend) (Vue 3 UI)
+>
+> **Competition:** [The MedGemma Impact Challenge](https://www.kaggle.com/competitions/med-gemma-impact-challenge) on Kaggle
 
 Agentic medical AI backend with autonomous tool calling, powered by MedGemma via remote vLLM endpoint. Designed for resource-limited healthcare environments.
 
